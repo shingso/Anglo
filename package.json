@@ -83,7 +83,8 @@
     "react-native-url-polyfill": "^2.0.0",
     "reactotron-mst": "3.1.4",
     "reactotron-react-js": "^3.3.7",
-    "reactotron-react-native": "5.0.3"
+    "reactotron-react-native": "5.0.3",
+    "expo-crypto": "~12.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
