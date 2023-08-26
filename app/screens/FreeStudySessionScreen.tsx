@@ -46,6 +46,7 @@ import {
 import { calculateNextInterval } from "app/utils/superMemoUtils"
 import { differenceInMinutes, addDays } from "date-fns"
 import { getSnapshot } from "mobx-state-tree"
+import * as Speech from "expo-speech"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
 
@@ -106,10 +107,10 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
     }
 
     const pronouceCurrentWord = () => {
-      /*   Speech.stop()
-    if (currentFlashcards && currentFlashcards.length > 0) {
-      Speech.speak(currentFlashcards[0]?.front)
-    } */
+      Speech.stop()
+      if (currentFlashcards && currentFlashcards.length > 0) {
+        Speech.speak(currentFlashcards[0]?.front)
+      }
     }
 
     return (
