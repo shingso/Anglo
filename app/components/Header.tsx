@@ -8,10 +8,11 @@ import {
   ViewStyle,
 } from "react-native"
 import { isRTL, translate } from "../i18n"
-import { colors, spacing } from "../theme"
+import { colors, custom_colors, spacing } from "../theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
+import { CustomText } from "./CustomText"
 
 export interface HeaderProps {
   /**
@@ -144,7 +145,7 @@ interface HeaderActionProps {
  */
 export function Header(props: HeaderProps) {
   const {
-    backgroundColor = colors.background,
+    backgroundColor = custom_colors.background1,
     LeftActionComponent,
     leftIcon,
     leftIconColor,
@@ -197,9 +198,8 @@ export function Header(props: HeaderProps) {
             ]}
             pointerEvents="none"
           >
-            <Text
-              weight="medium"
-              size="md"
+            <CustomText
+              preset="body2Strong"
               text={titleContent}
               style={[$title, $titleStyleOverride]}
             />
@@ -277,7 +277,7 @@ const $actionTextContainer: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
-  paddingHorizontal: spacing.md,
+  paddingHorizontal: spacing.size160,
   zIndex: 2,
 }
 
@@ -290,7 +290,7 @@ const $actionIconContainer: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
-  paddingHorizontal: spacing.md,
+  paddingHorizontal: spacing.size160,
   zIndex: 2,
 }
 
@@ -304,7 +304,7 @@ const $titleWrapperCenter: ViewStyle = {
   height: "100%",
   width: "100%",
   position: "absolute",
-  paddingHorizontal: spacing.xxl,
+  paddingHorizontal: spacing.size480,
   zIndex: 1,
 }
 

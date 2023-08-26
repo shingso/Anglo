@@ -7,8 +7,9 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { colors, spacing } from "../theme"
+import { colors, custom_colors, spacing } from "../theme"
 import { Text, TextProps } from "./Text"
+import { borderRadius } from "../theme/borderRadius"
 
 type Presets = keyof typeof $containerPresets
 
@@ -160,28 +161,28 @@ export function Card(props: CardProps) {
   const $containerStyle = [$containerPresets[preset], $containerStyleOverride]
   const $headingStyle = [
     $headingPresets[preset],
-    (isFooterPresent || isContentPresent) && { marginBottom: spacing.xxxs },
+    (isFooterPresent || isContentPresent) && { marginBottom: spacing.micro },
     $headingStyleOverride,
     HeadingTextProps?.style,
   ]
   const $contentStyle = [
     $contentPresets[preset],
-    isHeadingPresent && { marginTop: spacing.xxxs },
-    isFooterPresent && { marginBottom: spacing.xxxs },
+    isHeadingPresent && { marginTop: spacing.micro },
+    isFooterPresent && { marginBottom: spacing.micro },
     $contentStyleOverride,
     ContentTextProps?.style,
   ]
   const $footerStyle = [
     $footerPresets[preset],
-    (isHeadingPresent || isContentPresent) && { marginTop: spacing.xxxs },
+    (isHeadingPresent || isContentPresent) && { marginTop: spacing.micro },
     $footerStyleOverride,
     FooterTextProps?.style,
   ]
   const $alignmentWrapperStyle = [
     $alignmentWrapper,
     { justifyContent: $alignmentWrapperFlexOptions[verticalAlignment] },
-    LeftComponent && { marginStart: spacing.md },
-    RightComponent && { marginEnd: spacing.md },
+    LeftComponent && { marginStart: spacing.medium },
+    RightComponent && { marginEnd: spacing.medium },
   ]
 
   return (
@@ -240,14 +241,15 @@ export function Card(props: CardProps) {
 }
 
 const $containerBase: ViewStyle = {
-  borderRadius: spacing.md,
-  padding: spacing.xs,
-  borderWidth: 1,
-  shadowColor: colors.palette.neutral800,
+  borderRadius: borderRadius.corner120,
+  padding: spacing.extraSmall,
+  //borderWidth: 1,
+  shadowColor: "black",
   shadowOffset: { width: 0, height: 12 },
   shadowOpacity: 0.08,
   shadowRadius: 12.81,
-  elevation: 16,
+  elevation: 2,
+
   minHeight: 96,
   flexDirection: "row",
 }
@@ -268,7 +270,7 @@ const $containerPresets = {
   default: [
     $containerBase,
     {
-      backgroundColor: colors.palette.neutral100,
+      backgroundColor: custom_colors.background1,
       borderColor: colors.palette.neutral300,
     },
   ] as StyleProp<ViewStyle>,
@@ -277,19 +279,36 @@ const $containerPresets = {
     $containerBase,
     { backgroundColor: colors.palette.neutral800, borderColor: colors.palette.neutral500 },
   ] as StyleProp<ViewStyle>,
+
+  deck: [
+    $containerBase,
+    {
+      backgroundColor: colors.palette.neutral100,
+      borderColor: colors.palette.neutral300,
+      borderWidth: 0,
+      shadowColor: "white",
+      marginBottom: spacing.medium,
+      padding: spacing.medium,
+      paddingVertical: spacing.small,
+      height: 140,
+    },
+  ] as StyleProp<ViewStyle>,
 }
 
 const $headingPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  deck: {},
 }
 
 const $contentPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  deck: {},
 }
 
 const $footerPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  deck: {},
 }

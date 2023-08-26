@@ -18,17 +18,13 @@ interface State {
  * components can be error boundaries.
  *
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Error-Boundary.md)
- * - [React Error Boundaries](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary)
+ * - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html)
  */
 export class ErrorBoundary extends Component<Props, State> {
   state = { error: null, errorInfo: null }
 
   // If an error in a child is encountered, this will run
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Only set errors if enabled
-    if (!this.isEnabled()) {
-      return
-    }
     // Catch errors in any components below and re-render with error message
     this.setState({
       error,
@@ -61,6 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   // Render an error UI if there's an error; otherwise, render children
   render() {
+    //this.isEnabled() && this.state.error
     return this.isEnabled() && this.state.error ? (
       <ErrorDetails
         onReset={this.resetError}

@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { colors, spacing } from "../theme"
+import { colors, custom_colors, spacing } from "../theme"
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 
@@ -192,12 +192,12 @@ const $separatorTop: ViewStyle = {
 }
 
 const $separatorBottom: ViewStyle = {
-  borderBottomWidth: 1,
-  borderBottomColor: colors.separator,
+  borderBottomWidth: 0.5,
+  borderBottomColor: custom_colors.background6,
 }
 
 const $textStyle: TextStyle = {
-  paddingVertical: spacing.xs,
+  paddingVertical: spacing.extraSmall,
   alignSelf: "center",
   flexGrow: 1,
   flexShrink: 1,
@@ -214,9 +214,9 @@ const $iconContainer: ViewStyle = {
   flexGrow: 0,
 }
 const $iconContainerLeft: ViewStyle = {
-  marginEnd: spacing.md,
+  marginEnd: spacing.medium,
 }
 
 const $iconContainerRight: ViewStyle = {
-  marginStart: spacing.md,
+  marginStart: spacing.medium,
 }

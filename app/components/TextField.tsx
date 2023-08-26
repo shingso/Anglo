@@ -9,8 +9,10 @@ import {
   ViewStyle,
 } from "react-native"
 import { isRTL, translate } from "../i18n"
-import { colors, spacing, typography } from "../theme"
+import { colors, custom_colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
+import { NONE } from "apisauce"
+import { CustomText } from "./CustomText"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -174,14 +176,9 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
       accessibilityState={{ disabled }}
     >
       {!!(label || labelTx) && (
-        <Text
-          preset="formLabel"
-          text={label}
-          tx={labelTx}
-          txOptions={labelTxOptions}
-          {...LabelTextProps}
-          style={$labelStyles}
-        />
+        <CustomText style={$labelStyle} preset="caption1Strong">
+          {label}
+        </CustomText>
       )}
 
       <View style={$inputWrapperStyles}>
@@ -196,10 +193,12 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
 
         <TextInput
           ref={input}
+          //Change text cursor color here
+          selectionColor={colors.palette.primary400}
           underlineColorAndroid={colors.transparent}
           textAlignVertical="top"
           placeholder={placeholderContent}
-          placeholderTextColor={colors.textDim}
+          placeholderTextColor={custom_colors.foreground3}
           {...TextInputProps}
           editable={!disabled}
           style={$inputStyles}
@@ -230,16 +229,18 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
 })
 
 const $labelStyle: TextStyle = {
-  marginBottom: spacing.xs,
+  marginBottom: spacing.extraSmall,
 }
 
 const $inputWrapperStyle: ViewStyle = {
   flexDirection: "row",
   alignItems: "flex-start",
-  borderWidth: 1,
+
   borderRadius: 4,
-  backgroundColor: colors.palette.neutral200,
-  borderColor: colors.palette.neutral400,
+  backgroundColor: custom_colors.background5,
+  borderColor: custom_colors.foreground1,
+
+  height: 36,
   overflow: "hidden",
 }
 
@@ -248,28 +249,33 @@ const $inputStyle: TextStyle = {
   alignSelf: "stretch",
   fontFamily: typography.primary.normal,
   color: colors.text,
-  fontSize: 16,
-  height: 24,
+  //fontSize: 17,
+  //lineHeight: 22,
+  fontSize: 14,
+  lineHeight: 20,
+  height: 36,
+
   // https://github.com/facebook/react-native/issues/21720#issuecomment-532642093
   paddingVertical: 0,
-  paddingHorizontal: 0,
-  marginVertical: spacing.xs,
-  marginHorizontal: spacing.sm,
+  paddingHorizontal: spacing.size60,
+  marginVertical: spacing.extraSmall,
+  marginHorizontal: spacing.size60,
 }
 
 const $helperStyle: TextStyle = {
-  marginTop: spacing.xs,
+  marginTop: spacing.extraSmall,
 }
 
 const $rightAccessoryStyle: ViewStyle = {
-  marginEnd: spacing.xs,
-  height: 40,
+  marginEnd: spacing.extraSmall,
+  height: 36,
   justifyContent: "center",
   alignItems: "center",
 }
+
 const $leftAccessoryStyle: ViewStyle = {
-  marginStart: spacing.xs,
-  height: 40,
+  marginStart: spacing.small,
+  height: 36,
   justifyContent: "center",
   alignItems: "center",
 }

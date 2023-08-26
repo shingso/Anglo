@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native"
 import i18n from "i18n-js"
 import React from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
@@ -73,13 +74,23 @@ export function Text(props: TextProps) {
 }
 
 const $sizeStyles = {
-  xxl: { fontSize: 36, lineHeight: 44 } satisfies TextStyle,
-  xl: { fontSize: 24, lineHeight: 34 } satisfies TextStyle,
-  lg: { fontSize: 20, lineHeight: 32 } satisfies TextStyle,
-  md: { fontSize: 18, lineHeight: 26 } satisfies TextStyle,
-  sm: { fontSize: 16, lineHeight: 24 } satisfies TextStyle,
-  xs: { fontSize: 14, lineHeight: 21 } satisfies TextStyle,
-  xxs: { fontSize: 12, lineHeight: 18 } satisfies TextStyle,
+  xxl: { fontSize: 36, lineHeight: 44 } as TextStyle,
+  xl: { fontSize: 24, lineHeight: 34 } as TextStyle,
+  lg: { fontSize: 20, lineHeight: 32 } as TextStyle,
+  md: { fontSize: 18, lineHeight: 26 } as TextStyle,
+  sm: { fontSize: 16, lineHeight: 24 } as TextStyle,
+  xs: { fontSize: 14, lineHeight: 21 } as TextStyle,
+  xxs: { fontSize: 12, lineHeight: 18 } as TextStyle,
+}
+
+const $spacingStyles = {
+  xxl: { letterSpacing: 24 } as TextStyle,
+  xl: { letterSpacing: 24 } as TextStyle,
+  lg: { letterSpacing: 24 } as TextStyle,
+  md: { letterSpacing: 24 } as TextStyle,
+  sm: { letterSpacing: 24 } as TextStyle,
+  xs: { letterSpacing: 24 } as TextStyle,
+  xxs: { letterSpacing: 24 } as TextStyle,
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
@@ -94,16 +105,57 @@ const $baseStyle: StyleProp<TextStyle> = [
 
 const $presets = {
   default: $baseStyle,
-
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
-
+  //used for main header
   heading: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
-
+  //used for subsections headers
   subheading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.medium] as StyleProp<TextStyle>,
-
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
-
   formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+
+  heading1: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+  heading2: [$baseStyle, $sizeStyles.xl, $fontWeightStyles.light] as StyleProp<TextStyle>,
+  heading3: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+
+  sub1: [$baseStyle, $sizeStyles.xs, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  sub2: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.medium] as StyleProp<TextStyle>,
+
+  body1: [$baseStyle, $sizeStyles.sm, , $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  body2: [$baseStyle, $sizeStyles.xs, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  caption: [$baseStyle, $sizeStyles.xxs, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+
+  iosheading: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+  iostitle: [$baseStyle, $sizeStyles.md, $fontWeightStyles.medium] as StyleProp<TextStyle>,
+  iossub: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  iosbody: [
+    $baseStyle,
+    $sizeStyles.sm,
+    ,
+    $fontWeightStyles.normal,
+    { color: colors.palette.neutral500 },
+  ] as StyleProp<TextStyle>,
+  ioscaption: [
+    $baseStyle,
+    $sizeStyles.xs,
+    $fontWeightStyles.normal,
+    { color: colors.palette.neutral600 },
+  ] as StyleProp<TextStyle>,
+
+  label: [
+    $baseStyle,
+    $sizeStyles.xl,
+    $fontWeightStyles.light,
+    { color: colors.palette.neutral600 },
+  ] as StyleProp<Text>,
+
+  subLabel: [
+    $baseStyle,
+    $sizeStyles.xxs,
+    $fontWeightStyles.light,
+    { color: colors.palette.neutral600 },
+  ] as StyleProp<Text>,
+
+  title: [$baseStyle, $sizeStyles.xs, $fontWeightStyles.medium, { color: colors.text }],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

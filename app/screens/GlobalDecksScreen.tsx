@@ -1,0 +1,170 @@
+import React, { FC, useEffect, useState } from "react"
+import { observer } from "mobx-react-lite"
+import { ScrollView, TouchableOpacity, View, ViewStyle } from "react-native"
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
+import {
+  Button,
+  Card,
+  CustomTag,
+  CustomText,
+  Header,
+  Icon,
+  Screen,
+  Text,
+  TextField,
+} from "../components"
+import { colors, custom_colors, spacing } from "../theme"
+import { searchGlobalDecks } from "../utils/globalDecksUtils"
+import { useNavigation } from "@react-navigation/native"
+import { Deck, useStores } from "../models"
+import { supabase } from "../services/supabase/supabase"
+import { AppStackParamList, AppRoutes } from "../utils/consts"
+import { FlatList } from "react-native-gesture-handler"
+import { borderRadius } from "app/theme/borderRadius"
+// import { useStores } from "../models"
+
+// STOP! READ ME FIRST!
+// To fix the TS error below, you'll need to add the following things in your navigation config:
+// - Add `GlobalDecks: undefined` to AppStackParamList
+// - Import your screen, and add it to the stack:
+//     `<Stack.Screen name="GlobalDecks" component={GlobalDecksScreen} />`
+// Hint: Look for the 🔥!
+
+// REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
+// @ts-ignore
+export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "GlobalDecks">> = observer(
+  function GlobalDecksScreen() {
+    const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
+    const [searchTerm, setSearchTerm] = useState("")
+    const [decks, setDecks] = useState([])
+    const [selectedTag, setSelectedTag] = useState(null)
+
+    useEffect(() => {
+      const getDecks = async (searchTerm) => {
+        const data = await searchGlobalDecks(searchTerm)
+        if (data) {
+          setDecks((prev) => data)
+        }
+      }
+
+      getDecks(searchTerm).catch(() => {
+        console.log("something went wrong")
+      })
+    }, [searchTerm])
+
+    const goToDeckAdd = (deck: Deck) => {
+      navigation.navigate(AppRoutes.DECK_ADD, { deck: deck })
+    }
+
+    return (
+      <Screen safeAreaEdges={["bottom"]} style={$root}>
+        <View style={$content_container}>
+          <Header
+            leftIcon="caretLeft"
+            onLeftPress={() => navigation.goBack()}
+            title={"Global Decks"}
+          ></Header>
+
+          <TextField
+            containerStyle={{ marginBottom: spacing.size120, paddingHorizontal: spacing.size160 }}
+            value={searchTerm}
+            placeholder="Search"
+            LeftAccessory={(props) => (
+              <Icon
+                containerStyle={props.style}
+                color={custom_colors.foreground3}
+                icon="search"
+                size={24}
+              ></Icon>
+            )}
+            onChangeText={setSearchTerm}
+          ></TextField>
+
+          <ScrollView
+            contentContainerStyle={{
+              gap: 12,
+            }}
+            style={{
+              paddingHorizontal: spacing.size160,
+              marginBottom: spacing.size160,
+            }}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          >
+            {["Featured", "SAT", "English", "Spanish"].map((text, index) => {
+              return (
+                <View style={{ height: 42 }}>
+                  <CustomTag
+                    key={text + index}
+                    onPress={() => setSelectedTag(text)}
+                    selected={text === selectedTag}
+                    text={text}
+                  ></CustomTag>
+                </View>
+              )
+            })}
+          </ScrollView>
+
+          <FlatList
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              gap: 12,
+              // padding: 2,
+              marginHorizontal: 16,
+            }}
+            data={decks}
+            renderItem={({ item, index }) => (
+              <Card
+                style={{ elevation: 2 }}
+                key={item.id}
+                onPress={() => goToDeckAdd(item)}
+                ContentComponent={
+                  <View
+                    style={{
+                      paddingVertical: spacing.size80,
+                      paddingHorizontal: spacing.size120,
+                    }}
+                  >
+                    <CustomText style={{ marginBottom: spacing.size20 }} preset="body1strong">
+                      {item?.title}
+                    </CustomText>
+                    <CustomText style={{ marginBottom: spacing.size80 }} preset="body2">
+                      {item?.global_flashcards?.length} cards
+                    </CustomText>
+                    {item?.description ? (
+                      <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
+                        {item?.description}
+                      </CustomText>
+                    ) : null}
+                    <CustomText
+                      preset="caption1Strong"
+                      style={{
+                        marginBottom: spacing.size40,
+                        color: custom_colors.background1,
+                        backgroundColor: custom_colors.brandBackground1,
+                        paddingHorizontal: spacing.size80,
+                        paddingVertical: spacing.size40,
+                        borderRadius: borderRadius.corner80,
+                      }}
+                    >
+                      Premium
+                    </CustomText>
+                  </View>
+                }
+              ></Card>
+            )}
+          ></FlatList>
+        </View>
+      </Screen>
+    )
+  },
+)
+
+const $root: ViewStyle = {
+  flex: 1,
+}
+
+const $content_container: ViewStyle = {
+  height: "100%",
+}

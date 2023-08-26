@@ -7,8 +7,10 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native"
-import { colors, spacing, typography } from "../theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
+import { borderRadius } from "../theme/borderRadius"
+import { transparent } from "react-native-paper/lib/typescript/src/styles/themes/v2/colors"
 
 type Presets = keyof typeof $viewPresets
 
@@ -123,14 +125,66 @@ export function Button(props: ButtonProps) {
   )
 }
 
-const $baseViewStyle: ViewStyle = {
-  minHeight: 56,
-  borderRadius: 4,
+const $customBase: ViewStyle = {
+  borderRadius: borderRadius.corner80,
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
-  paddingVertical: spacing.sm,
-  paddingHorizontal: spacing.sm,
+  paddingVertical: 0,
+  paddingHorizontal: 20,
+  height: 40,
+}
+
+const $customBaseText: TextStyle = {
+  fontSize: 17,
+  lineHeight: 22,
+  fontFamily: typography.primary.semiBold,
+  textAlign: "center",
+  flexShrink: 1,
+  flexGrow: 0,
+  zIndex: 2,
+}
+
+const $customBaseSmall: ViewStyle = {
+  borderRadius: borderRadius.corner80,
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "row",
+  paddingHorizontal: spacing.size280,
+  paddingVertical: spacing.size60,
+  //flex: 1,
+  //paddingVertical: spacing.size80,
+  //width: 90,
+}
+
+const $customSmallText: TextStyle = {
+  fontSize: 13,
+  lineHeight: 18,
+  fontFamily: typography.primary.semiBold,
+  textAlign: "center",
+  zIndex: 2,
+}
+
+const $custom_outline: ViewStyle = {
+  borderWidth: 1,
+  borderColor: custom_colors.brandStroke1,
+}
+
+const $small_button: ViewStyle = {
+  //padding: 0,
+  minHeight: 30,
+}
+
+//// - OLD STYLES
+
+const $baseViewStyle: ViewStyle = {
+  minHeight: 56,
+  borderRadius: 8,
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "row",
+  paddingVertical: spacing.small,
+  paddingHorizontal: spacing.small,
   overflow: "hidden",
 }
 
@@ -144,8 +198,33 @@ const $baseTextStyle: TextStyle = {
   zIndex: 2,
 }
 
-const $rightAccessoryStyle: ViewStyle = { marginStart: spacing.xs, zIndex: 1 }
-const $leftAccessoryStyle: ViewStyle = { marginEnd: spacing.xs, zIndex: 1 }
+const $custom_filled: ViewStyle = {
+  borderWidth: 0,
+  minHeight: 0,
+  paddingVertical: spacing.small,
+  paddingHorizontal: spacing.large,
+}
+
+const $clear: ViewStyle = {
+  borderWidth: 0,
+  marginHorizontal: 8,
+  minHeight: 0,
+  paddingVertical: spacing.small,
+  paddingHorizontal: spacing.large,
+}
+
+const $circle_icon: ViewStyle = {
+  backgroundColor: colors.palette.primary300,
+  justifyContent: "center",
+  alignItems: "center",
+  flexDirection: "row",
+  width: 36,
+  height: 36,
+  borderRadius: 60,
+}
+
+const $rightAccessoryStyle: ViewStyle = { marginStart: spacing.extraSmall, zIndex: 1 }
+const $leftAccessoryStyle: ViewStyle = { marginEnd: spacing.extraSmall, zIndex: 1 }
 
 const $viewPresets = {
   default: [
@@ -163,22 +242,118 @@ const $viewPresets = {
     $baseViewStyle,
     { backgroundColor: colors.palette.neutral800 },
   ] as StyleProp<ViewStyle>,
+
+  small_success: [
+    $baseViewStyle,
+    $small_button,
+    { backgroundColor: colors.success },
+  ] as StyleProp<ViewStyle>,
+
+  custom_filled: [
+    $baseViewStyle,
+    $custom_filled,
+    { backgroundColor: colors.palette.primary500 },
+  ] as StyleProp<ViewStyle>,
+
+  clear: [$baseViewStyle, $clear, { backgroundColor: colors.transparent }] as StyleProp<ViewStyle>,
+
+  circle_icon: [$circle_icon] as StyleProp<ViewStyle>,
+
+  custom_default: [
+    $customBase,
+    { backgroundColor: custom_colors.brandBackground1 },
+  ] as StyleProp<ViewStyle>,
+
+  custom_clear: [$customBase, { backgroundColor: colors.transparent }] as StyleProp<ViewStyle>,
+
+  custom_default_small: [
+    $customBaseSmall,
+    $small_button,
+    { backgroundColor: custom_colors.brandBackground1 },
+  ] as StyleProp<ViewStyle>,
+
+  custom_secondary_small: [
+    $customBaseSmall,
+    $small_button,
+    { backgroundColor: custom_palette.grey88 },
+  ] as StyleProp<ViewStyle>,
+
+  custom_outline: [
+    $customBase,
+    $custom_outline,
+    { backgroundColor: colors.transparent },
+  ] as StyleProp<ViewStyle>,
+
+  custom_outline_small: [
+    $customBaseSmall,
+    $small_button,
+    $custom_outline,
+    { backgroundColor: colors.transparent },
+  ] as StyleProp<ViewStyle>,
 }
 
 const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: $baseTextStyle,
   filled: $baseTextStyle,
   reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
+  small_success: [$baseTextStyle, { color: colors.white }],
+  custom_filled: [$customBaseText, { color: colors.white }],
+  custom_outline: [
+    $customBaseText,
+    {
+      color: custom_colors.brandBackground1,
+    },
+  ],
+  clear: [
+    $baseTextStyle,
+    {
+      color: colors.palette.primary500,
+      fontFamily: typography.primary.bold,
+      fontSize: 14,
+      lineHeight: 16,
+    },
+  ],
+  circle_icon: [$baseTextStyle],
+  custom_default: [$customBaseText, { color: custom_colors.background1 }],
+  custom_default_small: [$customBaseText, $customSmallText, { color: custom_colors.background1 }],
+  custom_outline_small: [
+    $customBaseText,
+    $customSmallText,
+    { color: custom_colors.brandBackground1 },
+  ],
+  custom_secondary_small: [$customBaseText, $customSmallText, { color: custom_colors.foreground1 }],
+
+  custom_clear: [$customBaseText, { color: custom_colors.brandForeground1 }],
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
   default: { backgroundColor: colors.palette.neutral200 },
   filled: { backgroundColor: colors.palette.neutral400 },
   reversed: { backgroundColor: colors.palette.neutral700 },
+  small_success: { backgroundColor: colors.palette.neutral800 },
+  custom_filled: { backgroundColor: colors.palette.primary400 },
+  custom_outline: { backgroundColor: colors.palette.neutral300 },
+  clear: { backgroundColor: "transparent" },
+  circle_icon: { backgroundColor: colors.palette.primary400 },
+  custom_default: { backgroundColor: custom_colors.brandBackground1Pressed },
+  custom_default_small: { backgroundColor: custom_colors.brandBackground1Pressed },
+  custom_outline_small: { backgroundColor: colors.palette.neutral300 },
+  custom_clear: { backgroundColor: "transparent" },
+  custom_secondary_small: { backgroundColor: custom_palette.grey82 },
 }
 
 const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
   filled: { opacity: 0.9 },
   reversed: { opacity: 0.9 },
+  small_success: { opacity: 1 },
+  custom_filled: { opacity: 1 },
+  custom_outline: { opacity: 1 },
+  clear: { opacity: 0.5 },
+  circle_icon: { opacity: 0.5 },
+  custom_default: { opacity: 1 },
+  custom_default_small: { opacity: 1 },
+  custom_outline_small: { opacity: 1 },
+  custom_clear: { opacity: 0.5 },
+  custom_secondary_small: { opacity: 0.8 },
 }

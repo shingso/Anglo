@@ -1,6 +1,8 @@
+import { SCREEN_WIDTH } from "@gorhom/bottom-sheet"
 import * as React from "react"
-import { ComponentType } from "react"
+import { ComponentType, useRef } from "react"
 import {
+  Animated,
   Image,
   ImageStyle,
   StyleProp,
@@ -70,6 +72,7 @@ export function Icon(props: IconProps) {
       accessibilityRole={isPressable ? "imagebutton" : undefined}
       {...WrapperProps}
       style={$containerStyleOverride}
+      testID={icon}
     >
       <Image
         style={[
@@ -107,6 +110,79 @@ export const iconRegistry = {
   slack: require("../../assets/icons/slack.png"),
   view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
+
+  more_horiz: require("../../assets/icons/more_horiz.png"),
+  swipe_up: require("../../assets/icons/swipe_up.png"),
+  swipe_left: require("../../assets/icons/swipe_left.png"),
+  repeat: require("../../assets/icons/repeat.png"),
+  check_circle: require("../../assets/icons/check_circle.png"),
+  check_circle_200: require("../../assets/icons/check_circle_200.png"),
+  save: require("../../assets/icons/save.png"),
+  menu_200: require("../../assets/icons/menu_200.png"),
+  menu_300: require("../../assets/icons/menu_300.png"),
+  card_300: require("../../assets/icons/card_300.png"),
+  card_400: require("../../assets/icons/card_400.png"),
+  card_500: require("../../assets/icons/card_500.png"),
+  card_600: require("../../assets/icons/card_600.png"),
+  card_700: require("../../assets/icons/card_700.png"),
+  card_filled: require("../../assets/icons/card_filled.png"),
+  more_vert: require("../../assets/icons/more_vert.png"),
+  more_vert_600: require("../../assets/icons/more_vert_600.png"),
+  more_vert_600_: require("../../assets/icons/more_vert_600_0.png"),
+  more_vert_700: require("../../assets/icons/more_vert_700.png"),
+  more_vert_700_100: require("../../assets/icons/more_vert_700_100.png"),
+  card_add: require("../../assets/icons/card_add.png"),
+  delete: require("../../assets/icons/delete.png"),
+  search: require("../../assets/icons/search.png"),
+  global: require("../../assets/icons/global.png"),
+  global_search: require("../../assets/icons/global_search.png"),
+  dot: require("../../assets/icons/dot.png"),
+  cancel: require("../../assets/icons/cancel.png"),
+  edit_filled: require("../../assets/icons/edit_filled.png"),
+  caret_up: require("../../assets/icons/caret_up.png"),
+  caret_down: require("../../assets/icons/caret_down.png"),
+  caret_down400: require("../../assets/icons/caret_down400.png"),
+  caret_down500: require("../../assets/icons/caret_down500.png"),
+  sound: require("../../assets/icons/sound.png"),
+  sound_filled: require("../../assets/icons/sound_filled.png"),
+  tap: require("../../assets/icons/tap.png"),
+  swipe_right: require("../../assets/icons/swipe_right.png"),
+  google_logo: require("../../assets/icons/google_logo.png"),
+  apple_logo: require("../../assets/icons/apple_logo.png"),
+  play: require("../../assets/icons/play.png"),
+  fluent_more: require("../../assets/icons/fluent_more.png"),
+  fluent_edit: require("../../assets/icons/fluent_edit.png"),
+  fluent_nav: require("../../assets/icons/fluent_nav.png"),
+  fluent_settings: require("../../assets/icons/fluent_settings.png"),
+  fluent_settings_outline: require("../../assets/icons/fluent_settings_outline.png"),
+  fluent_sort: require("../../assets/icons/fluent_sort.png"),
+  fluent_add: require("../../assets/icons/fluent_add.png"),
+  fluent_add_square: require("../../assets/icons/fluent_add_square.png"),
+  fluent_question_circle: require("../../assets/icons/fluent_question_circle.png"),
+  fluent_question_book: require("../../assets/icons/fluent_question_book.png"),
+  fluent_sign_out: require("../../assets/icons/fluent_sign_out.png"),
+  fluent_lightbulb: require("../../assets/icons/fluent_lightbulb.png"),
+  fluent_turtle: require("../../assets/icons/fluent_turtle.png"),
+  fluent_calendar: require("../../assets/icons/fluent_calendar.png"),
+  fluent_alpha_sort: require("../../assets/icons/fluent_alpha_sort.png"),
+  fluent_undo: require("../../assets/icons/fluent_undo.png"),
+  fluent_redo: require("../../assets/icons/fluent_redo.png"),
+  fluent_delete: require("../../assets/icons/fluent_delete.png"),
+  fluent_save: require("../../assets/icons/fluent_save.png"),
+  fluent_camera: require("../../assets/icons/fluent_camera.png"),
+  fluent_camera_add: require("../../assets/icons/fluent_camera_add.png"),
+  fluent_play_outline: require("../../assets/icons/fluent_play_outline.png"),
+  fluent_play_circle: require("../../assets/icons/fluent_play_circle.png"),
+  fluent_add_flashcard: require("../../assets/icons/fluent_add_flashcard.png"),
+  fluent_search_word: require("../../assets/icons/fluent_search_word.png"),
+  fluent_error_circle: require("../../assets/icons/fluent_error_circle.png"),
+  fluent_error_circle_filled: require("../../assets/icons/fluent_error_circle_filled.png"),
+  fluent_add_circle: require("../../assets/icons/fluent_add_circle.png"),
+  fluent_globe_search: require("../../assets/icons/fluent_globe_search.png"),
+  fluent_note_edit: require("../../assets/icons/fluent_note_edit.png"),
+  fluent_edit_outline: require("../../assets/icons/fluent_edit_outline.png"),
+  fluent_add_cards: require("../../assets/icons/fluent_add_cards.png"),
+  home: require("../../assets/icons/anglo/home.png"),
 }
 
 const $imageStyle: ImageStyle = {

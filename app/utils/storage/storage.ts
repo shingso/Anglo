@@ -34,7 +34,7 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  *
  * @param key The key to fetch.
  */
-export async function load(key: string): Promise<unknown | null> {
+export async function load(key: string): Promise<any | null> {
   try {
     const almostThere = await AsyncStorage.getItem(key)
     return JSON.parse(almostThere)
@@ -49,7 +49,7 @@ export async function load(key: string): Promise<unknown | null> {
  * @param key The key to fetch.
  * @param value The value to store.
  */
-export async function save(key: string, value: unknown): Promise<boolean> {
+export async function save(key: string, value: any): Promise<boolean> {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(value))
     return true
@@ -76,4 +76,16 @@ export async function clear(): Promise<void> {
   try {
     await AsyncStorage.clear()
   } catch {}
+}
+
+export async function getAllKeys() {
+  try {
+    const keys = await AsyncStorage.getAllKeys()
+    console.log(keys)
+  } catch (e) {
+    // read key error
+  }
+
+  // example console.log result:
+  // ['@MyApp_user', '@MyApp_key']
 }

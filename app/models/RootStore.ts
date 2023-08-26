@@ -1,13 +1,22 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { AuthenticationStoreModel } from "./AuthenticationStore" // @demo remove-current-line
-import { EpisodeStoreModel } from "./EpisodeStore" // @demo remove-current-line
+
+import { BoughtDeckStoreModel } from "./BoughtDeckStore"
+import { SubscriptionStoreModel } from "./SubscriptionStore"
+import { SettingsStoreModel } from "./SettingsStore"
+import { AuthStoreModel } from "./AuthStore"
+import { DeckStoreModel } from "./DeckStore"
+import { GlobalDeckStoreModel } from "./GlobalDecks/GlobalDeckStore"
 
 /**
  * A RootStore model.
  */
 export const RootStoreModel = types.model("RootStore").props({
-  authenticationStore: types.optional(AuthenticationStoreModel, {}), // @demo remove-current-line
-  episodeStore: types.optional(EpisodeStoreModel, {}), // @demo remove-current-line
+  globalDeckStore: types.optional(GlobalDeckStoreModel, {} as any),
+  boughtDeckStore: types.optional(BoughtDeckStoreModel, {} as any),
+  subscriptionStore: types.optional(SubscriptionStoreModel, {} as any),
+  settingsStore: types.optional(SettingsStoreModel, {} as any),
+  authStore: types.optional(AuthStoreModel, {} as any),
+  deckStore: types.optional(DeckStoreModel, {} as any),
 })
 
 /**

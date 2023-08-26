@@ -1,6 +1,6 @@
 import React, { ErrorInfo } from "react"
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { Button, Icon, Screen, Text } from "../../components"
+import { Button, CustomText, Icon, Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 
 export interface ErrorDetailsProps {
@@ -17,22 +17,22 @@ export function ErrorDetails(props: ErrorDetailsProps) {
       contentContainerStyle={$contentContainer}
     >
       <View style={$topSection}>
-        <Icon icon="ladybug" size={64} />
-        <Text style={$heading} preset="subheading" tx="errorScreen.title" />
-        <Text tx="errorScreen.friendlySubtitle" />
+        {/*    <Text style={$heading} preset="subheading" tx="errorScreen.title" />
+        <Text tx="errorScreen.friendlySubtitle" /> */}
       </View>
 
-      <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
+      {/*      <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
         <Text style={$errorContent} weight="bold" text={`${props.error}`.trim()} />
         <Text
           selectable
           style={$errorBacktrace}
           text={`${props.errorInfo.componentStack}`.trim()}
         />
-      </ScrollView>
-
+      </ScrollView> */}
+      <CustomText preset="title3">Oops, this is kinda of easter egg</CustomText>
+      <CustomText preset="body2">Something unexpectably broke</CustomText>
       <Button
-        preset="reversed"
+        preset="custom_default"
         style={$resetButton}
         onPress={props.onReset}
         tx="errorScreen.reset"
@@ -43,30 +43,30 @@ export function ErrorDetails(props: ErrorDetailsProps) {
 
 const $contentContainer: ViewStyle = {
   alignItems: "center",
-  paddingHorizontal: spacing.lg,
-  paddingTop: spacing.xl,
+  paddingHorizontal: spacing.large,
+  paddingTop: spacing.extraLarge,
   flex: 1,
+  justifyContent: "center",
 }
 
 const $topSection: ViewStyle = {
-  flex: 1,
   alignItems: "center",
 }
 
 const $heading: TextStyle = {
   color: colors.error,
-  marginBottom: spacing.md,
+  marginBottom: spacing.medium,
 }
 
 const $errorSection: ViewStyle = {
   flex: 2,
   backgroundColor: colors.separator,
-  marginVertical: spacing.md,
+  marginVertical: spacing.medium,
   borderRadius: 6,
 }
 
 const $errorSectionContentContainer: ViewStyle = {
-  padding: spacing.md,
+  padding: spacing.medium,
 }
 
 const $errorContent: TextStyle = {
@@ -74,11 +74,11 @@ const $errorContent: TextStyle = {
 }
 
 const $errorBacktrace: TextStyle = {
-  marginTop: spacing.md,
+  marginTop: spacing.medium,
   color: colors.textDim,
 }
 
 const $resetButton: ViewStyle = {
   backgroundColor: colors.error,
-  paddingHorizontal: spacing.xxl,
+  paddingHorizontal: spacing.huge,
 }

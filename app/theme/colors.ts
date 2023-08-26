@@ -30,12 +30,123 @@ const palette = {
   accent400: "#FBC878",
   accent500: "#FFBB50",
 
+  danger100: "#FDF6F6",
+  danger200: "#DC5E62",
+  danger300: "#F2D6CD",
+  danger400: "#D13438",
+  danger500: "#BC2F32",
+
   angry100: "#F2D6CD",
   angry500: "#C03403",
+
+  success500: "green",
 
   overlay20: "rgba(25, 16, 21, 0.2)",
   overlay50: "rgba(25, 16, 21, 0.5)",
 } as const
+
+export const custom_palette = {
+  white: "#ffffff",
+  grey98: "#fafafa",
+  grey96: "#f5f5f5",
+  grey94: "#f0f0f0",
+  grey92: "#ebebeb",
+  grey90: "#e6e6e6",
+  grey88: "#e0e0e0",
+  grey86: "#dbdbdb",
+  grey82: "#d1d1d1",
+  grey74: "#bdbdbd",
+
+  grey50: "#808080",
+  grey46: "#757575",
+  grey38: "#616161",
+  grey14: "#242424",
+  black: "#000000",
+
+  primary40: "#7a4531",
+  primary50: "#8e5139",
+  primary60: "#a25c42",
+  primary70: "#b7684a",
+  primary80: "#cb7352",
+  primary90: "#d08163",
+  primary100: "#d58f75",
+  primary110: "#db9d86",
+  primary120: "#e0ab97",
+  primary130: "#e5b9a9",
+  primary140: "#eac7ba",
+  primary150: "#efd5cb",
+
+  red10: "#bc2f32",
+  red20: "#DC5E62",
+  red40: "#D13438", //primary
+  red60: "#fdf6f6",
+
+  green10: "#0e700e",
+  green20: "#359b35",
+  green40: "#107c10", //primary
+  green60: "#f1faf1",
+} as const
+
+export const custom_colors = {
+  //Background is background
+  //Foreground usually means text
+
+  background1: custom_palette.white,
+  background2: custom_palette.white,
+  background3: custom_palette.white,
+  background4: custom_palette.grey98,
+  background5: custom_palette.grey94,
+  background6: custom_palette.grey82,
+
+  foreground1: custom_palette.grey14,
+  foreground2: custom_palette.grey38,
+  foreground3: custom_palette.grey50,
+
+  brandBackground1: custom_palette.primary80,
+  brandBackground1Pressed: custom_palette.primary50,
+  brandBackground1Selected: custom_palette.primary60,
+  brandBackground2: custom_palette.primary70,
+  brandBackground2Pressed: custom_palette.primary40,
+  brandBackground2Selected: custom_palette.primary50,
+  brandBackground3: custom_palette.primary60,
+  brandBackgroundTint: custom_palette.primary150,
+  brandBackgroundDisabled: custom_palette.primary140,
+
+  brandForeground1: custom_palette.primary80,
+  brandForeground1Pressed: custom_palette.primary50,
+  brandForeground1Selected: custom_palette.primary60,
+  brandForegroundTint: custom_palette.primary60,
+  brandForegroundDisabled1: custom_palette.primary90,
+  brandForegroundDisabled2: custom_palette.primary140,
+
+  brandStroke1: custom_palette.primary80,
+  brandStroke1Pressed: custom_palette.primary50,
+  brandStroke1Selected: custom_palette.primary60,
+  brandStrokeTint: custom_palette.primary90,
+
+  dangerBackground1: custom_palette.red60,
+  dangerForeground1: custom_palette.red10,
+  dangerStroke1: custom_palette.red20,
+  dangerBackground2: custom_palette.red40,
+  dangerForeground2: custom_palette.red40,
+  dangerStroke2: custom_palette.red40,
+
+  blueForeground1: "#1967d2",
+  blueForeground2: "#2886DE",
+
+  successBackground1: custom_palette.green60,
+  successForeground1: custom_palette.green10,
+  successStroke1: custom_palette.green20,
+  successBackground2: custom_palette.green40,
+  successForeground2: custom_palette.green40,
+
+  severeBackground1: "rgba(0, 0, 0, 0)",
+  severeForeground1: "rgba(0, 0, 0, 0)",
+  severeStroke1: "rgba(0, 0, 0, 0)",
+  severeBackground2: "rgba(0, 0, 0, 0)",
+  severeForeground2: "rgba(0, 0, 0, 0)",
+  severeStroke2: "rgba(0, 0, 0, 0)",
+}
 
 export const colors = {
   /**
@@ -63,7 +174,7 @@ export const colors = {
   /**
    * The default border color.
    */
-  border: palette.neutral400,
+  border: palette.neutral300,
   /**
    * The main tinting color.
    */
@@ -81,4 +192,12 @@ export const colors = {
    *
    */
   errorBackground: palette.angry100,
+
+  /**
+   * Success messages.
+   *
+   */
+  success: palette.success500,
+
+  white: palette.neutral100,
 }
