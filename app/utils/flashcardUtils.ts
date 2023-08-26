@@ -61,7 +61,7 @@ export const mapReponseToFlashcard = (flashcard: FlashcardSnapshotIn): Flashcard
   }
 }
 
-export const addFlashcard = async (flashcard: any): Promise<Flashcard> => {
+export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn> => {
   if (!flashcard?.deck_id) {
     //throw some kinda of an ERROR
     console.log("you messed up here which means something is wrong with the data/flow")
@@ -85,11 +85,10 @@ export const addFlashcard = async (flashcard: any): Promise<Flashcard> => {
       ])
       .select()
     if (data && data.length > 0) {
-      return data[0]
+      return mapReponseToFlashcard(data[0])
     }
     return null
   } catch (error) {
-    console.log(error, "ERROR")
     return null
   }
 }
@@ -99,7 +98,7 @@ export const addFlashcard = async (flashcard: any): Promise<Flashcard> => {
 export const updateFlashcard = async (flashcard: any) => {
   console.log("ran")
   if (!flashcard) {
-    return
+    return null
   }
   try {
     const { data, error } = await supabase
@@ -112,14 +111,17 @@ export const updateFlashcard = async (flashcard: any) => {
     }
     if (data && data.length > 0) {
       console.log("data", data)
-      return data[0]
+      return mapReponseToFlashcard(data[0])
     }
+    return null
   } catch (error) {
     return null
   }
 }
 
-export const updateFlashcardByGlobalFlashcard = async (global_flashcard: GlobalFlashcard) => {
+export const updateFlashcardByGlobalFlashcard = async (
+  global_flashcard: GlobalFlashcard,
+): Promise<FlashcardSnapshotIn> => {
   try {
     const { data, error } = await supabase
       .from("flashcards")
@@ -128,10 +130,12 @@ export const updateFlashcardByGlobalFlashcard = async (global_flashcard: GlobalF
       .select()
     if (error) {
       showErrorToast(error.message)
+      return null
     }
     if (data && data.length > 0) {
-      return data[0]
+      return mapReponseToFlashcard(data[0])
     }
+    return null
   } catch (error) {
     return null
   }

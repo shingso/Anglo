@@ -28,7 +28,7 @@ import {
   Settings_Fields,
   toggleSetting,
 } from "../utils/settingsUtil"
-
+import * as Speech from "expo-speech"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import PaginationDot from "react-native-animated-pagination-dot"
 import {
@@ -162,7 +162,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const addTimeToFlashcardNextShown = async (flashcard: Flashcard, time: number) => {
       if (!flashcard?.id) {
-        return
+        return null
       }
       const updatedFlashcard = {
         [Flashcard_Fields.ID]: flashcard.id,
@@ -232,10 +232,10 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     }
 
     const pronouceCurrentWord = () => {
-      /*   Speech.stop()
+      Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
         Speech.speak(currentFlashcards[0]?.front)
-      } */
+      }
     }
 
     const tutorial = [

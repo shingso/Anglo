@@ -147,7 +147,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       flashcardReference.deck_id = deck.id
       const addedFlashcard = await addFlashcard(flashcardReference)
       if (addedFlashcard) {
-        deck.addFlashcard(mapReponseToFlashcard(addedFlashcard))
+        deck.addFlashcard(addedFlashcard)
       }
       showSuccessToast("Flashcard Added", `${addedFlashcard.front} has been added to ${deck.title}`)
       onAddCallBack ? onAddCallBack() : null

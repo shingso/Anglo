@@ -26,7 +26,6 @@ import { showErrorToast } from "app/utils/errorUtils"
 import {
   addToFlashcardProgress,
   Flashcard_Fields,
-  updateFlashcard,
   insertNote,
   removeNote,
 } from "app/utils/flashcardUtils"
