@@ -17,7 +17,9 @@ export const calculateEasinessFactor = (cardProgresses: CardProgressSnapshotIn[]
 export const calculateCurrentRepetition = (cardProgresses: CardProgressSnapshotIn[]): number => {
   let repetition = 0
   cardProgresses.forEach((progress) => {
-    if (progress.retrieval_level >= 1) {
+    if (progress.retrieval_level >= 2) {
+      repetition += 1
+    } else if (progress.retrieval_level >= 1 && repetition > 1) {
       repetition += 1
     } else {
       repetition = 0
@@ -28,23 +30,22 @@ export const calculateCurrentRepetition = (cardProgresses: CardProgressSnapshotI
 
 export const calculateNextInterval = (flashcard: Flashcard, retrievalLevel: number): number => {
   //interval is a representation of the number of days
-  const currentInterval = calculateCurrentRepetition(flashcard.card_progress)
+  const currentRepitition = calculateCurrentRepetition(flashcard.card_progress)
   const easeFactor = calculateEasinessFactor(flashcard.card_progress)
   // we only want this to occur if the current repition is less than 2
 
-  if (retrievalLevel <= 1 && currentInterval < 1) {
+  if (retrievalLevel <= 1 && currentRepitition <= 1) {
     //for the first rank we want to return 0 if we are only sure -> we want to mame sure that we move upwards
-
     return 0
   }
 
   if (retrievalLevel >= 1) {
-    if (currentInterval === 0) {
+    if (currentRepitition === 0) {
       return 1
-    } else if (currentInterval === 1) {
+    } else if (currentRepitition === 1) {
       return 6
     } else {
-      return Math.round(currentInterval * easeFactor)
+      return Math.round(currentRepitition * easeFactor)
     }
   } else {
     return 0
