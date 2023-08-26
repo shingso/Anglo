@@ -44,7 +44,6 @@ import debounce from "lodash.debounce"
 import { BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
 import { AppStackParamList } from "../utils/consts"
-import Tags from "react-native-tags"
 import { borderRadius } from "../theme/borderRadius"
 // STOP! READ ME FIRST!
 

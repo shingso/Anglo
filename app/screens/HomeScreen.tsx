@@ -44,7 +44,7 @@ import {
 } from "../utils/remote_sync/remoteSyncUtils"
 import { borderRadius } from "../theme/borderRadius"
 import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
-import Tags from "react-native-tags"
+
 import format from "date-fns/format"
 import isEqual from "lodash/isEqual"
 import { wordsApi } from "../services/dictionaryApi/wordsApi"

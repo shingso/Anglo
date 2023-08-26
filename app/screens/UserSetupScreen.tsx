@@ -6,7 +6,7 @@ import { AppStackScreenProps } from "../navigators"
 import { Button, CustomText, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Education_Levels, User, updateUser } from "../utils/userUtils"
-import DropDownPicker from "react-native-dropdown-picker"
+
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
 
@@ -52,23 +52,6 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
           </CustomText>
           <CustomText></CustomText>
           <CustomText>What is your highest level of education?</CustomText>
-          <DropDownPicker
-            scrollViewProps={{
-              nestedScrollEnabled: true,
-            }}
-            style={$dropdown}
-            dropDownContainerStyle={$dropdownContainer}
-            selectedItemContainerStyle={$dropdownSelectedContainer}
-            selectedItemLabelStyle={$dropdownSelectedLabel}
-            TickIconComponent={() => null}
-            open={openNewPerDay}
-            value={newPerDay}
-            items={educationList}
-            setOpen={setOpenNewPerDay}
-            setValue={setNewPerDay}
-            listMode="SCROLLVIEW"
-            zIndex={openNewPerDay ? 1 : 0}
-          />
           <Button style={{ marginTop: "auto" }} preset="custom_outline">
             Save
           </Button>

@@ -5,7 +5,6 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import { Button, Card, CustomText, Screen, Text } from "../components"
 import { spacing } from "../theme/spacing"
-import DropDownPicker from "react-native-dropdown-picker"
 import { Deck, FlashcardModel, useStores } from "../models"
 import { useNavigation } from "@react-navigation/native"
 import { Deck_Fields, addCardsToShow, getDeck, newPerDayList } from "../utils/deckUtils"
