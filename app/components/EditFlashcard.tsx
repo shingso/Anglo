@@ -25,6 +25,7 @@ import { useStores } from "../models/helpers/useStores"
 import { showSuccessToast } from "app/utils/errorUtils"
 import { Deck } from "../models/Deck"
 import { GlobalDeck } from "app/models"
+import { Dot } from "./Dot"
 export interface EditFlashcardProps {
   /**
    * An optional style override useful for padding & margin.
@@ -153,6 +154,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       onAddCallBack ? onAddCallBack() : null
     } else {
       const updatedFlashcard = await updateFlashcard(flashcardReference)
+      console.log("the card was updated here!!")
       original?.updateFlashcard(flashcardReference)
       setSelectedFlashcard(flashcardReference)
     }
@@ -188,142 +190,134 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
   return (
     <View style={$styles}>
-      <View>
-        <View style={$modal_header}>
-          {onDelete && flashcard?.id && (
-            <Icon
-              size={28}
-              onPress={() => onDelete()}
-              icon="fluent_delete"
-              color={custom_colors.dangerForeground2}
-            ></Icon>
-          )}
-          <View style={{ flexDirection: "row", gap: spacing.size280, alignSelf: "flex-end" }}>
-            <Icon
-              onPress={() => pickImage()}
-              size={28}
-              icon="fluent_camera_add"
-              color={custom_colors.foreground1}
-            ></Icon>
-            {!flashcard?.next_shown && flashcard?.deck_id ? (
-              <Icon
-                size={28}
-                onPress={() => startFlashcard(flashcard)}
-                icon="fluent_play_outline"
-                color={custom_colors.foreground1}
-              ></Icon>
-            ) : null}
-            <View>
-              {!isFlashcardSame && (
-                <View
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: 12,
-                    backgroundColor: "green",
-                    opacity: 1,
-                    zIndex: 2,
-                    top: -1,
-                    right: -1,
-                    position: "absolute",
-                  }}
-                ></View>
-              )}
-              <Icon
-                size={28}
-                onPress={() =>
-                  customSaveFlashcard
-                    ? customSaveFlashcard(selectedFlashcardReference, deck)
-                    : saveFlashcard(flashcard, selectedFlashcardReference, deck)
-                }
-                icon="fluent_save"
-                color={custom_colors.foreground1}
-              ></Icon>
-            </View>
-          </View>
-        </View>
-        <EditableText
-          style={{ marginBottom: spacing.size120 }}
-          preset="title1"
-          placeholder="Front (tap to edit)"
-          testID="front"
-          onSubmit={(value) => onSubmitFront(value)}
-          initialValue={selectedFlashcardReference?.front}
-        ></EditableText>
-
-        <EditableText
-          preset="body2"
-          testID="back"
-          focus={focusBack}
-          style={{ marginBottom: spacing.size120 }}
-          onSubmit={(value) => onSubmitBack(value)}
-          multiline={true}
-          placeholder="back (tap to edit)"
-          initialValue={selectedFlashcardReference?.back}
-        ></EditableText>
-
-        <EditableText
-          style={{ marginBottom: spacing.size120 }}
-          preset="caption1"
-          testID="sub_header"
-          focus={focusCaption}
-          placeholder="caption (tap to edit)"
-          onSubmit={(value) => onSubmitCaption(value)}
-          initialValue={selectedFlashcardReference?.sub_header}
-        ></EditableText>
-
-        <EditableText
-          style={{ marginBottom: spacing.size120 }}
-          preset="caption2"
-          testID="extra"
-          focus={focusExtra}
-          placeholder="Extra (tap to edit)"
-          onSubmit={(value) => onSubmitExtra(value)}
-          initialValue={selectedFlashcardReference?.extra}
-        ></EditableText>
-
+      <View style={$modal_header}>
+        {onDelete && flashcard?.id && (
+          <Icon
+            size={28}
+            onPress={() => onDelete()}
+            icon="fluent_delete"
+            color={custom_colors.dangerForeground2}
+          ></Icon>
+        )}
         <View
           style={{
-            alignItems: "center",
-            flexWrap: "wrap",
             flexDirection: "row",
-            gap: 8,
-            marginBottom: spacing.size200,
+            gap: spacing.size280,
+            alignSelf: "flex-end",
+            flex: 1,
+            justifyContent: "flex-end",
           }}
         >
-          {selectedFlashcardReference?.extra_array?.map((tag, index) => (
-            <CustomTag
-              onPress={() => handleRemoveTag(tag)}
-              key={tag + index}
-              text={tag}
-            ></CustomTag>
-          ))}
-          <TextInput
-            ref={extraArrayRef}
-            style={{
-              alignSelf: "flex-start",
-              borderRadius: borderRadius.corner40,
-              paddingHorizontal: 0,
-              paddingVertical: spacing.size20,
-              backgroundColor: custom_colors.background1,
-            }}
-            testID="extra_array_edit"
-            value={inputValue}
-            onChangeText={(text) => setInputValue(text)}
-            placeholder="Tags (tap to edit)"
-            onSubmitEditing={handleAddTag}
-            blurOnSubmit={false}
-          />
+          <Icon
+            onPress={() => pickImage()}
+            size={28}
+            icon="fluent_camera_add"
+            color={custom_colors.foreground1}
+          ></Icon>
+          {!flashcard?.next_shown && flashcard?.deck_id ? (
+            <Icon
+              size={28}
+              onPress={() => startFlashcard(flashcard)}
+              icon="fluent_play_outline"
+              color={custom_colors.foreground1}
+            ></Icon>
+          ) : null}
+          <View>
+            {!isFlashcardSame && (
+              <View style={$saveBadge}>
+                <Dot style={{ backgroundColor: custom_colors.dangerForeground1 }}></Dot>
+              </View>
+            )}
+            <Icon
+              size={28}
+              onPress={() =>
+                customSaveFlashcard
+                  ? customSaveFlashcard(selectedFlashcardReference, deck)
+                  : saveFlashcard(flashcard, selectedFlashcardReference, deck)
+              }
+              icon="fluent_save"
+              color={custom_colors.foreground1}
+            ></Icon>
+          </View>
         </View>
-        {selectedFlashcardReference?.picture_url ? (
-          <Image
-            style={{ height: 150, width: 150, borderRadius: borderRadius.corner80 }}
-            source={{
-              uri: selectedFlashcardReference?.picture_url,
-            }}
-          ></Image>
-        ) : null}
       </View>
+      <EditableText
+        style={{ marginBottom: spacing.size120 }}
+        preset="title1"
+        placeholder="Front (tap to edit)"
+        testID="front"
+        onSubmit={(value) => onSubmitFront(value)}
+        initialValue={selectedFlashcardReference?.front}
+      ></EditableText>
+
+      <EditableText
+        preset="body2"
+        testID="back"
+        focus={focusBack}
+        style={{ marginBottom: spacing.size120 }}
+        onSubmit={(value) => onSubmitBack(value)}
+        multiline={true}
+        placeholder="back (tap to edit)"
+        initialValue={selectedFlashcardReference?.back}
+      ></EditableText>
+
+      <EditableText
+        style={{ marginBottom: spacing.size120 }}
+        preset="caption1"
+        testID="sub_header"
+        focus={focusCaption}
+        placeholder="caption (tap to edit)"
+        onSubmit={(value) => onSubmitCaption(value)}
+        initialValue={selectedFlashcardReference?.sub_header}
+      ></EditableText>
+
+      <EditableText
+        style={{ marginBottom: spacing.size120 }}
+        preset="caption2"
+        testID="extra"
+        focus={focusExtra}
+        placeholder="Extra (tap to edit)"
+        onSubmit={(value) => onSubmitExtra(value)}
+        initialValue={selectedFlashcardReference?.extra}
+      ></EditableText>
+
+      <View
+        style={{
+          alignItems: "center",
+          flexWrap: "wrap",
+          flexDirection: "row",
+          gap: 8,
+          marginBottom: spacing.size200,
+        }}
+      >
+        {selectedFlashcardReference?.extra_array?.map((tag, index) => (
+          <CustomTag onPress={() => handleRemoveTag(tag)} key={tag + index} text={tag}></CustomTag>
+        ))}
+        <TextInput
+          ref={extraArrayRef}
+          style={{
+            alignSelf: "flex-start",
+            borderRadius: borderRadius.corner40,
+            paddingHorizontal: 0,
+            paddingVertical: spacing.size20,
+            backgroundColor: custom_colors.background1,
+          }}
+          testID="extra_array_edit"
+          value={inputValue}
+          onChangeText={(text) => setInputValue(text)}
+          placeholder="Tags (tap to edit)"
+          onSubmitEditing={handleAddTag}
+          blurOnSubmit={false}
+        />
+      </View>
+      {selectedFlashcardReference?.picture_url ? (
+        <Image
+          style={{ height: 150, width: 150, borderRadius: borderRadius.corner80 }}
+          source={{
+            uri: selectedFlashcardReference?.picture_url,
+          }}
+        ></Image>
+      ) : null}
     </View>
   )
 })
@@ -338,5 +332,12 @@ const $modal_header: ViewStyle = {
   gap: spacing.size320,
   justifyContent: "space-between",
   paddingHorizontal: spacing.size80,
-  marginTop: spacing.size120,
+}
+
+const $saveBadge: ViewStyle = {
+  opacity: 1,
+  zIndex: 2,
+  right: -1,
+  top: 0,
+  position: "absolute",
 }

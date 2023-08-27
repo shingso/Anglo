@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, spacing, typography } from "../theme"
+import { colors, custom_palette, spacing, typography } from "../theme"
 import { Text } from "./Text"
 import {
   BottomSheetModalProvider,
@@ -11,6 +11,7 @@ import {
 import { Icon } from "./Icon"
 import { forwardRef, Ref, useEffect, useImperativeHandle, useMemo, useRef } from "react"
 import { CustomText } from "./CustomText"
+import { borderRadius } from "app/theme/borderRadius"
 
 export interface BottomSheetProps {
   /**
@@ -48,7 +49,27 @@ export const BottomSheet = forwardRef(function BottomSheet(
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
-        handleComponent={null}
+        handleComponent={() => (
+          <View
+            style={{
+              marginBottom: spacing.size20,
+              minHeight: 0,
+              paddingBottom: 0,
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: spacing.size80,
+            }}
+          >
+            <View
+              style={{
+                width: 32,
+                backgroundColor: custom_palette.grey50,
+                height: 6,
+                borderRadius: borderRadius.corner120,
+              }}
+            ></View>
+          </View>
+        )}
         onDismiss={() => (onDismiss ? onDismiss() : null)}
         backdropComponent={renderBackdrop}
         keyboardBehavior="interactive"
@@ -88,7 +109,6 @@ const $text: TextStyle = {
 }
 
 const $modal_header: ViewStyle = {
-  paddingBottom: spacing.small,
   paddingHorizontal: spacing.large,
   //borderBottomWidth: 1,
   //borderBottomColor: colors.border,

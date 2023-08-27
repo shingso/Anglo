@@ -9,6 +9,7 @@ import {
   Card,
   CustomModal,
   CustomText,
+  Dot,
   EditFlashcard,
   FlashcardListItem,
   Header,
@@ -139,12 +140,22 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               <FlashcardListItem
                 key={item.id}
                 flashcard={item}
+                RightComponent={
+                  item?.next_shown ? (
+                    <Dot
+                      style={{
+                        backgroundColor: custom_colors.successForeground2,
+                        width: 10,
+                        height: 10,
+                      }}
+                    ></Dot>
+                  ) : null
+                }
                 onPress={() => selectFlashcard(FlashcardModel.create(item))}
               ></FlashcardListItem>
             )}
           ></FlatList>
         </View>
-
         <BottomSheet ref={sortModalRef} customSnap={["50%"]}>
           <CustomText style={{ marginVertical: spacing.size120 }} preset="body1strong">
             Sort by
@@ -173,7 +184,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             })}
           </View>
         </BottomSheet>
-
         <BottomSheet
           onDismiss={() => deckStore.selectedDeck.removeSelectedFlashcard()}
           ref={selectedFlashcardModalRef}

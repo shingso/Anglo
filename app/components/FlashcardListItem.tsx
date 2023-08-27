@@ -45,7 +45,13 @@ export const FlashcardListItem = observer(function FlashcardListItem(
             minHeight: 0,
           }}
           ContentComponent={
-            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <CustomText preset="body2">{flashcard.front}</CustomText>
               {RightComponent && RightComponent}
             </View>
