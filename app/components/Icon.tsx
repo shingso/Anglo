@@ -182,7 +182,11 @@ export const iconRegistry = {
   fluent_note_edit: require("../../assets/icons/fluent_note_edit.png"),
   fluent_edit_outline: require("../../assets/icons/fluent_edit_outline.png"),
   fluent_add_cards: require("../../assets/icons/fluent_add_cards.png"),
+
+  //ANGLO
   home: require("../../assets/icons/anglo/home.png"),
+  play_sound: require("../../assets/icons/anglo/play_sound.png"),
+  notes: require("../../assets/icons/anglo/notes.png"),
 }
 
 const $imageStyle: ImageStyle = {

@@ -26,6 +26,8 @@ import { showSuccessToast } from "app/utils/errorUtils"
 import { Deck } from "../models/Deck"
 import { GlobalDeck } from "app/models"
 import { Dot } from "./Dot"
+import { CustomText } from "./CustomText"
+import { StatusLabel } from "./StatusLabel"
 export interface EditFlashcardProps {
   /**
    * An optional style override useful for padding & margin.
@@ -190,15 +192,12 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
   return (
     <View style={$styles}>
+      {flashcard?.next_shown ? (
+        <View style={{ position: "absolute", top: 0, left: 0 }}>
+          <StatusLabel text={"Active"}></StatusLabel>
+        </View>
+      ) : null}
       <View style={$modal_header}>
-        {onDelete && flashcard?.id && (
-          <Icon
-            size={28}
-            onPress={() => onDelete()}
-            icon="fluent_delete"
-            color={custom_colors.dangerForeground2}
-          ></Icon>
-        )}
         <View
           style={{
             flexDirection: "row",
@@ -208,6 +207,14 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
             justifyContent: "flex-end",
           }}
         >
+          {onDelete && flashcard?.id && (
+            <Icon
+              size={28}
+              onPress={() => onDelete()}
+              icon="fluent_delete"
+              color={custom_colors.foreground1}
+            ></Icon>
+          )}
           <Icon
             onPress={() => pickImage()}
             size={28}
@@ -332,6 +339,7 @@ const $modal_header: ViewStyle = {
   gap: spacing.size320,
   justifyContent: "space-between",
   paddingHorizontal: spacing.size80,
+  alignItems: "center",
 }
 
 const $saveBadge: ViewStyle = {

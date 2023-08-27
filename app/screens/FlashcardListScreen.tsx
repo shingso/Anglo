@@ -16,6 +16,7 @@ import {
   Icon,
   IconTypes,
   Screen,
+  StatusLabel,
   Text,
   TextField,
 } from "app/components"
@@ -141,15 +142,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 key={item.id}
                 flashcard={item}
                 RightComponent={
-                  item?.next_shown ? (
-                    <Dot
-                      style={{
-                        backgroundColor: custom_colors.successForeground2,
-                        width: 10,
-                        height: 10,
-                      }}
-                    ></Dot>
-                  ) : null
+                  item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
                 }
                 onPress={() => selectFlashcard(FlashcardModel.create(item))}
               ></FlashcardListItem>

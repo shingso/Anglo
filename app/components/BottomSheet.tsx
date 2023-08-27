@@ -52,7 +52,7 @@ export const BottomSheet = forwardRef(function BottomSheet(
         handleComponent={() => (
           <View
             style={{
-              marginBottom: spacing.size20,
+              marginBottom: spacing.size80,
               minHeight: 0,
               paddingBottom: 0,
               alignItems: "center",
@@ -62,9 +62,9 @@ export const BottomSheet = forwardRef(function BottomSheet(
           >
             <View
               style={{
-                width: 32,
-                backgroundColor: custom_palette.grey50,
-                height: 6,
+                width: 40,
+                backgroundColor: custom_palette.grey74,
+                height: 4,
                 borderRadius: borderRadius.corner120,
               }}
             ></View>

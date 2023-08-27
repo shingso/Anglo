@@ -5,13 +5,11 @@ import {
   getCardProgressesByField,
   insertCardProgress,
 } from "../cardProgressUtils"
-import { updateFlashcard } from "../flashcardUtils"
 import { load, save } from "../storage"
 import { v4 as uuidv4 } from "uuid"
 import { showErrorToast } from "../errorUtils"
 import { CardProgress } from "../../models/CardProgress"
-
-export const pendingRemoteFunctionKey = "_pendingRemoteFunctionKey "
+export const pendingRemoteFunctionKey = "_pendingRemoteFunctionKey"
 export const mostRecentLocalIdKey = "_mostRecentLocalIdKey"
 export const confirmedRemoteIdKey = "_confirmedRemoteIdKey"
 export enum FunctionTypes {

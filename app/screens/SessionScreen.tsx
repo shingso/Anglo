@@ -20,7 +20,7 @@ import {
   TextField,
 } from "../components"
 import { CardProgress, CardProgressSnapshotIn, Flashcard, useStores } from "../models"
-import { colors, custom_colors, spacing } from "../theme"
+import { colors, custom_colors, custom_palette, spacing } from "../theme"
 import { useNavigation } from "@react-navigation/native"
 import {
   loadOrInitalizeSettings,
@@ -29,8 +29,6 @@ import {
   toggleSetting,
 } from "../utils/settingsUtil"
 import * as Speech from "expo-speech"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import PaginationDot from "react-native-animated-pagination-dot"
 import {
   Flashcard_Fields,
   addToFlashcardProgress,
@@ -61,14 +59,13 @@ import {
 import { showErrorToast } from "app/utils/errorUtils"
 import { calculateNextInterval } from "app/utils/superMemoUtils"
 import { addDays, addMinutes, differenceInMinutes } from "date-fns"
+import { borderRadius } from "app/theme/borderRadius"
 
 export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>> = observer(
   function SessionScreen() {
     const { deckStore } = useStores()
     const deck = deckStore.selectedDeck
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-    const [tutorialVisible, setTutorialVisible] = useState(false)
-    const [pageIndex, setPageIndex] = useState(0)
     const [sessionStats, setSessionStats] = useState({
       right: 0,
       left: 0,
@@ -95,7 +92,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       const loadSettings = async () => {
         const settings = await loadOrInitalizeSettings()
         if (settings?.showSessionTutorial != null && settings.showSessionTutorial) {
-          setTutorialVisible(true)
           tutorialModalRef?.current.present()
         }
       }
@@ -115,11 +111,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const navigateHome = () => {
       navigation.navigate(AppRoutes.DECKS)
-    }
-
-    const closeTutorial = () => {
-      toggleSetting(Settings_Fields.SHOW_SESSION_TUTORIAL, false)
-      setTutorialVisible(false)
     }
 
     const editFlashcard = () => {
@@ -238,24 +229,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       }
     }
 
-    const tutorial = [
-      {
-        title: "Tap to see the back",
-        text: "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-        icon: "tap",
-      },
-      {
-        title: "Swipe right if you know it",
-        text: "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-        icon: "swipe_right",
-      },
-      {
-        title: "Swipe left if you dont",
-        text: "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex",
-        icon: "swipe_left",
-      },
-    ]
-
     const undo = async () => {
       //remove the last card progress that was inserted
       //Fix all of the sync data
@@ -295,7 +268,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         return [...prev, progressId]
       })
     }
-
+    const hasSessionCards = deck?.sessionCards && deck?.sessionCards?.length > 0
     return (
       <Screen style={$root}>
         <Header
@@ -304,10 +277,11 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           onLeftPress={() => navigation.goBack()}
           title={deck.title}
         ></Header>
-        {deck?.sessionCards && deck?.sessionCards?.length > 0 && (
+
+        {hasSessionCards && (
           <View style={$count_container}>
             <Text style={$count_style} text={deck?.sessionCards?.length.toString()} />
-            <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size320 }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
               <Icon
                 onPress={() => undo()}
                 disabled={sessionProgressLog.length === 0}
@@ -327,12 +301,12 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               />
               <Icon
                 onPress={() => showNotes()}
-                icon="fluent_note_edit"
+                icon="notes"
                 color={custom_colors.foreground1}
                 size={28}
               />
               <Icon
-                icon="sound"
+                icon="play_sound"
                 onPress={() => pronouceCurrentWord()}
                 color={custom_colors.foreground1}
                 size={28}
@@ -341,7 +315,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           </View>
         )}
 
-        {deck?.sessionCards && deck?.sessionCards?.length > 0 ? (
+        {hasSessionCards ? (
           <SwipeCards
             currentDeck={deckStore.selectedDeck}
             swipeRight={() => rightSwipe()}
@@ -355,7 +329,64 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             swipeRight={() => navigateHome()}
             children={
               <View style={$sessions_statistics}>
-                <CustomText style={{ marginBottom: spacing.size200 }} preset="title2">
+                <CustomText preset="body1">Lorum</CustomText>
+                <View
+                  style={{
+                    borderColor: custom_palette.grey82,
+                    borderWidth: 1.2,
+                    width: "100%",
+                    padding: spacing.size120,
+                    borderRadius: borderRadius.corner80,
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Icon
+                      style={{ marginRight: spacing.size80 }}
+                      icon="fluent_lightbulb"
+                      size={20}
+                    ></Icon>
+                    <CustomText>Cards passed : {sessionStats.left}</CustomText>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    borderColor: custom_palette.grey82,
+                    borderWidth: 1.2,
+                    width: "100%",
+                    padding: spacing.size120,
+                    borderRadius: borderRadius.corner80,
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Icon
+                      style={{ marginRight: spacing.size80 }}
+                      icon="fluent_lightbulb"
+                      size={20}
+                    ></Icon>
+                    <CustomText>Total card reviewed: {sessionStats.totalSwipes}</CustomText>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    borderColor: custom_palette.grey82,
+                    borderWidth: 1.2,
+                    width: "100%",
+                    padding: spacing.size120,
+                    borderRadius: borderRadius.corner80,
+                  }}
+                >
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Icon
+                      style={{ marginRight: spacing.size80 }}
+                      icon="fluent_lightbulb"
+                      size={20}
+                    ></Icon>
+                    <CustomText>
+                      Longest Elapsed: {millisecondsToTime(sessionStats?.longestElapsed * 60000)}
+                    </CustomText>
+                  </View>
+                </View>
+                {/* <CustomText style={{ marginBottom: spacing.size200 }} preset="title2">
                   Horray! You have just learned more words
                 </CustomText>
                 <CustomText>Passed</CustomText>
@@ -367,7 +398,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                 </CustomText>
                 <CustomText style={{ marginTop: "auto" }} preset="caption1Strong">
                   Swipe to go back home
-                </CustomText>
+                </CustomText> */}
               </View>
             }
           ></CustomSwipeCards>
@@ -449,7 +480,7 @@ const $count_container: ViewStyle = {
 
 const $sessions_statistics: ViewStyle = {
   height: "100%",
-  padding: spacing.size160,
+  gap: spacing.size100,
 }
 
 const $count_style: TextStyle = {
