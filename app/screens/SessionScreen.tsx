@@ -285,13 +285,13 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               <Icon
                 onPress={() => undo()}
                 disabled={sessionProgressLog.length === 0}
-                icon="fluent_undo"
+                icon="undo"
                 color={
                   sessionProgressLog.length === 0
                     ? custom_colors.foreground3
                     : custom_colors.foreground1
                 }
-                size={26}
+                size={30}
               />
               <Icon
                 onPress={() => editFlashcard()}

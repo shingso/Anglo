@@ -187,6 +187,7 @@ export const iconRegistry = {
   home: require("../../assets/icons/anglo/home.png"),
   play_sound: require("../../assets/icons/anglo/play_sound.png"),
   notes: require("../../assets/icons/anglo/notes.png"),
+  undo: require("../../assets/icons/anglo/undo.png"),
 }
 
 const $imageStyle: ImageStyle = {

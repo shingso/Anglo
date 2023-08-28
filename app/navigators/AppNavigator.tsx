@@ -39,12 +39,13 @@ import {
   TutorialScreen,
   FreeStudyScreen,
   FreeStudySessionScreen,
+  DeckHomeScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, spacing, typography } from "../theme"
 import { navigate, navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { useNavigation } from "@react-navigation/native"
-import { Button, CustomModal, CustomText, Header, Text, TextField } from "../components"
+import { Button, CustomModal, CustomText, DeckHome, Header, Text, TextField } from "../components"
 import { Deck, useStores } from "../models"
 import {
   DarkTheme as NavigationDarkTheme,
@@ -291,6 +292,13 @@ const HomeScreens = () => {
           headerShown: false,
         }}
         component={AboutStackScreens}
+      />
+      <Stack.Screen
+        name={AppRoutes.DECK_HOME}
+        options={{
+          headerShown: false,
+        }}
+        component={DeckHomeScreen}
       />
       <Stack.Screen
         name={AppRoutes.SUBSCRIBE}

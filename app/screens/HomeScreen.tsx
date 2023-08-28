@@ -173,11 +173,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
             onRightPress={() => (deckStore?.selectedDeck ? deckStore.removeSelectedDeck() : null)}
           ></Header>
 
-          {deckStore.selectedDeck ? (
-            <DeckHome navigation={navigation} deck={deckStore.selectedDeck}></DeckHome>
-          ) : (
-            <HomeForecast></HomeForecast>
-          )}
+          <HomeForecast></HomeForecast>
 
           <CustomModal
             header={"Conflict Detected!"}

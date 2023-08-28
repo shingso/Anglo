@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { custom } from "mobx-state-tree/dist/internal"
 import { borderRadius } from "app/theme/borderRadius"
-import { Flashcard } from "app/models"
+import { Deck, Flashcard } from "app/models"
 import { useEffect } from "react"
 
 export interface HomeForecastProps {
@@ -58,6 +58,11 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
       currentDate = addDays(currentDate, 1)
     }
     return dateArray
+  }
+
+  const selectDeck = (deck: Deck) => {
+    deckStore.selectDeck(deck)
+    navigation.navigate(AppRoutes.DECK_HOME)
   }
 
   return (
@@ -119,7 +124,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
         {deckStore.decks.map((deck) => {
           return (
             <Card
-              onPress={() => deckStore.selectDeck(deck)}
+              onPress={() => selectDeck(deck)}
               key={deck.id}
               style={{
                 minHeight: 0,
@@ -149,14 +154,14 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                           {deck?.todaysCards?.length}
                         </CustomText>
                       </View> */}
-                      <CustomText preset="body1">{deck.title}</CustomText>
+                      <CustomText preset="body2Strong">{deck.title}</CustomText>
                     </View>
-                    <Icon
+                    {/*  <Icon
                       icon="fluent_play_outline"
                       containerStyle={{ alignSelf: "center" }}
                       color={custom_colors.foreground1}
                       size={20}
-                    ></Icon>
+                    ></Icon> */}
                   </View>
                 </View>
               }

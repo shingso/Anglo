@@ -259,6 +259,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               minHeight: 0,
               elevation: 1,
               flex: 1,
+              marginBottom: 2,
             }}
             ContentComponent={
               <View

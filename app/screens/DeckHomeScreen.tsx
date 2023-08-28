@@ -1,22 +1,29 @@
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { Alert, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
-import { Screen, Text } from "app/components"
+import { DeckHome, Header, Screen, Text } from "app/components"
+import { useStores } from "app/models"
+import { useNavigation } from "@react-navigation/native"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
 
 interface DeckHomeScreenProps extends AppStackScreenProps<"DeckHome"> {}
 
 export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHomeScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+  const { deckStore } = useStores()
+  const navigation = useNavigation()
+  const selectedDeck = deckStore.selectedDeck
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
     <Screen style={$root} preset="scroll">
-      <Text text="deckHome" />
+      <Header
+        containerStyle={{ zIndex: 1, elevation: 4 }}
+        leftIcon="caretLeft"
+        onLeftPress={() => navigation.goBack()}
+        title={selectedDeck.title}
+      ></Header>
+      <DeckHome navigation={navigation} deck={selectedDeck}></DeckHome>
     </Screen>
   )
 })
