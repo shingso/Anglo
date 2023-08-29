@@ -37,6 +37,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
 
   const selectDeck = (deck) => {
     deckStore.selectDeck(deck)
+    navigation.navigate(AppRoutes.DECK_HOME)
     navigation.closeDrawer()
   }
 
