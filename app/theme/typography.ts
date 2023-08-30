@@ -213,7 +213,7 @@ export const preset_fonts = {
     $lineHeightStyles.sm,
     $fontWeightStyles.normal,
   ] as StyleProp<TextStyle>,
-  body1strong: [
+  body1Strong: [
     $baseStyle,
     $sizeStyles.sm,
     $lineHeightStyles.sm,

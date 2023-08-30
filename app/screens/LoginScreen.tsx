@@ -144,9 +144,10 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             <CustomText
               preset="title1"
               style={{ marginBottom: spacing.size40, fontSize: 44, lineHeight: 60 }}
-              animatedText="Know it when you need it"
               animate={true}
-            ></CustomText>
+            >
+              Study anywhere, know it everywhere
+            </CustomText>
           </View>
           <TextField
             containerStyle={$modal_text_field}

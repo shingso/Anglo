@@ -9,7 +9,7 @@ import { addDeck } from "app/utils/deckUtils"
 import { getPendingRemoteFunctions } from "app/utils/remote_sync/remoteSyncUtils"
 import { CustomText } from "./CustomText"
 import { Icon } from "./Icon"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { CustomModal } from "./CustomModal"
 import { TextField } from "./TextField"
@@ -34,7 +34,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
   const [deckLimitModalVisbile, setDeckLimitModalVisible] = useState(false)
   const [deckTitle, setDeckTitle] = useState("")
-
+  const theme = useTheme()
   const selectDeck = (deck) => {
     deckStore.selectDeck(deck)
     navigation.navigate(AppRoutes.DECK_HOME)
@@ -105,7 +105,11 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   return (
     <DrawerContentScrollView
       contentContainerStyle={{ justifyContent: "space-between", flex: 1 }}
-      style={{ padding: spacing.size160, paddingVertical: spacing.size320 }}
+      style={{
+        padding: spacing.size160,
+        paddingVertical: spacing.size320,
+        backgroundColor: theme.colors.background2,
+      }}
       {...props}
     >
       <View>
@@ -160,9 +164,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
             paddingBottom: spacing.size80,
           }}
         >
-          <CustomText style={{ color: custom_colors.foreground1 }} preset="body1">
-            Decks
-          </CustomText>
+          <CustomText preset="body1">Decks</CustomText>
           <View style={{ gap: 16, flexDirection: "row" }}>
             <Icon
               size={24}
@@ -245,21 +247,13 @@ const $container: ViewStyle = {
   justifyContent: "center",
 }
 
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
-}
-
 const $deck_item: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   paddingVertical: spacing.size120,
 }
 
-const $deck_selected_item: ViewStyle = {
-  //backgroundColor: custom_colors.background6,
-}
+const $deck_selected_item: ViewStyle = {}
 
 const $drawer_action: ViewStyle = {
   paddingVertical: spacing.size120,

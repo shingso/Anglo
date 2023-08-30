@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native"
 import { isRTL, translate, TxKeyPath } from "../i18n"
-import { colors, preset_fonts, typography } from "../theme"
+import { $sizeStyles, colors, preset_fonts, typography } from "../theme"
 import { Button } from "./Button"
 
 type Sizes = keyof typeof $sizeStyles
@@ -64,65 +64,19 @@ export interface CustomTextProps extends RNTextProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Text.md)
  */
 export function CustomText(props: CustomTextProps) {
-  const {
-    weight,
-    size,
-    tx,
-    txOptions,
-    text,
-    children,
-    style: $styleOverride,
-    animatedText,
-    animate,
-    ...rest
-  } = props
+  const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
-
+  const theme = useTheme()
   const preset: Presets = $presets[props.preset] ? props.preset : "default"
-  const $styles = [$rtlStyle, $presets[preset], $styleOverride]
-
-  const textArray = animatedText?.trim()?.split(" ") || []
-  const animatedValues = textArray.map((word, index) => new Animated.Value(0))
-
-  useEffect(() => {
-    if (animatedText && animate) {
-      animateText()
-    }
-  }, [animate])
-
-  const animateText = (toValue = 1) => {
-    const animations = textArray.map((word, index) => {
-      return Animated.timing(animatedValues[index], {
-        toValue: toValue,
-        useNativeDriver: true,
-        duration: 500,
-      })
-    })
-
-    Animated.stagger(200, animations).start()
-  }
+  const $styles = [$rtlStyle, $presets[preset], { color: theme.colors.foreground1 }, $styleOverride]
 
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-      {animatedText ? (
-        textArray.map((word, index) => {
-          return (
-            <Animated.Text
-              {...rest}
-              style={[...$styles, { opacity: animatedValues[index] }]}
-              key={word + index}
-            >
-              {word} {index < textArray.length - 1}
-            </Animated.Text>
-          )
-        })
-      ) : (
-        <RNText {...rest} style={$styles}>
-          {content}
-        </RNText>
-      )}
+      <RNText {...rest} style={$styles}>
+        {content}
+      </RNText>
     </View>
   )
 }
@@ -131,7 +85,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
   return { ...acc, [weight]: { fontFamily } }
 }, {}) as Record<Weights, TextStyle>
 
-const $baseStyle: StyleProp<TextStyle> = [$fontWeightStyles.normal, { color: colors.text }]
+const $baseStyle: StyleProp<TextStyle> = [$fontWeightStyles.normal]
 
 const $presets = {
   default: $baseStyle,

@@ -196,7 +196,6 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   height: "100%",
-  backgroundColor: custom_colors.background5,
 }
 
 const $modal_text_field: ViewStyle = {

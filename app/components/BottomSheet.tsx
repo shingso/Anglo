@@ -83,14 +83,6 @@ export const BottomSheet = forwardRef(function BottomSheet(
           <View style={$buttons_container}>
             {header && <View style={$header}>{header}</View>}
             {title && <CustomText preset="body2Strong">{title}</CustomText>}
-            {/*    <Icon color="rgba(0,0,0,0.7)" size={24} icon="save"></Icon>*/}
-            {/*    <Icon
-              style={{ marginLeft: spacing.large }}
-              onPress={() => bottomSheetRef.current.dismiss()}
-              color="rgba(0,0,0,0.7)"
-              size={26}
-              icon="x"
-            ></Icon> */}
           </View>
         </View>
         <View style={$modal_content}>{children}</View>
@@ -101,13 +93,6 @@ export const BottomSheet = forwardRef(function BottomSheet(
 
 const $container: ViewStyle = {
   justifyContent: "center",
-  backgroundColor: "green",
-}
-
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
 }
 
 const $modal_header: ViewStyle = {
@@ -117,11 +102,6 @@ const $modal_header: ViewStyle = {
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-}
-
-const $modal_header_title: TextStyle = {
-  fontSize: 18,
-  fontWeight: "bold",
 }
 
 const $modal_content: ViewStyle = { paddingHorizontal: spacing.medium }

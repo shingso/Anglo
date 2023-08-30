@@ -129,9 +129,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText style={{ color: custom_colors.foreground1 }} preset="body1Strong">
-            Flashcards
-          </CustomText>
+          <CustomText preset="body1Strong">Flashcards</CustomText>
           {/*   <CustomText
                   style={{ color: custom_colors.brandForeground1 }}
                   preset="caption1Strong"
@@ -244,10 +242,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText
-            style={{ color: custom_colors.foreground1, marginBottom: spacing.size160 }}
-            preset="body1Strong"
-          >
+          <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
             Settings
           </CustomText>
         </View>

@@ -150,7 +150,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           ></FlatList>
         </View>
         <BottomSheet ref={sortModalRef} customSnap={["50%"]}>
-          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1strong">
+          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
             Sort by
           </CustomText>
           <View>
@@ -203,7 +203,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: custom_colors.background5,
 }
 
 const $container: ViewStyle = {

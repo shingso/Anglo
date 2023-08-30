@@ -29,21 +29,6 @@ import {
   insertNote,
   removeNote,
 } from "app/utils/flashcardUtils"
-import { millisecondsToTime } from "app/utils/helperUtls"
-import {
-  returnRemoteAndLocalMostRecent,
-  getRemoteRecentUpdate,
-  updateMostRecentLocalId,
-  updateConfirmedRemoteId,
-} from "app/utils/remote_sync/remoteSyncUtils"
-import {
-  reloadDefaultSettings,
-  loadOrInitalizeSettings,
-  toggleSetting,
-  Settings_Fields,
-} from "app/utils/settingsUtil"
-import { calculateNextInterval } from "app/utils/superMemoUtils"
-import { differenceInMinutes, addDays } from "date-fns"
 import { getSnapshot } from "mobx-state-tree"
 import * as Speech from "expo-speech"
 // import { useNavigation } from "@react-navigation/native"

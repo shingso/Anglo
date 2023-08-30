@@ -56,14 +56,21 @@ export const custom_palette = {
   grey90: "#e6e6e6",
   grey88: "#e0e0e0",
   grey86: "#dbdbdb",
+  grey84: "#D6D6D6",
   grey82: "#d1d1d1",
   grey74: "#bdbdbd",
-
+  grey68: "#ADADAD",
   grey50: "#808080",
   grey46: "#757575",
   grey38: "#616161",
+  grey36: "5C5C5C",
+  grey30: "4D4D4D",
+  grey24: "3D3D3D",
+  grey20: "#333333",
+  grey16: "#292929",
   grey14: "#242424",
   grey12: "#1F1F1F",
+  grey8: "#141414",
   black: "#000000",
 
   primary40: "#7a4531",
@@ -158,6 +165,7 @@ export const lightTheme = {
     background4: custom_palette.grey98,
     background5: custom_palette.grey94,
     background6: custom_palette.grey82,
+    canvas: custom_palette.grey96,
 
     foreground1: custom_palette.grey14,
     foreground2: custom_palette.grey38,
@@ -207,6 +215,9 @@ export const lightTheme = {
     severeBackground2: "rgba(0, 0, 0, 0)",
     severeForeground2: "rgba(0, 0, 0, 0)",
     severeStroke2: "rgba(0, 0, 0, 0)",
+
+    stroke1: custom_palette.grey82,
+    stroke2: custom_palette.grey88,
   },
 }
 
@@ -215,15 +226,16 @@ export const darkTheme = {
   colors: {
     ...DefaultTheme.colors,
     background1: custom_palette.black,
-    background2: custom_palette.white,
-    background3: custom_palette.white,
-    background4: custom_palette.grey98,
-    background5: custom_palette.grey94,
-    background6: custom_palette.grey82,
+    background2: custom_palette.grey12,
+    background3: custom_palette.grey16,
+    background4: custom_palette.grey20,
+    background5: custom_palette.grey24,
+    background6: custom_palette.grey36,
+    canvas: custom_palette.grey8, //screen background color
 
-    foreground1: custom_palette.grey14,
-    foreground2: custom_palette.grey38,
-    foreground3: custom_palette.grey50,
+    foreground1: custom_palette.white,
+    foreground2: custom_palette.grey84,
+    foreground3: custom_palette.grey68,
 
     brandBackground1: custom_palette.primary80,
     brandBackground1Pressed: custom_palette.primary50,
@@ -269,10 +281,13 @@ export const darkTheme = {
     severeBackground2: "rgba(0, 0, 0, 0)",
     severeForeground2: "rgba(0, 0, 0, 0)",
     severeStroke2: "rgba(0, 0, 0, 0)",
+
+    stroke1: custom_palette.grey30,
+    stroke2: custom_palette.grey24,
   },
 }
 
-export type Theme = typeof customTheme
+export type Theme = typeof lightTheme
 
 export const colors = {
   /**

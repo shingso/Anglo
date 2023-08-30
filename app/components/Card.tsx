@@ -10,6 +10,7 @@ import {
 import { colors, custom_colors, spacing } from "../theme"
 import { Text, TextProps } from "./Text"
 import { borderRadius } from "../theme/borderRadius"
+import { useTheme } from "@react-navigation/native"
 
 type Presets = keyof typeof $containerPresets
 
@@ -157,8 +158,12 @@ export function Card(props: CardProps) {
 
   const Wrapper: ComponentType<TouchableOpacityProps> = isPressable ? TouchableOpacity : View
   const HeaderContentWrapper = verticalAlignment === "force-footer-bottom" ? View : Fragment
-
-  const $containerStyle = [$containerPresets[preset], $containerStyleOverride]
+  const theme = useTheme()
+  const $containerStyle = [
+    $containerPresets[preset],
+    { backgroundColor: theme.colors.background2 },
+    $containerStyleOverride,
+  ]
   const $headingStyle = [
     $headingPresets[preset],
     (isFooterPresent || isContentPresent) && { marginBottom: spacing.micro },
@@ -249,7 +254,6 @@ const $containerBase: ViewStyle = {
   shadowOpacity: 0.08,
   shadowRadius: 12.81,
   elevation: 2,
-
   minHeight: 96,
   flexDirection: "row",
 }
@@ -270,7 +274,6 @@ const $containerPresets = {
   default: [
     $containerBase,
     {
-      backgroundColor: custom_colors.background1,
       borderColor: colors.palette.neutral300,
     },
   ] as StyleProp<ViewStyle>,

@@ -114,7 +114,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: custom_palette.grey94,
 }
 
 const $container: ViewStyle = {
