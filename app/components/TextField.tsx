@@ -248,7 +248,7 @@ const $inputStyle: TextStyle = {
   flex: 1,
   alignSelf: "stretch",
   fontFamily: typography.primary.normal,
-  color: colors.text,
+  color: custom_colors.foreground1,
   //fontSize: 17,
   //lineHeight: 22,
   fontSize: 14,

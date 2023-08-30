@@ -13,6 +13,7 @@ import {
 } from "./cardProgressUtils"
 import { GlobalFlashcard } from "./globalFlashcardsUtils"
 import { updateConfirmedRemoteId, updateMostRecentLocalId } from "./remote_sync/remoteSyncUtils"
+import { calculateCurrentRepetition, calculateEasinessFactor } from "./superMemoUtils"
 
 export enum Flashcard_Fields {
   ID = "id",
@@ -257,4 +258,41 @@ export const addToFlashcardProgress = async (
   }
 
   return insertedProgress || newProgress
+}
+
+const calculateFlashcardProgress = (flashcard: Flashcard) => {
+  const flashcardStatistics = {
+    total: 0,
+    correctSwipes: 0,
+    middleSwipe: 0,
+    failedSwipe: 0,
+    timeElapsed: 0,
+    currentRepetition: 0,
+    easinessFactor: 0,
+  }
+
+  flashcardStatistics.currentRepetition = calculateCurrentRepetition(flashcard.card_progress)
+  flashcardStatistics.easinessFactor = calculateEasinessFactor(flashcard.card_progress)
+
+  flashcard.card_progress.forEach((progress) => {
+    flashcardStatistics.total += 1
+    if (progress.retrieval_level === 2) {
+      flashcardStatistics.correctSwipes += 1
+    }
+
+    if (progress.retrieval_level === 1) {
+      flashcardStatistics.middleSwipe += 1
+    }
+
+    if (progress.retrieval_level === 0) {
+      flashcardStatistics.failedSwipe += 1
+    }
+
+    flashcardStatistics.timeElapsed = Math.max(
+      flashcardStatistics.timeElapsed,
+      progress.time_elapsed,
+    )
+  })
+
+  return flashcardStatistics
 }

@@ -113,7 +113,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
         return data
       }
       const redirectUrl = makeRedirectUri({
-        path: "Sign_Up",
+        //path: "Sign_Up",
         //useProxy: false,
       })
       console.log(redirectUrl, redirectUrl)

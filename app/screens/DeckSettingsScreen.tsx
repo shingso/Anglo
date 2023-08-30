@@ -8,7 +8,6 @@ import {
   Button,
   CustomModal,
   CustomText,
-  EditFlashcard,
   EditableText,
   Header,
   Icon,

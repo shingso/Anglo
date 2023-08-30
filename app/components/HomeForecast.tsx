@@ -18,7 +18,8 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { custom } from "mobx-state-tree/dist/internal"
 import { borderRadius } from "app/theme/borderRadius"
 import { Deck, Flashcard } from "app/models"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { StatusLabel } from "./StatusLabel"
 
 export interface HomeForecastProps {
   /**
@@ -32,6 +33,13 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
   const $styles = [$container, style]
   const { deckStore, boughtDeckStore } = useStores()
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
+  const dateFormat = "yyyy-MM-dd"
+  const [weeklyForecast, setWeeklyForecast] = useState({})
+
+  useEffect(() => {
+    const forecaset = getWeeklyForecast()
+    setWeeklyForecast(forecaset)
+  }, [])
 
   const splitFlashcardsByNextShown = (flashcards: Flashcard[]) => {
     const dividedFlashcards: {
@@ -39,6 +47,9 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
     } = {}
 
     flashcards.forEach((card) => {
+      if (!card?.next_shown) {
+        return
+      }
       const formattedDate = format(card?.next_shown, "yyyy-MM-dd")
       if (dividedFlashcards?.[formattedDate]) {
         dividedFlashcards[formattedDate].push(card)
@@ -50,11 +61,31 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
     return dividedFlashcards
   }
 
+  //what i want to display is the next showns for the next week for all the decks combine them all
+
+  const getWeeklyForecast = () => {
+    const weeklyForecast: {
+      [key: string]: Flashcard[]
+    } = {}
+    deckStore.decks.forEach((deck) => {
+      const splitFlashcards = splitFlashcardsByNextShown(deck?.flashcards)
+      for (const [key, value] of Object.entries(splitFlashcards)) {
+        if (weeklyForecast?.[key]) {
+          weeklyForecast[key].concat(value)
+        } else {
+          weeklyForecast[key] = [...value]
+        }
+      }
+    })
+
+    return weeklyForecast
+  }
+
   function getDates(startDate: Date, stopDate: Date): string[] {
     const dateArray = []
     let currentDate = startDate
     while (currentDate <= stopDate) {
-      dateArray.push(format(new Date(currentDate), "yyyy-MM-dd"))
+      dateArray.push(format(new Date(currentDate), dateFormat))
       currentDate = addDays(currentDate, 1)
     }
     return dateArray
@@ -139,22 +170,16 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                   }}
                 >
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      {/*                       <View style={{ minWidth: 40 }}>
-                        <CustomText
-                          style={{
-                            backgroundColor: custom_colors.brandBackground1,
-                            paddingHorizontal: spacing.size80,
-                            paddingVertical: spacing.size20,
-                            borderRadius: borderRadius.corner40,
-                            color: custom_colors.background1,
-                          }}
-                          preset="body2Strong"
-                        >
-                          {deck?.todaysCards?.length}
-                        </CustomText>
-                      </View> */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flex: 1,
+                      }}
+                    >
                       <CustomText preset="body2Strong">{deck.title}</CustomText>
+                      <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel>
                     </View>
                     {/*  <Icon
                       icon="fluent_play_outline"
@@ -181,16 +206,17 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
         {getDates(addDays(new Date(), 1), addDays(new Date(), 6)).map((date) => {
           return (
             <Card
-              onPress={() => deckStore.getDecks()}
               key={date}
-              style={{ minWidth: 110, elevation: 2, margin: 4, minHeight: 120 }}
-            >
-              {/*  <CustomText preset="body2">{format(new Date(date), "EEEE")}</CustomText>
-              <CustomText preset="body2"> {format(new Date(date), "do")}</CustomText>
-              <CustomText preset="body2">
-                {splitFlashcardsByNextShown(deckStore.decks[1].flashcards)[date]?.length}
-              </CustomText> */}
-            </Card>
+              style={{ minWidth: 110, elevation: 1, margin: 2, minHeight: 120 }}
+              ContentComponent={
+                <View>
+                  <CustomText preset="body2">{format(new Date(date), "do")}</CustomText>
+                  <CustomText preset="body2Strong">
+                    {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
+                  </CustomText>
+                </View>
+              }
+            ></Card>
           )
         })}
       </ScrollView>

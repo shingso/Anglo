@@ -51,7 +51,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       [Flashcard_Fields.BACK]: flashcard?.back,
       [Flashcard_Fields.SUB_HEADER]: flashcard?.sub_header,
       [Flashcard_Fields.EXTRA]: flashcard?.extra,
-      [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard.extra_array : [],
+      [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard?.extra_array : [],
       [Flashcard_Fields.PICTURE_URL]: flashcard?.picture_url,
     }
   }
@@ -303,12 +303,14 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         <TextInput
           ref={extraArrayRef}
           style={{
+            color: custom_colors.foreground1,
             alignSelf: "flex-start",
             borderRadius: borderRadius.corner40,
             paddingHorizontal: 0,
             paddingVertical: spacing.size20,
             backgroundColor: custom_colors.background1,
           }}
+          placeholderTextColor={custom_colors.foreground3}
           testID="extra_array_edit"
           value={inputValue}
           onChangeText={(text) => setInputValue(text)}

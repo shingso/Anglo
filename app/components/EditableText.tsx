@@ -62,7 +62,6 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
 
   useEffect(() => {
     if (focus) {
-      console.log("this ran focus")
       setEditing(true)
       textInputRef?.current?.focus()
     }
@@ -86,7 +85,7 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
       {editing ? (
         <TextInput
           ref={textInputRef}
-          style={$styles}
+          style={[...$styles, { color: custom_colors.foreground1 }]}
           value={text}
           onChangeText={handleTextChange}
           onBlur={handleBlur}

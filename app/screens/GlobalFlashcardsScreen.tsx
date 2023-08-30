@@ -165,18 +165,18 @@ export const GlobalFlashcardsScreen: FC<StackScreenProps<AppStackScreenProps, "G
               <TouchableOpacity onPress={() => selectFlashcard(searchDefinition)}>
                 <View style={{ paddingVertical: spacing.size320 }}>
                   <CustomText style={$flashcard_front} preset="body1strong">
-                    {searchDefinition.front}
+                    {searchDefinition?.front}
                   </CustomText>
                   <CustomText style={$flashcard_back} preset="body2">
-                    {searchDefinition.back}
+                    {searchDefinition?.back}
                   </CustomText>
                   {searchDefinition?.extra && (
                     <CustomText preset="caption1" style={$flashcard_extra}>
-                      {searchDefinition.extra}
+                      {searchDefinition?.extra}
                     </CustomText>
                   )}
                   <View style={$extra_array}>
-                    {searchDefinition?.extra_array.map((extra, i) => (
+                    {searchDefinition?.extra_array?.map((extra, i) => (
                       <CustomTag text={extra}></CustomTag>
                     ))}
                   </View>
