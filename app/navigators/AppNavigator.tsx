@@ -42,7 +42,7 @@ import {
   DeckHomeScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
-import { custom_colors, custom_palette, spacing, typography } from "../theme"
+import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
 import { navigate, navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { useNavigation } from "@react-navigation/native"
 import { Button, CustomModal, CustomText, DeckHome, Header, Text, TextField } from "../components"
@@ -410,7 +410,7 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
   return (
     <NavigationContainer
       ref={navigationRef}
-      theme={settingsStore.isDarkMode ? DarkTheme : DefaultTheme}
+      theme={settingsStore.isDarkMode ? darkTheme : lightTheme}
       {...props}
     >
       <AppStack />

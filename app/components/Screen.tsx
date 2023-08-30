@@ -13,7 +13,7 @@ import {
   ViewStyle,
 } from "react-native"
 import { useStores } from "../models"
-import { colors, custom_colors } from "../theme"
+import { Theme, colors, customTheme, custom_colors } from "../theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 
 interface BaseScreenProps {
@@ -202,7 +202,9 @@ export function Screen(props: ScreenProps) {
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
 
   return (
-    <View style={[$containerStyle, { backgroundColor: theme.colors.background }, $containerInsets]}>
+    <View
+      style={[$containerStyle, { backgroundColor: theme.colors.background1 }, $containerInsets]}
+    >
       <StatusBar style={statusBarStyle} {...StatusBarProps} />
 
       <KeyboardAvoidingView

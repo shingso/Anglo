@@ -21,7 +21,6 @@ import Modal from "react-native-modal"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/consts"
 import { Icon } from "./Icon"
 import Image from "react-native-image-progress"
-import * as Progress from "react-native-progress"
 
 import { borderRadius } from "../theme/borderRadius"
 import { CustomText } from "./CustomText"
