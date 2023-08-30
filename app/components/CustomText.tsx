@@ -51,10 +51,6 @@ export interface CustomTextProps extends RNTextProps {
    * Children components.
    */
   children?: React.ReactNode
-
-  animatedText?: string
-
-  animate?: boolean
 }
 
 /**

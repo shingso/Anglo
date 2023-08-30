@@ -1,4 +1,5 @@
 import { SCREEN_WIDTH } from "@gorhom/bottom-sheet"
+import { useTheme } from "@react-navigation/native"
 import * as React from "react"
 import { ComponentType, useRef } from "react"
 import {
@@ -66,7 +67,7 @@ export function Icon(props: IconProps) {
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View
-
+  const theme = useTheme()
   return (
     <Wrapper
       accessibilityRole={isPressable ? "imagebutton" : undefined}
@@ -77,6 +78,7 @@ export function Icon(props: IconProps) {
       <Image
         style={[
           $imageStyle,
+          { tintColor: theme.colors.foreground2 },
           color && { tintColor: color },
           size && { width: size, height: size },
           $imageStyleOverride,

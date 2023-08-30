@@ -13,6 +13,7 @@ import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsets
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 import { CustomText } from "./CustomText"
+import { useTheme } from "@react-navigation/native"
 
 export interface HeaderProps {
   /**
@@ -144,8 +145,9 @@ interface HeaderActionProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Header.md)
  */
 export function Header(props: HeaderProps) {
+  const theme = useTheme()
   const {
-    backgroundColor = custom_colors.background1,
+    backgroundColor = theme.colors.background2,
     LeftActionComponent,
     leftIcon,
     leftIconColor,

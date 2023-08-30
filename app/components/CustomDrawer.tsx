@@ -170,25 +170,21 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               size={24}
               onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
               icon="fluent_lightbulb"
-              color={custom_colors.foreground1}
             ></Icon>
             <Icon
               size={24}
               onPress={() => navigation.navigate(AppRoutes.USER_GLOBAL_DECKS)}
               icon="fluent_lightbulb"
-              color={custom_colors.foreground1}
             ></Icon>
             <Icon
               size={24}
               onPress={() => setNewDeckModalVisible(true)}
               icon="fluent_add_circle"
-              color={custom_colors.foreground1}
             ></Icon>
             <Icon
               size={24}
               onPress={() => navigation.navigate(AppRoutes.GLOBAL_DECKS)}
               icon="fluent_globe_search"
-              color={custom_colors.foreground1}
             ></Icon>
           </View>
         </View>

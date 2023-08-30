@@ -121,5 +121,4 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   padding: spacing.size200,
   height: "100%",
-  backgroundColor: custom_palette.grey96,
 }

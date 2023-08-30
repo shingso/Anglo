@@ -24,17 +24,8 @@ import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { Provider as PaperProvider } from "react-native-paper"
-import { adaptNavigationTheme } from "react-native-paper"
-import {
-  NavigationContainer,
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native"
-import { MD3DarkTheme, MD3LightTheme } from "react-native-paper"
 import merge from "deepmerge"
 import { View, ViewStyle } from "react-native"
-import { Text } from "../app/components/Text"
 import { borderRadius } from "./theme/borderRadius"
 import { CustomText, Icon } from "./components"
 import { StripeProvider } from "@stripe/stripe-react-native"
@@ -169,7 +160,7 @@ function App(props: AppProps) {
         <View>
           <CustomText
             style={{ color: custom_colors.dangerForeground1, marginBottom: spacing.size20 }}
-            preset="body1strong"
+            preset="body1Strong"
           >
             {props.text1}
           </CustomText>
