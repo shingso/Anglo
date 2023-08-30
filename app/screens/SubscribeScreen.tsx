@@ -241,7 +241,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                     right: -30,
                   }}
                 >
-                  <CustomText preset="body1strong" style={{ color: custom_colors.background1 }}>
+                  <CustomText preset="body1Strong" style={{ color: custom_colors.background1 }}>
                     -45%
                   </CustomText>
                 </View>

@@ -126,7 +126,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                       paddingHorizontal: spacing.size120,
                     }}
                   >
-                    <CustomText style={{ marginBottom: spacing.size20 }} preset="body1strong">
+                    <CustomText style={{ marginBottom: spacing.size20 }} preset="body1Strong">
                       {item?.title}
                     </CustomText>
                     <CustomText style={{ marginBottom: spacing.size80 }} preset="body2">

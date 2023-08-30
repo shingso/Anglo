@@ -85,15 +85,15 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
         ) : null}
 
         {/*  <View style={{ marginVertical: spacing.medium }}>
-          <CustomText preset="body1strong">Initial Starting</CustomText>
+          <CustomText preset="body1Strong">Initial Starting</CustomText>
           <CustomText preset="caption1">How many cards do you plan on studying now?</CustomText>
         </View>
 
         <View style={{ marginVertical: spacing.medium }}>
-          <CustomText preset="body1strong">Cards Per Day</CustomText>
+          <CustomText preset="body1Strong">Cards Per Day</CustomText>
           <CustomText preset="caption1">The amount of new cards added per day</CustomText>
         </View> */}
-        <CustomText preset="body1strong" style={{ marginBottom: spacing.size80 }}>
+        <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
           {flashcards.length} cards
         </CustomText>
         <FlatList

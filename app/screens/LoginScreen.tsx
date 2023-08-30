@@ -222,7 +222,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             Continue with Apple
           </Button>
           <CustomText
-            preset="body1strong"
+            preset="body1Strong"
             style={{ marginTop: spacing.size160, color: custom_colors.blueForeground1 }}
             onPress={() => goToSignUp()}
           >

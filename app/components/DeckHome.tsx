@@ -59,7 +59,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
     <View style={$styles}>
       <View style={{ marginHorizontal: spacing.size160 }}>
         <View style={{ marginTop: spacing.size200 }}>
-          <CustomText style={{ marginBottom: spacing.size160 }} preset="body1strong">
+          <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
             Today
           </CustomText>
           <Card
@@ -129,7 +129,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText style={{ color: custom_colors.foreground1 }} preset="body1strong">
+          <CustomText style={{ color: custom_colors.foreground1 }} preset="body1Strong">
             Flashcards
           </CustomText>
           {/*   <CustomText
@@ -165,7 +165,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 ></Icon>
                 <View>
                   <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                    <CustomText preset="body1strong">
+                    <CustomText preset="body1Strong">
                       {deckStore.selectedDeck.flashcards.length + " "}
                     </CustomText>
                     <CustomText preset="body2">cards</CustomText>
@@ -246,7 +246,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
         >
           <CustomText
             style={{ color: custom_colors.foreground1, marginBottom: spacing.size160 }}
-            preset="body1strong"
+            preset="body1Strong"
           >
             Settings
           </CustomText>

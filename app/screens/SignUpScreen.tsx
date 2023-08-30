@@ -58,7 +58,7 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
 
     return (
       <Screen safeAreaEdges={["top"]} style={$root} preset="scroll">
-        <CustomText style={{ marginBottom: spacing.size120 }} preset="body1strong">
+        <CustomText style={{ marginBottom: spacing.size120 }} preset="body1Strong">
           Sign Up
         </CustomText>
 

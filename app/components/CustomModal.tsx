@@ -51,7 +51,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
         }}
       >
         <View style={{ marginBottom: spacing.size160 }}>
-          <CustomText preset="body1strong" style={{ marginBottom: spacing.size120 }}>
+          <CustomText preset="body1Strong" style={{ marginBottom: spacing.size120 }}>
             {header}
           </CustomText>
           <CustomText preset="caption2">{body}</CustomText>

@@ -213,7 +213,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               size={26}
               icon="x"
             ></Icon>
-            <CustomText style={{ marginBottom: spacing.size160 }} preset="body1strong">
+            <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
               New cards added per day
             </CustomText>
             <CustomText preset="body2">Set how many random cards will be added per day</CustomText>

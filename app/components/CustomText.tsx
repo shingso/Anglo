@@ -142,7 +142,7 @@ const $presets = {
   body2: preset_fonts.body2 as StyleProp<TextStyle>,
   body2Strong: preset_fonts.body2Strong as StyleProp<TextStyle>,
   body1: preset_fonts.body1 as StyleProp<TextStyle>,
-  body1strong: preset_fonts.body1strong as StyleProp<TextStyle>,
+  body1Strong: preset_fonts.body1Strong as StyleProp<TextStyle>,
   title3: preset_fonts.title3 as StyleProp<TextStyle>,
   title2: preset_fonts.title2 as StyleProp<TextStyle>,
   title1: preset_fonts.title1 as StyleProp<TextStyle>,

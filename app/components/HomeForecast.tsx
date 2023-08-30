@@ -130,7 +130,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 color={custom_colors.background5}
               ></Icon>
               <View>
-                <CustomText preset="body1strong" style={{ color: custom_colors.background5 }}>
+                <CustomText preset="body1Strong" style={{ color: custom_colors.background5 }}>
                   {"Get Smarter"}
                 </CustomText>
                 <CustomText preset="caption1" style={{ color: custom_colors.background5 }}>
@@ -261,7 +261,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 <TouchableOpacity key={deck.id} onPress={() => deckStore.selectDeck(deck)}>
                   <View style={{ marginBottom: spacing.size320 }}>
                     <View>
-                      <CustomText preset="body1strong" style={{ marginBottom: spacing.size40 }}>
+                      <CustomText preset="body1Strong" style={{ marginBottom: spacing.size40 }}>
                         {deck.title}
                       </CustomText>
                       <CustomText preset="body1">{deck.todaysCards.length} </CustomText>
