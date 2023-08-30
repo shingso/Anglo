@@ -51,10 +51,9 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native"
-import { MD3DarkTheme, MD3LightTheme } from "react-native-paper"
+
 import merge from "deepmerge"
-import { Provider as PaperProvider } from "react-native-paper"
-import { adaptNavigationTheme } from "react-native-paper"
+
 import { useNetInfo } from "@react-native-community/netinfo"
 import Toast from "react-native-toast-message"
 import {
@@ -405,31 +404,17 @@ interface NavigationProps extends Partial<React.ComponentProps<typeof Navigation
 
 export const AppNavigator = observer(function AppNavigator(props: NavigationProps) {
   const { settingsStore } = useStores()
-  const { LightTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
-  })
-  const CombinedDefaultTheme = merge(MD3DarkTheme, LightTheme)
-  const CombinedDarkTheme = merge(MD3LightTheme, DarkTheme)
-  const [currentTheme, setCurrentTheme] = useState(
-    settingsStore.isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme,
-  )
-  useEffect(() => {
-    setCurrentTheme(settingsStore.isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme)
-  }, [settingsStore.isDarkMode])
 
   useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
 
   return (
-    <PaperProvider theme={currentTheme}>
-      <NavigationContainer
-        ref={navigationRef}
-        theme={settingsStore.isDarkMode ? DarkTheme : DefaultTheme}
-        {...props}
-      >
-        <AppStack />
-      </NavigationContainer>
-    </PaperProvider>
+    <NavigationContainer
+      ref={navigationRef}
+      theme={settingsStore.isDarkMode ? DarkTheme : DefaultTheme}
+      {...props}
+    >
+      <AppStack />
+    </NavigationContainer>
   )
 })
 

@@ -48,7 +48,6 @@ export const ForgotPasswordScreen: FC<StackScreenProps<AppStackScreenProps, "For
         showErrorToast("Error", "Password reset email could not be sent")
       }
 
-      console.log(data, error)
       // we need to make them go to the redirect when they click on email
     }
 

@@ -11,7 +11,6 @@ import { v4 as uuidv4 } from "uuid"
 
 import { Flashcard, FlashcardModel, FlashcardSnapshotIn } from "../../models/Flashcard"
 import * as flashcardUtils from "../../utils/flashcardUtils"
-import { removeFlashcardFromDeck } from "../../utils/deckUtils"
 import { generateMockFlashcards, mockDeckStoreModel } from "../mock/mock"
 
 jest.mock("../../models/helpers/useStores", () => ({

@@ -10,7 +10,6 @@ import {
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
 import { borderRadius } from "../theme/borderRadius"
-import { transparent } from "react-native-paper/lib/typescript/src/styles/themes/v2/colors"
 
 type Presets = keyof typeof $viewPresets
 
