@@ -167,7 +167,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
         <View style={$container}>
           <Header
             onLeftPress={() => navigation.openDrawer()}
-            title={deckStore?.selectedDeck?.title || "Home"}
+            title={"Home"}
             leftIcon="menu"
             rightIcon={deckStore?.selectedDeck ? "home" : null}
             onRightPress={() => (deckStore?.selectedDeck ? deckStore.removeSelectedDeck() : null)}

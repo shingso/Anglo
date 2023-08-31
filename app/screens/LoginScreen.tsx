@@ -144,7 +144,6 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             <CustomText
               preset="title1"
               style={{ marginBottom: spacing.size40, fontSize: 44, lineHeight: 60 }}
-              animate={true}
             >
               Study anywhere, know it everywhere
             </CustomText>

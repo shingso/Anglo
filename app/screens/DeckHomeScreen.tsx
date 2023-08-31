@@ -18,7 +18,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
   return (
     <Screen style={$root} preset="scroll">
       <Header
-        containerStyle={{ zIndex: 1, elevation: 4 }}
         leftIcon="caretLeft"
         onLeftPress={() => navigation.goBack()}
         title={selectedDeck?.title}
