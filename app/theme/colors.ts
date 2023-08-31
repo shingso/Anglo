@@ -159,6 +159,7 @@ export const lightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
+    background: custom_palette.grey96,
     background1: custom_palette.white,
     background2: custom_palette.white,
     background3: custom_palette.white,
@@ -223,8 +224,10 @@ export const lightTheme = {
 
 export const darkTheme = {
   ...DefaultTheme,
+
   colors: {
     ...DefaultTheme.colors,
+    background: custom_palette.grey8,
     background1: custom_palette.black,
     background2: custom_palette.grey12,
     background3: custom_palette.grey16,

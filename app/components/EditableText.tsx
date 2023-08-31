@@ -13,6 +13,7 @@ import { colors, custom_colors, typography } from "../theme"
 import { Text } from "./Text"
 import { useEffect, useRef, useState } from "react"
 import { CustomText } from "./CustomText"
+import { useTheme } from "@react-navigation/native"
 
 export interface EditableTextProps {
   /**
@@ -46,7 +47,7 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
 
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState(initialValue)
-
+  const theme = useTheme()
   const textInputRef = useRef<TextInput>(null)
 
   useEffect(() => {
@@ -85,12 +86,13 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
       {editing ? (
         <TextInput
           ref={textInputRef}
-          style={[...$styles, { color: custom_colors.foreground1 }]}
+          style={[...$styles, { color: theme.colors.foreground1 }]}
           value={text}
           onChangeText={handleTextChange}
           onBlur={handleBlur}
           autoFocus
           blurOnSubmit={true}
+          placeholderTextColor={theme.colors.foreground2}
           testID={testID + "_edit"}
           multiline={multiline}
           placeholder={placeholder}

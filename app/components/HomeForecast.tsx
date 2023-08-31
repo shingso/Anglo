@@ -127,15 +127,10 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 icon="fluent_lightbulb"
                 style={{ marginRight: spacing.size160 }}
                 size={32}
-                color={custom_colors.background5}
               ></Icon>
               <View>
-                <CustomText preset="body1Strong" style={{ color: custom_colors.background5 }}>
-                  {"Get Smarter"}
-                </CustomText>
-                <CustomText preset="caption1" style={{ color: custom_colors.background5 }}>
-                  {"Retain information even better"}
-                </CustomText>
+                <CustomText preset="body1Strong">{"Get Smarter"}</CustomText>
+                <CustomText preset="caption1">{"Retain information even better"}</CustomText>
               </View>
             </View>
           </LinearGradient>

@@ -60,10 +60,7 @@ export const UserGlobalDeckEditScreen: FC<UserGlobalDeckEditScreenProps> = obser
           >
             Add card
           </Button>
-          <CustomText
-            style={{ marginBottom: spacing.size120, color: custom_colors.foreground2 }}
-            preset="title2"
-          >
+          <CustomText style={{ marginBottom: spacing.size120 }} preset="title2">
             Cards
           </CustomText>
           {/*     <CustomText
@@ -116,7 +113,6 @@ export const UserGlobalDeckEditScreen: FC<UserGlobalDeckEditScreenProps> = obser
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: custom_colors.background5,
 }
 const $container: ViewStyle = {
   padding: spacing.size200,

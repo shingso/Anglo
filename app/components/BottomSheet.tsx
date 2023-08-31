@@ -12,6 +12,7 @@ import { Icon } from "./Icon"
 import { forwardRef, Ref, useEffect, useImperativeHandle, useMemo, useRef } from "react"
 import { CustomText } from "./CustomText"
 import { borderRadius } from "app/theme/borderRadius"
+import { useTheme } from "@react-navigation/native"
 
 export interface BottomSheetProps {
   /**
@@ -37,7 +38,7 @@ export const BottomSheet = forwardRef(function BottomSheet(
   const $styles = [$container, style]
   const bottomSheetRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => (customSnap ? customSnap : ["50%", "90%"]), [customSnap])
-
+  const theme = useTheme()
   useImperativeHandle(ref, () => bottomSheetRef.current)
 
   const renderBackdrop = React.useCallback(
@@ -50,6 +51,9 @@ export const BottomSheet = forwardRef(function BottomSheet(
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
+        backgroundStyle={{
+          backgroundColor: theme.colors.background2,
+        }}
         handleComponent={() => (
           <View
             style={{
@@ -64,7 +68,7 @@ export const BottomSheet = forwardRef(function BottomSheet(
             <View
               style={{
                 width: 40,
-                backgroundColor: custom_palette.grey74,
+                backgroundColor: theme.colors.foreground3,
                 height: 4,
                 borderRadius: borderRadius.corner120,
               }}
@@ -79,13 +83,15 @@ export const BottomSheet = forwardRef(function BottomSheet(
         ref={bottomSheetRef}
         snapPoints={snapPoints}
       >
-        <View style={$modal_header}>
-          <View style={$buttons_container}>
-            {header && <View style={$header}>{header}</View>}
-            {title && <CustomText preset="body2Strong">{title}</CustomText>}
+        <View style={{ flex: 1 }}>
+          <View style={$modal_header}>
+            <View style={$buttons_container}>
+              {header && <View style={$header}>{header}</View>}
+              {title && <CustomText preset="body2Strong">{title}</CustomText>}
+            </View>
           </View>
+          <View style={$modal_content}>{children}</View>
         </View>
-        <View style={$modal_content}>{children}</View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   )
@@ -112,8 +118,6 @@ const $buttons_container: ViewStyle = {
   width: "100%",
   justifyContent: "center",
 }
-
-const $modal_container: ViewStyle = { backgroundColor: "green" }
 
 const $header: ViewStyle = {
   flex: 1,

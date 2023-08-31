@@ -19,7 +19,15 @@ import { useInitialRootStore, useStores } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
-import { colors, customFontsToLoad, custom_colors, spacing, typography } from "./theme"
+import {
+  colors,
+  customFontsToLoad,
+  custom_colors,
+  darkTheme,
+  lightTheme,
+  spacing,
+  typography,
+} from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
@@ -29,6 +37,7 @@ import { View, ViewStyle } from "react-native"
 import { borderRadius } from "./theme/borderRadius"
 import { CustomText, Icon } from "./components"
 import { StripeProvider } from "@stripe/stripe-react-native"
+import { useTheme } from "@react-navigation/native"
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
 setupReactotron({
@@ -80,7 +89,7 @@ function App(props: AppProps) {
   })
 
   const [areFontsLoaded] = useFonts(customFontsToLoad)
-  const { subscriptionStore, deckStore } = useStores()
+  const { subscriptionStore, deckStore, settingsStore } = useStores()
   const { rehydrated } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
 
@@ -175,7 +184,14 @@ function App(props: AppProps) {
   // otherwise, we're ready to render the app
   return (
     <>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView
+        style={{
+          flex: 1,
+          backgroundColor: settingsStore.isDarkMode
+            ? darkTheme.colors.canvas
+            : lightTheme.colors.canvas,
+        }}
+      >
         <StripeProvider
           publishableKey={
             "pk_test_51NJMe6FbJw5QnWpVUZQKgzRHNzhdlM7xGl7AQaGh05j4yjhKUnsZfoB9d6KlRZ3IZt1yJ3AVtmVsMImH5G1EOiHJ00f7TywaIf"

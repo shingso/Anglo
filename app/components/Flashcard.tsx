@@ -107,9 +107,6 @@ const $cardContainer: ViewStyle = {
   width: "100%",
   height: "100%",
   padding: spacing.size200,
-
-  backgroundColor: custom_colors.background1,
-
   borderColor: custom_colors.background1,
 }
 

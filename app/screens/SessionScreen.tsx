@@ -280,37 +280,25 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
         {hasSessionCards && (
           <View style={$count_container}>
-            <Text style={$count_style} text={deck?.sessionCards?.length.toString()} />
+            <CustomText
+              preset="body1Strong"
+              text={deck?.sessionCards?.length.toString()}
+            ></CustomText>
             <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
               <Icon
                 onPress={() => undo()}
                 disabled={sessionProgressLog.length === 0}
                 icon="undo"
-                color={
-                  sessionProgressLog.length === 0
-                    ? custom_colors.foreground3
-                    : custom_colors.foreground1
-                }
+                // color={
+                //   sessionProgressLog.length === 0
+                //     ? custom_colors.foreground3
+                //     : custom_colors.foreground1
+                // }
                 size={30}
               />
-              <Icon
-                onPress={() => editFlashcard()}
-                icon="fluent_edit_outline"
-                color={custom_colors.foreground1}
-                size={26}
-              />
-              <Icon
-                onPress={() => showNotes()}
-                icon="notes"
-                color={custom_colors.foreground1}
-                size={28}
-              />
-              <Icon
-                icon="play_sound"
-                onPress={() => pronouceCurrentWord()}
-                color={custom_colors.foreground1}
-                size={28}
-              />
+              <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={26} />
+              <Icon onPress={() => showNotes()} icon="notes" size={28} />
+              <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={28} />
             </View>
           </View>
         )}
@@ -481,14 +469,6 @@ const $count_container: ViewStyle = {
 const $sessions_statistics: ViewStyle = {
   height: "100%",
   gap: spacing.size100,
-}
-
-const $count_style: TextStyle = {
-  fontSize: 20,
-  fontWeight: "bold",
-  marginRight: 2,
-  lineHeight: 24,
-  textAlignVertical: "center",
 }
 
 const $modal: ViewStyle = {

@@ -208,25 +208,14 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           }}
         >
           {onDelete && flashcard?.id && (
-            <Icon
-              size={28}
-              onPress={() => onDelete()}
-              icon="fluent_delete"
-              color={custom_colors.foreground1}
-            ></Icon>
+            <Icon size={28} onPress={() => onDelete()} icon="fluent_delete"></Icon>
           )}
-          <Icon
-            onPress={() => pickImage()}
-            size={28}
-            icon="fluent_camera_add"
-            color={custom_colors.foreground1}
-          ></Icon>
+          <Icon onPress={() => pickImage()} size={28} icon="fluent_camera_add"></Icon>
           {!flashcard?.next_shown && flashcard?.deck_id ? (
             <Icon
               size={28}
               onPress={() => startFlashcard(flashcard)}
               icon="fluent_play_outline"
-              color={custom_colors.foreground1}
             ></Icon>
           ) : null}
           <View>
@@ -243,7 +232,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
                   : saveFlashcard(flashcard, selectedFlashcardReference, deck)
               }
               icon="fluent_save"
-              color={custom_colors.foreground1}
             ></Icon>
           </View>
         </View>
@@ -308,7 +296,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
             borderRadius: borderRadius.corner40,
             paddingHorizontal: 0,
             paddingVertical: spacing.size20,
-            backgroundColor: custom_colors.background1,
           }}
           placeholderTextColor={custom_colors.foreground3}
           testID="extra_array_edit"

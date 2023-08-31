@@ -47,21 +47,9 @@ import { navigate, navigationRef, useBackButtonHandler } from "./navigationUtili
 import { useNavigation } from "@react-navigation/native"
 import { Button, CustomModal, CustomText, DeckHome, Header, Text, TextField } from "../components"
 import { Deck, useStores } from "../models"
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native"
-
-import merge from "deepmerge"
-
 import { useNetInfo } from "@react-native-community/netinfo"
 import Toast from "react-native-toast-message"
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-  createDrawerNavigator,
-} from "@react-navigation/drawer"
+import { createDrawerNavigator } from "@react-navigation/drawer"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { AppRoutes, AppStackParamList, SCREEN_WIDTH } from "../utils/consts"
 import { borderRadius } from "../theme/borderRadius"

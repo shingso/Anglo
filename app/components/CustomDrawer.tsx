@@ -85,12 +85,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   const DrawerItem = ({ icon, text, onPress }) => {
     return (
       <View style={$action_item_container}>
-        <Icon
-          icon={icon}
-          color={custom_colors.foreground1}
-          style={{ marginRight: spacing.size200 }}
-          size={22}
-        ></Icon>
+        <Icon icon={icon} style={{ marginRight: spacing.size200 }} size={22}></Icon>
         <CustomText
           onPress={() => (onPress ? onPress() : null)}
           style={$drawer_action}
