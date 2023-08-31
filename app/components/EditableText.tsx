@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite"
 import { colors, custom_colors, typography } from "../theme"
 import { Text } from "./Text"
 import { useEffect, useRef, useState } from "react"
-import { CustomText } from "./CustomText"
+import { $presets, CustomText } from "./CustomText"
 import { useTheme } from "@react-navigation/native"
 
 export interface EditableTextProps {
@@ -86,7 +86,14 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
       {editing ? (
         <TextInput
           ref={textInputRef}
-          style={[...$styles, { color: theme.colors.foreground1 }]}
+          style={[
+            $presets?.[preset] ? $presets[preset] : null,
+            $styles,
+            {
+              color: theme.colors.foreground1,
+              padding: 0,
+            },
+          ]}
           value={text}
           onChangeText={handleTextChange}
           onBlur={handleBlur}

@@ -83,7 +83,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
 
 const $baseStyle: StyleProp<TextStyle> = [$fontWeightStyles.normal]
 
-const $presets = {
+export const $presets = {
   default: $baseStyle,
 
   caption1: preset_fonts.caption1 as StyleProp<TextStyle>,
