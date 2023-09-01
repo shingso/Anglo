@@ -39,14 +39,24 @@ export interface SwipeCardsProps {
   emptyComponent?: ReactElement
   disabled?: Boolean
   currentDeck?: Deck
+  showBackCallback?: Function
 }
 
 /**
  * Describe your component here
  */
 export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
-  const { style, cards, swipeLeft, swipeUp, swipeRight, emptyComponent, disabled, currentDeck } =
-    props
+  const {
+    style,
+    cards,
+    swipeLeft,
+    swipeUp,
+    swipeRight,
+    emptyComponent,
+    disabled,
+    currentDeck,
+    showBackCallback,
+  } = props
   const $styles = [$container, style]
 
   const currentFlashcards = cards || []
@@ -199,6 +209,13 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
     extrapolate: "clamp",
   })
 
+  const showBackOfCard = () => {
+    if (!showBack) {
+      setShowBack(true)
+      showBackCallback ? showBackCallback() : null
+    }
+  }
+
   const renderCards = () => {
     return currentFlashcards
       .map((card, i) => {
@@ -214,7 +231,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
               <TouchableWithoutFeedback
                 testID="showBack"
                 containerStyle={$touchableContainer}
-                onPress={() => setShowBack(true)}
+                onPress={() => showBackOfCard()}
               >
                 <Flashcard cardStyle={{ elevation: 0 }} showBack={showBack} card={card}></Flashcard>
               </TouchableWithoutFeedback>

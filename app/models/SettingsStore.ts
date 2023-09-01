@@ -1,6 +1,11 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 
+export enum SoundOptions {
+  CUSTOM = "custom",
+  FRONT = "front",
+  BACK = "back",
+}
 /**
  * Model description here for TypeScript hints.
  */

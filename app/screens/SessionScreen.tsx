@@ -225,7 +225,10 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const pronouceCurrentWord = () => {
       Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        Speech.speak(currentFlashcards[0]?.back)
+        const soundOption = deckStore.selectedDeck.soundOption
+        if (currentFlashcards[0]?.[soundOption.toString()]) {
+          Speech.speak(currentFlashcards[0]?.[soundOption.toString()])
+        }
       }
     }
 
@@ -258,6 +261,12 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         updateConfirmedRemoteId(remoteSyncData.last_progress_id)
         // we also need to set the last progressId -> last progress id is the prev prev session
         //this is only usefull when we are local only...
+      }
+    }
+
+    const showBackCallBack = () => {
+      if (deckStore?.selectedDeck?.playSoundAutomatically) {
+        pronouceCurrentWord()
       }
     }
 
@@ -307,6 +316,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             swipeLeft={() => leftSwipe()}
             swipeUp={() => upSwipe()}
             cards={deck.sessionCards}
+            showBackCallback={() => showBackCallBack()}
           ></SwipeCards>
         ) : (
           <CustomSwipeCards

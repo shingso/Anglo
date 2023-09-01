@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ListRenderItemInfo, Switch, TextStyle, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
@@ -17,7 +17,7 @@ import {
   Screen,
   Text,
 } from "../components"
-import { Deck, useStores } from "../models"
+import { Deck, SoundOptions, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
 import { deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
 import { colors, custom_colors, spacing, typography } from "../theme"
@@ -41,12 +41,13 @@ import { FlatList } from "react-native-gesture-handler"
 export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckSettings">> =
   observer(function DeckSettingsScreen() {
     const { deckStore } = useStores()
+    const selectedDeck = deckStore?.selectedDeck
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [newPerDay, setNewPerDay] = useState(deckStore?.selectedDeck?.new_per_day)
     const [deckTitle, setDeckTitle] = useState(deckStore?.selectedDeck?.title)
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
-    const [soundSettings, setSoundSettings] = useState("front")
+    const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const theme = useTheme()
 
     const removeDeck = (deck: Deck) => {
@@ -58,6 +59,10 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [toggleIsOn, setToggle] = useState(false)
     const [playSoundAuto, setPlaySoundAuto] = useState(false)
 
+    useEffect(() => {
+      setPlaySoundAuto(deckStore.selectedDeck.playSoundAutomatically)
+    }, [])
+
     const data = useMemo(
       () =>
         Array(25)
@@ -68,6 +73,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
 
     const openCardsPerDay = () => {
       cardsPerDayModelRef?.current.present()
+    }
+
+    const setSoundOption = (option: SoundOptions) => {
+      setSoundSettings(option)
+      selectedDeck.setSoundOption(option)
     }
 
     const updateSelectedDeck = async () => {
@@ -201,8 +211,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }}
           >
             <CustomRadioButton
-              selected={soundSettings === "front"}
-              onPress={() => setSoundSettings("front")}
+              selected={soundSettings === SoundOptions.FRONT}
+              onPress={() => setSoundOption(SoundOptions.FRONT)}
             ></CustomRadioButton>
             <CustomText preset="body2">Front</CustomText>
           </View>
@@ -215,8 +225,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }}
           >
             <CustomRadioButton
-              selected={soundSettings === "back"}
-              onPress={() => setSoundSettings("back")}
+              selected={soundSettings === SoundOptions.BACK}
+              onPress={() => setSoundOption(SoundOptions.BACK)}
             ></CustomRadioButton>
             <CustomText preset="body2">Back</CustomText>
           </View>
@@ -232,6 +242,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             <CustomSwitch
               isOn={playSoundAuto}
               onToggle={() => {
+                selectedDeck.togglePlaySoundAutomatically()
                 setPlaySoundAuto(!playSoundAuto)
               }}
             ></CustomSwitch>

@@ -25,6 +25,7 @@ import {
   GlobalFlashcardSnapshotIn,
 } from "./GlobalFlashcard"
 import { CardProgress } from "./CardProgress"
+import { SoundOptions } from "./SettingsStore"
 
 /**
  * Model description here for TypeScript hints.
@@ -43,6 +44,11 @@ export const DeckModel = types
     selectedFlashcard: types.maybe(types.safeReference(FlashcardModel)),
     sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
     globalConflicts: types.optional(types.array(GlobalFlashcardModel), []),
+    soundOption: types.optional(
+      types.enumeration([SoundOptions.CUSTOM, SoundOptions.FRONT, SoundOptions.BACK]),
+      SoundOptions.FRONT,
+    ),
+    playSoundAutomatically: types.optional(types.boolean, false),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -63,6 +69,15 @@ export const DeckModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    toggleTheme() {
+      self.isDarkMode = !self.isDarkMode
+    },
+    setSoundOption(option: SoundOptions) {
+      self.soundOption = option
+    },
+    togglePlaySoundAutomatically() {
+      self.playSoundAutomatically = !self.playSoundAutomatically
+    },
     getConflicts: flow(function* () {
       if (!self.global_deck_id) {
         return
