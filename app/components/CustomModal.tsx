@@ -45,7 +45,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
     <Modal isVisible={visible}>
       <View
         style={{
-          backgroundColor: theme.colors.background5,
+          backgroundColor: theme.colors.background3,
           minHeight: 160,
           borderRadius: borderRadius.corner120,
           padding: spacing.size160,
