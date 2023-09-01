@@ -7,6 +7,7 @@ import Modal from "react-native-modal"
 import { Button } from "./Button"
 import { CustomText } from "./CustomText"
 import { borderRadius } from "../theme/borderRadius"
+import { useTheme } from "@react-navigation/native"
 
 export interface CustomModalProps {
   /**
@@ -39,12 +40,12 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
     children,
   } = props
   const $styles = [$container, style]
-
+  const theme = useTheme()
   return (
     <Modal isVisible={visible}>
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: theme.colors.background5,
           minHeight: 160,
           borderRadius: borderRadius.corner120,
           padding: spacing.size160,
@@ -54,7 +55,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
           <CustomText preset="body1Strong" style={{ marginBottom: spacing.size120 }}>
             {header}
           </CustomText>
-          <CustomText preset="caption2">{body}</CustomText>
+          <CustomText preset="body2">{body}</CustomText>
         </View>
         {children && <View style={{ marginBottom: spacing.size160 }}>{children}</View>}
         <View style={{ flexDirection: "row" }}>

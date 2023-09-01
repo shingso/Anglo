@@ -200,8 +200,6 @@ const $baseTextStyle: TextStyle = {
 const $custom_filled: ViewStyle = {
   borderWidth: 0,
   minHeight: 0,
-  paddingVertical: spacing.small,
-  paddingHorizontal: spacing.large,
 }
 
 const $clear: ViewStyle = {
@@ -249,7 +247,7 @@ const $viewPresets = {
   ] as StyleProp<ViewStyle>,
 
   custom_filled: [
-    $baseViewStyle,
+    $customBase,
     $custom_filled,
     { backgroundColor: colors.palette.primary500 },
   ] as StyleProp<ViewStyle>,
