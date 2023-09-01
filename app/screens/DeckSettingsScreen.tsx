@@ -6,7 +6,10 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import {
   BottomSheet,
   Button,
+  Card,
   CustomModal,
+  CustomRadioButton,
+  CustomSwitch,
   CustomText,
   EditableText,
   Header,
@@ -15,7 +18,7 @@ import {
   Text,
 } from "../components"
 import { Deck, useStores } from "../models"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
 import { colors, custom_colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppRoutes } from "../utils/consts"
@@ -43,15 +46,17 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [deckTitle, setDeckTitle] = useState(deckStore?.selectedDeck?.title)
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
-
-    const [isEnabled, setIsEnabled] = useState(false)
-    const toggleSwitch = () => setIsEnabled((previousState) => !previousState)
+    const [soundSettings, setSoundSettings] = useState("front")
+    const theme = useTheme()
 
     const removeDeck = (deck: Deck) => {
       deleteDeck(deck.id)
       navigation.navigate(AppRoutes.DECKS)
       deckStore.deleteDeck(deck)
     }
+
+    const [toggleIsOn, setToggle] = useState(false)
+    const [playSoundAuto, setPlaySoundAuto] = useState(false)
 
     const data = useMemo(
       () =>
@@ -116,7 +121,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           title={"Settings"}
         ></Header>
         <View style={$container}>
-          <Button
+          {/*        <Button
             preset="custom_default_small"
             style={{ marginBottom: spacing.size200 }}
             onPress={() => updateSelectedDeck()}
@@ -140,7 +145,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             onPress={() => deckStore.selectedDeck.clearLastAdded()}
           >
             Clear
-          </Button>
+          </Button> */}
 
           <EditableText
             style={{ marginBottom: spacing.size120 }}
@@ -160,50 +165,116 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           >
             <TouchableOpacity onPress={() => openCardsPerDay()}>
               <View style={{ marginVertical: spacing.medium }}>
-                <CustomText style={{ marginBottom: spacing.size20 }} preset="body1">
-                  New cards added per day
+                <CustomText style={{ marginBottom: spacing.size20 }} preset="body1Strong">
+                  New cards per day
                 </CustomText>
                 <CustomText preset="body2" style={{ color: custom_colors.foreground2 }}>
                   {deckStore.selectedDeck.new_per_day} cards added
                 </CustomText>
-                <CustomText preset="body2" style={{ color: custom_colors.foreground2 }}>
+                {/*        <CustomText preset="body2" style={{ color: custom_colors.foreground2 }}>
                   {deckStore.selectedDeck?.last_added?.toString()}
-                </CustomText>
+                </CustomText> */}
               </View>
             </TouchableOpacity>
-
-            <Switch
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isEnabled}
-            />
+            <CustomSwitch
+              isOn={toggleIsOn}
+              onToggle={() => {
+                setToggle(!toggleIsOn)
+              }}
+            ></CustomSwitch>
           </View>
 
-          <View style={{ marginVertical: spacing.medium }}>
-            <CustomText
-              style={{ marginBottom: spacing.size80, color: custom_colors.brandBackground2 }}
-              preset="body2Strong"
-            >
-              Spaced repitition algorithm
-            </CustomText>
-            <CustomText style={{ marginBottom: spacing.size20 }} preset="caption1Strong">
-              Basic spaced repitition
-            </CustomText>
-            <CustomText style={{ marginBottom: spacing.size160 }} preset="body2">
-              Use the common basic spaced repitition algorithm
-            </CustomText>
-            <CustomText style={{ marginBottom: spacing.size20 }} preset="caption1Strong">
-              AI spaced repitition
-            </CustomText>
-            <CustomText preset="body2">
-              Use an AI algorithm to try and figure out the best algorithm
-            </CustomText>
+          <CustomText
+            style={{
+              marginBottom: spacing.size80,
+            }}
+            preset="body1Strong"
+          >
+            Sound
+          </CustomText>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: spacing.size160,
+              marginBottom: spacing.size160,
+            }}
+          >
+            <CustomRadioButton
+              selected={soundSettings === "front"}
+              onPress={() => setSoundSettings("front")}
+            ></CustomRadioButton>
+            <CustomText preset="body2">Front</CustomText>
           </View>
-          <Button preset="custom_outline_small" onPress={() => setCofirmDeleteModalVisible(true)}>
-            Delete
-          </Button>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: spacing.size160,
+              marginBottom: spacing.size160,
+            }}
+          >
+            <CustomRadioButton
+              selected={soundSettings === "back"}
+              onPress={() => setSoundSettings("back")}
+            ></CustomRadioButton>
+            <CustomText preset="body2">Back</CustomText>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: spacing.size200,
+            }}
+          >
+            <CustomText preset="body2">Play automatically</CustomText>
+            <CustomSwitch
+              isOn={playSoundAuto}
+              onToggle={() => {
+                setPlaySoundAuto(!playSoundAuto)
+              }}
+            ></CustomSwitch>
+          </View>
+          <Card
+            onPress={() => setCofirmDeleteModalVisible(true)}
+            style={{
+              marginTop: spacing.size80,
+              minHeight: 0,
+              elevation: 1,
+              backgroundColor: theme.colors.dangerBackground1,
+              borderColor: theme.colors.dangerBackground2,
+              borderWidth: 1,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  paddingHorizontal: spacing.size120,
+                  paddingVertical: spacing.size80,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Icon
+                  icon="fluent_delete"
+                  style={{ marginRight: spacing.size120 }}
+                  size={22}
+                  color={theme.colors.dangerForeground1}
+                ></Icon>
+                <View>
+                  <CustomText
+                    style={{ color: theme.colors.dangerForeground1 }}
+                    preset="body2Strong"
+                  >
+                    {"Delete deck"}
+                  </CustomText>
+                  <CustomText style={{ color: theme.colors.dangerForeground1 }} preset="caption2">
+                    {"Warning this action cannot be undone."}
+                  </CustomText>
+                </View>
+              </View>
+            }
+          ></Card>
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
           <View style={{ marginBottom: spacing.size200, marginTop: spacing.size120 }}>

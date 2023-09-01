@@ -73,7 +73,8 @@ export const custom_palette = {
   grey8: "#141414",
   black: "#000000",
 
-  primary40: "#7a4531",
+  //brown primary
+  /*   primary40: "#7a4531",
   primary50: "#8e5139",
   primary60: "#a25c42",
   primary70: "#b7684a",
@@ -85,6 +86,20 @@ export const custom_palette = {
   primary130: "#e5b9a9",
   primary140: "#eac7ba",
   primary150: "#efd5cb",
+ */
+
+  primary40: "#0C3B5E",
+  primary50: "#0E4775",
+  primary60: "#0F548C",
+  primary70: "#115EA3",
+  primary80: "#0F6CBD",
+  primary90: "#2886DE",
+  primary100: "#479EF5",
+
+  primary120: "#77B7F7",
+  primary130: "#96C6FA",
+  primary140: "#B4D6FA",
+  primary150: "#CFE4FA",
 
   red10: "#bc2f32",
   red20: "#DC5E62",

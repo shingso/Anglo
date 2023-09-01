@@ -30,7 +30,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     useEffect(() => {
       const setPaidFlashcards = async () => {
         const cards = await getGlobalDeckById("29ff0039-6e9a-4d03-846e-330b14b51fea")
-        const paidCard = cards.global_flashcards.filter((card) => !card.free)
+        const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
         setPaidCards(paidCard)
       }
       setPaidFlashcards()

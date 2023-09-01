@@ -229,13 +229,7 @@ const HomeScreens = () => {
       }}
     >
       <Drawer.Screen name={AppRoutes.HOME} component={DrawerHome} />
-      <Stack.Screen
-        options={{
-          headerShown: true,
-        }}
-        name={AppRoutes.SETTINGS}
-        component={SettingsScreen}
-      />
+      <Stack.Screen name={AppRoutes.SETTINGS} component={SettingsScreen} />
       <Stack.Screen
         options={{
           headerShown: true,

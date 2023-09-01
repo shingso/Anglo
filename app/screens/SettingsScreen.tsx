@@ -2,10 +2,19 @@ import React, { FC, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Switch, TextInput, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
-import { Button, CustomTag, Screen, Text } from "../components"
+import {
+  Button,
+  CustomSwitch,
+  CustomTag,
+  CustomText,
+  Header,
+  Icon,
+  Screen,
+  Text,
+} from "../components"
 import { useStores } from "../models"
 
-import { useTheme } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 
 import { custom_colors, spacing } from "../theme"
 import { supabase } from "../services/supabase/supabase"
@@ -25,13 +34,28 @@ import { borderRadius } from "app/theme/borderRadius"
 export const SettingsScreen: FC<StackScreenProps<AppStackScreenProps, "Settings">> = observer(
   function SettingsScreen() {
     const { settingsStore } = useStores()
+    const navigation = useNavigation()
+    const [toggleIsOn, setToggle] = useState(settingsStore?.isDarkMode)
     return (
       <Screen style={$root} preset="scroll">
-        <Text>Dark mode: {settingsStore?.isDarkMode.toString()}</Text>
-        <Switch
-          value={settingsStore.isDarkMode}
-          onValueChange={() => settingsStore.toggleTheme()}
-        />
+        <Header leftIcon="caret_left" onLeftPress={() => navigation.goBack()}></Header>
+        <View style={$container}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+          >
+            <View style={{ flexDirection: "row", gap: spacing.size120 }}>
+              <Icon icon="moon" size={22}></Icon>
+              <CustomText preset="body1Strong">Dark mode</CustomText>
+            </View>
+            <CustomSwitch
+              isOn={toggleIsOn}
+              onToggle={() => {
+                settingsStore.toggleTheme()
+                setToggle(!toggleIsOn)
+              }}
+            ></CustomSwitch>
+          </View>
+        </View>
       </Screen>
     )
   },
@@ -39,5 +63,8 @@ export const SettingsScreen: FC<StackScreenProps<AppStackScreenProps, "Settings"
 
 const $root: ViewStyle = {
   flex: 1,
-  padding: spacing.medium,
+}
+
+const $container: ViewStyle = {
+  padding: spacing.size200,
 }

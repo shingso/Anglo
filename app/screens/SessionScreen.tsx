@@ -225,7 +225,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const pronouceCurrentWord = () => {
       Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        Speech.speak(currentFlashcards[0]?.front)
+        Speech.speak(currentFlashcards[0]?.back)
       }
     }
 
@@ -272,7 +272,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     return (
       <Screen style={$root}>
         <Header
-          containerStyle={{ zIndex: 1, elevation: 4 }}
           leftIcon="caretLeft"
           onLeftPress={() => navigation.goBack()}
           title={deck.title}
@@ -291,7 +290,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                 icon="undo"
                 // color={
                 //   sessionProgressLog.length === 0
-                //     ? custom_colors.foreground3
+                //     ? custom_colors.foreground2
                 //     : custom_colors.foreground1
                 // }
                 size={30}
@@ -460,7 +459,7 @@ const $count_container: ViewStyle = {
   justifyContent: "space-between",
   borderColor: custom_colors.background5,
   // borderBottomWidth: 0.6,
-  borderTopWidth: 0.6,
+  //borderTopWidth: 0.6,
   alignItems: "center",
   paddingHorizontal: spacing.extraLarge,
   paddingTop: spacing.size200,
@@ -471,37 +470,7 @@ const $sessions_statistics: ViewStyle = {
   gap: spacing.size100,
 }
 
-const $modal: ViewStyle = {
-  backgroundColor: "white",
-  padding: 0,
-  borderRadius: 8,
-  //animationIn="zoomIn"
-  //animationOut="zoomOut"
-}
-
-const $buttons_container: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "flex-end",
-}
-
-const $modal_header: ViewStyle = {
-  paddingBottom: spacing.small,
-  paddingHorizontal: spacing.medium,
-  marginHorizontal: -spacing.medium,
-  borderBottomWidth: 1,
-  borderBottomColor: colors.border,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-}
-
-const $modal_header_title: TextStyle = {
-  fontSize: 18,
-  fontWeight: "bold",
-}
-
 const $text_input_wrapper: ViewStyle = {
-  //backgroundColor: "white",
   borderWidth: 0,
 }
 
@@ -514,21 +483,4 @@ const $notes_container: ViewStyle = {
   justifyContent: "space-between",
   alignContent: "center",
   marginBottom: spacing.large,
-}
-
-const $tutorial_title: TextStyle = {
-  marginBottom: spacing.medium,
-}
-
-const $confirm_leave_container: ViewStyle = {
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}
-
-const $confirm_leave_actions: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-around",
-  width: "100%",
 }

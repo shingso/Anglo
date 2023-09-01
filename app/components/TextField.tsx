@@ -13,6 +13,7 @@ import { colors, custom_colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
 import { NONE } from "apisauce"
 import { CustomText } from "./CustomText"
+import { borderRadius } from "app/theme/borderRadius"
 
 export interface TextFieldAccessoryProps {
   style: StyleProp<any>
@@ -236,7 +237,7 @@ const $inputWrapperStyle: ViewStyle = {
   flexDirection: "row",
   alignItems: "flex-start",
 
-  borderRadius: 4,
+  borderRadius: borderRadius.corner120,
   backgroundColor: custom_colors.background5,
   borderColor: custom_colors.foreground1,
 

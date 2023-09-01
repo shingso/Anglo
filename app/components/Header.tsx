@@ -14,6 +14,7 @@ import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 import { CustomText } from "./CustomText"
 import { useTheme } from "@react-navigation/native"
+import { custom } from "mobx-state-tree/dist/internal"
 
 export interface HeaderProps {
   /**
@@ -125,6 +126,8 @@ export interface HeaderProps {
    * Override the default edges for the safe area.
    */
   safeAreaEdges?: ExtendedEdge[]
+
+  customHeader?: ReactElement
 }
 
 interface HeaderActionProps {
@@ -147,7 +150,8 @@ interface HeaderActionProps {
 export function Header(props: HeaderProps) {
   const theme = useTheme()
   const {
-    backgroundColor = theme.colors.background2,
+    backgroundColor = "transparent",
+    //backgroundColor = theme.colors.background2,
     LeftActionComponent,
     leftIcon,
     leftIconColor,
@@ -171,6 +175,7 @@ export function Header(props: HeaderProps) {
     style: $styleOverride,
     titleStyle: $titleStyleOverride,
     containerStyle: $containerStyleOverride,
+    customHeader,
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
@@ -200,15 +205,15 @@ export function Header(props: HeaderProps) {
             ]}
             pointerEvents="none"
           >
-            <CustomText
+            {/*    <CustomText
               preset="body2Strong"
               text={titleContent}
               style={[$title, $titleStyleOverride]}
-            />
+            /> */}
           </View>
         )}
-
-        <HeaderAction
+        {customHeader && customHeader}
+        {/*         <HeaderAction
           tx={rightTx}
           text={rightText}
           icon={rightIcon}
@@ -217,7 +222,7 @@ export function Header(props: HeaderProps) {
           txOptions={rightTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={RightActionComponent}
-        />
+        /> */}
       </View>
     </View>
   )
@@ -246,7 +251,7 @@ function HeaderAction(props: HeaderActionProps) {
   if (icon) {
     return (
       <Icon
-        size={24}
+        size={20}
         icon={icon}
         color={iconColor}
         onPress={onPress}
@@ -264,6 +269,7 @@ const $wrapper: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
+  paddingHorizontal: spacing.size200,
 }
 
 const $container: ViewStyle = {
@@ -292,7 +298,7 @@ const $actionIconContainer: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
-  paddingHorizontal: spacing.size160,
+  //paddingHorizontal: spacing.size160,
   zIndex: 2,
 }
 

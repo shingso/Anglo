@@ -36,8 +36,10 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
       const cards = await getGlobalDeckById(deck.global_deck_id)
       //  const value = await getGlobalPaidFlashcardsByDeckId(deck.global_deck_id)
       //   console.log("how many cards", value)
-      const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
-      setPaidCards(paidCard)
+      if (cards) {
+        const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
+        setPaidCards(paidCard)
+      }
     }
 
     if (deck?.global_deck_id) {

@@ -93,7 +93,7 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
     const pronouceCurrentWord = () => {
       Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        Speech.speak(currentFlashcards[0]?.front)
+        Speech.speak(currentFlashcards[0]?.back)
       }
     }
 

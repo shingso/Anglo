@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, TouchableOpacity, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -15,13 +15,14 @@ import {
   Header,
   Icon,
   IconTypes,
+  LineWord,
   Screen,
   StatusLabel,
   Text,
   TextField,
 } from "app/components"
 import { Deck, Flashcard, FlashcardModel, useStores } from "app/models"
-import { spacing, custom_colors } from "app/theme"
+import { spacing, custom_colors, custom_palette } from "app/theme"
 import { format } from "date-fns"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 import {
@@ -31,7 +32,7 @@ import {
   SortTypeIcon,
   SortTypeLabels,
 } from "app/utils/consts"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { showErrorToast } from "app/utils/errorUtils"
@@ -48,18 +49,32 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
   function FlashcardListScreen() {
     const { deckStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-
+    const theme = useTheme()
     const flashcards = deckStore?.selectedDeck?.flashcards
       ? deckStore?.selectedDeck?.flashcards
       : []
     const [searchTerm, setSearchTerm] = useState("")
-
+    const [flashcardEditSheetIndex, setFlashcardEditSheetIndex] = useState(0)
     const [sortOption, setSortOption] = useState(null)
     const sortOptions = [SortType.DATE_ADDDED, SortType.ACTIVE, SortType.ALPHABETICAL]
     const sortModalRef = useRef<BottomSheetModal>()
     const [deleteFlashcardModalVisible, setDeleteFlashcardModalVisible] = useState(false)
     const selectedFlashcardModalRef = useRef<BottomSheetModal>()
     const selectedFlashcard = deckStore?.selectedDeck?.selectedFlashcard
+
+    useEffect(
+      () =>
+        navigation.addListener("beforeRemove", (e) => {
+          console.log("current index is", flashcardEditSheetIndex)
+          if (true) {
+            return
+          }
+          e.preventDefault()
+          selectedFlashcardModalRef?.current?.close()
+          setFlashcardEditSheetIndex(-1)
+        }),
+      [navigation],
+    )
 
     const removeFlashcard = async (flashcard: Flashcard, deck: Deck) => {
       const deleted = await removeFlashcardFromDeck(flashcard, deck)
@@ -86,12 +101,28 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
     return (
       <Screen style={$root}>
         <Header
-          leftIcon="caretLeft"
+          leftIcon="caret_left"
           onLeftPress={() => navigation.goBack()}
           title={deckStore.selectedDeck?.title}
+          customHeader={
+            <View style={{ flexDirection: "row", gap: spacing.size200 }}>
+              <Icon
+                icon="fluent_add_circle"
+                color={theme.colors.foreground1}
+                onPress={() => openAddNewFlashcard()}
+                size={22}
+              ></Icon>
+              <Icon
+                color={theme.colors.foreground1}
+                icon="fluent_globe_search"
+                onPress={() => openAddNewFlashcard()}
+                size={22}
+              ></Icon>
+            </View>
+          }
         ></Header>
         <View style={$container}>
-          <View style={{ flexDirection: "row", gap: spacing.size60 }}>
+          {/*        <View style={{ flexDirection: "row", gap: spacing.size60 }}>
             <Button
               style={{ marginBottom: spacing.size120 }}
               onPress={() => openAddNewFlashcard()}
@@ -106,7 +137,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             >
               Online
             </Button>
-          </View>
+          </View> */}
 
           <TextField
             value={searchTerm}
@@ -114,6 +145,9 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             autoCapitalize={"none"}
             autoComplete={"off"}
             placeholder="Search"
+            containerStyle={{
+              marginBottom: spacing.size120,
+            }}
             LeftAccessory={(props) => (
               <Icon
                 containerStyle={props.style}
@@ -124,13 +158,39 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             )}
             onChangeText={setSearchTerm}
           ></TextField>
-          <Icon
+          {/* <Icon
             style={{ marginVertical: spacing.size120 }}
             icon="fluent_sort"
             onPress={() => sortModalRef?.current?.present()}
-            color={custom_colors.foreground2}
             size={24}
-          ></Icon>
+          ></Icon> */}
+          {flashcards?.length > 0 ? (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: spacing.size80,
+                marginHorizontal: spacing.size120,
+              }}
+            >
+              <CustomText preset="caption1Strong">{flashcards.length}</CustomText>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size40 }}>
+                <CustomText
+                  onPress={() => sortModalRef?.current?.present()}
+                  style={{ color: theme.colors.brandBackground1 }}
+                  preset="caption1Strong"
+                >
+                  Status
+                </CustomText>
+                <Icon
+                  icon="fluent_sort"
+                  onPress={() => sortModalRef?.current?.present()}
+                  color={theme.colors.brandBackground1}
+                  size={14}
+                ></Icon>
+              </View>
+            </View>
+          ) : null}
           <FlatList
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
@@ -148,7 +208,45 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               ></FlashcardListItem>
             )}
           ></FlatList>
+          {flashcards?.length === 0 && (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CustomText style={{ marginBottom: spacing.size200 }} preset="title3">
+                Add some cards
+              </CustomText>
+              <CustomText style={{ marginBottom: spacing.size200 }} preset="body2">
+                Get started by adding some flashcards
+              </CustomText>
+              <Icon
+                icon="fluent_add_circle"
+                color={theme.colors.foreground1}
+                onPress={() => openAddNewFlashcard()}
+                style={{ marginBottom: spacing.size40 }}
+                size={22}
+              ></Icon>
+              <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
+                Add new flashcard
+              </CustomText>
+
+              <LineWord text="or"></LineWord>
+              <Icon
+                color={theme.colors.foreground1}
+                icon="fluent_globe_search"
+                style={{ marginBottom: spacing.size40 }}
+                onPress={() => openAddNewFlashcard()}
+                size={22}
+              ></Icon>
+              <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
+                Search premade flashcards
+              </CustomText>
+            </View>
+          )}
         </View>
+
         <BottomSheet ref={sortModalRef} customSnap={["50%"]}>
           <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
             Sort by
@@ -178,6 +276,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           </View>
         </BottomSheet>
         <BottomSheet
+          onChange={(index) => setFlashcardEditSheetIndex(index)}
           onDismiss={() => deckStore.selectedDeck.removeSelectedFlashcard()}
           ref={selectedFlashcardModalRef}
           customSnap={["85"]}
@@ -206,7 +305,7 @@ const $root: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  padding: spacing.size160,
+  paddingHorizontal: spacing.size160,
 }
 
 const $sort_option: ViewStyle = {

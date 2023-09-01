@@ -141,10 +141,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
       <Screen safeAreaEdges={["top", "bottom"]} style={$root} preset="fixed">
         <View style={$container}>
           <View style={{ width: 300, marginBottom: spacing.size320 }}>
-            <CustomText
-              preset="title1"
-              style={{ marginBottom: spacing.size40, fontSize: 44, lineHeight: 60 }}
-            >
+            <CustomText preset="title1" style={{ marginBottom: spacing.size40 }}>
               Study anywhere, know it everywhere
             </CustomText>
           </View>
@@ -199,7 +196,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             }}
             textStyle={{ fontSize: 16, lineHeight: 26, color: custom_colors.foreground3 }}
             LeftAccessory={(props) => (
-              <Icon containerStyle={props.style} icon="google_logo" size={22}></Icon>
+              <Icon color={null} containerStyle={props.style} icon="google_logo" size={22}></Icon>
             )}
             onPress={() => signInWithSocialAuth(AuthProviders.GOOGLE)}
           >

@@ -45,6 +45,8 @@ interface IconProps extends TouchableOpacityProps {
    * An optional function to be called when the icon is pressed
    */
   onPress?: TouchableOpacityProps["onPress"]
+
+  secondary?: boolean
 }
 
 /**
@@ -54,10 +56,12 @@ interface IconProps extends TouchableOpacityProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Icon.md)
  */
 export function Icon(props: IconProps) {
+  const theme = useTheme()
   const {
     icon,
-    color,
+    color = theme.colors.foreground1,
     size,
+    secondary,
     style: $imageStyleOverride,
     containerStyle: $containerStyleOverride,
     ...WrapperProps
@@ -67,7 +71,7 @@ export function Icon(props: IconProps) {
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View
-  const theme = useTheme()
+
   return (
     <Wrapper
       accessibilityRole={isPressable ? "imagebutton" : undefined}
@@ -78,7 +82,7 @@ export function Icon(props: IconProps) {
       <Image
         style={[
           $imageStyle,
-          { tintColor: theme.colors.foreground2 },
+          secondary && { tintColor: theme.colors.foreground2 },
           color && { tintColor: color },
           size && { width: size, height: size },
           $imageStyleOverride,
@@ -190,6 +194,8 @@ export const iconRegistry = {
   play_sound: require("../../assets/icons/anglo/play_sound.png"),
   notes: require("../../assets/icons/anglo/notes.png"),
   undo: require("../../assets/icons/anglo/undo.png"),
+  caret_left: require("../../assets/icons/anglo/caret_left.png"),
+  moon: require("../../assets/icons/anglo/moon.png"),
 }
 
 const $imageStyle: ImageStyle = {
