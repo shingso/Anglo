@@ -143,6 +143,4 @@ const $cardStyle: ViewStyle = {
   width: "100%",
   height: "100%",
   padding: spacing.large,
-  backgroundColor: custom_colors.background1,
-  borderColor: custom_colors.background1,
 }
