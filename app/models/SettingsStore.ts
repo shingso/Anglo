@@ -15,9 +15,6 @@ export const SettingsStoreModel = types
     toggleTheme() {
       self.isDarkMode = !self.isDarkMode
     },
-    loadTheme() {
-      //get theme from store and set the is dark
-    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export interface SettingsStore extends Instance<typeof SettingsStoreModel> {}

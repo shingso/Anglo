@@ -230,24 +230,25 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     }
 
     const undo = async () => {
-      //remove the last card progress that was inserted
+      if (!sessionProgressLog || sessionProgressLog?.length === 0) {
+        showErrorToast("Error", "Could not undo")
+      }
+
+      const sessionProgressLogLength = sessionProgressLog?.length
+      const lastProgressLog = sessionProgressLog[sessionProgressLogLength - 1]
+      const deletedRemote = await deleteCardProgress(lastProgressLog)
+      //TODO confirm deck was deleted/add error handling if it was not deleted
+
+      deckStore.selectedDeck.deleteCardProgress(lastProgressLog)
+      //remove the processed undo progress from log
+      setSessionProgressLog((prev) => {
+        return [...prev.filter((progress) => progress.id !== lastProgressLog.id)]
+      })
+      deckStore.selectedDeck.addFlashcardToSession(lastProgressLog.flashcard_id)
+
       //Fix all of the sync data
       // - Set it to the last card progress that was inserted before it -> we can find this out by...looking at the deckstore
       // or we can ge tit by looking at the local store in general
-      //Re add the cards to the session card
-      //Set the card to the first session card
-      if (!previousProgressId || !sessionProgressLog || sessionProgressLog?.length === 0) {
-        showErrorToast("Error", "Could not undo")
-      }
-      //add the flashcard backk,
-      const sessionProgressLogLength = sessionProgressLog?.length
-      const lastProgressLog = sessionProgressLog[sessionProgressLogLength - 1]
-      deckStore.selectedDeck.addFlashcardToSession(lastProgressLog.flashcard_id)
-
-      const deletedRemote = await deleteCardProgress(lastProgressLog)
-      if (deletedRemote) {
-        deckStore.selectedDeck.deleteCardProgress(lastProgressLog)
-      }
 
       //if this works then it syncs both
       const remoteSyncData = await getRemoteRecentUpdate()
@@ -255,9 +256,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         console.log(remoteSyncData)
         updateMostRecentLocalId(remoteSyncData.last_progress_id)
         updateConfirmedRemoteId(remoteSyncData.last_progress_id)
-        setSessionProgressLog((prev) => {
-          return [...prev.filter((progress) => progress.id !== lastProgressLog.id)]
-        })
         // we also need to set the last progressId -> last progress id is the prev prev session
         //this is only usefull when we are local only...
       }
