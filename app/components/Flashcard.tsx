@@ -5,7 +5,7 @@ import { colors, custom_colors, spacing, typography } from "../theme"
 import { Text } from "./Text"
 import { Card } from "./Card"
 import { CustomText } from "./CustomText"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import * as Speech from "expo-speech"
 import { borderRadius } from "../theme/borderRadius"
 import { CustomTag } from "./CustomTag"
@@ -63,7 +63,7 @@ export const Flashcard = observer(function Flashcard(props: FlashcardProps) {
             <View style={$contentContainer}>
               <View>
                 <View style={{ marginBottom: spacing.size160 }}>
-                  <CustomText animate={showBack} preset="title2" style={$back}>
+                  <CustomText preset="title2" style={$back}>
                     {card.back}
                   </CustomText>
                 </View>

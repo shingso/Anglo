@@ -1,16 +1,8 @@
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react-native"
+import { render, fireEvent, act } from "@testing-library/react-native"
 import React from "react"
-import { DeckModel, DeckSnapshotIn } from "../../models/Deck"
-import { DeckStoreModel, DeckStoreSnapshotIn } from "../../models/DeckStore"
-import { subDays, addDays } from "date-fns"
-import { v4 as uuidv4 } from "uuid"
-import { Flashcard, FlashcardSnapshotIn } from "../../models/Flashcard"
 import { SessionScreen } from "../SessionScreen"
 import { useNavigation } from "@react-navigation/native"
-import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
-import { View } from "react-native"
-import { RootStore, RootStoreModel, useStores } from "app/models"
-import { createContext } from "react"
+import { useStores } from "app/models"
 import { mockDeckStoreCreate } from "app/components/mock/mock"
 
 jest.mock("../../models/helpers/useStores", () => ({

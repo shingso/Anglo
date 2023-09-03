@@ -198,11 +198,6 @@ const DrawerHome = () => (
     screenOptions={{
       headerShown: false,
       swipeEdgeWidth: 0,
-      headerTitleAlign: "center",
-      headerTitleStyle: { fontSize: 18, fontFamily: typography.primary.bold },
-      header: (props) => {
-        return <Header leftIcon="caretLeft" onLeftPress={() => props.navigation.goBack()}></Header>
-      },
     }}
   >
     <Drawer.Screen name={AppRoutes.DECKS} component={HomeScreen} />
@@ -221,7 +216,7 @@ const HomeScreens = () => {
           return (
             <Header
               title={(props.options.headerTitle as string) ?? (props.route.name as string)}
-              leftIcon="caretLeft"
+              leftIcon="caret_left"
               onLeftPress={() => props.navigation.goBack()}
             ></Header>
           )
@@ -244,21 +239,9 @@ const HomeScreens = () => {
         name={AppRoutes.FREE_STUDY}
         component={FreeStudyScreen}
       />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={AppRoutes.FLASHCARD_LIST}
-        component={FlashcardListScreen}
-      />
+      <Stack.Screen name={AppRoutes.FLASHCARD_LIST} component={FlashcardListScreen} />
 
-      <Stack.Screen
-        name={AppRoutes.DECK_SETTINGS}
-        options={{
-          headerShown: false,
-        }}
-        component={DeckSettingsScreen}
-      />
+      <Stack.Screen name={AppRoutes.DECK_SETTINGS} component={DeckSettingsScreen} />
       <Stack.Screen name={AppRoutes.GLOBAL_DECKS} component={GlobalDecksScreen} />
       <Stack.Screen
         name={AppRoutes.DECK_ADD}
@@ -267,20 +250,8 @@ const HomeScreens = () => {
         }}
         component={DeckAddScreen}
       />
-      <Stack.Screen
-        name={AppRoutes.ABOUT_STACK}
-        options={{
-          headerShown: false,
-        }}
-        component={AboutStackScreens}
-      />
-      <Stack.Screen
-        name={AppRoutes.DECK_HOME}
-        options={{
-          headerShown: false,
-        }}
-        component={DeckHomeScreen}
-      />
+      <Stack.Screen name={AppRoutes.ABOUT_STACK} component={AboutStackScreens} />
+      <Stack.Screen name={AppRoutes.DECK_HOME} component={DeckHomeScreen} />
       <Stack.Screen
         name={AppRoutes.SUBSCRIBE}
         options={{
@@ -300,7 +271,6 @@ const HomeScreens = () => {
       <Stack.Screen
         name={AppRoutes.USER_GLOBAL_DECKS_EDIT}
         options={{
-          headerShown: false,
           title: "Global Deck Edit",
         }}
         component={UserGlobalDeckEditScreen}
@@ -312,31 +282,11 @@ const HomeScreens = () => {
         }}
         component={PurchaseDeckScreen}
       />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.GLOBAL_FLASHCARDS}
-        component={GlobalFlashcardsScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.GLOBAL_CONFLICT}
-        component={GlobalConflictScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.PROGRESS_CONFLICT}
-        component={ProgressConflictScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.SESSION}
-        component={SessionScreen}
-      />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.FREE_STUDY_SESSION}
-        component={FreeStudySessionScreen}
-      />
+      <Stack.Screen name={AppRoutes.GLOBAL_FLASHCARDS} component={GlobalFlashcardsScreen} />
+      <Stack.Screen name={AppRoutes.GLOBAL_CONFLICT} component={GlobalConflictScreen} />
+      <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
+      <Stack.Screen name={AppRoutes.SESSION} component={SessionScreen} />
+      <Stack.Screen name={AppRoutes.FREE_STUDY_SESSION} component={FreeStudySessionScreen} />
     </Stack.Navigator>
   )
 }
