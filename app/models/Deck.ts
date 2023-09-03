@@ -31,6 +31,11 @@ import { SoundOptions } from "./SettingsStore"
  * Model description here for TypeScript hints.
  */
 
+export enum SoundLanguage {
+  ENGLISH = "en-US",
+  SPANISH_MX = "es-MX", //Mexico spanish
+}
+
 export const DeckModel = types
   .model("Deck")
   .props({
@@ -49,6 +54,10 @@ export const DeckModel = types
       SoundOptions.FRONT,
     ),
     playSoundAutomatically: types.optional(types.boolean, false),
+    playSoundLanguage: types.optional(
+      types.enumeration([SoundLanguage.ENGLISH, SoundLanguage.SPANISH_MX]),
+      SoundLanguage.ENGLISH,
+    ),
   })
   .actions(withSetPropAction)
   .views((self) => ({
@@ -69,11 +78,11 @@ export const DeckModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    toggleTheme() {
-      self.isDarkMode = !self.isDarkMode
-    },
     setSoundOption(option: SoundOptions) {
       self.soundOption = option
+    },
+    setPlaySoundLanguage(language: SoundLanguage) {
+      self.playSoundLanguage = language
     },
     togglePlaySoundAutomatically() {
       self.playSoundAutomatically = !self.playSoundAutomatically

@@ -16,8 +16,9 @@ import {
   Icon,
   Screen,
   Text,
+  TextField,
 } from "../components"
-import { Deck, SoundOptions, useStores } from "../models"
+import { Deck, SoundLanguage, SoundOptions, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
 import { deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
 import { colors, custom_colors, spacing, typography } from "../theme"
@@ -48,6 +49,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
+    const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
+
     const theme = useTheme()
 
     const removeDeck = (deck: Deck) => {
@@ -78,6 +81,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const setSoundOption = (option: SoundOptions) => {
       setSoundSettings(option)
       selectedDeck.setSoundOption(option)
+    }
+
+    const setPlayLanguageSetting = (language: SoundLanguage) => {
+      setLanguageSettings(language)
+      selectedDeck.setPlaySoundLanguage(language)
     }
 
     const updateSelectedDeck = async () => {
@@ -178,7 +186,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 <CustomText style={{ marginBottom: spacing.size20 }} preset="body1Strong">
                   New cards per day
                 </CustomText>
-                <CustomText preset="body2" style={{ color: custom_colors.foreground2 }}>
+                <CustomText preset="body2">
                   {deckStore.selectedDeck.new_per_day} cards added
                 </CustomText>
                 {/*        <CustomText preset="body2" style={{ color: custom_colors.foreground2 }}>
@@ -230,6 +238,38 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             ></CustomRadioButton>
             <CustomText preset="body2">Back</CustomText>
           </View>
+
+          <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size160 }}>
+            Language
+          </CustomText>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: spacing.size160,
+              marginBottom: spacing.size160,
+            }}
+          >
+            <CustomRadioButton
+              selected={languageSettings === SoundLanguage.ENGLISH}
+              onPress={() => setPlayLanguageSetting(SoundLanguage.ENGLISH)}
+            ></CustomRadioButton>
+            <CustomText preset="body2">English</CustomText>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: spacing.size160,
+              marginBottom: spacing.size160,
+            }}
+          >
+            <CustomRadioButton
+              selected={languageSettings === SoundLanguage.SPANISH_MX}
+              onPress={() => setPlayLanguageSetting(SoundLanguage.SPANISH_MX)}
+            ></CustomRadioButton>
+            <CustomText preset="body2">Spanish</CustomText>
+          </View>
           <View
             style={{
               flexDirection: "row",
@@ -238,7 +278,12 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               marginBottom: spacing.size200,
             }}
           >
-            <CustomText preset="body2">Play automatically</CustomText>
+            <View>
+              <CustomText preset="body2" style={{ marginBottom: spacing.size20 }}>
+                Play automatically
+              </CustomText>
+              <CustomText preset="caption2">Play sound when back is revealed</CustomText>
+            </View>
             <CustomSwitch
               isOn={playSoundAuto}
               onToggle={() => {
@@ -261,7 +306,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               <View
                 style={{
                   paddingHorizontal: spacing.size120,
-                  paddingVertical: spacing.size80,
+                  paddingVertical: spacing.size40,
                   flexDirection: "row",
                   alignItems: "center",
                 }}
@@ -313,8 +358,17 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           mainActionLabel={"Delete"}
           visible={confirmDeleteModalVisible}
           header={"Delete deck?"}
-          body={
-            "Are you sure you want to permently delete this deck? This action cannot be undone."
+          body={"Are you sure you want to delete this deck? This action cannot be undone."}
+          children={
+            <View style={{ height: 200 }}>
+              <CustomText>adsfads</CustomText>
+              <TextField
+                autoCorrect={false}
+                autoComplete="off"
+                //value={newNote}
+                //onChangeText={setNewNote}
+              ></TextField>
+            </View>
           }
         ></CustomModal>
       </Screen>

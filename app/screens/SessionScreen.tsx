@@ -225,9 +225,10 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const pronouceCurrentWord = () => {
       Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        const soundOption = deckStore.selectedDeck.soundOption
+        const soundOption = deckStore?.selectedDeck?.soundOption
+        const languageOption = deckStore?.selectedDeck?.playSoundLanguage
         if (currentFlashcards[0]?.[soundOption.toString()]) {
-          Speech.speak(currentFlashcards[0]?.[soundOption.toString()])
+          Speech.speak(currentFlashcards[0]?.[soundOption.toString()], { language: languageOption })
         }
       }
     }
