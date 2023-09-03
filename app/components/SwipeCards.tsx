@@ -46,17 +46,7 @@ export interface SwipeCardsProps {
  * Describe your component here
  */
 export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
-  const {
-    style,
-    cards,
-    swipeLeft,
-    swipeUp,
-    swipeRight,
-    emptyComponent,
-    disabled,
-    currentDeck,
-    showBackCallback,
-  } = props
+  const { style, cards, swipeLeft, swipeUp, swipeRight, emptyComponent, showBackCallback } = props
   const $styles = [$container, style]
 
   const currentFlashcards = cards || []
@@ -74,6 +64,10 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
     resetPosition()
     resetCard()
   }
+
+  useEffect(() => {
+    resetCard()
+  }, [currentFlashcards[0]])
 
   const panResponder = useMemo(
     () =>
