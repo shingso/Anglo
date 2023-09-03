@@ -28,6 +28,7 @@ import { GlobalDeck } from "app/models"
 import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
+import { useTheme } from "@react-navigation/native"
 export interface EditFlashcardProps {
   /**
    * An optional style override useful for padding & margin.
@@ -51,13 +52,14 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       [Flashcard_Fields.BACK]: flashcard?.back,
       [Flashcard_Fields.SUB_HEADER]: flashcard?.sub_header,
       [Flashcard_Fields.EXTRA]: flashcard?.extra,
-      [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard?.extra_array : [],
+      [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? [...flashcard?.extra_array] : [],
       [Flashcard_Fields.PICTURE_URL]: flashcard?.picture_url,
     }
   }
 
   const { style, flashcard, onDelete, onAddCallBack, deck, customSaveFlashcard } = props
   const $styles = [$container, style]
+  const theme = useTheme()
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
   )
@@ -291,7 +293,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         <TextInput
           ref={extraArrayRef}
           style={{
-            color: custom_colors.foreground1,
+            color: theme.colors.foreground1,
             alignSelf: "flex-start",
             borderRadius: borderRadius.corner40,
             paddingHorizontal: 0,
