@@ -100,44 +100,29 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
     return (
       <Screen style={$root}>
-        <Header
-          leftIcon="caret_left"
-          onLeftPress={() => navigation.goBack()}
-          title={deckStore.selectedDeck?.title}
-          customHeader={
-            <View style={{ flexDirection: "row", gap: spacing.size200 }}>
-              <Icon
-                icon="fluent_add_circle"
-                color={theme.colors.foreground1}
-                onPress={() => openAddNewFlashcard()}
-                size={22}
-              ></Icon>
-              <Icon
-                color={theme.colors.foreground1}
-                icon="fluent_globe_search"
-                onPress={() => openAddNewFlashcard()}
-                size={22}
-              ></Icon>
-            </View>
-          }
-        ></Header>
         <View style={$container}>
-          {/*        <View style={{ flexDirection: "row", gap: spacing.size60 }}>
-            <Button
-              style={{ marginBottom: spacing.size120 }}
-              onPress={() => openAddNewFlashcard()}
-              preset="custom_secondary_small"
-            >
-              Add new
-            </Button>
-            <Button
-              style={{ marginBottom: spacing.size120 }}
-              onPress={() => goToGlobalFlashcards()}
-              preset="custom_default_small"
-            >
-              Online
-            </Button>
-          </View> */}
+          <Header
+            style={{ paddingHorizontal: -spacing.size120 }}
+            leftIcon="caret_left"
+            onLeftPress={() => navigation.goBack()}
+            title={deckStore.selectedDeck?.title}
+            customHeader={
+              <View style={{ flexDirection: "row", gap: spacing.size200 }}>
+                <Icon
+                  icon="fluent_add_circle"
+                  color={theme.colors.foreground1}
+                  onPress={() => openAddNewFlashcard()}
+                  size={22}
+                ></Icon>
+                <Icon
+                  color={theme.colors.foreground1}
+                  icon="fluent_globe_search"
+                  onPress={() => openAddNewFlashcard()}
+                  size={22}
+                ></Icon>
+              </View>
+            }
+          ></Header>
 
           <TextField
             value={searchTerm}
@@ -158,12 +143,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             )}
             onChangeText={setSearchTerm}
           ></TextField>
-          {/* <Icon
-            style={{ marginVertical: spacing.size120 }}
-            icon="fluent_sort"
-            onPress={() => sortModalRef?.current?.present()}
-            size={24}
-          ></Icon> */}
+
           {flashcards?.length > 0 ? (
             <View
               style={{
@@ -191,26 +171,29 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               </View>
             </View>
           ) : null}
-          <FlatList
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            data={getSnapshot(flashcards as IStateTreeNode).filter(
-              (card) => card?.front && card.front.includes(searchTerm),
-            )}
-            renderItem={({ item, index }) => (
-              <FlashcardListItem
-                key={item.id}
-                flashcard={item}
-                RightComponent={
-                  item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
-                }
-                onPress={() => selectFlashcard(FlashcardModel.create(item))}
-              ></FlashcardListItem>
-            )}
-          ></FlatList>
-          {flashcards?.length === 0 && (
+          {!!flashcards && flashcards?.length !== 0 ? (
+            <FlatList
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{ paddingBottom: spacing.size200 }}
+              showsVerticalScrollIndicator={false}
+              data={getSnapshot(flashcards as IStateTreeNode).filter(
+                (card) => card?.front && card.front.includes(searchTerm),
+              )}
+              renderItem={({ item, index }) => (
+                <FlashcardListItem
+                  key={item.id}
+                  flashcard={item}
+                  RightComponent={
+                    item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
+                  }
+                  onPress={() => selectFlashcard(FlashcardModel.create(item))}
+                ></FlashcardListItem>
+              )}
+            ></FlatList>
+          ) : (
             <View
               style={{
+                flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -266,7 +249,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                       icon={SortTypeIcon[option]}
                       size={20}
                       style={{ marginRight: spacing.size120 }}
-                      color={custom_colors.foreground1}
                     ></Icon>
                     <CustomText preset="body2Strong">{SortTypeLabels[option]}</CustomText>
                   </View>
@@ -306,6 +288,7 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   paddingHorizontal: spacing.size160,
+  height: "100%",
 }
 
 const $sort_option: ViewStyle = {
