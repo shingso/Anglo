@@ -57,10 +57,10 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
     }
 
     return (
-      <Screen safeAreaEdges={["bottom"]} style={$root}>
+      <Screen style={$root}>
         <View style={$content_container}>
           <Header
-            leftIcon="caretLeft"
+            leftIcon="caret_left"
             onLeftPress={() => navigation.goBack()}
             title={"Global Decks"}
           ></Header>
@@ -112,6 +112,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
               gap: 12,
               // padding: 2,
               marginHorizontal: 16,
+              paddingBottom: spacing.size200,
             }}
             data={decks}
             renderItem={({ item, index }) => (

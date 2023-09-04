@@ -18,9 +18,9 @@ import {
   Text,
   TextField,
 } from "../components"
-import { Deck, SoundLanguage, SoundOptions, useStores } from "../models"
+import { Deck, DeckSnapshotIn, SoundLanguage, SoundOptions, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import { deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
+import { Deck_Fields, deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
 import { colors, custom_colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppRoutes } from "../utils/consts"
 import { getGlobalDeckByOriginalId, makeDeckPublic } from "app/utils/globalDecksUtils"
@@ -46,6 +46,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [newPerDay, setNewPerDay] = useState(deckStore?.selectedDeck?.new_per_day)
     const [deckTitle, setDeckTitle] = useState(deckStore?.selectedDeck?.title)
+    const [confirmDelete, setConfirmDelete] = useState("")
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
@@ -74,6 +75,16 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       [],
     )
 
+    const onSubmitNewCardsPerDay = (newPerDay: number) => {
+      setNewPerDay(newPerDay)
+      updateSelectedDeck({ [Deck_Fields.NEW_PER_DAY]: newPerDay })
+    }
+
+    const onSubmitDeckTitle = (title) => {
+      setDeckTitle(title)
+      updateSelectedDeck({ [Deck_Fields.TITLE]: title })
+    }
+
     const openCardsPerDay = () => {
       cardsPerDayModelRef?.current.present()
     }
@@ -88,11 +99,10 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       selectedDeck.setPlaySoundLanguage(language)
     }
 
-    const updateSelectedDeck = async () => {
+    const updateSelectedDeck = async (deck: Partial<Deck>) => {
       const newDeck: Partial<Deck> = {
-        title: deckTitle,
+        ...deck,
         id: deckStore.selectedDeck.id,
-        new_per_day: newPerDay,
       }
       const updatedDeck = await updateDeck(newDeck)
       deckStore.selectedDeck.updateDeck(updatedDeck)
@@ -116,7 +126,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     }
     const renderItem = useCallback(
       ({ item }) => (
-        <TouchableOpacity onPress={() => setNewPerDay(item)}>
+        <TouchableOpacity onPress={() => onSubmitNewCardsPerDay(item)}>
           <View
             style={{
               paddingVertical: spacing.size160,
@@ -170,7 +180,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             preset="title1"
             placeholder="Title"
             testID="title"
-            onSubmit={(value) => setDeckTitle(value)}
+            onSubmit={(value) => onSubmitDeckTitle(value)}
             initialValue={deckTitle}
           ></EditableText>
 
@@ -358,15 +368,15 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           mainActionLabel={"Delete"}
           visible={confirmDeleteModalVisible}
           header={"Delete deck?"}
+          mainActionDisabled={confirmDelete !== "Delete"}
           body={"Are you sure you want to delete this deck? This action cannot be undone."}
           children={
-            <View style={{ height: 200 }}>
-              <CustomText>adsfads</CustomText>
+            <View>
               <TextField
+                onChangeText={setConfirmDelete}
                 autoCorrect={false}
                 autoComplete="off"
-                //value={newNote}
-                //onChangeText={setNewNote}
+                placeholder="Delete"
               ></TextField>
             </View>
           }
