@@ -24,7 +24,6 @@ export interface BottomSheetProps {
   customSnap?: any
   title?: string
   onDismiss?: Function
-  onChange?: Function
 }
 
 /**
@@ -34,7 +33,7 @@ export const BottomSheet = forwardRef(function BottomSheet(
   props: BottomSheetProps,
   ref: Ref<BottomSheetModal>,
 ) {
-  const { style, children, header, customSnap, title, onDismiss, onChange } = props
+  const { style, children, header, customSnap, title, onDismiss } = props
   const $styles = [$container, style]
   const bottomSheetRef = useRef<BottomSheetModal>(null)
   const snapPoints = useMemo(() => (customSnap ? customSnap : ["50%", "90%"]), [customSnap])
@@ -76,7 +75,6 @@ export const BottomSheet = forwardRef(function BottomSheet(
           </View>
         )}
         onDismiss={() => (onDismiss ? onDismiss() : null)}
-        onChange={(index) => (onChange ? onChange(index) : null)}
         backdropComponent={renderBackdrop}
         keyboardBehavior="interactive"
         enablePanDownToClose={true}

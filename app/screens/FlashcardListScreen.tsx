@@ -61,20 +61,30 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
     const [deleteFlashcardModalVisible, setDeleteFlashcardModalVisible] = useState(false)
     const selectedFlashcardModalRef = useRef<BottomSheetModal>()
     const selectedFlashcard = deckStore?.selectedDeck?.selectedFlashcard
+    const [editFlashcardVisible, setEditFlashcardVisible] = useState(false)
 
-    useEffect(
-      () =>
-        navigation.addListener("beforeRemove", (e) => {
-          console.log("current index is", flashcardEditSheetIndex)
-          if (true) {
-            return
-          }
-          e.preventDefault()
-          selectedFlashcardModalRef?.current?.close()
-          setFlashcardEditSheetIndex(-1)
-        }),
-      [navigation],
-    )
+    useEffect(() => {
+      const res = navigation.addListener("beforeRemove", (e) => {
+        console.log(editFlashcardVisible, "current edit flashcard")
+        if (!editFlashcardVisible) {
+          return
+        }
+        e.preventDefault()
+        selectedFlashcardModalRef?.current?.close()
+        setFlashcardEditSheetIndex(-1)
+      })
+      return res
+    }, [navigation, editFlashcardVisible])
+
+    const onBottomSheetDismiss = () => {
+      deckStore.selectedDeck.removeSelectedFlashcard()
+      setEditFlashcardVisible(false)
+    }
+
+    const openEditFlashcard = () => {
+      selectedFlashcardModalRef?.current.present()
+      setEditFlashcardVisible(true)
+    }
 
     const removeFlashcard = async (flashcard: Flashcard, deck: Deck) => {
       const deleted = await removeFlashcardFromDeck(flashcard, deck)
@@ -86,7 +96,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
     const openAddNewFlashcard = () => {
       deckStore.selectedDeck.removeSelectedFlashcard()
-      selectedFlashcardModalRef?.current.present()
+      openEditFlashcard()
     }
 
     const goToGlobalFlashcards = () => {
@@ -95,7 +105,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
     const selectFlashcard = (flashcard: Flashcard) => {
       deckStore.selectedDeck.selectFlashcard(flashcard)
-      selectedFlashcardModalRef?.current.present()
+      openEditFlashcard()
     }
 
     return (
@@ -258,8 +268,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           </View>
         </BottomSheet>
         <BottomSheet
-          onChange={(index) => setFlashcardEditSheetIndex(index)}
-          onDismiss={() => deckStore.selectedDeck.removeSelectedFlashcard()}
+          onDismiss={() => onBottomSheetDismiss()}
           ref={selectedFlashcardModalRef}
           customSnap={["85"]}
         >
