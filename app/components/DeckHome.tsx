@@ -13,6 +13,7 @@ import { showSuccessToast } from "app/utils/errorUtils"
 import { useEffect, useState } from "react"
 import { getGlobalDeckById, getGlobalPaidFlashcardsByDeckId } from "app/utils/globalDecksUtils"
 import { millisecondsToTime } from "app/utils/helperUtls"
+import { StatusLabel } from "./StatusLabel"
 
 export interface DeckHomeProps {
   /**
@@ -31,6 +32,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   const $styles = [$container, style]
   const { deckStore } = useStores()
   const [paidCards, setPaidCards] = useState([])
+  const selectedDeck = deckStore?.selectedDeck
   useEffect(() => {
     const setPaidFlashcards = async () => {
       const cards = await getGlobalDeckById(deck.global_deck_id)
@@ -50,10 +52,10 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   const startSession = (deck: Deck) => {
     if (deck?.todaysCards && deck?.todaysCards.length > 0) {
       deckStore.selectDeck(deck)
-      deckStore.selectedDeck.setSessionCards()
+      selectedDeck.setSessionCards()
       navigation.navigate(AppRoutes.SESSION)
     } else {
-      showSuccessToast("Good Job!", "There are no more cards for today")
+      showSuccessToast("There are no more cards for today")
     }
   }
 
@@ -61,62 +63,97 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
     <View style={$styles}>
       <View style={{ marginHorizontal: spacing.size160 }}>
         <View style={{ marginTop: spacing.size200 }}>
-          <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
-            Today
+          <CustomText style={{ marginBottom: spacing.size240 }} preset="title1">
+            {selectedDeck?.title}
           </CustomText>
+          <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
+            Study
+          </CustomText>
+          <View
+            style={{ marginBottom: spacing.size100, flexDirection: "row", gap: spacing.size80 }}
+          >
+            <Card
+              onPress={() => startSession(selectedDeck)}
+              style={{ flex: 2.2, backgroundColor: custom_colors.brandBackground3 }}
+              ContentComponent={
+                <View
+                  style={{ paddingHorizontal: spacing.size160, paddingVertical: spacing.size80 }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      style={{ marginRight: spacing.size60 }}
+                      size={16}
+                      icon="fluent_play_circle"
+                    ></Icon>
+                    <CustomText preset="caption1Strong">CARDS DUE</CustomText>
+                  </View>
+
+                  <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
+                    {selectedDeck.todaysCards.length}
+                  </CustomText>
+                </View>
+              }
+            ></Card>
+            <Card
+              style={{ flex: 1.4 }}
+              ContentComponent={
+                <View
+                  style={{ paddingHorizontal: spacing.size160, paddingVertical: spacing.size80 }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      style={{ marginRight: spacing.size60 }}
+                      size={16}
+                      icon="check_circle"
+                    ></Icon>
+                    <CustomText preset="caption1Strong">PASSED</CustomText>
+                  </View>
+
+                  <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
+                    {selectedDeck.flashcards.reduce((prev, card) => {
+                      return (
+                        prev +
+                        card.todaysCardProgresses.filter((progress) => progress?.passed).length
+                      )
+                    }, 0)}
+                  </CustomText>
+                </View>
+              }
+            ></Card>
+          </View>
+
           <Card
-            onPress={() => startSession(deckStore.selectedDeck)}
+            onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
             style={{
               minHeight: 0,
-              elevation: 2,
+              elevation: 1,
             }}
             ContentComponent={
               <View
                 style={{
-                  paddingHorizontal: spacing.size200,
+                  paddingHorizontal: spacing.size120,
                   paddingVertical: spacing.size80,
                   flexDirection: "row",
                   alignItems: "center",
                 }}
               >
-                {/*   <Icon
-                      icon="fluent_play_outline"
-                      style={{ marginRight: spacing.size120 }}
-                      size={28}
-                    ></Icon> */}
+                {/*    <Icon
+                  icon="fluent_add_cards"
+                  style={{ marginRight: spacing.size120 }}
+                  size={22}
+                ></Icon> */}
                 <View>
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="body2">
-                    {deckStore.selectedDeck.todaysCards.length} cards due
-                  </CustomText>
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="body2">
-                    {deckStore.selectedDeck.flashcards.reduce((prev, card) => {
-                      return prev + card.todaysCardProgresses.length
-                    }, 0)}{" "}
-                    swipes
-                  </CustomText>
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="body2">
-                    {deckStore.selectedDeck.flashcards.reduce((prev, card) => {
-                      return (
-                        prev +
-                        card.todaysCardProgresses.filter((progress) => progress?.passed).length
-                      )
-                    }, 0)}{" "}
-                    passed
-                  </CustomText>
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="body2">
-                    {millisecondsToTime(
-                      deckStore.selectedDeck.flashcards.reduce((prev, card) => {
-                        let maxElapsed = 0
-                        card.todaysCardProgresses.forEach((progress) => {
-                          if (progress?.time_elapsed) {
-                            maxElapsed = Math.max(progress.time_elapsed, maxElapsed)
-                          }
-                        })
-                        return Math.max(prev, maxElapsed)
-                      }, 0) * 60000,
-                    )}{" "}
-                    longest recall
-                  </CustomText>
+                  <CustomText preset="body1Strong">{"Free study"}</CustomText>
                 </View>
               </View>
             }
@@ -131,7 +168,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText preset="body1Strong">Flashcards</CustomText>
+          <CustomText preset="title3">Flashcards</CustomText>
           {/*   <CustomText
                   style={{ color: custom_colors.brandForeground1 }}
                   preset="caption1Strong"
@@ -166,7 +203,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 <View>
                   <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
                     <CustomText preset="body1Strong">
-                      {deckStore.selectedDeck.flashcards.length + " "}
+                      {selectedDeck.flashcards.length + " "}
                     </CustomText>
                     <CustomText preset="body2">cards</CustomText>
                   </View>
@@ -176,13 +213,14 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             </View>
           }
         ></Card>
-        {deckStore?.selectedDeck?.global_deck_id ? (
+        {selectedDeck?.global_deck_id ? (
           <Card
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{
               marginTop: spacing.size80,
               minHeight: 0,
               elevation: 1,
+              marginBottom: spacing.size80,
             }}
             ContentComponent={
               <View
@@ -207,83 +245,45 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             }
           ></Card>
         ) : null}
+
         <Card
-          onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
+          onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
           style={{
-            marginTop: spacing.size80,
             minHeight: 0,
             elevation: 1,
+            flex: 1,
+            marginBottom: 2,
           }}
           ContentComponent={
             <View
               style={{
-                paddingHorizontal: spacing.size120,
                 paddingVertical: spacing.size80,
-                flexDirection: "row",
-                alignItems: "center",
+                paddingHorizontal: spacing.size120,
               }}
             >
-              <Icon
-                icon="fluent_add_cards"
-                style={{ marginRight: spacing.size120 }}
-                size={22}
-              ></Icon>
-              <View>
-                <CustomText preset="body2Strong">{"Free study"}</CustomText>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: spacing.size100,
+                }}
+              >
+                <Icon
+                  style={{ marginRight: spacing.size120 }}
+                  icon="fluent_settings_outline"
+                  size={22}
+                ></Icon>
+                <CustomText preset="body2Strong">Settings</CustomText>
+              </View>
+              <View style={{ flexDirection: "row", gap: spacing.size60 }}>
+                <StatusLabel
+                  text={deckStore?.selectedDeck?.new_per_day + " cards per day"}
+                ></StatusLabel>
+                {/*                 <StatusLabel text={"English"}></StatusLabel> */}
               </View>
             </View>
           }
         ></Card>
-
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: spacing.size280,
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginHorizontal: spacing.size80,
-          }}
-        >
-          <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
-            Settings
-          </CustomText>
-        </View>
-
-        <View style={{ flexDirection: "row" }}>
-          <Card
-            onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
-            style={{
-              minHeight: 0,
-              elevation: 1,
-              flex: 1,
-              marginBottom: 2,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  paddingVertical: spacing.size80,
-                  paddingHorizontal: spacing.size80,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Icon
-                    style={{ marginRight: spacing.size120 }}
-                    icon="fluent_settings_outline"
-                    size={22}
-                  ></Icon>
-                  <CustomText preset="body2Strong">
-                    {deckStore.selectedDeck.new_per_day} cards added per day
-                  </CustomText>
-                </View>
-              </View>
-            }
-          ></Card>
-        </View>
       </View>
     </View>
   )
