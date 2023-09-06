@@ -77,12 +77,12 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   }
 
   const isSelectedFlashcardSame = () => {
-    const deckStoreSelected = flashcard
-    if (!deckStoreSelected || !selectedFlashcardReference) {
+    // const deckStoreSelected = flashcard
+    if (!flashcard || !selectedFlashcardReference) {
       //TODO this is a wordaround, for some reason if we click on flashcards while its loading it bugs
       return true
     }
-    const storeFlashcard = mapToEditableFlashcard(deckStoreSelected)
+    const storeFlashcard = mapToEditableFlashcard(flashcard)
     const stateFlashcard = mapToEditableFlashcard(selectedFlashcardReference)
     return isEqual(storeFlashcard, stateFlashcard)
   }
@@ -160,9 +160,10 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       const updatedFlashcard = await updateFlashcard(flashcardReference)
       console.log("the card was updated here!!")
       original?.updateFlashcard(flashcardReference)
-      setSelectedFlashcard(flashcardReference)
+      setSelectedFlashcard({ ...flashcardReference })
     }
   }
+
   const [focusBack, setFocusBack] = useState(false)
   const [focusCaption, setFocusCaption] = useState(false)
   const [focusExtra, setFocusExtra] = useState(false)
