@@ -66,8 +66,9 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
   }
 
   useEffect(() => {
+    //reset the card when it changes - for the undo function
     resetCard()
-  }, [currentFlashcards[0]])
+  }, [currentFlashcards[0]?.id])
 
   const panResponder = useMemo(
     () =>
