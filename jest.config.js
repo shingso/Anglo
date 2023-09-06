@@ -8,7 +8,11 @@ module.exports = {
     "<rootDir>/node_modules/(react-clone-referenced-element|@react-native-community|react-navigation|@react-navigation/.*|@unimodules/.*|native-base|react-native-code-push)",
     "jest-runner",
   ],
+  transform: {
+    "^.+\\.[jt]sx?$": "babel-jest",
+  },
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.maestro/", "@react-native"],
-  testEnvironment: "jsdom",
+  testEnvironment: "node",
   setupFiles: ["<rootDir>/test/setup.ts"],
+  setupFilesAfterEnv: ["@testing-library/jest-native/extend-expect"],
 }
