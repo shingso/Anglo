@@ -20,6 +20,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { supabase } from "app/services/supabase/supabase"
 import {
+  cancelSubscription,
   getProducts,
   processProductPayment,
   processSubscriptionPayment,
@@ -82,9 +83,22 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       }
     }
 
+    const endSubscription = async () => {
+      if (subscriptionStore?.subscription?.subscription_id) {
+        console.log("ending subscription")
+        cancelSubscription(subscriptionStore?.subscription?.subscription_id)
+      } else {
+        console.log("could not end because no id")
+      }
+    }
+
     const initializeSubscriptionPaymentSheet = async () => {
-      const { paymentIntent, ephemeralKey, customer } = await fetchSubscriptionMonthlyPaymentSheet()
-      const { error } = await confirmPlatformPayPayment(paymentIntent, {
+      const {
+        paymentIntent: paymentInput,
+        ephemeralKey,
+        customer,
+      } = await fetchSubscriptionMonthlyPaymentSheet()
+      const { paymentIntent, error } = await confirmPlatformPayPayment(paymentInput, {
         googlePay: {
           testEnv: true,
           merchantName: "Anglo",
@@ -97,7 +111,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           },
         },
       })
-      console.log("error", error)
+      if (paymentIntent?.status == "Succeeded") {
+        subscriptionStore.getSubscription()
+      }
     }
 
     const initializePaymentSheet = async (subLength: string) => {
@@ -156,6 +172,25 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           <CustomText style={{ marginBottom: spacing.size160 }}>
             Cancel anytime, no fees, simple and hassle free
           </CustomText>
+          <CustomText style={{ marginBottom: spacing.size160 }}>
+            {subscriptionStore?.subscription?.subscription_id}
+          </CustomText>
+          <Card
+            onPress={() => endSubscription()}
+            style={{
+              marginBottom: spacing.size160,
+              elevation: 4,
+              minHeight: 0,
+              paddingHorizontal: spacing.size200,
+              paddingVertical: spacing.size120,
+            }}
+            ContentComponent={
+              <View>
+                <CustomText preset="body2Strong">Cancel Subscription</CustomText>
+              </View>
+            }
+          ></Card>
+
           <Card
             onPress={() => initializeSubscriptionPaymentSheet()}
             style={{

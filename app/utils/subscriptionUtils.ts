@@ -8,6 +8,7 @@ export enum Subscription_Fields {
   CREATED_AT = "created_at",
   START_DATE = "start_date",
   END_DATE = "end_date",
+  SUBSCRIPTION_ID = "subscription_id",
 }
 
 export const mapToSubscription = (subscription: Subscription): SubscriptionSnapshotIn => {
@@ -21,6 +22,9 @@ export const mapToSubscription = (subscription: Subscription): SubscriptionSnaps
       : undefined,
     [Subscription_Fields.END_DATE]: subscription?.end_date
       ? new Date(subscription?.end_date)
+      : undefined,
+    [Subscription_Fields.SUBSCRIPTION_ID]: subscription?.subscription_id
+      ? subscription?.subscription_id
       : undefined,
   }
 }
@@ -53,7 +57,7 @@ export const processSubscriptionPayment = async (userId: string): Promise<any> =
   return data
 }
 
-export const cancelSubscription = async (subscriptionId): Promise<any> => {
+export const cancelSubscription = async (subscriptionId: string): Promise<any> => {
   const { data, error } = await supabase.functions.invoke("cancelSubscription", {
     body: JSON.stringify({ subscriptionId: subscriptionId }),
   })

@@ -26,10 +26,12 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     // Pull in one of our MST stores
     const { deckStore } = useStores()
     const [paidCards, setPaidCards] = useState([])
+    const selectedDeck = deckStore?.selectedDeck
+    const globalDeckId = selectedDeck?.global_deck_id
 
     useEffect(() => {
       const setPaidFlashcards = async () => {
-        const cards = await getGlobalDeckById("29ff0039-6e9a-4d03-846e-330b14b51fea")
+        const cards = await getGlobalDeckById(globalDeckId)
         const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
         setPaidCards(paidCard)
       }
@@ -37,12 +39,8 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     }, [])
 
     const fetchPaymentSheetParamsBuyDeck = async (deckId: string) => {
-      console.log("we are here")
       const user = await supabase.auth.getUser()
-
       const res = await processProductPayment(`deck_${deckId}`, user.data.user.id)
-      console.log("res", res)
-
       return {
         paymentIntent: res.paymentIntent,
         ephemeralKey: res.ephemeralKey,
@@ -51,12 +49,13 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     }
 
     const initializePaymentSheet = async () => {
-      console.log("runnning!!@#@@#4")
-      const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParamsBuyDeck(
-        "29ff0039-6e9a-4d03-846e-330b14b51fea",
-      )
+      const {
+        paymentIntent: paymentInput,
+        ephemeralKey,
+        customer,
+      } = await fetchPaymentSheetParamsBuyDeck(globalDeckId)
 
-      const { error } = await confirmPlatformPayPayment(paymentIntent, {
+      const { paymentIntent, error } = await confirmPlatformPayPayment(paymentInput, {
         googlePay: {
           testEnv: true,
           merchantName: "Anglo",
@@ -70,14 +69,16 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         },
       })
 
-      console.log("error", error)
+      if (paymentIntent?.status == "Succeeded") {
+        const res = await getPaidGlobalFlashcards()
+        console.log(res)
+      }
     }
 
     const getPaidGlobalFlashcards = async () => {
-      //importPurchasedCards(deckStore.selectedDeck.id, "29ff0039-6e9a-4d03-846e-330b14b51fea")
       const addedFlashcards = await insertFlashcardsAndReturn(
         deckStore.selectedDeck.id,
-        "29ff0039-6e9a-4d03-846e-330b14b51fea",
+        globalDeckId,
       )
       if (addedFlashcards && addedFlashcards?.length > 0) {
         deckStore.selectedDeck.addMutlipleFlashcards(addedFlashcards)
@@ -100,6 +101,13 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
               )
             }}
           ></FlatList>
+          {/*   <Button
+            preset="custom_default_small"
+            onPress={() => getPaidGlobalFlashcards()}
+            style={{ marginBottom: 20 }}
+          >
+            Add cards
+          </Button> */}
           <PlatformPayButton
             type={PlatformPay.ButtonType.Pay}
             onPress={() => initializePaymentSheet()}

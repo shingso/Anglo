@@ -12,6 +12,7 @@ export const SubscriptionModel = types
     [Subscription_Fields.CREATED_AT]: types.maybe(types.Date),
     [Subscription_Fields.START_DATE]: types.maybe(types.Date),
     [Subscription_Fields.END_DATE]: types.maybe(types.Date),
+    [Subscription_Fields.SUBSCRIPTION_ID]: types.maybe(types.string),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
