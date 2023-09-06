@@ -372,6 +372,9 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           body={"Are you sure you want to delete this deck? This action cannot be undone."}
           children={
             <View>
+              <CustomText preset="caption1" style={{ marginBottom: spacing.size40 }}>
+                Enter "Delete" to confirm
+              </CustomText>
               <TextField
                 onChangeText={setConfirmDelete}
                 autoCorrect={false}

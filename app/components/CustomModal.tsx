@@ -17,6 +17,7 @@ export interface CustomModalProps {
   visible: boolean
   mainAction: Function
   mainActionLabel?: String
+  mainActionDisabled?: boolean
   secondaryAction: Function
   secondaryActionLabel?: String
   header?: String
@@ -34,6 +35,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
     mainAction,
     secondaryAction,
     mainActionLabel,
+    mainActionDisabled = false,
     secondaryActionLabel,
     header,
     body,
@@ -67,6 +69,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
             {secondaryActionLabel || "Cancel"}
           </Button>
           <Button
+            disabled={mainActionDisabled}
             style={{ flex: 1, marginLeft: 4 }}
             preset="custom_filled"
             onPress={() => mainAction()}
