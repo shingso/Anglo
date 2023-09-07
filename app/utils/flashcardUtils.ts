@@ -260,7 +260,7 @@ export const addToFlashcardProgress = async (
   return insertedProgress || newProgress
 }
 
-const calculateFlashcardProgress = (flashcard: Flashcard) => {
+export const calculateFlashcardProgress = (flashcard: Flashcard) => {
   const flashcardStatistics = {
     total: 0,
     correctSwipes: 0,
@@ -271,28 +271,31 @@ const calculateFlashcardProgress = (flashcard: Flashcard) => {
     easinessFactor: 0,
   }
 
-  flashcardStatistics.currentRepetition = calculateCurrentRepetition(flashcard.card_progress)
-  flashcardStatistics.easinessFactor = calculateEasinessFactor(flashcard.card_progress)
+  if (flashcard?.card_progress && flashcard?.card_progress.length > 0) {
+    flashcard?.card_progress.forEach((progress) => {
+      console.log("progress", progress)
+    })
+    flashcardStatistics.currentRepetition = calculateCurrentRepetition(flashcard.card_progress)
+    flashcardStatistics.easinessFactor = calculateEasinessFactor(flashcard.card_progress)
+    flashcard.card_progress.forEach((progress) => {
+      flashcardStatistics.total += 1
+      if (progress.retrieval_level === 2) {
+        flashcardStatistics.correctSwipes += 1
+      }
 
-  flashcard.card_progress.forEach((progress) => {
-    flashcardStatistics.total += 1
-    if (progress.retrieval_level === 2) {
-      flashcardStatistics.correctSwipes += 1
-    }
+      if (progress.retrieval_level === 1) {
+        flashcardStatistics.middleSwipe += 1
+      }
 
-    if (progress.retrieval_level === 1) {
-      flashcardStatistics.middleSwipe += 1
-    }
+      if (progress.retrieval_level === 0) {
+        flashcardStatistics.failedSwipe += 1
+      }
 
-    if (progress.retrieval_level === 0) {
-      flashcardStatistics.failedSwipe += 1
-    }
-
-    flashcardStatistics.timeElapsed = Math.max(
-      flashcardStatistics.timeElapsed,
-      progress.time_elapsed,
-    )
-  })
-
+      flashcardStatistics.timeElapsed = Math.max(
+        flashcardStatistics.timeElapsed,
+        progress.time_elapsed,
+      )
+    })
+  }
   return flashcardStatistics
 }

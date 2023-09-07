@@ -55,13 +55,15 @@ export const mapResponseToCardProgress = (progress: any): CardProgressSnapshotIn
     [Card_Progress_Fields.FLASHCARD_ID]: progress?.flashcard_id
       ? progress?.flashcard_id
       : undefined,
-    [Card_Progress_Fields.RETRIEVAL_LEVEL]: progress?.retrieval_level
-      ? progress?.retrieval_level
-      : undefined,
+    [Card_Progress_Fields.RETRIEVAL_LEVEL]:
+      progress?.retrieval_level || progress?.retrieval_level === 0
+        ? progress?.retrieval_level
+        : undefined,
     [Card_Progress_Fields.CREATED_AT]: progress?.created_at
       ? new Date(progress.created_at)
       : undefined,
-    [Card_Progress_Fields.TIME_ELAPSED]: progress?.time_elapsed ? progress.time_elapsed : undefined,
+    [Card_Progress_Fields.TIME_ELAPSED]:
+      progress?.time_elapsed || progress?.time_elapsed === 0 ? progress.time_elapsed : undefined,
     [Card_Progress_Fields.PASSED]: progress.passed !== null ? progress.passed : undefined,
   }
 }

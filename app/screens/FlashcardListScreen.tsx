@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react"
+import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, TouchableOpacity, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -36,7 +36,7 @@ import { useNavigation, useTheme } from "@react-navigation/native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { showErrorToast } from "app/utils/errorUtils"
-import { deleteFlashcard } from "app/utils/flashcardUtils"
+import { deleteFlashcard, calculateFlashcardProgress } from "app/utils/flashcardUtils"
 import { removeFlashcardFromDeck } from "app/utils/deckUtils"
 import { borderRadius } from "app/theme/borderRadius"
 // import { useNavigation } from "@react-navigation/native"
@@ -54,7 +54,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       ? deckStore?.selectedDeck?.flashcards
       : []
     const [searchTerm, setSearchTerm] = useState("")
-    const [flashcardEditSheetIndex, setFlashcardEditSheetIndex] = useState(0)
     const [sortOption, setSortOption] = useState(null)
     const sortOptions = [SortType.DATE_ADDDED, SortType.ACTIVE, SortType.ALPHABETICAL]
     const sortModalRef = useRef<BottomSheetModal>()
@@ -65,13 +64,11 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
     useEffect(() => {
       const res = navigation.addListener("beforeRemove", (e) => {
-        console.log(editFlashcardVisible, "current edit flashcard")
         if (!editFlashcardVisible) {
           return
         }
         e.preventDefault()
         selectedFlashcardModalRef?.current?.close()
-        setFlashcardEditSheetIndex(-1)
       })
       return res
     }, [navigation, editFlashcardVisible])
@@ -107,6 +104,10 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       deckStore.selectedDeck.selectFlashcard(flashcard)
       openEditFlashcard()
     }
+
+    const flashcardStatistics = useMemo(() => {
+      return calculateFlashcardProgress(selectedFlashcard)
+    }, [selectedFlashcard])
 
     return (
       <Screen style={$root}>
@@ -277,6 +278,13 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             flashcard={selectedFlashcard}
             deck={deckStore.selectedDeck}
           ></EditFlashcard>
+          <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
+          <CustomText>Rep: {flashcardStatistics.currentRepetition}</CustomText>
+          <CustomText>Max Time: {flashcardStatistics.timeElapsed}</CustomText>
+          <CustomText>Left: {flashcardStatistics.correctSwipes}</CustomText>
+          <CustomText>Middle: {flashcardStatistics.middleSwipe}</CustomText>
+          <CustomText>Right: {flashcardStatistics.failedSwipe}</CustomText>
+          <CustomText>Total Swipes: {flashcardStatistics.total}</CustomText>
         </BottomSheet>
         <CustomModal
           mainAction={() => removeFlashcard(selectedFlashcard, deckStore.selectedDeck)}

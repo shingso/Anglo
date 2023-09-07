@@ -168,7 +168,9 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText preset="title3">Flashcards</CustomText>
+          <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
+            Flashcards
+          </CustomText>
           {/*   <CustomText
                   style={{ color: custom_colors.brandForeground1 }}
                   preset="caption1Strong"
@@ -180,7 +182,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
         <Card
           onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
           style={{
-            marginTop: spacing.size160,
+            marginBottom: spacing.size160,
             minHeight: 0,
             elevation: 1,
           }}
@@ -217,10 +219,9 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           <Card
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{
-              marginTop: spacing.size80,
               minHeight: 0,
               elevation: 1,
-              marginBottom: spacing.size80,
+              marginBottom: spacing.size160,
             }}
             ContentComponent={
               <View
