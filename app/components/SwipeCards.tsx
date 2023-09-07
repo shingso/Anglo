@@ -66,7 +66,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
   }
 
   useEffect(() => {
-    //reset the card when it changes - for the undo function
+    //reset the card when it changes - for the undo
     resetCard()
   }, [currentFlashcards[0]?.id])
 
@@ -83,30 +83,30 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
           if (!showBack) {
             return
           }
-          if (gestureState.dx < -120) {
+          if (gestureState.dx < -70) {
             Animated.spring(position, {
               toValue: { x: -SCREEN_WIDTH - 160, y: gestureState.dy },
               ...$animationProps,
             }).start(async () => {
               //this is swiping left - left means could not recall
-              swipeRight()
+              // swipeRight()
               showNextCard()
             })
-          } else if (gestureState.dx > 120) {
+          } else if (gestureState.dx > 70) {
             // this is a right swipe - right means pass
             Animated.spring(position, {
               toValue: { x: SCREEN_WIDTH + 160, y: gestureState.dy },
               ...$animationProps,
             }).start(async () => {
-              swipeLeft()
+              //swipeLeft()
               showNextCard()
             })
-          } else if (gestureState.dy < -140) {
+          } else if (gestureState.dy < -80) {
             Animated.spring(position, {
               toValue: { x: 0, y: -SCREEN_HEIGHT - 160 },
               ...$animationProps,
             }).start(async () => {
-              swipeUp()
+              //  swipeUp()
               showNextCard()
             })
           } else {
@@ -163,26 +163,20 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
   const negScreenHeightDivTwo = -SCREEN_HEIGHT / 2
 
   const passOpacity = position.x.interpolate({
-    inputRange: [100, posScreenWidthDivTwo - 50, posScreenWidthDivTwo + 350],
+    inputRange: [50, 100, posScreenWidthDivTwo + 350],
     outputRange: [0, 1, 0],
     extrapolate: "clamp",
   })
 
   const upCardOpacity = position.y.interpolate({
-    inputRange: [negScreenHeightDivTwo - 300, negScreenHeightDivTwo, -100],
+    inputRange: [negScreenHeightDivTwo - 300, -100, -50],
     outputRange: [0, 1, 0],
     extrapolate: "clamp",
   })
 
   const reshuffleOpacity = position.x.interpolate({
-    inputRange: [negScreenWidthDivTwo - 350, negScreenWidthDivTwo + 50, -100],
+    inputRange: [negScreenWidthDivTwo - 350, -100, -50],
     outputRange: [0, 1, 0],
-    extrapolate: "clamp",
-  })
-
-  const nextCardOpacity = position.x.interpolate({
-    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-    outputRange: [1, 0, 1],
     extrapolate: "clamp",
   })
 

@@ -11,7 +11,8 @@ export const calculateEasinessFactor = (cardProgresses: CardProgressSnapshotIn[]
       collectiveEasinessFactor = 1.3
     }
   })
-  return collectiveEasinessFactor
+  //return rounded collective easiness factor to two decimal
+  return Math.round(collectiveEasinessFactor * 100) / 100
 }
 
 export const calculateCurrentRepetition = (cardProgresses: CardProgressSnapshotIn[]): number => {
