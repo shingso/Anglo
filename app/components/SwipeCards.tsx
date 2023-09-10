@@ -78,6 +78,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
         },
         onPanResponderMove: (evt, gestureState) => {
           position.setValue({ x: gestureState.dx, y: gestureState.dy })
+          positionSize.setValue(Math.max(Math.abs(gestureState.dx), Math.abs(gestureState.dy)))
         },
         onPanResponderRelease: (evt, gestureState) => {
           if (!showBack) {
@@ -124,6 +125,8 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
   )
 
   const position = useRef(new Animated.ValueXY()).current
+  const positionSize = useRef(new Animated.Value(0)).current
+
   const rotate = useRef(
     position.x.interpolate({
       inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -132,22 +135,6 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
     }),
   ).current
   const TWO = new Animated.Value(2)
-
-  const maxOfAnimated = (
-    a: Animated.Value,
-    b: Animated.Value,
-  ): Animated.AnimatedInterpolation<number> => {
-    return Animated.divide(
-      Animated.add(
-        Animated.add(a, b),
-        Animated.subtract(a, b).interpolate({
-          inputRange: [-1, 0, 1],
-          outputRange: [1, 0, 1],
-        }),
-      ),
-      TWO,
-    )
-  }
 
   const rotateAndTranslate = {
     transform: [
@@ -180,21 +167,9 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
     extrapolate: "clamp",
   })
 
-  const nextCardScale = position.x.interpolate({
-    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-    outputRange: [1, 0.8, 1],
-    extrapolate: "clamp",
-  })
-
-  const newNextCardScale = maxOfAnimated(position.x, position.y).interpolate({
-    inputRange: [-100, 0, 100],
-    outputRange: [0, 0, 1],
-    extrapolate: "clamp",
-  })
-
-  const nextCardScale2 = position.y.interpolate({
-    inputRange: [-SCREEN_HEIGHT / 2, 0, SCREEN_HEIGHT / 2],
-    outputRange: [1, 0.8, 1],
+  const nextCardScale = positionSize.interpolate({
+    inputRange: [0, 130],
+    outputRange: [0.7, 1],
     extrapolate: "clamp",
   })
 
