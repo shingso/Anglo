@@ -68,7 +68,9 @@ export const DeckModel = types
         return card?.next_shown && isBefore(card.next_shown, endOfToday)
       })
     },
-
+    getFlashcardById: (id: string) => {
+      return self.flashcards.find((card) => card.id === id)
+    },
     isDeckBought(boughtDeckIds: string[]) {
       return boughtDeckIds.find((item) => item === self.global_deck_id)
     },

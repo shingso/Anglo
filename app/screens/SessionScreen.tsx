@@ -58,7 +58,7 @@ import {
 } from "app/utils/remote_sync/remoteSyncUtils"
 import { showErrorToast } from "app/utils/errorUtils"
 import { calculateNextInterval } from "app/utils/superMemoUtils"
-import { addDays, addMinutes, differenceInMinutes } from "date-fns"
+import { addDays, addMinutes, differenceInMinutes, subMinutes } from "date-fns"
 import { borderRadius } from "app/theme/borderRadius"
 
 export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>> = observer(
@@ -117,17 +117,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       selectedFlashcardModalRef?.current.present()
     }
 
-    const rightSwipe = async () => {
-      deckStore.selectedDeck.reshuffleFirstCard()
-      const progress = await applySessionResponse(currentFlashcard, false, 0)
-      addProgressToLog(progress)
-      setSessionStats((prev) => ({
-        ...prev,
-        right: prev.right + 1,
-        totalSwipes: prev.totalSwipes + 1,
-      }))
-    }
-
     const applySessionResponse = async (
       flashcard: Flashcard,
       passed: boolean,
@@ -139,7 +128,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       if (mostRecentProgress) {
         levelAttempted = mostRecentProgress.mem_level + 1
         timeElapsed = differenceInMinutes(new Date(), mostRecentProgress.created_at)
-        console.log("the prev most recent respoonse", mostRecentProgress)
       }
       const response = await addToFlashcardProgress(
         flashcard,
@@ -151,23 +139,35 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       return response
     }
 
-    const addTimeToFlashcardNextShown = async (flashcard: Flashcard, time: number) => {
+    const setFlashcardNextShown = async (flashcard: Flashcard, nextShown: Date) => {
       if (!flashcard?.id) {
         return null
       }
       const updatedFlashcard = {
         [Flashcard_Fields.ID]: flashcard.id,
-        [Flashcard_Fields.NEXT_SHOWN]: addDays(new Date(), time),
+        [Flashcard_Fields.NEXT_SHOWN]: nextShown,
       }
       const flashcardResponse = await updateFlashcard(updatedFlashcard)
       flashcard.updateFlashcard(updatedFlashcard)
       return flashcardResponse
     }
 
+    const rightSwipe = async () => {
+      deckStore.selectedDeck.reshuffleFirstCard()
+      const progress = await applySessionResponse(currentFlashcard, false, 0)
+      addProgressToLog(progress)
+      setSessionStats((prev) => ({
+        ...prev,
+        right: prev.right + 1,
+        totalSwipes: prev.totalSwipes + 1,
+      }))
+    }
+
     const leftSwipe = async () => {
       deckStore.selectedDeck.removeFirstSessionCard()
-      const nextShownTime = await calculateNextInterval(currentFlashcard, 2)
-      const timeAddResponse = await addTimeToFlashcardNextShown(currentFlashcard, nextShownTime)
+      const nextInterval = await calculateNextInterval(currentFlashcard, 2)
+      const nextShown = addDays(new Date(), nextInterval)
+      const timeAddResponse = await setFlashcardNextShown(currentFlashcard, nextShown)
       const progress = await applySessionResponse(currentFlashcard, true, 2)
       addProgressToLog(progress)
       setSessionStats((prev) => ({
@@ -182,13 +182,15 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     }
 
     const upSwipe = async () => {
-      const nextShownTime = calculateNextInterval(currentFlashcard, 1)
-      if (nextShownTime === 0) {
+      const nextInterval = calculateNextInterval(currentFlashcard, 1)
+      const nextShown = addDays(new Date(), nextInterval)
+
+      if (nextInterval === 0) {
         deckStore.selectedDeck.reshuffleFirstCard()
       } else {
         deckStore.selectedDeck.removeFirstSessionCard()
       }
-      const timeAddResponse = await addTimeToFlashcardNextShown(currentFlashcard, nextShownTime)
+      const timeAddResponse = await setFlashcardNextShown(currentFlashcard, nextShown)
       const progress = await applySessionResponse(currentFlashcard, true, 1)
 
       addProgressToLog(progress)
@@ -242,8 +244,13 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       const lastProgressLog = sessionProgressLog[sessionProgressLogLength - 1]
       const deletedRemote = await deleteCardProgress(lastProgressLog)
       //TODO confirm deck was deleted/add error handling if it was not deleted
-
       deckStore.selectedDeck.deleteCardProgress(lastProgressLog)
+      const undoTimeShown = subMinutes(
+        new Date(),
+        lastProgressLog?.[Card_Progress_Fields.TIME_ELAPSED],
+      )
+      const undoFlashcard = deckStore?.selectedDeck?.getFlashcardById(lastProgressLog.flashcard_id)
+      setFlashcardNextShown(undoFlashcard, undoTimeShown)
       //remove the processed undo progress from log
       setSessionProgressLog((prev) => {
         return [...prev.filter((progress) => progress.id !== lastProgressLog.id)]
