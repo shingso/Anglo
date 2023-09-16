@@ -111,7 +111,9 @@ export const mapToGlobalFlashcard = (card: any): PrivateGlobalFlashcardsSnapshot
 
 export const searchGlobalDecks = async (searchTerm: string) => {
   const search: string = "%" + searchTerm + "%"
-  let { data, error } = await supabase.from("global_decks").select("*, global_flashcards(*)")
+  let { data, error } = await supabase
+    .from("global_decks")
+    .select("*, private_global_flashcards(*)")
 
   return data
 }
@@ -179,4 +181,16 @@ export const addToPrivateGlobalFlashcard = async (
     console.log(error)
   }
   return null
+}
+
+export const importGlobalDeckById = async (deckId: String, deckTitle: String) => {
+  let { data: deck, error } = await supabase.rpc("import_global_deck", {
+    deck_id: deckId,
+    deck_title: deckTitle,
+  })
+  /* if (deck?.id) {
+    const res = await addNewRemoteDeckToStore(deck.id)
+    const localDeck = deckStore.getDeckById(deck.id)
+    addCardsToShow(localDeck, startingValue)
+  } */
 }

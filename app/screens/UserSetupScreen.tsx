@@ -6,6 +6,7 @@ import { AppStackScreenProps } from "../navigators"
 import { Button, CustomText, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Education_Levels, User, updateUser } from "../utils/userUtils"
+import { importGlobalDeckById } from "app/utils/globalDecksUtils"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -26,8 +27,7 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
     // Pull in navigation via hook
     // const navigation = useNavigation()
 
-    const [newPerDay, setNewPerDay] = useState("")
-    const [openNewPerDay, setOpenNewPerDay] = useState(false)
+    const promoDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
 
     const educationList = Object.values(Education_Levels).map((level) => {
       return {
@@ -41,6 +41,10 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
     }
 
     const submitData = () => {}
+
+    const importSATVocabDeck = async () => {
+      importGlobalDeckById(promoDeckId, "SAT Vocabulary")
+    }
 
     return (
       <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
