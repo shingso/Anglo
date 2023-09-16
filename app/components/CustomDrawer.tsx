@@ -166,11 +166,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
               icon="fluent_lightbulb"
             ></Icon>
-            <Icon
-              size={24}
-              onPress={() => navigation.navigate(AppRoutes.USER_GLOBAL_DECKS)}
-              icon="fluent_lightbulb"
-            ></Icon>
+
             <Icon
               size={24}
               onPress={() => setNewDeckModalVisible(true)}

@@ -260,7 +260,7 @@ const HomeScreens = () => {
         }}
         component={SubscribeScreen}
       />
-      <Stack.Screen
+      {/*   <Stack.Screen
         name={AppRoutes.USER_GLOBAL_DECKS}
         options={{
           headerShown: true,
@@ -274,7 +274,7 @@ const HomeScreens = () => {
           title: "Global Deck Edit",
         }}
         component={UserGlobalDeckEditScreen}
-      />
+      /> */}
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
         options={{
