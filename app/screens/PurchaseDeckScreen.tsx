@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
-import { Button, CustomText, FlashcardListItem, Screen, Text } from "app/components"
+import { Button, CustomModal, CustomText, FlashcardListItem, Screen, Text } from "app/components"
 import { custom_colors, custom_palette, spacing } from "app/theme"
 
 import { getGlobalDeckById } from "app/utils/globalDecksUtils"
@@ -17,17 +17,20 @@ import {
   confirmPlatformPayPayment,
 } from "@stripe/stripe-react-native"
 import { processProductPayment } from "app/utils/subscriptionUtils"
+import { AppRoutes } from "app/utils/consts"
+import { useNavigation } from "@react-navigation/native"
 
 interface PurchaseDeckScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"PurchaseDeck">> {}
 
 export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
   function PurchaseDeckScreen() {
-    // Pull in one of our MST stores
     const { deckStore } = useStores()
     const [paidCards, setPaidCards] = useState([])
     const selectedDeck = deckStore?.selectedDeck
     const globalDeckId = selectedDeck?.global_deck_id
+    const [importPurchasedDeckVisible, setImportPurchasedDeckVisible] = useState(false)
+    const navigation = useNavigation()
 
     useEffect(() => {
       const setPaidFlashcards = async () => {
@@ -70,8 +73,9 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
       })
 
       if (paymentIntent?.status == "Succeeded") {
-        const res = await getPaidGlobalFlashcards()
-        console.log(res)
+        //const res = await getPaidGlobalFlashcards()
+        //console.log(res)
+        setImportPurchasedDeckVisible(true)
       }
     }
 
@@ -108,6 +112,14 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
           >
             Add cards
           </Button> */}
+
+          <CustomModal
+            header={"Deck purchased"}
+            body={"Import the deck below or add or cards"}
+            secondaryAction={() => setImportPurchasedDeckVisible(false)}
+            mainAction={() => getPaidGlobalFlashcards()}
+            visible={importPurchasedDeckVisible}
+          ></CustomModal>
           <PlatformPayButton
             type={PlatformPay.ButtonType.Pay}
             onPress={() => initializePaymentSheet()}

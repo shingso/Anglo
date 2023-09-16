@@ -29,6 +29,8 @@ import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
 import { useTheme } from "@react-navigation/native"
+import { getAIDefinition } from "app/utils/openAiUtils"
+import { CustomModal } from "./CustomModal"
 export interface EditFlashcardProps {
   /**
    * An optional style override useful for padding & margin.
@@ -60,9 +62,14 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const { style, flashcard, onDelete, onAddCallBack, deck, customSaveFlashcard } = props
   const $styles = [$container, style]
   const theme = useTheme()
+  const [errorModalVisible, setErrorModalVisible] = useState(false)
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
   )
+
+  useEffect(() => {
+    setSelectedFlashcard(mapToEditableFlashcard(flashcard))
+  }, [flashcard])
 
   const [inputValue, setInputValue] = useState("")
 
@@ -73,6 +80,25 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         inputValue,
       ])
       setInputValue("")
+    }
+  }
+
+  const useAIDefinition = async () => {
+    if (selectedFlashcardReference?.front) {
+      const data = await getAIDefinition(selectedFlashcardReference?.front)
+      if (!!data?.error) {
+        setErrorModalVisible(true)
+        return
+      }
+
+      if (data) {
+        setSelectedFlashcard((prev) => ({
+          ...prev,
+          back: data?.definition,
+          extra: data?.extra,
+          extra_array: [...prev.extra_array, ...(data?.synonyms || [])],
+        }))
+      }
     }
   }
 
@@ -188,13 +214,13 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   }
   const onSubmitExtra = (value: string) => {
     updateSelectedFlashcard("extra", value)
-    if (!flashcard) {
+    /*  if (!flashcard) {
       extraArrayRef.current.focus()
-    }
+    } */
   }
 
   return (
-    <View style={$styles}>
+    <View style={$styles} key={flashcard?.id}>
       {flashcard?.next_shown ? (
         <View style={{ position: "absolute", top: 0, left: 0 }}>
           <StatusLabel text={"Active"}></StatusLabel>
@@ -221,6 +247,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
               icon="fluent_play_outline"
             ></Icon>
           ) : null}
+          <Icon size={28} onPress={() => useAIDefinition()} icon="fluent_lightbulb"></Icon>
           <View>
             {!isFlashcardSame && (
               <View style={$saveBadge}>
@@ -317,6 +344,15 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           }}
         ></Image>
       ) : null}
+
+      <CustomModal
+        mainAction={() => setErrorModalVisible(false)}
+        //secondaryAction={() => setErrorModalVisible(false)}
+        mainActionLabel={"Close"}
+        visible={errorModalVisible}
+        header={"Rate limit reached"}
+        body={"You've reached the free limit of 3 AI generated cards per day. Subscribe for more."}
+      ></CustomModal>
     </View>
   )
 })

@@ -18,7 +18,7 @@ export interface CustomModalProps {
   mainAction: Function
   mainActionLabel?: String
   mainActionDisabled?: boolean
-  secondaryAction: Function
+  secondaryAction?: Function
   secondaryActionLabel?: String
   header?: String
   body: String
@@ -48,9 +48,9 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
       <View
         style={{
           backgroundColor: theme.colors.background3,
-          minHeight: 160,
+          //minHeight: 160,
           borderRadius: borderRadius.corner120,
-          padding: spacing.size160,
+          padding: spacing.size200,
         }}
       >
         <View style={{ marginBottom: spacing.size160 }}>
@@ -60,17 +60,15 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
           <CustomText preset="body2">{body}</CustomText>
         </View>
         {children && <View style={{ marginBottom: spacing.size160 }}>{children}</View>}
-        <View style={{ flexDirection: "row" }}>
-          <Button
-            style={{ flex: 1, marginRight: 4 }}
-            preset="custom_outline"
-            onPress={() => secondaryAction()}
-          >
-            {secondaryActionLabel || "Cancel"}
-          </Button>
+        <View style={{ flexDirection: "row", gap: spacing.size120 }}>
+          {secondaryAction ? (
+            <Button style={{ flex: 1 }} preset="custom_outline" onPress={() => secondaryAction()}>
+              {secondaryActionLabel || "Cancel"}
+            </Button>
+          ) : null}
           <Button
             disabled={mainActionDisabled}
-            style={{ flex: 1, marginLeft: 4 }}
+            style={{ flex: 1 }}
             preset="custom_filled"
             onPress={() => mainAction()}
           >

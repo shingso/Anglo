@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, custom_colors, spacing, typography } from "app/theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { AppRoutes } from "app/utils/consts"
 
@@ -88,12 +88,18 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     <Icon
                       style={{ marginRight: spacing.size60 }}
                       size={16}
+                      color={custom_palette.white}
                       icon="fluent_play_circle"
                     ></Icon>
-                    <CustomText preset="caption1Strong">CARDS DUE</CustomText>
+                    <CustomText style={{ color: custom_palette.white }} preset="caption1Strong">
+                      CARDS DUE
+                    </CustomText>
                   </View>
 
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
+                  <CustomText
+                    style={{ marginBottom: spacing.size60, color: custom_palette.white }}
+                    preset="title1"
+                  >
                     {selectedDeck.todaysCards.length}
                   </CustomText>
                 </View>
@@ -182,7 +188,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
         <Card
           onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
           style={{
-            marginBottom: spacing.size160,
+            marginBottom: spacing.size80,
             minHeight: 0,
             elevation: 1,
           }}
@@ -221,7 +227,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             style={{
               minHeight: 0,
               elevation: 1,
-              marginBottom: spacing.size160,
+              marginBottom: spacing.size80,
             }}
             ContentComponent={
               <View
