@@ -128,7 +128,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 <Icon
                   color={theme.colors.foreground1}
                   icon="fluent_globe_search"
-                  onPress={() => openAddNewFlashcard()}
+                  onPress={() => goToGlobalFlashcards()}
                   size={22}
                 ></Icon>
               </View>

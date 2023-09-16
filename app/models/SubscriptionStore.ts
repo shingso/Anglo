@@ -17,9 +17,10 @@ export const SubscriptionStoreModel = types
     hasActiveSubscription: () => {
       const now = new Date()
       return (
-        !!self.subscription &&
-        !!self.subscription?.end_date &&
-        isAfter(new Date(self.subscription?.end_date), now)
+        (!!self.subscription &&
+          !!self.subscription?.end_date &&
+          isAfter(new Date(self.subscription?.end_date), now)) ||
+        !!self.subscription?.subscription_id
       )
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

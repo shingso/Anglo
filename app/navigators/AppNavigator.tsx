@@ -227,7 +227,7 @@ const HomeScreens = () => {
       <Stack.Screen name={AppRoutes.SETTINGS} component={SettingsScreen} />
       <Stack.Screen
         options={{
-          headerShown: true,
+          headerShown: false,
         }}
         name={AppRoutes.TUTORIAL}
         component={TutorialScreen}

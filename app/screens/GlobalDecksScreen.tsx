@@ -93,9 +93,8 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
           >
             {["Featured", "SAT", "English", "Spanish"].map((text, index) => {
               return (
-                <View style={{ height: 42 }}>
+                <View key={text} style={{ height: 42 }}>
                   <CustomTag
-                    key={text + index}
                     onPress={() => setSelectedTag(text)}
                     selected={text === selectedTag}
                     text={text}
@@ -131,7 +130,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                       {item?.title}
                     </CustomText>
                     <CustomText style={{ marginBottom: spacing.size80 }} preset="body2">
-                      {item?.global_flashcards?.length} cards
+                      {item?.private_global_flashcards?.length} cards
                     </CustomText>
                     {item?.description ? (
                       <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">

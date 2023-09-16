@@ -32,7 +32,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
 
     const { deck } = route.params
-    const flashcards = deck.global_flashcards
+    const flashcards = deck.private_global_flashcards
     useEffect(() => {
       navigation.setOptions({ headerTitle: deck?.title })
     }, [])
@@ -47,14 +47,13 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 
     const addNewRemoteDeckToStore = async (id: string) => {
       const deckResponse = await getDeck(id)
-
       if (deckResponse) {
         deckStore.addDeck(deckResponse)
       }
     }
 
     const cloneDeck = async (deck_id: String, deck_title: String) => {
-      let { data: deck, error } = await supabase.rpc("clone_deck", {
+      let { data: deck, error } = await supabase.rpc("import_global_deck", {
         deck_id: deck_id,
         deck_title: deck_title,
         [Deck_Fields.NEW_PER_DAY]: newPerDay,
@@ -94,7 +93,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           <CustomText preset="caption1">The amount of new cards added per day</CustomText>
         </View> */}
         <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
-          {flashcards.length} cards
+          {flashcards?.length} cards
         </CustomText>
         <FlatList
           contentContainerStyle={{ paddingBottom: 200 }}

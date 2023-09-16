@@ -117,10 +117,12 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const initializePaymentSheet = async (subLength: string) => {
-      const { paymentIntent, ephemeralKey, customer } = await fetchSubscriptionPaymentSheet(
-        subLength,
-      )
-      const { error } = await confirmPlatformPayPayment(paymentIntent, {
+      const {
+        paymentIntent: paymentIntentInput,
+        ephemeralKey,
+        customer,
+      } = await fetchSubscriptionPaymentSheet(subLength)
+      const { paymentIntent, error } = await confirmPlatformPayPayment(paymentIntentInput, {
         googlePay: {
           testEnv: true,
           merchantName: "Anglo",
@@ -133,7 +135,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           },
         },
       })
-      console.log("error", error)
+      if (paymentIntent?.status == "Succeeded") {
+        subscriptionStore.getSubscription()
+      }
     }
 
     return (
@@ -163,12 +167,32 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+              Customizable sound settings
+            </CustomText>
+            <CustomText preset="caption1">
+              Play the back, extra sentence, or a combination of sounds in different languages.
+            </CustomText>
+          </View>
+
+          <View style={{ marginBottom: spacing.size200 }}>
+            {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
+            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+              AI Flashcards
+            </CustomText>
+            <CustomText preset="caption1">Autogenerate flashcards using AI</CustomText>
+          </View>
+          {/* 
+          <View style={{ marginBottom: spacing.size200 }}>
+
+            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
               Insightful statistics
             </CustomText>
             <CustomText style={{ marginBottom: spacing.size320 }} preset="caption1">
               Visualize the progress you are making with comprehensive statistics.
             </CustomText>
           </View>
+          */}
+
           <CustomText style={{ marginBottom: spacing.size160 }}>
             Cancel anytime, no fees, simple and hassle free
           </CustomText>
