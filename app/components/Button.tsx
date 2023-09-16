@@ -131,7 +131,7 @@ const $customBase: ViewStyle = {
   flexDirection: "row",
   paddingVertical: 0,
   paddingHorizontal: 20,
-  height: 40,
+  height: 38,
 }
 
 const $customBaseText: TextStyle = {
@@ -249,7 +249,7 @@ const $viewPresets = {
   custom_filled: [
     $customBase,
     $custom_filled,
-    { backgroundColor: colors.palette.primary500 },
+    { backgroundColor: custom_colors.brandBackground1 },
   ] as StyleProp<ViewStyle>,
 
   clear: [$baseViewStyle, $clear, { backgroundColor: colors.transparent }] as StyleProp<ViewStyle>,
