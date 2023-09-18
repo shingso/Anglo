@@ -26,6 +26,7 @@ import {
 } from "./GlobalFlashcard"
 import { CardProgress } from "./CardProgress"
 import { SoundOptions } from "./SettingsStore"
+import { QueryModel } from "./Query"
 
 /**
  * Model description here for TypeScript hints.
@@ -34,6 +35,25 @@ import { SoundOptions } from "./SettingsStore"
 export enum SoundLanguage {
   ENGLISH = "en-US",
   SPANISH_MX = "es-MX", //Mexico spanish
+  KOREAN = "ko-KR",
+  GERMAN = "de-DE",
+  FRENCH = "fr-FR",
+  DUTCH = "nl-NL",
+  MANDARIN = "zh-CN",
+  JAPANESE = "ja-JP",
+  THAI = "th-TH",
+}
+
+export enum TranslateLanguage {
+  ENGLISH = "english",
+  SPANISH = "spanish",
+  KOREAN = "korean",
+  GERMAN = "german",
+  FRENCH = "french",
+  DUTCH = "dutch",
+  MANDARIN = "mandarin",
+  JAPANESE = "japanese",
+  THAI = "thai",
 }
 
 export const DeckModel = types
@@ -55,8 +75,34 @@ export const DeckModel = types
     ),
     playSoundAutomatically: types.optional(types.boolean, false),
     playSoundLanguage: types.optional(
-      types.enumeration([SoundLanguage.ENGLISH, SoundLanguage.SPANISH_MX]),
+      types.enumeration([
+        SoundLanguage.ENGLISH,
+        SoundLanguage.SPANISH_MX,
+        SoundLanguage.KOREAN,
+        SoundLanguage.GERMAN,
+        SoundLanguage.FRENCH,
+        SoundLanguage.DUTCH,
+        SoundLanguage.MANDARIN,
+        SoundLanguage.JAPANESE,
+        SoundLanguage.THAI,
+      ]),
       SoundLanguage.ENGLISH,
+    ),
+
+    queuedQueries: types.optional(types.array(QueryModel), []),
+    translateLanguage: types.optional(
+      types.enumeration([
+        TranslateLanguage.ENGLISH,
+        TranslateLanguage.SPANISH,
+        TranslateLanguage.KOREAN,
+        TranslateLanguage.GERMAN,
+        TranslateLanguage.MANDARIN,
+        TranslateLanguage.JAPANESE,
+        TranslateLanguage.FRENCH,
+        TranslateLanguage.DUTCH,
+        TranslateLanguage.THAI,
+      ]),
+      TranslateLanguage.ENGLISH,
     ),
   })
   .actions(withSetPropAction)
@@ -80,6 +126,9 @@ export const DeckModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setTranslateLanguage(language: TranslateLanguage) {
+      self.translateLanguage = language
+    },
     setSoundOption(option: SoundOptions) {
       self.soundOption = option
     },

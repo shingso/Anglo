@@ -82,6 +82,6 @@ export const SortTypeLabels = {
 
 export const SortTypeIcon: { [key: string]: IconTypes } = {
   [SortType.DATE_ADDDED]: "fluent_calendar",
-  [SortType.ACTIVE]: "fluent_alpha_sort",
+  [SortType.ACTIVE]: "fluent_play_outline",
   [SortType.ALPHABETICAL]: "fluent_alpha_sort",
 }

@@ -171,7 +171,7 @@ export const iconRegistry = {
   fluent_turtle: require("../../assets/icons/fluent_turtle.png"),
   fluent_calendar: require("../../assets/icons/fluent_calendar.png"),
   fluent_alpha_sort: require("../../assets/icons/fluent_alpha_sort.png"),
-  fluent_undo: require("../../assets/icons/fluent_undo.png"),
+
   fluent_redo: require("../../assets/icons/fluent_redo.png"),
   fluent_delete: require("../../assets/icons/fluent_delete.png"),
   fluent_save: require("../../assets/icons/fluent_save.png"),
@@ -196,6 +196,7 @@ export const iconRegistry = {
   undo: require("../../assets/icons/undo.png"),
   caret_left: require("../../assets/icons/caret_left.png"),
   moon: require("../../assets/icons/moon.png"),
+  flashcards: require("../../assets/icons/flashcards.png"),
 }
 
 const $imageStyle: ImageStyle = {

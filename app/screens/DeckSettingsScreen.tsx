@@ -18,10 +18,17 @@ import {
   Text,
   TextField,
 } from "../components"
-import { Deck, DeckSnapshotIn, SoundLanguage, SoundOptions, useStores } from "../models"
+import {
+  Deck,
+  DeckSnapshotIn,
+  SoundLanguage,
+  SoundOptions,
+  TranslateLanguage,
+  useStores,
+} from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
 import { Deck_Fields, deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
-import { colors, custom_colors, spacing, typography } from "../theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { AppStackParamList, AppRoutes } from "../utils/consts"
 import { getGlobalDeckByOriginalId, makeDeckPublic } from "app/utils/globalDecksUtils"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
@@ -49,9 +56,46 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [confirmDelete, setConfirmDelete] = useState("")
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
+    const aiLanguageModelRef = useRef<BottomSheetModal>()
+    const soundLanguageModelRef = useRef<BottomSheetModal>()
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
+    const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
+    const aiLanguageOptions = [
+      TranslateLanguage.ENGLISH,
+      TranslateLanguage.SPANISH,
+      TranslateLanguage.MANDARIN,
+      TranslateLanguage.GERMAN,
+      TranslateLanguage.JAPANESE,
+      TranslateLanguage.FRENCH,
+      TranslateLanguage.KOREAN,
+      TranslateLanguage.DUTCH,
+      TranslateLanguage.THAI,
+    ]
 
+    const languageLabels = {
+      [SoundLanguage.ENGLISH]: "English",
+      [SoundLanguage.SPANISH_MX]: "Spanish",
+      [SoundLanguage.MANDARIN]: "Mandarin",
+      [SoundLanguage.GERMAN]: "German",
+      [SoundLanguage.JAPANESE]: "Japanese",
+      [SoundLanguage.FRENCH]: "French",
+      [SoundLanguage.KOREAN]: "Korean",
+      [SoundLanguage.DUTCH]: "Dutch",
+      [SoundLanguage.THAI]: "Thai",
+    }
+
+    const soundLanguageOptions = [
+      SoundLanguage.ENGLISH,
+      SoundLanguage.SPANISH_MX,
+      SoundLanguage.MANDARIN,
+      SoundLanguage.GERMAN,
+      SoundLanguage.JAPANESE,
+      SoundLanguage.FRENCH,
+      SoundLanguage.KOREAN,
+      SoundLanguage.DUTCH,
+      SoundLanguage.THAI,
+    ]
     const theme = useTheme()
 
     const removeDeck = (deck: Deck) => {
@@ -97,6 +141,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const setPlayLanguageSetting = (language: SoundLanguage) => {
       setLanguageSettings(language)
       selectedDeck.setPlaySoundLanguage(language)
+    }
+
+    const setAILanguageSettings = (language: TranslateLanguage) => {
+      setAILanguage(language)
+      selectedDeck.setTranslateLanguage(language)
     }
 
     const updateSelectedDeck = async (deck: Partial<Deck>) => {
@@ -249,37 +298,22 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             <CustomText preset="body2">Back</CustomText>
           </View>
 
-          <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size160 }}>
-            Language
-          </CustomText>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: spacing.size160,
-              marginBottom: spacing.size160,
-            }}
-          >
-            <CustomRadioButton
-              selected={languageSettings === SoundLanguage.ENGLISH}
-              onPress={() => setPlayLanguageSetting(SoundLanguage.ENGLISH)}
-            ></CustomRadioButton>
-            <CustomText preset="body2">English</CustomText>
+          <View style={{ marginBottom: spacing.size160 }}>
+            <CustomText preset="caption1Strong" style={{}}>
+              Language sound
+            </CustomText>
+            <CustomText preset="caption1Strong" style={{}}>
+              Sound will play in the selected language
+            </CustomText>
+            <CustomText
+              onPress={() => soundLanguageModelRef?.current?.present()}
+              preset="caption1Strong"
+              style={{}}
+            >
+              {languageLabels[languageSettings]}
+            </CustomText>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: spacing.size160,
-              marginBottom: spacing.size160,
-            }}
-          >
-            <CustomRadioButton
-              selected={languageSettings === SoundLanguage.SPANISH_MX}
-              onPress={() => setPlayLanguageSetting(SoundLanguage.SPANISH_MX)}
-            ></CustomRadioButton>
-            <CustomText preset="body2">Spanish</CustomText>
-          </View>
+
           <View
             style={{
               flexDirection: "row",
@@ -302,6 +336,23 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               }}
             ></CustomSwitch>
           </View>
+
+          <View style={{ marginBottom: spacing.size320 }}>
+            <CustomText preset="caption1Strong" style={{}}>
+              AI Card Options
+            </CustomText>
+            <CustomText preset="caption1Strong" style={{}}>
+              AI will translate the front using this language
+            </CustomText>
+            <CustomText
+              onPress={() => aiLanguageModelRef?.current?.present()}
+              preset="caption1Strong"
+              style={{}}
+            >
+              {aiLanguage}
+            </CustomText>
+          </View>
+
           <Card
             onPress={() => setCofirmDeleteModalVisible(true)}
             style={{
@@ -362,6 +413,53 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             renderItem={renderItem}
           ></FlatList>
         </BottomSheet>
+
+        <BottomSheet ref={aiLanguageModelRef} customSnap={["75%"]}>
+          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
+            Generate cards in language:
+          </CustomText>
+          <View>
+            {aiLanguageOptions.map((option) => {
+              return (
+                <TouchableOpacity onPress={() => setAILanguageSettings(option)} key={option}>
+                  <View style={{ paddingVertical: spacing.size100 }}>
+                    <CustomText
+                      style={option === aiLanguage ? { color: custom_palette.primary80 } : null}
+                      preset="body1Strong"
+                    >
+                      {option}
+                    </CustomText>
+                  </View>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+        </BottomSheet>
+
+        <BottomSheet ref={soundLanguageModelRef} customSnap={["75%"]}>
+          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
+            Generate cards in language:
+          </CustomText>
+          <View>
+            {soundLanguageOptions.map((option) => {
+              return (
+                <TouchableOpacity onPress={() => setPlayLanguageSetting(option)} key={option}>
+                  <View style={{ paddingVertical: spacing.size100 }}>
+                    <CustomText
+                      style={
+                        option === languageSettings ? { color: custom_palette.primary80 } : null
+                      }
+                      preset="body1Strong"
+                    >
+                      {languageLabels[option]}
+                    </CustomText>
+                  </View>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+        </BottomSheet>
+
         <CustomModal
           mainAction={() => removeDeck(deckStore.selectedDeck)}
           secondaryAction={() => setCofirmDeleteModalVisible(false)}

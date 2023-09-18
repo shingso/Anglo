@@ -203,11 +203,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               }}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Icon
-                  icon="fluent_lightbulb"
-                  style={{ marginRight: spacing.size120 }}
-                  size={22}
-                ></Icon>
+                <Icon icon="flashcards" style={{ marginRight: spacing.size120 }} size={24}></Icon>
                 <View>
                   <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
                     <CustomText preset="body1Strong">
