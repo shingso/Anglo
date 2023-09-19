@@ -253,7 +253,6 @@ export const DeckModel = types
 
       switch (type) {
         case SortType.DATE_ADDDED: {
-          console.log("date added ran")
           self.flashcards.replace(
             self.flashcards.sort((a, b) => {
               if (!a?.created_at) {
@@ -268,12 +267,10 @@ export const DeckModel = types
           break
         }
         case SortType.ALPHABETICAL: {
-          console.log("alpha added ran")
           self.flashcards.replace(self.flashcards.sort((a, b) => a?.front.localeCompare(b?.front)))
           break
         }
         case SortType.ACTIVE: {
-          console.log("active added ran")
           self.flashcards.replace(
             self.flashcards.sort((a, b) => {
               if (!a?.next_shown) {

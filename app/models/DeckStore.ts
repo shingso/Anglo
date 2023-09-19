@@ -29,7 +29,6 @@ export const DeckStoreModel = types
       //Will replace the store with the remote state
       destroy(self.decks)
       const result: DeckSnapshotIn[] = yield getUserDecks()
-      // console.log(result[0].flashcards[0], "random flashcard")
       self.saveDecks(result)
       return result
     }),
