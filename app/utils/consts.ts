@@ -85,3 +85,9 @@ export const SortTypeIcon: { [key: string]: IconTypes } = {
   [SortType.ACTIVE]: "fluent_play_outline",
   [SortType.ALPHABETICAL]: "fluent_alpha_sort",
 }
+
+export enum SoundOptions {
+  CUSTOM = "custom",
+  FRONT = "front",
+  BACK = "back",
+}

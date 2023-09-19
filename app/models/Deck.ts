@@ -12,7 +12,7 @@ import {
 import { Deck_Fields } from "../utils/deckUtils"
 import { Flashcard, FlashcardModel, FlashcardSnapshotIn } from "./Flashcard"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { SortType } from "../utils/consts"
+import { SortType, SoundOptions } from "../utils/consts"
 import { getGlobalDeckById } from "../utils/globalDecksUtils"
 import {
   Global_Flashcard_Fields,
@@ -25,8 +25,7 @@ import {
   GlobalFlashcardSnapshotIn,
 } from "./GlobalFlashcard"
 import { CardProgress } from "./CardProgress"
-import { SoundOptions } from "./SettingsStore"
-import { QueryModel } from "./Query"
+import { QueryModel, QuerySnapshotIn } from "./Query"
 
 /**
  * Model description here for TypeScript hints.
@@ -126,6 +125,18 @@ export const DeckModel = types
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    addToQueuedQueries(query: QuerySnapshotIn) {
+      const newQuery = QueryModel.create(query)
+      self.queuedQueries.push(newQuery)
+      return newQuery
+    },
+    removeFromQueries(query: QuerySnapshotIn) {
+      const queryIndex = self.queuedQueries.findIndex((curr) => curr.id === query.id)
+      if (queryIndex != -1) {
+        self.queuedQueries.splice(queryIndex, 1)
+        console.log("we remove the query", query)
+      }
+    },
     setTranslateLanguage(language: TranslateLanguage) {
       self.translateLanguage = language
     },
@@ -280,7 +291,7 @@ export const DeckModel = types
           break
       }
     },
-    updateDeck: (deck: Partial<Deck>) => {
+    updateDeck: (deck: Partial<DeckSnapshotIn>) => {
       if (!deck) {
         return
       }

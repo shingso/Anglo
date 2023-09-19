@@ -46,7 +46,7 @@ import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typograp
 import { navigate, navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { useNavigation } from "@react-navigation/native"
 import { Button, CustomModal, CustomText, DeckHome, Header, Text, TextField } from "../components"
-import { Deck, useStores } from "../models"
+import { Deck, RootStoreModel, functionsMap, useStores } from "../models"
 import { useNetInfo } from "@react-native-community/netinfo"
 import Toast from "react-native-toast-message"
 import { createDrawerNavigator } from "@react-navigation/drawer"
@@ -293,18 +293,42 @@ const HomeScreens = () => {
 
 const AppStack = observer(function AppStack() {
   const netInfo = useNetInfo()
-  const { deckStore } = useStores()
+  const { deckStore, settingsStore } = useStores()
   const [session, setSession] = useState(null)
 
   useEffect(() => {
-    if (!netInfo.isConnected && netInfo.isConnected !== null) {
+    if (netInfo.isConnected === null) {
+      return
+    }
+
+    settingsStore.setIsOffline(!netInfo.isConnected)
+
+    if (!netInfo.isConnected) {
       Toast.show({
         type: "error",
         text1: "No internet connection found.",
         topOffset: 80,
       })
     }
-  }, [netInfo])
+
+    if (netInfo.isConnected) {
+      deckStore?.decks?.forEach((deck) => {
+        if (deck?.queuedQueries && deck?.queuedQueries?.length > 0) {
+          deck.queuedQueries.forEach(async (query) => {
+            let variables = undefined
+            const func = functionsMap[query.function]
+            if (query?.variables) {
+              variables = JSON.parse(query.variables)
+            }
+            const res = await func(variables)
+            if (res) {
+              deck.removeFromQueries(query)
+            }
+          })
+        }
+      })
+    }
+  }, [netInfo.isConnected])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

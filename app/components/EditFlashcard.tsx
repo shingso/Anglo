@@ -1,5 +1,13 @@
 import * as React from "react"
-import { StyleProp, TextInput, TextStyle, View, ViewStyle, Image } from "react-native"
+import {
+  StyleProp,
+  TextInput,
+  TextStyle,
+  View,
+  ViewStyle,
+  Image,
+  ActivityIndicator,
+} from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
@@ -22,15 +30,17 @@ import { supabseStorageUrl } from "app/services/supabase/supabase"
 import isEqual from "lodash/isEqual"
 import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
 import { useStores } from "../models/helpers/useStores"
-import { showSuccessToast } from "app/utils/errorUtils"
+import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { Deck } from "../models/Deck"
-import { GlobalDeck } from "app/models"
+import { GlobalDeck, QueryFunctions } from "app/models"
 import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
 import { useTheme } from "@react-navigation/native"
 import { getAIDefinition } from "app/utils/openAiUtils"
 import { CustomModal } from "./CustomModal"
+import { v4 as uuidv4 } from "uuid"
+
 export interface EditFlashcardProps {
   /**
    * An optional style override useful for padding & margin.
@@ -39,7 +49,7 @@ export interface EditFlashcardProps {
   flashcard: Flashcard
   onDelete?: Function
   onAddCallBack?: Function
-  deck?: Deck | GlobalDeck
+  deck?: Deck
   customSaveFlashcard?: Function
 }
 
@@ -61,7 +71,9 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
   const { style, flashcard, onDelete, onAddCallBack, deck, customSaveFlashcard } = props
   const $styles = [$container, style]
+  const { settingsStore } = useStores()
   const theme = useTheme()
+  const [loading, setLoading] = useState(false)
   const [errorModalVisible, setErrorModalVisible] = useState(false)
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
@@ -85,9 +97,15 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
   const useAIDefinition = async () => {
     if (selectedFlashcardReference?.front) {
-      const data = await getAIDefinition(selectedFlashcardReference?.front)
+      let language = null
+      if (deck?.translateLanguage && deck?.translateLanguage != "english") {
+        language = deck?.translateLanguage
+      }
+      setLoading(true)
+      const data = await getAIDefinition(selectedFlashcardReference?.front, language)
       if (!!data?.error) {
         setErrorModalVisible(true)
+        setLoading(false)
         return
       }
 
@@ -100,6 +118,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         }))
       }
     }
+    setLoading(false)
   }
 
   const isSelectedFlashcardSame = () => {
@@ -169,24 +188,49 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   }
 
   const saveFlashcard = async (
-    original: Flashcard,
+    flashcard: Flashcard,
     flashcardRef: FlashcardSnapshotIn,
     deck: Partial<Deck>,
   ) => {
     const flashcardReference = flashcardRef
     if (!flashcardReference?.id) {
-      flashcardReference.deck_id = deck.id
-      const addedFlashcard = await addFlashcard(flashcardReference)
-      if (addedFlashcard) {
-        deck.addFlashcard(addedFlashcard)
+      // if there isnt a front or a back throw an error
+      if (!flashcardReference?.front || !flashcardReference?.back) {
+        showErrorToast(
+          `Missing ${!flashcardReference?.front && "front"} ${
+            !flashcardReference?.front && !flashcardReference?.back && "and"
+          } ${!flashcardReference?.back && "back"}`,
+        )
+        return
       }
-      showSuccessToast("Flashcard Added", `${addedFlashcard.front} has been added to ${deck.title}`)
+      flashcardReference.deck_id = deck.id
+      flashcardReference.id = uuidv4()
+      flashcardReference.created_at = new Date()
+      deck.addFlashcard(flashcardReference)
+      showSuccessToast(`${flashcardReference.front} has been added to ${deck.title}`)
       onAddCallBack ? onAddCallBack() : null
+
+      if (settingsStore.isOffline) {
+        deck.addToQueuedQueries({
+          id: uuidv4(),
+          variables: JSON.stringify(flashcardReference),
+          function: QueryFunctions.INSERT_FLASHCARD,
+        })
+        return
+      }
+      const addedFlashcard = await addFlashcard(flashcardReference)
     } else {
-      const updatedFlashcard = await updateFlashcard(flashcardReference)
-      console.log("the card was updated here!!")
-      original?.updateFlashcard(flashcardReference)
+      flashcard?.updateFlashcard(flashcardReference)
       setSelectedFlashcard({ ...flashcardReference })
+      if (settingsStore.isOffline) {
+        deck.addToQueuedQueries({
+          id: uuidv4(),
+          variables: JSON.stringify(flashcardReference),
+          function: QueryFunctions.UPDATE_FLASHCARD,
+        })
+        return
+      }
+      const updatedFlashcard = await updateFlashcard(flashcardReference)
     }
   }
 
@@ -221,6 +265,24 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
   return (
     <View style={$styles} key={flashcard?.id}>
+      {loading && (
+        <View
+          style={{
+            zIndex: 1000,
+            height: "100%",
+            width: "100%",
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
+          }}
+        >
+          <ActivityIndicator size={32}></ActivityIndicator>
+        </View>
+      )}
       {flashcard?.next_shown ? (
         <View style={{ position: "absolute", top: 0, left: 0 }}>
           <StatusLabel text={"Active"}></StatusLabel>
