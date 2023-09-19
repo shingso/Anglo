@@ -48,7 +48,6 @@ import {
   deleteCardProgress,
   insertCardProgress,
   mapResponseToCardProgress,
-  updateProgressUpdate,
 } from "../utils/cardProgressUtils"
 import {
   getRemoteRecentUpdate,
@@ -121,19 +120,12 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       flashcard: Flashcard,
       retrievalLevel: number,
     ): Promise<any> => {
-      let levelAttempted = 0
       let timeElapsed = 0
       const mostRecentProgress = flashcard?.mostRecentProgress
       if (mostRecentProgress) {
-        levelAttempted = mostRecentProgress.mem_level + 1
         timeElapsed = differenceInMinutes(new Date(), mostRecentProgress.created_at)
       }
-      const response = await addToFlashcardProgress(
-        flashcard,
-        retrievalLevel,
-        levelAttempted,
-        timeElapsed,
-      )
+      const response = await addToFlashcardProgress(flashcard, retrievalLevel, timeElapsed)
       return response
     }
 
@@ -278,7 +270,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const addProgressToLog = (progressId: CardProgressSnapshotIn) => {
       setSessionProgressLog((prev) => {
-        return [...prev, progressId]
+        return [progressId]
       })
     }
     const hasSessionCards = deck?.sessionCards && deck?.sessionCards?.length > 0

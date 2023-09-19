@@ -54,7 +54,6 @@ export const UserGlobalDecksScreen: FC<UserGlobalDecksScreenProps> = observer(
               >
                 <CustomText>{deck.title}</CustomText>
                 <CustomText>{deck?.private_global_flashcards?.length}</CustomText>
-                <CustomText>30 downloads</CustomText>
               </TouchableOpacity>
             )
           })}
