@@ -239,11 +239,9 @@ export const createFormData = (uri: any) => {
 export const addToFlashcardProgress = async (
   flashcard: Flashcard,
   retrievalLevel: number,
-  levelAttempted: number,
   timeElapsed: number,
 ): Promise<any> => {
   const newProgress: CardProgressSnapshotIn = {
-    [Card_Progress_Fields.MEM_LEVEL]: levelAttempted,
     [Card_Progress_Fields.TIME_ELAPSED]: timeElapsed,
     [Card_Progress_Fields.FLASHCARD_ID]: flashcard.id,
     [Card_Progress_Fields.RETRIEVAL_LEVEL]: retrievalLevel,

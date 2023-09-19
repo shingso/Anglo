@@ -1,4 +1,3 @@
-import { DeckSnapshotIn } from "app/models/Deck"
 import { CardProgressModel, CardProgressSnapshotIn } from "../models/CardProgress"
 import { supabase } from "../services/supabase/supabase"
 import { showErrorToast } from "./errorUtils"
@@ -11,7 +10,6 @@ import { format } from "date-fns"
 
 export enum Card_Progress_Fields {
   ID = "id",
-  MEM_LEVEL = "mem_level",
   FLASHCARD_ID = "flashcard_id",
   TIME_ELAPSED = "time_elapsed",
   CREATED_AT = "created_at",
@@ -20,14 +18,13 @@ export enum Card_Progress_Fields {
 
 export interface CardProgress {
   [Card_Progress_Fields.ID]?: string
-  [Card_Progress_Fields.MEM_LEVEL]?: number
   [Card_Progress_Fields.FLASHCARD_ID]?: string
   [Card_Progress_Fields.TIME_ELAPSED]?: number
   [Card_Progress_Fields.CREATED_AT]?: Date
   [Card_Progress_Fields.RETRIEVAL_LEVEL]?: number
 }
 
-export const CardProgressOutputFields = `id, mem_level, flashcard_id, time_elapsed, created_at, retrieval_level`
+export const CardProgressOutputFields = `id, flashcard_id, time_elapsed, created_at, retrieval_level`
 
 export const getCardProgress = async (id: String): Promise<CardProgress> => {
   try {
@@ -49,7 +46,6 @@ export const getCardProgress = async (id: String): Promise<CardProgress> => {
 export const mapResponseToCardProgress = (progress: any): CardProgressSnapshotIn => {
   return {
     [Card_Progress_Fields.ID]: progress?.id ? progress?.id : undefined,
-    [Card_Progress_Fields.MEM_LEVEL]: progress?.mem_level ? progress?.mem_level : undefined,
     [Card_Progress_Fields.FLASHCARD_ID]: progress?.flashcard_id
       ? progress?.flashcard_id
       : undefined,
