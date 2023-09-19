@@ -94,13 +94,6 @@ export const getMostRecentCardProgress = async (): Promise<CardProgress> => {
   }
 }
 
-export const updateProgressUpdate = async (progress: CardProgress) => {
-  const { data, error } = await supabase.functions.invoke("progressUpdate", {
-    body: JSON.stringify({ progress: progress }),
-  })
-  console.log(data, error)
-}
-
 export const insertCardProgress = async (
   progress: CardProgressSnapshotIn,
 ): Promise<CardProgress> => {

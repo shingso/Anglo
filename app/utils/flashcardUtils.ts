@@ -9,7 +9,6 @@ import {
   Card_Progress_Fields,
   insertCardProgress,
   mapResponseToCardProgress,
-  updateProgressUpdate,
 } from "./cardProgressUtils"
 import { GlobalFlashcard } from "./globalFlashcardsUtils"
 import { updateConfirmedRemoteId, updateMostRecentLocalId } from "./remote_sync/remoteSyncUtils"
@@ -251,7 +250,6 @@ export const addToFlashcardProgress = async (
   if (insertedProgress) {
     updateMostRecentLocalId(insertedProgress.id)
     //updateConfirmedRemoteId(insertedProgress.id) TODO figure if this is needed
-    //updateProgressUpdate(insertedProgress) this is to update the memory levels which is undeed
     flashcard.addToCardProgress(mapResponseToCardProgress(insertedProgress) as any)
   }
 
