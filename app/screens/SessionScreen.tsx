@@ -119,7 +119,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const applySessionResponse = async (
       flashcard: Flashcard,
-      passed: boolean,
       retrievalLevel: number,
     ): Promise<any> => {
       let levelAttempted = 0
@@ -131,7 +130,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       }
       const response = await addToFlashcardProgress(
         flashcard,
-        passed,
         retrievalLevel,
         levelAttempted,
         timeElapsed,
@@ -154,7 +152,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const rightSwipe = async () => {
       deckStore.selectedDeck.reshuffleFirstCard()
-      const progress = await applySessionResponse(currentFlashcard, false, 0)
+      const progress = await applySessionResponse(currentFlashcard, 0)
       addProgressToLog(progress)
       setSessionStats((prev) => ({
         ...prev,
@@ -168,7 +166,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       const nextInterval = await calculateNextInterval(currentFlashcard, 2)
       const nextShown = addDays(new Date(), nextInterval)
       const timeAddResponse = await setFlashcardNextShown(currentFlashcard, nextShown)
-      const progress = await applySessionResponse(currentFlashcard, true, 2)
+      const progress = await applySessionResponse(currentFlashcard, 2)
       addProgressToLog(progress)
       setSessionStats((prev) => ({
         ...prev,
@@ -191,7 +189,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         deckStore.selectedDeck.removeFirstSessionCard()
       }
       const timeAddResponse = await setFlashcardNextShown(currentFlashcard, nextShown)
-      const progress = await applySessionResponse(currentFlashcard, true, 1)
+      const progress = await applySessionResponse(currentFlashcard, 1)
 
       addProgressToLog(progress)
       setSessionStats((prev) => ({

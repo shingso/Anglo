@@ -47,7 +47,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
     if (deck?.global_deck_id) {
       setPaidFlashcards()
     }
-  }, [deck.global_deck_id])
+  }, [deck?.global_deck_id])
 
   const startSession = (deck: Deck) => {
     if (deck?.todaysCards && deck?.todaysCards.length > 0) {
@@ -129,7 +129,9 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     {selectedDeck.flashcards.reduce((prev, card) => {
                       return (
                         prev +
-                        card.todaysCardProgresses.filter((progress) => progress?.passed).length
+                        card.todaysCardProgresses.filter(
+                          (progress) => progress?.retrieval_level >= 1,
+                        ).length
                       )
                     }, 0)}
                   </CustomText>

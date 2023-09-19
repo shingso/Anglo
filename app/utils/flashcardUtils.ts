@@ -63,7 +63,7 @@ export const mapReponseToFlashcard = (flashcard: FlashcardSnapshotIn): Flashcard
 }
 
 export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn> => {
-  if (!flashcard?.deck_id) {
+  if (!flashcard?.deck_id || !flashcard?.front || !flashcard?.back) {
     //throw some kinda of an ERROR
     console.log("you messed up here which means something is wrong with the data/flow")
   }
@@ -75,16 +75,18 @@ export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn>
         {
           [Flashcard_Fields.DECK_ID]: flashcard.deck_id,
           [Flashcard_Fields.FRONT]: flashcard.front,
-          [Flashcard_Fields.BACK]: flashcard.back,
+          [Flashcard_Fields.BACK]: flashcard?.back,
           [Flashcard_Fields.EXTRA]: flashcard?.extra,
           [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard.extra_array : [],
           [Flashcard_Fields.SUB_HEADER]: flashcard?.sub_header,
           [Flashcard_Fields.TYPE]: flashcard?.type,
           [Flashcard_Fields.DIFFICULTIY]: flashcard?.difficulty,
           [Flashcard_Fields.PICTURE_URL]: flashcard.picture_url,
+          [Flashcard_Fields.ID]: flashcard?.id,
         },
       ])
       .select()
+    console.log("we are logging the response to this", data, error)
     if (data && data.length > 0) {
       return mapReponseToFlashcard(data[0])
     }
@@ -96,9 +98,9 @@ export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn>
 
 //Update
 
-export const updateFlashcard = async (flashcard: any) => {
+export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) => {
   console.log("ran")
-  if (!flashcard) {
+  if (!flashcard || !flashcard?.id) {
     return null
   }
   try {
@@ -236,7 +238,6 @@ export const createFormData = (uri: any) => {
 
 export const addToFlashcardProgress = async (
   flashcard: Flashcard,
-  passed: boolean,
   retrievalLevel: number,
   levelAttempted: number,
   timeElapsed: number,
@@ -245,7 +246,6 @@ export const addToFlashcardProgress = async (
     [Card_Progress_Fields.MEM_LEVEL]: levelAttempted,
     [Card_Progress_Fields.TIME_ELAPSED]: timeElapsed,
     [Card_Progress_Fields.FLASHCARD_ID]: flashcard.id,
-    [Card_Progress_Fields.PASSED]: passed,
     [Card_Progress_Fields.RETRIEVAL_LEVEL]: retrievalLevel,
   }
 

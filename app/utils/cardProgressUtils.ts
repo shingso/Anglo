@@ -12,7 +12,6 @@ import { format } from "date-fns"
 export enum Card_Progress_Fields {
   ID = "id",
   MEM_LEVEL = "mem_level",
-  PASSED = "passed",
   FLASHCARD_ID = "flashcard_id",
   TIME_ELAPSED = "time_elapsed",
   CREATED_AT = "created_at",
@@ -22,14 +21,13 @@ export enum Card_Progress_Fields {
 export interface CardProgress {
   [Card_Progress_Fields.ID]?: string
   [Card_Progress_Fields.MEM_LEVEL]?: number
-  [Card_Progress_Fields.PASSED]?: boolean
   [Card_Progress_Fields.FLASHCARD_ID]?: string
   [Card_Progress_Fields.TIME_ELAPSED]?: number
   [Card_Progress_Fields.CREATED_AT]?: Date
   [Card_Progress_Fields.RETRIEVAL_LEVEL]?: number
 }
 
-export const CardProgressOutputFields = `id, mem_level, passed, flashcard_id, time_elapsed, created_at, retrieval_level`
+export const CardProgressOutputFields = `id, mem_level, flashcard_id, time_elapsed, created_at, retrieval_level`
 
 export const getCardProgress = async (id: String): Promise<CardProgress> => {
   try {
@@ -64,7 +62,6 @@ export const mapResponseToCardProgress = (progress: any): CardProgressSnapshotIn
       : undefined,
     [Card_Progress_Fields.TIME_ELAPSED]:
       progress?.time_elapsed || progress?.time_elapsed === 0 ? progress.time_elapsed : undefined,
-    [Card_Progress_Fields.PASSED]: progress.passed !== null ? progress.passed : undefined,
   }
 }
 

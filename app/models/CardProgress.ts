@@ -11,7 +11,6 @@ export const CardProgressModel = types
   .props({
     [Card_Progress_Fields.ID]: types.identifier,
     [Card_Progress_Fields.MEM_LEVEL]: types.maybe(types.number),
-    [Card_Progress_Fields.PASSED]: types.maybe(types.boolean),
     [Card_Progress_Fields.TIME_ELAPSED]: types.maybe(types.number),
     [Card_Progress_Fields.CREATED_AT]: types.maybe(types.Date),
     [Card_Progress_Fields.FLASHCARD_ID]: types.maybe(types.string),

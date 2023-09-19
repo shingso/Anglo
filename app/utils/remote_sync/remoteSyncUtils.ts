@@ -12,6 +12,7 @@ import { CardProgress } from "../../models/CardProgress"
 export const pendingRemoteFunctionKey = "_pendingRemoteFunctionKey"
 export const mostRecentLocalIdKey = "_mostRecentLocalIdKey"
 export const confirmedRemoteIdKey = "_confirmedRemoteIdKey"
+
 export enum FunctionTypes {
   INSERT_CARD_PROGRESS = "insert_card_progress",
 }
@@ -225,7 +226,7 @@ export const autoResolveCardProgresses = (
   for (const [key, value] of Object.entries(conflictedProgress)) {
     const remoteOperations = value[0].sort((a, b) => sortProgressByCreatedAt(a, b))
     const localOperations = value[1].sort((a, b) => sortProgressByCreatedAt(a, b))
-    if (remoteOperations[0].passed === localOperations[0].passed) {
+    if (remoteOperations[0].retrieval_level === localOperations[0].retrieval_level) {
       remoteOperations[0].created_at.getTime() > localOperations[0].created_at.getTime()
         ? autoResolvedConflicts.push(...remoteOperations)
         : autoResolvedConflicts.push(...localOperations)

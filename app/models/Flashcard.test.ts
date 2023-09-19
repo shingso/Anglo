@@ -41,7 +41,7 @@ test("get most recent card progres", () => {
     id: uuidv4(),
     mem_level: Math.floor(Math.random() * 10) + 1,
     time_elapsed: Math.floor(Math.random() * 2000) + 1,
-    passed: Math.random() > 0.5 ? true : false,
+
     retrieval_level: Math.floor(Math.random() * 3) + 1,
     created_at: subDays(new Date(), Math.floor(Math.random() * 10)),
   }
@@ -52,7 +52,6 @@ test("get most recent card progres", () => {
       flashcard_id: flashcardId,
       mem_level: Math.floor(Math.random() * 10) + 1,
       time_elapsed: Math.floor(Math.random() * 2000) + 1,
-      passed: Math.random() > 0.5 ? true : false,
       retrieval_level: Math.floor(Math.random() * 3) + 1,
       created_at: subDays(new Date(), Math.floor(Math.random() * 10)),
     }

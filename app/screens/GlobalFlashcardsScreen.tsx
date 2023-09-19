@@ -97,7 +97,6 @@ export const GlobalFlashcardsScreen: FC<StackScreenProps<AppStackScreenProps, "G
     const getWordDefinition = async (searchTerm): Promise<string> => {
       const data = await dictionaryApi.getEntry(searchTerm)
       if (data) {
-        console.log("data this is the entry", data)
         const res = addGlobalFlashcard(data)
       }
       return null
@@ -157,7 +156,7 @@ export const GlobalFlashcardsScreen: FC<StackScreenProps<AppStackScreenProps, "G
             onPress={() => getOnlineDictionaryDefintion(searchTerm)}
             preset="custom_default_small"
           >
-            Search for definition
+            Search definition
           </Button>
           {searchDefinition && (
             <View style={$search_definition}>
