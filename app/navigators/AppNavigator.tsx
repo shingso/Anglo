@@ -20,7 +20,6 @@ import {
   FlashcardListScreen,
   ForgotPasswordScreen,
   GlobalConflictScreen,
-  GlobalDecksScreen,
   GlobalFlashcardsScreen,
   HomeScreen,
   LoginScreen,
@@ -34,12 +33,11 @@ import {
   SubscribeScreen,
   TermsOfServiceScreen,
   UserSetupScreen,
-  UserGlobalDecksScreen,
-  UserGlobalDeckEditScreen,
   TutorialScreen,
   FreeStudyScreen,
   FreeStudySessionScreen,
   DeckHomeScreen,
+  GlobalDecksScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
@@ -260,21 +258,7 @@ const HomeScreens = () => {
         }}
         component={SubscribeScreen}
       />
-      {/*   <Stack.Screen
-        name={AppRoutes.USER_GLOBAL_DECKS}
-        options={{
-          headerShown: true,
-          headerTitle: "Your Public Decks",
-        }}
-        component={UserGlobalDecksScreen}
-      />
-      <Stack.Screen
-        name={AppRoutes.USER_GLOBAL_DECKS_EDIT}
-        options={{
-          title: "Global Deck Edit",
-        }}
-        component={UserGlobalDeckEditScreen}
-      /> */}
+
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
         options={{

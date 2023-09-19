@@ -5,13 +5,11 @@ import { SubscriptionStoreModel } from "./SubscriptionStore"
 import { SettingsStoreModel } from "./SettingsStore"
 import { AuthStoreModel } from "./AuthStore"
 import { DeckStoreModel } from "./DeckStore"
-import { GlobalDeckStoreModel } from "./GlobalDecks/GlobalDeckStore"
 
 /**
  * A RootStore model.
  */
 export const RootStoreModel = types.model("RootStore").props({
-  globalDeckStore: types.optional(GlobalDeckStoreModel, {} as any),
   boughtDeckStore: types.optional(BoughtDeckStoreModel, {} as any),
   subscriptionStore: types.optional(SubscriptionStoreModel, {} as any),
   settingsStore: types.optional(SettingsStoreModel, {} as any),
