@@ -39,7 +39,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
       //  const value = await getGlobalPaidFlashcardsByDeckId(deck.global_deck_id)
       //   console.log("how many cards", value)
       if (cards) {
-        const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
+        const paidCard = cards?.private_global_flashcards?.filter((card) => !card.free)
         setPaidCards(paidCard)
       }
     }
@@ -100,7 +100,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     style={{ marginBottom: spacing.size60, color: custom_palette.white }}
                     preset="title1"
                   >
-                    {selectedDeck.todaysCards.length}
+                    {selectedDeck?.todaysCards?.length}
                   </CustomText>
                 </View>
               }

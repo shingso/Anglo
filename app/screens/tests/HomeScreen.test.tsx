@@ -22,7 +22,7 @@ jest.mock("../../models/helpers/useStores", () => ({
 test("Home screen works", async () => {
   const { deckStore } = useStores()
   deckStore.selectDeck(deckStore.decks[0])
-  const currentTodaysCardsLength = deckStore.selectedDeck.todaysCards.length
+  const currentTodaysCardsLength = deckStore?.selectedDeck?.todaysCards?.length
   console.log(deckStore.selectedDeck.new_per_day, "new inside test")
   console.log(deckStore.selectedDeck.last_added, "adeddd inside")
   console.log(currentTodaysCardsLength, "curre inside")

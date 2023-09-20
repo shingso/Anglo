@@ -23,12 +23,7 @@ import { spacing, custom_colors, colors } from "app/theme"
 import { Card_Progress_Fields, deleteCardProgress } from "app/utils/cardProgressUtils"
 import { AppStackParamList, AppRoutes } from "app/utils/consts"
 import { showErrorToast } from "app/utils/errorUtils"
-import {
-  addToFlashcardProgress,
-  Flashcard_Fields,
-  insertNote,
-  removeNote,
-} from "app/utils/flashcardUtils"
+import { Flashcard_Fields, insertNote, removeNote } from "app/utils/flashcardUtils"
 import { getSnapshot } from "mobx-state-tree"
 import * as Speech from "expo-speech"
 // import { useNavigation } from "@react-navigation/native"

@@ -98,7 +98,6 @@ export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn>
 //Update
 
 export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) => {
-  console.log("ran")
   if (!flashcard || !flashcard?.id) {
     return null
   }
@@ -236,24 +235,16 @@ export const createFormData = (uri: any) => {
 }
 
 export const addToFlashcardProgress = async (
-  flashcard: Flashcard,
-  retrievalLevel: number,
-  timeElapsed: number,
+  cardProgress: CardProgressSnapshotIn,
 ): Promise<any> => {
-  const newProgress: CardProgressSnapshotIn = {
-    [Card_Progress_Fields.TIME_ELAPSED]: timeElapsed,
-    [Card_Progress_Fields.FLASHCARD_ID]: flashcard.id,
-    [Card_Progress_Fields.RETRIEVAL_LEVEL]: retrievalLevel,
-  }
-
-  const insertedProgress = await insertCardProgress(newProgress)
+  const insertedProgress = await insertCardProgress(cardProgress)
+  console.log("inserted progress", insertedProgress)
   if (insertedProgress) {
     updateMostRecentLocalId(insertedProgress.id)
     //updateConfirmedRemoteId(insertedProgress.id) TODO figure if this is needed
-    flashcard.addToCardProgress(mapResponseToCardProgress(insertedProgress) as any)
   }
 
-  return insertedProgress || newProgress
+  return insertedProgress || cardProgress
 }
 
 export const calculateFlashcardProgress = (flashcard: Flashcard) => {

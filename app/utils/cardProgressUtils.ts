@@ -14,6 +14,7 @@ export enum Card_Progress_Fields {
   TIME_ELAPSED = "time_elapsed",
   CREATED_AT = "created_at",
   RETRIEVAL_LEVEL = "retrieval_level",
+  NEXT_SHOWN = "next_shown",
 }
 
 export interface CardProgress {
@@ -22,9 +23,10 @@ export interface CardProgress {
   [Card_Progress_Fields.TIME_ELAPSED]?: number
   [Card_Progress_Fields.CREATED_AT]?: Date
   [Card_Progress_Fields.RETRIEVAL_LEVEL]?: number
+  [Card_Progress_Fields.NEXT_SHOWN]?: Date
 }
 
-export const CardProgressOutputFields = `id, flashcard_id, time_elapsed, created_at, retrieval_level`
+export const CardProgressOutputFields = `id, flashcard_id, time_elapsed, created_at, retrieval_level, next_shown`
 
 export const getCardProgress = async (id: String): Promise<CardProgress> => {
   try {
@@ -54,6 +56,9 @@ export const mapResponseToCardProgress = (progress: any): CardProgressSnapshotIn
         ? progress?.retrieval_level
         : undefined,
     [Card_Progress_Fields.CREATED_AT]: progress?.created_at
+      ? new Date(progress.created_at)
+      : undefined,
+    [Card_Progress_Fields.NEXT_SHOWN]: progress?.next_shown
       ? new Date(progress.created_at)
       : undefined,
     [Card_Progress_Fields.TIME_ELAPSED]:

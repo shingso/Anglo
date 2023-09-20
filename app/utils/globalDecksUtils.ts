@@ -26,28 +26,16 @@ export const getGlobalDecks = async () => {
   return global_decks
 }
 
-export const getGlobalDeckByOriginalId = async (deck_id: string) => {
-  let { data: deck, error } = await supabase
-    .from("global_decks")
-    .select("*, global_flashcards(*)")
-    .eq(Global_Deck_Fields.ORIGINAL_ID, deck_id)
-
-  if (deck && deck?.length > 0) {
-    console.log(deck[0])
-    return deck[0]
-  }
-  return null
-}
-
 export const getGlobalDeckById = async (deck_id: string) => {
   let { data: deck, error } = await supabase
     .from("global_decks")
-    .select("*, global_flashcards(*)")
+    .select("*, private_global_flashcards(*)")
     .eq(Global_Deck_Fields.ID, deck_id)
 
   if (deck && deck?.length > 0) {
     return deck[0]
   }
+
   return null
 }
 
@@ -68,19 +56,12 @@ export const searchGlobalDecks = async (searchTerm: string) => {
   let { data, error } = await supabase
     .from("global_decks")
     .select("*, private_global_flashcards(*)")
-
-  return data
-}
-
-export const makeDeckPublic = async (deckId: string) => {
-  let { data: deck, error } = await supabase.rpc("make_deck_public", {
-    deck_id: deckId,
-  })
-  console.log(deck, error)
-  if (error) {
-    return null
+    .ilike("title", search)
+    .limit(10)
+  if (data && data?.length > 0) {
+    return data
   }
-  return deck
+  return []
 }
 
 export const getGlobalDeckFlashcardsAfterTime = async (
