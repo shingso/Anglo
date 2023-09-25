@@ -125,12 +125,12 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                   onPress={() => openAddNewFlashcard()}
                   size={22}
                 ></Icon>
-                <Icon
+                {/*       <Icon
                   color={theme.colors.foreground1}
                   icon="fluent_globe_search"
                   onPress={() => goToGlobalFlashcards()}
                   size={22}
-                ></Icon>
+                ></Icon> */}
               </View>
             }
           ></Header>
@@ -188,7 +188,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               contentContainerStyle={{ paddingBottom: spacing.size200 }}
               showsVerticalScrollIndicator={false}
               data={getSnapshot(flashcards as IStateTreeNode).filter(
-                (card) => card?.front && card.front.includes(searchTerm),
+                (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
               )}
               renderItem={({ item, index }) => (
                 <FlashcardListItem

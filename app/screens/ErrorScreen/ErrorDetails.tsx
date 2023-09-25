@@ -29,8 +29,10 @@ export function ErrorDetails(props: ErrorDetailsProps) {
           text={`${props.errorInfo.componentStack}`.trim()}
         />
       </ScrollView> */}
-      <CustomText preset="title3">Oops, this is kinda of easter egg</CustomText>
-      <CustomText preset="body2">Something unexpectably broke</CustomText>
+      <CustomText style={{ marginBottom: spacing.size200 }} preset="title3">
+        Oops, something went wrong!
+      </CustomText>
+      <CustomText preset="body2"></CustomText>
       <Button
         preset="custom_default"
         style={$resetButton}

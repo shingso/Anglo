@@ -1,4 +1,4 @@
-import { endOfDay, isAfter, isBefore } from "date-fns"
+import { endOfDay, isAfter, isBefore, isToday } from "date-fns"
 import {
   destroy,
   Instance,
@@ -113,6 +113,22 @@ export const DeckModel = types
         return card?.next_shown && isBefore(card.next_shown, endOfToday)
       })
     },
+    get activeCardsCount() {
+      return self.flashcards.reduce((prev, card) => {
+        return prev + (!!card?.next_shown ? 1 : 0)
+      }, 0)
+    },
+    get cardProgressCount() {
+      return self.flashcards.reduce((prev, card) => {
+        return (
+          prev +
+          card.todaysCardProgresses.filter(
+            (progress) =>
+              isToday(progress.created_at) && isAfter(progress.next_shown, endOfDay(new Date())),
+          ).length
+        )
+      }, 0)
+    },
     getFlashcardById: (id: string) => {
       return self.flashcards.find((card) => card.id === id)
     },
@@ -211,8 +227,17 @@ export const DeckModel = types
     deleteCardProgress: (cardProgress: CardProgress) => {
       const flashcard = self?.flashcards?.find((card) => card.id === cardProgress.flashcard_id)
       const progress = flashcard?.card_progress?.find((progress) => progress.id === cardProgress.id)
+      const mostRecentProgress = flashcard?.mostRecentProgress
+      //ideally we would want to set our next_shown to the last card progress in the list if it doesnt
       if (progress) {
         destroy(progress)
+        if (mostRecentProgress && mostRecentProgress?.next_shown) {
+          flashcard.next_shown = mostRecentProgress.next_shown
+          console.log("destroyed", mostRecentProgress)
+        } else {
+          console.log("destroyeddfs", mostRecentProgress)
+          flashcard.next_shown = new Date()
+        }
         return true
       }
       return false

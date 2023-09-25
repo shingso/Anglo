@@ -23,7 +23,6 @@ import { useNavigation, useTheme } from "@react-navigation/native"
 import { Deck_Fields, deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { AppStackParamList, AppRoutes, SoundOptions } from "../utils/consts"
-import { getGlobalDeckByOriginalId, makeDeckPublic } from "app/utils/globalDecksUtils"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { FlatList } from "react-native-gesture-handler"
@@ -150,22 +149,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       deckStore.selectedDeck.updateDeck(updatedDeck)
     }
 
-    const makePublic = async () => {
-      const deckPublicStatus = await getGlobalDeckByOriginalId(
-        deckStore?.selectedDeck?.global_deck_id,
-      )
-      if (!deckPublicStatus) {
-        const res = makeDeckPublic(deckStore?.selectedDeck?.id)
-        if (!res) {
-          showErrorToast("Error", "Error occurred trying to make the deck public, try again later.")
-        } else {
-          showSuccessToast(
-            "Deck made public",
-            "This deck can now be searched publicly, you can manage your deck in the global decks settings",
-          )
-        }
-      }
-    }
     const renderItem = useCallback(
       ({ item }) => (
         <TouchableOpacity onPress={() => onSubmitNewCardsPerDay(item)}>
@@ -191,32 +174,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           title={"Settings"}
         ></Header>
         <View style={$container}>
-          {/*        <Button
-            preset="custom_default_small"
-            style={{ marginBottom: spacing.size200 }}
-            onPress={() => updateSelectedDeck()}
-          >
-            Update deck
-          </Button>
-
-          {deckStore?.selectedDeck?.global_deck_id && (
-            <Button
-              style={{ marginBottom: spacing.size160 }}
-              preset="custom_outline_small"
-              onPress={() => makePublic()}
-            >
-              Make public
-            </Button>
-          )}
-
-          <Button
-            style={{ marginBottom: spacing.size160 }}
-            preset="custom_outline_small"
-            onPress={() => deckStore.selectedDeck.clearLastAdded()}
-          >
-            Clear
-          </Button> */}
-
           <EditableText
             style={{ marginBottom: spacing.size120 }}
             preset="title1"

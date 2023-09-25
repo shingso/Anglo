@@ -140,9 +140,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       }
     }
 
-    return (
-      <Screen style={$root} preset="scroll">
-        <View style={$container}>
+    const SubscriptionFeaturesList = () => {
+      return (
+        <View>
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
@@ -181,134 +181,121 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             </CustomText>
             <CustomText preset="caption1">Autogenerate flashcards using AI</CustomText>
           </View>
-          {/* 
-          <View style={{ marginBottom: spacing.size200 }}>
 
+          {/*    <View style={{ marginBottom: spacing.size200 }}>
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
               Insightful statistics
             </CustomText>
             <CustomText style={{ marginBottom: spacing.size320 }} preset="caption1">
               Visualize the progress you are making with comprehensive statistics.
             </CustomText>
-          </View>
-          */}
+          </View> */}
+        </View>
+      )
+    }
 
-          <CustomText style={{ marginBottom: spacing.size160 }}>
-            Cancel anytime, no fees, simple and hassle free
-          </CustomText>
-          <CustomText style={{ marginBottom: spacing.size160 }}>
-            {subscriptionStore?.subscription?.subscription_id}
-          </CustomText>
-          <Card
-            onPress={() => endSubscription()}
-            style={{
-              marginBottom: spacing.size160,
-              elevation: 4,
-              minHeight: 0,
-              paddingHorizontal: spacing.size200,
-              paddingVertical: spacing.size120,
-            }}
-            ContentComponent={
-              <View>
-                <CustomText preset="body2Strong">Cancel Subscription</CustomText>
-              </View>
-            }
-          ></Card>
-
-          <Card
-            onPress={() => initializeSubscriptionPaymentSheet()}
-            style={{
-              marginBottom: spacing.size160,
-              elevation: 4,
-              minHeight: 0,
-              paddingHorizontal: spacing.size200,
-              paddingVertical: spacing.size120,
-            }}
-            ContentComponent={
-              <View>
-                <CustomText preset="body2Strong">Subscription plan</CustomText>
-                <CustomText preset="body1">$3.99 per month</CustomText>
-              </View>
-            }
-          ></Card>
-
-          <LineWord text="Or save with a plan"></LineWord>
-          <Card
-            onPress={() => initializePaymentSheet("6")}
-            style={{
-              marginBottom: spacing.size160,
-              elevation: 4,
-              minHeight: 0,
-              paddingHorizontal: spacing.size200,
-              paddingVertical: spacing.size120,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+    return (
+      <Screen style={$root} preset="scroll">
+        {!subscriptionStore?.hasActiveSubscription ? (
+          <View style={$container}>
+            <CustomText style={{ marginBottom: spacing.size160 }}>
+              Cancel anytime, no fees, simple and hassle free
+            </CustomText>
+            <SubscriptionFeaturesList></SubscriptionFeaturesList>
+            <Card
+              onPress={() => initializeSubscriptionPaymentSheet()}
+              style={{
+                marginBottom: spacing.size160,
+                elevation: 4,
+                minHeight: 0,
+                paddingHorizontal: spacing.size200,
+                paddingVertical: spacing.size120,
+              }}
+              ContentComponent={
                 <View>
-                  <CustomText preset="body2Strong">6 month subscription</CustomText>
-                  <CustomText preset="body1">$19.95</CustomText>
+                  <CustomText preset="body2Strong">Subscription plan</CustomText>
+                  <CustomText preset="body1">$3.99 per month</CustomText>
                 </View>
-                <View
-                  style={{
-                    backgroundColor: custom_colors.brandBackground1,
-                    paddingHorizontal: spacing.size100,
-                    paddingVertical: spacing.size40,
-                    borderRadius: borderRadius.corner80,
-                    transform: [{ rotate: "20deg" }],
-                    position: "absolute",
-                    top: -16,
-                    right: -30,
-                    elevation: 2,
-                  }}
-                >
-                  <CustomText preset="body2Strong" style={{ color: custom_colors.background1 }}>
-                    -20%
-                  </CustomText>
-                </View>
-              </View>
-            }
-          ></Card>
-          <Card
-            onPress={() => initializePaymentSheet("12")}
-            style={{
-              marginBottom: spacing.size160,
-              paddingVertical: spacing.size120,
-              elevation: 4,
-              minHeight: 0,
-              paddingHorizontal: spacing.size200,
-            }}
-            ContentComponent={
-              <View>
-                <CustomText preset="body2Strong">12 month subscription</CustomText>
-                <CustomText preset="body1">$29.99</CustomText>
-                <View
-                  style={{
-                    backgroundColor: custom_colors.brandBackground1,
-                    paddingHorizontal: spacing.size100,
-                    paddingVertical: spacing.size40,
-                    borderRadius: borderRadius.corner80,
-                    transform: [{ rotate: "20deg" }],
-                    elevation: 2,
-                    position: "absolute",
-                    top: -16,
-                    right: -30,
-                  }}
-                >
-                  <CustomText preset="body1Strong" style={{ color: custom_colors.background1 }}>
-                    -45%
-                  </CustomText>
-                </View>
-              </View>
-            }
-          ></Card>
+              }
+            ></Card>
 
-          {/*    <PlatformPayButton
+            <LineWord text="Or save with a plan"></LineWord>
+            <Card
+              onPress={() => initializePaymentSheet("6")}
+              style={{
+                marginBottom: spacing.size160,
+                elevation: 4,
+                minHeight: 0,
+                paddingHorizontal: spacing.size200,
+                paddingVertical: spacing.size120,
+              }}
+              ContentComponent={
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View>
+                    <CustomText preset="body2Strong">6 month subscription</CustomText>
+                    <CustomText preset="body1">$19.95</CustomText>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: custom_colors.brandBackground1,
+                      paddingHorizontal: spacing.size100,
+                      paddingVertical: spacing.size40,
+                      borderRadius: borderRadius.corner80,
+                      transform: [{ rotate: "20deg" }],
+                      position: "absolute",
+                      top: -16,
+                      right: -30,
+                      elevation: 2,
+                    }}
+                  >
+                    <CustomText preset="body2Strong" style={{ color: custom_colors.background1 }}>
+                      -20%
+                    </CustomText>
+                  </View>
+                </View>
+              }
+            ></Card>
+            <Card
+              onPress={() => initializePaymentSheet("12")}
+              style={{
+                marginBottom: spacing.size160,
+                paddingVertical: spacing.size120,
+                elevation: 4,
+                minHeight: 0,
+                paddingHorizontal: spacing.size200,
+              }}
+              ContentComponent={
+                <View>
+                  <CustomText preset="body2Strong">12 month subscription</CustomText>
+                  <CustomText preset="body1">$29.99</CustomText>
+                  <View
+                    style={{
+                      backgroundColor: custom_colors.brandBackground1,
+                      paddingHorizontal: spacing.size100,
+                      paddingVertical: spacing.size40,
+                      borderRadius: borderRadius.corner80,
+                      transform: [{ rotate: "20deg" }],
+                      elevation: 2,
+                      position: "absolute",
+                      top: -16,
+                      right: -30,
+                    }}
+                  >
+                    <CustomText preset="body1Strong" style={{ color: custom_colors.background1 }}>
+                      -45%
+                    </CustomText>
+                  </View>
+                </View>
+              }
+            ></Card>
+
+            {/*    <PlatformPayButtonc
             type={PlatformPay.ButtonType.Pay}
             onPress={() => initializePaymentSheet()}
             style={{
@@ -316,7 +303,26 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
               height: 50,
             }}
           /> */}
-        </View>
+          </View>
+        ) : (
+          <View style={$container}>
+            <CustomText preset="title2" style={{ marginBottom: spacing.size200 }}>
+              You currently have an active subscription
+            </CustomText>
+            <SubscriptionFeaturesList></SubscriptionFeaturesList>
+            <Card
+              onPress={() => endSubscription()}
+              style={{
+                marginBottom: spacing.size160,
+                elevation: 4,
+                minHeight: 0,
+                paddingHorizontal: spacing.size200,
+                paddingVertical: spacing.size120,
+              }}
+              ContentComponent={<CustomText preset="body2Strong">Cancel Subscription</CustomText>}
+            ></Card>
+          </View>
+        )}
       </Screen>
     )
   },
