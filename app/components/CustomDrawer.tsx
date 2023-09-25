@@ -30,7 +30,7 @@ export interface CustomDrawerProps {
  */
 export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerProps) {
   const { navigation } = props
-  const { deckStore, subscriptionStore } = useStores()
+  const { deckStore, subscriptionStore, authStore } = useStores()
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
   const [deckLimitModalVisbile, setDeckLimitModalVisible] = useState(false)
   const [deckTitle, setDeckTitle] = useState("")
@@ -79,6 +79,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
     if (pendingRemoteFunctions && pendingRemoteFunctions.length > 0) {
       console.log("there are pending actions before we leave")
     }
+    authStore.logout()
     supabase.auth.signOut()
   }
 

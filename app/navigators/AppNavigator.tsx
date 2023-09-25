@@ -277,8 +277,8 @@ const HomeScreens = () => {
 
 const AppStack = observer(function AppStack() {
   const netInfo = useNetInfo()
-  const { deckStore, settingsStore } = useStores()
-  const [session, setSession] = useState(null)
+  const navigation = useNavigation()
+  const { deckStore, settingsStore, authStore } = useStores()
 
   useEffect(() => {
     if (netInfo.isConnected === null) {
@@ -316,7 +316,9 @@ const AppStack = observer(function AppStack() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+      if (session?.access_token) {
+        authStore.setAuthToken(session.access_token)
+      }
     })
 
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -327,17 +329,19 @@ const AppStack = observer(function AppStack() {
       }
 
       if (_event === "SIGNED_IN") {
-        console.log("we are signing in")
         deckStore.getDecks()
       }
-      setSession(session)
+
+      if (session?.access_token) {
+        authStore.setAuthToken(session.access_token)
+      }
     })
     return () => {
       authListener.subscription.unsubscribe()
     }
   }, [])
 
-  return session ? HomeScreens() : LoginStackScreens()
+  return authStore?.authToken ? HomeScreens() : LoginStackScreens()
 })
 
 interface NavigationProps extends Partial<React.ComponentProps<typeof NavigationContainer>> {}
