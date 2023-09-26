@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps } from "../navigators"
-import { Button, CustomText, Screen, Text } from "../components"
+import { Button, Card, CustomText, Icon, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Education_Levels, User, updateUser } from "../utils/userUtils"
 import { importGlobalDeckById } from "app/utils/globalDecksUtils"
@@ -43,19 +43,37 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
     const submitData = () => {}
 
     const importSATVocabDeck = async () => {
-      importGlobalDeckById(promoDeckId, "SAT Vocabulary")
+      importGlobalDeckById("340a0dc1-3767-455d-a8f6-cad938ea9827", "SAT Vocabulary")
     }
 
     return (
       <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
         <View style={$container}>
-          <CustomText>Setup</CustomText>
-          <CustomText>
-            This step is optional, but by providing information about yourself a more personalized
-            learning experience can be created for you.
-          </CustomText>
+          <CustomText preset="title1">Help us teach you</CustomText>
           <CustomText></CustomText>
-          <CustomText>What is your highest level of education?</CustomText>
+          <Card
+            onPress={() => importSATVocabDeck()}
+            style={{
+              minHeight: 0,
+              elevation: 1,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  paddingHorizontal: spacing.size120,
+                  paddingVertical: spacing.size80,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <View>
+                  <CustomText preset="body1Strong">
+                    {"Get started with a premium 300 cards SAT vocabulary deck."}
+                  </CustomText>
+                </View>
+              </View>
+            }
+          ></Card>
           <Button style={{ marginTop: "auto" }} preset="custom_outline">
             Save
           </Button>
@@ -73,23 +91,4 @@ const $container: ViewStyle = {
   padding: spacing.size160,
   paddingBottom: spacing.size560,
   height: "100%",
-}
-
-const $dropdownContainer: ViewStyle = {
-  borderWidth: 0,
-  borderTopWidth: 1,
-  borderTopColor: colors.border,
-}
-
-const $dropdownSelectedContainer: ViewStyle = {
-  backgroundColor: colors.palette.neutral300,
-}
-
-const $dropdownSelectedLabel: TextStyle = {
-  color: colors.white,
-  fontFamily: typography.primary.medium,
-}
-
-const $dropdown: ViewStyle = {
-  borderWidth: 0,
 }
