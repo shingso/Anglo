@@ -117,63 +117,49 @@ function App(props: AppProps) {
     config,
   }
 
+  const DefaultToastBody = (props) => {
+    const { text1, text2 } = props
+    return (
+      <View style={{ paddingRight: spacing.size200 }}>
+        {text1 && !text2 && (
+          <CustomText
+            style={{ color: custom_palette.white, marginBottom: spacing.size20 }}
+            preset="body2"
+          >
+            {text1}
+          </CustomText>
+        )}
+        {text1 && text2 && (
+          <View>
+            <CustomText
+              style={{ color: custom_palette.white, marginBottom: spacing.size20 }}
+              preset="body2Strong"
+            >
+              {text1}
+            </CustomText>
+            <CustomText style={{ color: custom_palette.white }} preset="caption1">
+              {text2}
+            </CustomText>
+          </View>
+        )}
+      </View>
+    )
+  }
+
   const toastConfig = {
     default: (props) => (
       <View style={$custom_toast}>
-        <Icon
-          size={28}
-          style={{ marginRight: spacing.size160 }}
-          color={custom_colors.foreground1}
-          icon="fluent_error_circle"
-        ></Icon>
-        <View style={{ paddingRight: spacing.size360 }}>
-          <CustomText style={{ color: custom_colors.foreground1 }} preset="body2Strong">
-            {props.text1}
-          </CustomText>
-          <CustomText style={{ color: custom_colors.foreground1 }} preset="body2">
-            {props.text2}
-          </CustomText>
-        </View>
+        <DefaultToastBody text1={props.text1} text2={props.text2}></DefaultToastBody>
       </View>
     ),
     success: (props) => (
       <View style={[$custom_toast, $success_toast]}>
-        {/*    <Icon
-          size={28}
-          style={{ marginRight: spacing.size160 }}
-          color={custom_colors.successForeground1}
-          icon="fluent_error_circle"
-        ></Icon> */}
-        <View style={{ paddingRight: spacing.size360 }}>
-          <CustomText style={{ color: custom_colors.successForeground1 }} preset="body2Strong">
-            {props.text1}
-          </CustomText>
-          <CustomText style={{ color: custom_colors.successForeground1 }} preset="body2">
-            {props.text2}
-          </CustomText>
-        </View>
+        <DefaultToastBody text1={props.text1} text2={props.text2}></DefaultToastBody>
       </View>
     ),
-
     error: (props) => (
       <View style={[$custom_toast, $error_toast]}>
-        {/*   <Icon
-          size={28}
-          style={{ marginRight: spacing.size160 }}
-          color={custom_colors.dangerForeground1}
-          icon="fluent_error_circle"
-        ></Icon> */}
-        <View>
-          <CustomText
-            style={{ color: custom_colors.dangerForeground1, marginBottom: spacing.size20 }}
-            preset="body1Strong"
-          >
-            {props.text1}
-          </CustomText>
-          <CustomText style={{ color: custom_colors.dangerForeground1 }} preset="body2">
-            {props.text2}
-          </CustomText>
-        </View>
+        <DefaultToastBody text1={props.text1} text2={props.text2}></DefaultToastBody>
       </View>
     ),
   }
@@ -219,7 +205,7 @@ const $custom_toast: ViewStyle = {
   paddingHorizontal: spacing.size240,
   paddingVertical: spacing.size160,
   borderRadius: borderRadius.corner120,
-  backgroundColor: custom_colors.background5,
+  backgroundColor: custom_colors.brandBackground2,
   elevation: 2,
   //borderWidth: 0.5,
   //borderColor: custom_colors.background6,
@@ -229,11 +215,12 @@ const $custom_toast: ViewStyle = {
 
 const $error_toast: ViewStyle = {
   //backgroundColor: custom_colors.dangerBackground1,
-  backgroundColor: custom_colors.background3,
+  backgroundColor: custom_palette.red20,
 }
 
 const $success_toast: ViewStyle = {
-  backgroundColor: custom_colors.successBackground1,
+  borderRadius: borderRadius.corner120,
+  backgroundColor: custom_colors.brandBackground2,
 }
 
 const $dot: ViewStyle = {

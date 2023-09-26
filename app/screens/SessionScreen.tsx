@@ -128,7 +128,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       if (mostRecentProgress) {
         timeElapsed = differenceInMinutes(new Date(), mostRecentProgress.created_at)
       }
-
       const progress: CardProgressSnapshotIn = {
         [Card_Progress_Fields.ID]: uuidv4(),
         [Card_Progress_Fields.CREATED_AT]: new Date(),
@@ -138,10 +137,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         [Card_Progress_Fields.NEXT_SHOWN]: nextShown,
       }
 
-      const updatedFlashcard = {
-        [Flashcard_Fields.ID]: flashcard.id,
-        [Flashcard_Fields.NEXT_SHOWN]: nextShown,
-      }
       if (settingsStore.isOffline) {
         deck.addToQueuedQueries({
           id: uuidv4(),
@@ -149,10 +144,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           function: QueryFunctions.INSERT_CARD_PROGRESS,
         })
       }
-      //TODO write a trigger that updates the flashcard with the card progress
-      flashcard.updateFlashcard(updatedFlashcard)
       flashcard.addToCardProgress(progress)
-      // const flashcardResponse = await updateFlashcard(updatedFlashcard)
       const response = await addToFlashcardProgress(progress)
       return progress
     }

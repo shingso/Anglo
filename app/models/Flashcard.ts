@@ -70,6 +70,7 @@ export const FlashcardModel = types
     addToCardProgress(cardProgress: CardProgressSnapshotIn) {
       const cardProgressModel = CardProgressModel.create(cardProgress)
       self.card_progress.push(cardProgressModel)
+      self.next_shown = cardProgress.next_shown as Date
       //whenever we do this we want to update or own
     },
     addNote(note: string) {

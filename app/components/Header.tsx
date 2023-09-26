@@ -13,7 +13,7 @@ import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsets
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 import { CustomText } from "./CustomText"
-import { useTheme } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { custom } from "mobx-state-tree/dist/internal"
 
 export interface HeaderProps {
@@ -148,7 +148,7 @@ interface HeaderActionProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Header.md)
  */
 export function Header(props: HeaderProps) {
-  const theme = useTheme()
+  const navigation = useNavigation()
   const {
     backgroundColor = "transparent",
     //backgroundColor = theme.colors.background2,
@@ -179,7 +179,11 @@ export function Header(props: HeaderProps) {
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
-
+  const goBack = () => {
+    if (navigation?.canGoBack()) {
+      navigation.goBack()
+    }
+  }
   const titleContent = titleTx ? translate(titleTx, titleTxOptions) : title
 
   return (
@@ -188,9 +192,9 @@ export function Header(props: HeaderProps) {
         <HeaderAction
           tx={leftTx}
           text={leftText}
-          icon={leftIcon}
+          icon={leftIcon || "caret_left"}
           iconColor={leftIconColor}
-          onPress={onLeftPress}
+          onPress={onLeftPress || goBack}
           txOptions={leftTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={LeftActionComponent}

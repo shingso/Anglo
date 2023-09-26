@@ -50,13 +50,8 @@ import isEqual from "lodash/isEqual"
 import { wordsApi } from "../services/dictionaryApi/wordsApi"
 import { vocabulary_words } from "../../assets/words"
 import { AppRoutes, AppStackParamList, SortType } from "../utils/consts"
-import { showErrorToast, showSuccessToast } from "../utils/errorUtils"
 import { AppStackScreenProps } from "app/navigators"
-import { dictionaryApi } from "app/services/dictionaryApi/dictionaryApi"
-import { getDay } from "date-fns"
-import formatDistance from "date-fns/fp/formatDistance/index.js"
-import { getUserBoughtDecks } from "../utils/boughtDecksUtils"
-import { getTutorialSeen } from "app/utils/storage/tutorialUtils"
+import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUtils"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
@@ -67,10 +62,10 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
 
     const goToTutorial = async () => {
-      //const response = await deckStore.getDecks()
       const res = await getTutorialSeen()
       if (res === null && !(deckStore?.decks?.length > 0)) {
         navigation.navigate(AppRoutes.TUTORIAL)
+        saveTutorialSeen(true)
       }
     }
 
@@ -83,7 +78,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
 
       //TODO Figure these out we do always want to go to tutorail check and getUserBought deck/subscription status
       // getMostRecentCardProgress()
-      // goToTutorial()
+      goToTutorial()
       // boughtDeckStore.getUserBoughtDecks()
     }, [])
 
@@ -143,25 +138,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
       })
     }
 
-    const goToDeckSettings = () => {
-      navigation.navigate(AppRoutes.DECK_SETTINGS)
-    }
-
-    const startSession = (deck: Deck) => {
-      if (deck?.todaysCards && deck?.todaysCards.length > 0) {
-        deckStore.selectDeck(deck)
-        deckStore.selectedDeck.setSessionCards()
-        navigation.navigate(AppRoutes.SESSION)
-      } else {
-        showSuccessToast("Good Job!", "There are no more cards for today")
-      }
-    }
-
-    const purchaseDeck = async () => {
-      const userBoughtDecks = await getUserBoughtDecks()
-      console.log(userBoughtDecks)
-    }
-
     return (
       <Screen safeAreaEdges={["bottom"]} style={$root}>
         <View style={$container}>
@@ -172,9 +148,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
             // rightIcon={deckStore?.selectedDeck ? "home" : null}
             // onRightPress={() => (deckStore?.selectedDeck ? deckStore.removeSelectedDeck() : null)}
           ></Header>
-
           <HomeForecast></HomeForecast>
-
           <CustomModal
             header={"Conflict Detected!"}
             body={
@@ -196,16 +170,4 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   height: "100%",
-}
-
-const $modal_text_field: ViewStyle = {
-  marginVertical: spacing.medium,
-}
-
-const $text_input_wrapper: ViewStyle = {
-  backgroundColor: "white",
-}
-
-const $button_container: ViewStyle = {
-  flexDirection: "row",
 }

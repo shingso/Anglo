@@ -207,7 +207,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       flashcardReference.id = uuidv4()
       flashcardReference.created_at = new Date()
       deck.addFlashcard(flashcardReference)
-      showSuccessToast(`${flashcardReference.front} has been added to ${deck.title}`)
+      showSuccessToast(`${flashcardReference.front} added to ${deck.title}`)
       onAddCallBack ? onAddCallBack() : null
 
       if (settingsStore.isOffline) {
