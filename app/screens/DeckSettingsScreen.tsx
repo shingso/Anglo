@@ -168,11 +168,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
 
     return (
       <Screen style={$root}>
-        <Header
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={"Settings"}
-        ></Header>
+        <Header title={"Settings"}></Header>
         <View style={$container}>
           <EditableText
             style={{ marginBottom: spacing.size120 }}

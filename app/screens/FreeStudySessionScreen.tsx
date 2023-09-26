@@ -94,12 +94,7 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
 
     return (
       <Screen style={$root}>
-        <Header
-          containerStyle={{ zIndex: 1, elevation: 4 }}
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={deck.title}
-        ></Header>
+        <Header containerStyle={{ zIndex: 1, elevation: 4 }} title={deck.title}></Header>
         {deck?.sessionCards && deck?.sessionCards?.length > 0 && (
           <View style={$count_container}>
             <Text style={$count_style} text={deck?.sessionCards?.length.toString()} />

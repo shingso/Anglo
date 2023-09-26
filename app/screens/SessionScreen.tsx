@@ -299,12 +299,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const hasSessionCards = deck?.sessionCards && deck?.sessionCards?.length > 0
     return (
       <Screen style={$root}>
-        <Header
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={deck.title}
-        ></Header>
-
+        <Header title={deck.title}></Header>
         {hasSessionCards && (
           <View style={$count_container}>
             <CustomText

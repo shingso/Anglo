@@ -99,11 +99,7 @@ export const ProgressConflictScreen: FC<ProgressConflictScreenProps> = observer(
     const navigation = useNavigation()
     return (
       <Screen style={$root}>
-        <Header
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={"Progress Sync"}
-        ></Header>
+        <Header title={"Progress Sync"}></Header>
         <View style={$container}>
           <FlatList
             keyExtractor={(item) => item.id}

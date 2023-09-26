@@ -94,13 +94,7 @@ const LoginStackScreens = () => {
     <Stack.Navigator
       screenOptions={{
         header: (props) => {
-          return (
-            <Header
-              leftIcon="caretLeft"
-              title={props?.options?.title}
-              onLeftPress={() => props.navigation.goBack()}
-            ></Header>
-          )
+          return <Header title={props?.options?.title}></Header>
         },
       }}
     >
@@ -130,7 +124,7 @@ const LoginStackScreens = () => {
         component={TermsOfServiceScreen}
       />
       <Stack.Screen
-        options={{ title: "User Setup" }}
+        options={{ headerShown: false }}
         name={AppRoutes.USER_SETUP}
         component={UserSetupScreen}
       />
@@ -144,13 +138,7 @@ const AboutStackScreens = () => {
       initialRouteName={AppRoutes.ABOUT}
       screenOptions={{
         header: (props) => {
-          return (
-            <Header
-              leftIcon="caretLeft"
-              title={props?.options?.title}
-              onLeftPress={() => props.navigation.goBack()}
-            ></Header>
-          )
+          return <Header title={props?.options?.title}></Header>
         },
       }}
     >
