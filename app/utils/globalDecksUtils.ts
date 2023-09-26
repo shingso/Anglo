@@ -21,32 +21,13 @@ export interface GlobalDeck {
   [Global_Deck_Fields.LAST_UPDATED]?: Date
 }
 
-export const getGlobalDecks = async () => {
-  let { data: global_decks, error } = await supabase.from("global_decks").select("*")
-  return global_decks
-}
-
 export const getGlobalDeckById = async (deck_id: string) => {
   let { data: deck, error } = await supabase
     .from("global_decks")
     .select("*, private_global_flashcards(*)")
     .eq(Global_Deck_Fields.ID, deck_id)
-
   if (deck && deck?.length > 0) {
     return deck[0]
-  }
-
-  return null
-}
-
-export const getGlobalPaidFlashcardsByDeckId = async (deck_id: string) => {
-  let { data, error } = await supabase
-    .from("global_decks")
-    .select("global_flashcards(*)", { count: "exact" })
-    .eq(Global_Deck_Fields.ID, deck_id)
-  console.log(data, error)
-  if (data && data?.length > 0) {
-    return data[0]
   }
   return null
 }
@@ -74,12 +55,12 @@ export const getGlobalDeckFlashcardsAfterTime = async (
   console.log(field, formattedTime, "current field time")
   let { data: deck, error } = await supabase
     .from("global_decks")
-    .select("global_flashcards(*)")
+    .select("private_global_flashcards(*)")
     .eq("id", deck_id)
     .gt(field, formattedTime)
   if (deck && deck?.length > 0) {
-    console.log(deck[0].global_flashcards)
-    return deck[0].global_flashcards
+    console.log(deck[0].private_global_flashcards)
+    return deck[0].private_global_flashcards
   }
   return []
 }
@@ -88,10 +69,12 @@ export const importGlobalDeckById = async (deckId: String, deckTitle: String) =>
   let { data: deck, error } = await supabase.rpc("import_global_deck", {
     deck_id: deckId,
     deck_title: deckTitle,
+    new_per_day: 3,
   })
-  /* if (deck?.id) {
+  console.log(deck, error)
+  /*    if (deck?.id) {
     const res = await addNewRemoteDeckToStore(deck.id)
     const localDeck = deckStore.getDeckById(deck.id)
     addCardsToShow(localDeck, startingValue)
-  } */
+  }  */
 }

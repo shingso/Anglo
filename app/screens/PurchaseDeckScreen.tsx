@@ -8,7 +8,7 @@ import { custom_colors, custom_palette, spacing } from "app/theme"
 
 import { getGlobalDeckById } from "app/utils/globalDecksUtils"
 import { FlatList } from "react-native-gesture-handler"
-import { importPurchasedCards, insertFlashcardsAndReturn } from "app/utils/boughtDecksUtils"
+import { insertFlashcardsAndReturn } from "app/utils/boughtDecksUtils"
 import { useStores } from "../models/helpers/useStores"
 import { supabase } from "app/services/supabase/supabase"
 import {
@@ -16,30 +16,46 @@ import {
   PlatformPayButton,
   confirmPlatformPayPayment,
 } from "@stripe/stripe-react-native"
-import { processProductPayment } from "app/utils/subscriptionUtils"
-import { AppRoutes } from "app/utils/consts"
-import { useNavigation } from "@react-navigation/native"
+import {
+  getPaidFlashcardsCountByDeckId,
+  getPaidFlashcardsPreview,
+  processProductPayment,
+} from "app/utils/subscriptionUtils"
+import { Flashcard, FlashcardSnapshotIn } from "app/models"
 
 interface PurchaseDeckScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"PurchaseDeck">> {}
 
 export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
   function PurchaseDeckScreen() {
-    const { deckStore } = useStores()
-    const [paidCards, setPaidCards] = useState([])
+    const { deckStore, boughtDeckStore } = useStores()
+    const [paidCardsPreview, setPaidCardsPreview] = useState([])
+    const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
     const selectedDeck = deckStore?.selectedDeck
     const globalDeckId = selectedDeck?.global_deck_id
     const [importPurchasedDeckVisible, setImportPurchasedDeckVisible] = useState(false)
-    const navigation = useNavigation()
 
     useEffect(() => {
       const setPaidFlashcards = async () => {
         const cards = await getGlobalDeckById(globalDeckId)
         const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
-        setPaidCards(paidCard)
+        setPaidCardsPreview(paidCard)
       }
+
       setPaidFlashcards()
     }, [])
+
+    useEffect(() => {
+      const setPurchasabeDeck = async () => {
+        const paidCount = await getPaidFlashcardsCountByDeckId(globalDeckId)
+        setPaidCardsCount(paidCount)
+        const previewRes = await getPaidFlashcardsPreview(globalDeckId)
+        setPaidCardsPreview(previewRes)
+      }
+      if (globalDeckId) {
+        setPurchasabeDeck()
+      }
+    }, [globalDeckId])
 
     const fetchPaymentSheetParamsBuyDeck = async (deckId: string) => {
       const user = await supabase.auth.getUser()
@@ -76,6 +92,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         //const res = await getPaidGlobalFlashcards()
         //console.log(res)
         setImportPurchasedDeckVisible(true)
+        boughtDeckStore.addToBoughtDecks(globalDeckId)
       }
     }
 
@@ -92,10 +109,15 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     return (
       <Screen style={$root}>
         <View style={$container}>
-          <CustomText preset="title3">Get more premium cards</CustomText>
-          <CustomText preset="body1">{paidCards?.length} cards</CustomText>
+          <CustomText preset="title3" style={{ marginBottom: spacing.size120 }}>
+            Get more cards
+          </CustomText>
+          <CustomText preset="body1">{paidCardsCount.toString()} more cards</CustomText>
+          <CustomText style={{ marginBottom: spacing.size40 }} preset="caption1">
+            Card preview
+          </CustomText>
           <FlatList
-            data={paidCards}
+            data={paidCardsPreview}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => {
               return (
@@ -105,13 +127,6 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
               )
             }}
           ></FlatList>
-          {/*   <Button
-            preset="custom_default_small"
-            onPress={() => getPaidGlobalFlashcards()}
-            style={{ marginBottom: 20 }}
-          >
-            Add cards
-          </Button> */}
 
           <CustomModal
             header={"Deck purchased"}

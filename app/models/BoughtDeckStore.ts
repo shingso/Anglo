@@ -20,6 +20,16 @@ export const BoughtDeckStoreModel = types
       self.boughtDecks.replace(boughtDeckModels)
       return result
     }),
+    addToBoughtDecks: (boughtDeckId: string) => {
+      const model = BoughtDecksModel.create({ bought_deck_id: boughtDeckId })
+      self.boughtDecks.push(model)
+    },
+    isDeckBought: (boughtDeckId: string) => {
+      const bought = self.boughtDecks
+        .map((boughtDecks) => boughtDecks.bought_deck_id)
+        .find((id) => id === boughtDeckId)
+      return !!bought
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export interface BoughtDeckStore extends Instance<typeof BoughtDeckStoreModel> {}

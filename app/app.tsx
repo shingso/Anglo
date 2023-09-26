@@ -23,6 +23,7 @@ import {
   colors,
   customFontsToLoad,
   custom_colors,
+  custom_palette,
   darkTheme,
   lightTheme,
   spacing,
@@ -32,12 +33,12 @@ import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import merge from "deepmerge"
+
 import { View, ViewStyle } from "react-native"
 import { borderRadius } from "./theme/borderRadius"
 import { CustomText, Icon } from "./components"
 import { StripeProvider } from "@stripe/stripe-react-native"
-import { useTheme } from "@react-navigation/native"
+
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
 setupReactotron({
@@ -89,7 +90,7 @@ function App(props: AppProps) {
   })
 
   const [areFontsLoaded] = useFonts(customFontsToLoad)
-  const { subscriptionStore, deckStore, settingsStore } = useStores()
+  const { subscriptionStore, deckStore, settingsStore, boughtDeckStore } = useStores()
   const { rehydrated } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
 
@@ -98,14 +99,10 @@ function App(props: AppProps) {
     // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
     // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
     subscriptionStore.getSubscription()
+    boughtDeckStore.getUserBoughtDecks()
     deckStore.removeSelectedDeck()
     setTimeout(hideSplashScreen, 500)
   })
-
-  useEffect(() => {
-    subscriptionStore.getSubscription()
-    //deckStore.removeSelectedDeck()
-  }, [])
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background

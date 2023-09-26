@@ -85,6 +85,42 @@ export const getProducts = async (): Promise<Product[]> => {
   return null
 }
 
+export const getProductExistsByProductId = async (productId: string): Promise<Boolean> => {
+  try {
+    let { count, error } = await supabase
+      .from("products")
+      .select("*", { count: "exact", head: true })
+      .eq("deck_id", productId)
+    return !!count
+  } catch (error) {}
+  return false
+}
+
+export const getPaidFlashcardsCountByDeckId = async (deck_id: string) => {
+  let { count, error } = await supabase
+    .from("private_global_flashcards")
+    .select("*", { count: "exact" })
+    .eq("deck_id", deck_id)
+    .eq("free", false)
+  console.log("paid card count", count, error)
+  return count
+}
+
+export const getPaidFlashcardsPreview = async (deck_id: string) => {
+  try {
+    let { data, error } = await supabase
+      .from("private_global_flashcards")
+      .select("id, front")
+      .limit(25)
+      .eq("deck_id", deck_id)
+      .eq("free", false)
+    console.log(data, error)
+    return data
+  } catch (error) {
+    return null
+  }
+}
+
 //always fetch the subscription state and reload it every time to ensure it has the most recent information
 //the only way the subscription state gets updated is througn the webhook
 //we should ensure an entry exists and if it doesnt for some reason then create it

@@ -4,16 +4,19 @@ import { observer } from "mobx-react-lite"
 import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { AppRoutes } from "app/utils/consts"
-
 import { CustomText } from "./CustomText"
 import { Icon } from "./Icon"
 import { Deck, useStores } from "app/models"
 import { Card } from "./Card"
 import { showSuccessToast } from "app/utils/errorUtils"
-import { useEffect, useState } from "react"
-import { getGlobalDeckById, getGlobalPaidFlashcardsByDeckId } from "app/utils/globalDecksUtils"
-import { millisecondsToTime } from "app/utils/helperUtls"
+import { useEffect, useMemo, useState } from "react"
 import { StatusLabel } from "./StatusLabel"
+import { borderRadius } from "app/theme/borderRadius"
+import { LinearGradient } from "expo-linear-gradient"
+import {
+  getPaidFlashcardsCountByDeckId,
+  getProductExistsByProductId,
+} from "app/utils/subscriptionUtils"
 
 export interface DeckHomeProps {
   /**
@@ -30,22 +33,23 @@ export interface DeckHomeProps {
 export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   const { style, deck, navigation } = props
   const $styles = [$container, style]
-  const { deckStore } = useStores()
-  const [paidCards, setPaidCards] = useState([])
+  const { deckStore, boughtDeckStore } = useStores()
+  const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
+  const [isPurchasable, setIsPurchasable] = useState<Boolean>(false)
   const selectedDeck = deckStore?.selectedDeck
+
   useEffect(() => {
-    const setPaidFlashcards = async () => {
-      const cards = await getGlobalDeckById(deck.global_deck_id)
-      //  const value = await getGlobalPaidFlashcardsByDeckId(deck.global_deck_id)
-      //   console.log("how many cards", value)
-      if (cards) {
-        const paidCard = cards?.private_global_flashcards?.filter((card) => !card.free)
-        setPaidCards(paidCard)
+    const setPurchasabeDeck = async () => {
+      const productExits = await getProductExistsByProductId(deck?.global_deck_id)
+      setIsPurchasable(productExits)
+      console.log("product res", productExits)
+      if (productExits) {
+        const paidCount = await getPaidFlashcardsCountByDeckId(deck?.global_deck_id)
+        setPaidCardsCount(paidCount)
       }
     }
-
     if (deck?.global_deck_id) {
-      setPaidFlashcards()
+      setPurchasabeDeck()
     }
   }, [deck?.global_deck_id])
 
@@ -62,14 +66,94 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   return (
     <View style={$styles}>
       <View style={{ marginHorizontal: spacing.size160 }}>
-        <View style={{ marginTop: spacing.size200 }}>
-          <CustomText style={{ marginBottom: spacing.size240 }} preset="title1">
+        <View style={{ marginTop: spacing.size60 }}>
+          {/*     <CustomText style={{ marginBottom: spacing.size240 }} preset="title1">
             {selectedDeck?.title}
-          </CustomText>
-          <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
+          </CustomText> */}
+
+          <Card
+            onPress={() => startSession(selectedDeck)}
+            style={{
+              minHeight: 0,
+              elevation: 1,
+              marginBottom: spacing.size80,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  paddingHorizontal: spacing.size100,
+                  paddingTop: spacing.size40,
+                  paddingBottom: spacing.size160,
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    marginBottom: spacing.size100,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <CustomText style={{ fontSize: 52 }}>
+                    {selectedDeck?.todaysCards?.length}
+                  </CustomText>
+                  <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
+                    {selectedDeck?.cardProgressCount}
+                  </CustomText>
+
+                  {/*   <Icon icon="play" color={custom_colors.brandForeground1} size={28}></Icon> */}
+                </View>
+                <View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginBottom: spacing.size40,
+                    }}
+                  >
+                    <CustomText style={{ color: custom_palette.primary60 }} preset="caption1Strong">
+                      {selectedDeck?.cardProgressCount} /{" "}
+                      {(selectedDeck?.cardProgressCount || 0) +
+                        (selectedDeck?.todaysCards?.length || 0)}
+                    </CustomText>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: custom_palette.grey94,
+                      width: "100%",
+                      height: 14,
+                      borderRadius: borderRadius.corner80,
+                    }}
+                  >
+                    <LinearGradient
+                      style={{
+                        borderRadius: borderRadius.corner80,
+                        width: `${
+                          (selectedDeck?.cardProgressCount /
+                            (selectedDeck?.todaysCards?.length + selectedDeck?.cardProgressCount)) *
+                          100
+                        }%`,
+                      }}
+                      colors={[custom_palette.primary140, custom_palette.primary100]}
+                      start={{ x: 0, y: 0.1 }}
+                    >
+                      <View
+                        style={{
+                          height: 14,
+                          borderRadius: borderRadius.corner80,
+                        }}
+                      ></View>
+                    </LinearGradient>
+                  </View>
+                </View>
+              </View>
+            }
+          ></Card>
+
+          {/*     <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
             Study
-          </CustomText>
-          <View
+          </CustomText> */}
+          {/*       <View
             style={{ marginBottom: spacing.size100, flexDirection: "row", gap: spacing.size80 }}
           >
             <Card
@@ -138,7 +222,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 </View>
               }
             ></Card>
-          </View>
+          </View> */}
 
           <Card
             onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
@@ -155,11 +239,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                   alignItems: "center",
                 }}
               >
-                {/*    <Icon
-                  icon="fluent_add_cards"
-                  style={{ marginRight: spacing.size120 }}
-                  size={22}
-                ></Icon> */}
+                <Icon icon="swipe_right" style={{ marginRight: spacing.size120 }} size={22}></Icon>
                 <View>
                   <CustomText preset="body1Strong">{"Free study"}</CustomText>
                 </View>
@@ -176,7 +256,10 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             marginHorizontal: spacing.size80,
           }}
         >
-          <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
+          <CustomText
+            style={{ marginBottom: spacing.size120, color: custom_colors.foreground2 }}
+            preset="body2Strong"
+          >
             Flashcards
           </CustomText>
           {/*   <CustomText
@@ -186,7 +269,6 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                   View all
                 </CustomText> */}
         </View>
-
         <Card
           onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
           style={{
@@ -209,17 +291,30 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 <View>
                   <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
                     <CustomText preset="body1Strong">
-                      {selectedDeck.flashcards.length + " "}
+                      {selectedDeck?.flashcards.length + " "}
                     </CustomText>
-                    <CustomText preset="body2">cards</CustomText>
+                    <CustomText style={{ color: custom_palette.grey38 }} preset="caption1Strong">
+                      cards
+                    </CustomText>
                   </View>
                 </View>
               </View>
+              <StatusLabel
+                style={{
+                  marginLeft: spacing.size200,
+                  backgroundColor: custom_palette.primary80,
+                  color: "white",
+                }}
+                text={selectedDeck?.activeCardsCount?.toString() + " active"}
+              ></StatusLabel>
               {/*    <Icon icon="caretRight" color={custom_colors.foreground2} size={22}></Icon> */}
             </View>
           }
         ></Card>
-        {selectedDeck?.global_deck_id ? (
+
+        {!boughtDeckStore.isDeckBought(selectedDeck?.global_deck_id) &&
+        isPurchasable &&
+        !!paidCardsCount ? (
           <Card
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{
@@ -237,20 +332,17 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 }}
               >
                 <Icon
-                  icon="fluent_add_cards"
+                  icon="fluent_add_circle"
                   style={{ marginRight: spacing.size120 }}
                   size={22}
                 ></Icon>
                 <View>
-                  <CustomText preset="body2Strong">{`Get ${paidCards.length} more premium cards`}</CustomText>
+                  <CustomText preset="body2Strong">{`Get ${paidCardsCount} more premium cards`}</CustomText>
                 </View>
-                {/*          TODO Add this back to not show the purchase deck option when the deck is already purchased */}
-                {/* deckStore?.selectedDeck?.isDeckBought(boughtDeckStore.boughtDecks.map((deck) => deck.bought_deck_id)*/}
               </View>
             }
           ></Card>
         ) : null}
-
         <Card
           onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
           style={{
@@ -284,7 +376,6 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                 <StatusLabel
                   text={deckStore?.selectedDeck?.new_per_day + " cards per day"}
                 ></StatusLabel>
-                {/*                 <StatusLabel text={"English"}></StatusLabel> */}
               </View>
             </View>
           }
