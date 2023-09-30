@@ -7,7 +7,7 @@ import { Button, FlashcardListItem, Icon, Screen, Text } from "app/components"
 import { FlashcardModel, useStores } from "app/models"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 import { useNavigation } from "@react-navigation/native"
-import { custom_palette, spacing } from "app/theme"
+import { custom_colors, custom_palette, spacing } from "app/theme"
 import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { StackNavigationProp } from "@react-navigation/stack"
 
@@ -78,13 +78,13 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           >
             Inactive
           </Button>
-          <Button
+          {/*      <Button
             style={{ marginBottom: spacing.size120 }}
             onPress={() => goToFreeStudySession()}
             preset="custom_secondary_small"
           >
             Start
-          </Button>
+          </Button> */}
         </View>
         <FlatList
           keyExtractor={(item) => item.id}
@@ -99,7 +99,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
               }
               RightComponent={
                 !unselectedFlashcards.includes(item.id) ? (
-                  <Icon size={20} icon="fluent_add"></Icon>
+                  <Icon size={20} color={custom_colors.successForeground2} icon="checkmark"></Icon>
                 ) : null
               }
               key={item.id}

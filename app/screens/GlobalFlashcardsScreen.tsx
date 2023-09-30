@@ -129,11 +129,7 @@ export const GlobalFlashcardsScreen: FC<StackScreenProps<AppStackScreenProps, "G
 
     return (
       <Screen safeAreaEdges={["bottom"]} style={$root}>
-        <Header
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={deckStore.selectedDeck.title}
-        ></Header>
+        <Header title={deckStore.selectedDeck.title}></Header>
         <View style={$container}>
           <TextField
             autoCapitalize={"none"}

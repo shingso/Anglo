@@ -123,11 +123,6 @@ const LoginStackScreens = () => {
         name={AppRoutes.TERMS_OF_SERVICE}
         component={TermsOfServiceScreen}
       />
-      <Stack.Screen
-        options={{ headerShown: false }}
-        name={AppRoutes.USER_SETUP}
-        component={UserSetupScreen}
-      />
     </Stack.Navigator>
   )
 }
@@ -259,6 +254,11 @@ const HomeScreens = () => {
       <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
       <Stack.Screen name={AppRoutes.SESSION} component={SessionScreen} />
       <Stack.Screen name={AppRoutes.FREE_STUDY_SESSION} component={FreeStudySessionScreen} />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name={AppRoutes.USER_SETUP}
+        component={UserSetupScreen}
+      />
     </Stack.Navigator>
   )
 }
@@ -272,16 +272,7 @@ const AppStack = observer(function AppStack() {
     if (netInfo.isConnected === null) {
       return
     }
-
     settingsStore.setIsOffline(!netInfo.isConnected)
-
-    if (!netInfo.isConnected) {
-      Toast.show({
-        type: "error",
-        text1: "No internet connection found.",
-        topOffset: 80,
-      })
-    }
 
     if (netInfo.isConnected) {
       deckStore?.decks?.forEach((deck) => {

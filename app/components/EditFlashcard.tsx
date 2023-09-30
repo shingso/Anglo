@@ -7,6 +7,7 @@ import {
   ViewStyle,
   Image,
   ActivityIndicator,
+  Keyboard,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, spacing, typography } from "app/theme"
@@ -32,7 +33,7 @@ import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
 import { useStores } from "../models/helpers/useStores"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { Deck } from "../models/Deck"
-import { GlobalDeck, QueryFunctions } from "app/models"
+import { QueryFunctions } from "app/models"
 import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
@@ -83,6 +84,17 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     setSelectedFlashcard(mapToEditableFlashcard(flashcard))
   }, [flashcard])
 
+  useEffect(() => {
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      extraArrayRef?.current?.blur()
+    })
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      keyboardDidHideListener.remove()
+    }
+  }, [])
+
   const [inputValue, setInputValue] = useState("")
 
   const handleAddTag = () => {
@@ -96,6 +108,16 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   }
 
   const useAIDefinition = async () => {
+    if (settingsStore.isOffline) {
+      showErrorToast("Currently offline", "Go online to use AI to generate a flashcards")
+      return
+    }
+
+    if (!selectedFlashcardReference?.front) {
+      showErrorToast("Enter a word on the front field to use AI to generate a flashcard")
+      return
+    }
+
     if (selectedFlashcardReference?.front) {
       let language = null
       if (deck?.translateLanguage && deck?.translateLanguage != "english") {
@@ -240,21 +262,21 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const extraArrayRef = useRef<TextInput>()
   const onSubmitFront = (value: string) => {
     updateSelectedFlashcard("front", value)
-    if (!flashcard) {
+    /*  if (!flashcard) {
       setFocusBack(true)
-    }
+    } */
   }
   const onSubmitBack = (value: string) => {
     updateSelectedFlashcard("back", value)
-    if (!flashcard) {
+    /*  if (!flashcard) {
       setFocusCaption(true)
-    }
+    } */
   }
   const onSubmitCaption = (value: string) => {
     updateSelectedFlashcard("sub_header", value)
-    if (!flashcard) {
+    /*   if (!flashcard) {
       setFocusExtra(true)
-    }
+    } */
   }
   const onSubmitExtra = (value: string) => {
     updateSelectedFlashcard("extra", value)
@@ -395,7 +417,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           onChangeText={(text) => setInputValue(text)}
           placeholder="Tags (tap to edit)"
           onSubmitEditing={handleAddTag}
-          blurOnSubmit={false}
+          blurOnSubmit={inputValue === "" ? true : false}
         />
       </View>
       {selectedFlashcardReference?.picture_url ? (

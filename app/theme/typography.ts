@@ -180,7 +180,6 @@ export const preset_fonts = {
     $baseStyle,
     $sizeStyles.xxs,
     $lineHeightStyles.xxs,
-    ,
     $fontWeightStyles.normal,
   ] as StyleProp<TextStyle>,
   caption2: [

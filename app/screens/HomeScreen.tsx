@@ -29,22 +29,14 @@ import {
 import { addDeck, addNewDailyCardsToShow } from "../utils/deckUtils"
 import { supabase, supabseStorageUrl } from "../services/supabase/supabase"
 import { Deck, useStores } from "../models"
-import { colors, custom_colors, spacing, typography } from "../theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import {
-  FunctionTypes,
-  applyRemoteSync,
-  autoResolveCardProgresses,
   getConfirmedRemoteId,
   getPendingRemoteFunctions,
-  getRemoteRecentUpdate,
   returnRemoteAndLocalConflicts,
   returnRemoteAndLocalMostRecent,
-  updateConfirmedRemoteId,
 } from "../utils/remote_sync/remoteSyncUtils"
-import { borderRadius } from "../theme/borderRadius"
-import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
-
 import format from "date-fns/format"
 import isEqual from "lodash/isEqual"
 import { wordsApi } from "../services/dictionaryApi/wordsApi"
@@ -57,25 +49,19 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
   function HomeScreen() {
     const { deckStore, boughtDeckStore, subscriptionStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-    const [deckTitle, setDeckTitle] = useState("")
-    const [modalVisible, setModalVisible] = useState(false)
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
 
     const goToTutorial = async () => {
       const res = await getTutorialSeen()
-      if (res === null && !(deckStore?.decks?.length > 0)) {
+      if (res === null && deckStore?.decks?.length <= 0) {
         navigation.navigate(AppRoutes.TUTORIAL)
         saveTutorialSeen(true)
       }
     }
 
     useEffect(() => {
-      const getUserDecks = async () => {}
-      //getUserDecks()
       //getGlobalDeckConflicts()
-
       addNewCardsToShowToDecks()
-
       //TODO Figure these out we do always want to go to tutorail check and getUserBought deck/subscription status
       // getMostRecentCardProgress()
       goToTutorial()
@@ -128,7 +114,9 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
 
     const addNewCardsToShowToDecks = () => {
       deckStore.decks.forEach((deck) => {
-        addNewDailyCardsToShow(deck)
+        if (deck?.addNewCardsPerDay) {
+          addNewDailyCardsToShow(deck)
+        }
       })
     }
 
@@ -139,15 +127,49 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     }
 
     return (
-      <Screen safeAreaEdges={["bottom"]} style={$root}>
+      <Screen safeAreaEdges={["bottom", "top"]} style={$root}>
         <View style={$container}>
-          <Header
+          {/*   <Header
             onLeftPress={() => navigation.openDrawer()}
             title={"Home"}
             leftIcon="menu"
             // rightIcon={deckStore?.selectedDeck ? "home" : null}
             // onRightPress={() => (deckStore?.selectedDeck ? deckStore.removeSelectedDeck() : null)}
-          ></Header>
+          ></Header> */}
+
+          <View
+            style={{
+              paddingHorizontal: spacing.size200,
+              marginVertical: spacing.size160,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                backgroundColor: custom_palette.grey74,
+                //borderWidth: 1.2,
+                borderRadius: 50,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                onPress={() => navigation.openDrawer()}
+                icon="menu"
+                color={custom_palette.white}
+                size={22}
+              ></Icon>
+            </View>
+            {/* <CustomText
+              preset="title3"
+              style={{ marginLeft: spacing.size200, fontFamily: typography.fonts.roboto.light }}
+            >
+              Good Afternoon
+            </CustomText> */}
+          </View>
           <HomeForecast></HomeForecast>
           <CustomModal
             header={"Conflict Detected!"}

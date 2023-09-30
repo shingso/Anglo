@@ -102,7 +102,7 @@ export const getPaidFlashcardsCountByDeckId = async (deck_id: string) => {
     .select("*", { count: "exact" })
     .eq("deck_id", deck_id)
     .eq("free", false)
-  console.log("paid card count", count, error)
+
   return count
 }
 

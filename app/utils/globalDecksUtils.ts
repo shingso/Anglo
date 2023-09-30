@@ -65,16 +65,16 @@ export const getGlobalDeckFlashcardsAfterTime = async (
   return []
 }
 
-export const importGlobalDeckById = async (deckId: String, deckTitle: String) => {
+export const importGlobalDeckById = async (
+  deckId: String,
+  deckTitle: String,
+  newPerDay: Number = 3,
+) => {
   let { data: deck, error } = await supabase.rpc("import_global_deck", {
     deck_id: deckId,
     deck_title: deckTitle,
-    new_per_day: 3,
+    new_per_day: newPerDay,
   })
   console.log(deck, error)
-  /*    if (deck?.id) {
-    const res = await addNewRemoteDeckToStore(deck.id)
-    const localDeck = deckStore.getDeckById(deck.id)
-    addCardsToShow(localDeck, startingValue)
-  }  */
+  return deck
 }

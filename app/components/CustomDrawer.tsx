@@ -17,6 +17,7 @@ import { StackNavigationProp } from "@react-navigation/stack"
 import { useState } from "react"
 import { DrawerContentScrollView } from "@react-navigation/drawer"
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types"
+import { showErrorToast } from "app/utils/errorUtils"
 
 export interface CustomDrawerProps {
   /**
@@ -30,7 +31,7 @@ export interface CustomDrawerProps {
  */
 export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerProps) {
   const { navigation } = props
-  const { deckStore, subscriptionStore, authStore } = useStores()
+  const { deckStore, subscriptionStore, authStore, settingsStore } = useStores()
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
   const [deckLimitModalVisbile, setDeckLimitModalVisible] = useState(false)
   const [deckTitle, setDeckTitle] = useState("")
@@ -75,6 +76,10 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   }
 
   const signOut = async () => {
+    if (settingsStore?.isOffline) {
+      showErrorToast("Currently offline", "Go online to sign out")
+      return
+    }
     const pendingRemoteFunctions = await getPendingRemoteFunctions()
     if (pendingRemoteFunctions && pendingRemoteFunctions.length > 0) {
       console.log("there are pending actions before we leave")
@@ -169,12 +174,20 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
             ></Icon>
             <Icon
               size={24}
-              onPress={() => setNewDeckModalVisible(true)}
+              onPress={() =>
+                settingsStore?.isOffline
+                  ? showErrorToast("Currently offline", "Go online to add a new deck")
+                  : setNewDeckModalVisible(true)
+              }
               icon="fluent_add_circle"
             ></Icon>
             <Icon
               size={24}
-              onPress={() => navigation.navigate(AppRoutes.GLOBAL_DECKS)}
+              onPress={() =>
+                settingsStore?.isOffline
+                  ? showErrorToast("Currently offline", "Go online to view global decks")
+                  : navigation.navigate(AppRoutes.GLOBAL_DECKS)
+              }
               icon="fluent_globe_search"
             ></Icon>
           </View>

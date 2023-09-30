@@ -96,7 +96,7 @@ export function Icon(props: IconProps) {
 export const iconRegistry = {
   back: require("../../assets/icons/back.png"),
   bell: require("../../assets/icons/bell.png"),
-  //caretLeft: require("../../assets/icons/caretLeft.png"),
+
   caretRight: require("../../assets/icons/caretRight.png"),
   check: require("../../assets/icons/check.png"),
   clap: require("../../assets/icons/clap.png"),
@@ -189,14 +189,16 @@ export const iconRegistry = {
   fluent_edit_outline: require("../../assets/icons/fluent_edit_outline.png"),
   fluent_add_cards: require("../../assets/icons/fluent_add_cards.png"),
 
-  //Icon set
   home: require("../../assets/icons/home.png"),
   play_sound: require("../../assets/icons/play_sound.png"),
   notes: require("../../assets/icons/notes.png"),
   undo: require("../../assets/icons/undo.png"),
   caret_left: require("../../assets/icons/caret_left.png"),
+  caret_right: require("../../assets/icons/caret_right.png"),
   moon: require("../../assets/icons/moon.png"),
   flashcards: require("../../assets/icons/flashcards.png"),
+  checkmark: require("../../assets/icons/checkmark.png"),
+  repeat_arrow: require("../../assets/icons/repeat_arrow.png"),
 }
 
 const $imageStyle: ImageStyle = {

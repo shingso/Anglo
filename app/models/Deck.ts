@@ -12,7 +12,7 @@ import {
 import { Deck_Fields } from "../utils/deckUtils"
 import { Flashcard, FlashcardModel, FlashcardSnapshotIn } from "./Flashcard"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { SortType, SoundOptions } from "../utils/consts"
+import { SortType, SoundLanguage, SoundOptions, TranslateLanguage } from "../utils/consts"
 import { getGlobalDeckById } from "../utils/globalDecksUtils"
 import {
   Global_Flashcard_Fields,
@@ -24,36 +24,12 @@ import {
   GlobalFlashcardModel,
   GlobalFlashcardSnapshotIn,
 } from "./GlobalFlashcard"
-import { CardProgress } from "./CardProgress"
+import { CardProgress, CardProgressSnapshotIn } from "./CardProgress"
 import { QueryModel, QuerySnapshotIn } from "./Query"
 
 /**
  * Model description here for TypeScript hints.
  */
-
-export enum SoundLanguage {
-  ENGLISH = "en-US",
-  SPANISH_MX = "es-MX", //Mexico spanish
-  KOREAN = "ko-KR",
-  GERMAN = "de-DE",
-  FRENCH = "fr-FR",
-  DUTCH = "nl-NL",
-  MANDARIN = "zh-CN",
-  JAPANESE = "ja-JP",
-  THAI = "th-TH",
-}
-
-export enum TranslateLanguage {
-  ENGLISH = "english",
-  SPANISH = "spanish",
-  KOREAN = "korean",
-  GERMAN = "german",
-  FRENCH = "french",
-  DUTCH = "dutch",
-  MANDARIN = "mandarin",
-  JAPANESE = "japanese",
-  THAI = "thai",
-}
 
 export const DeckModel = types
   .model("Deck")
@@ -69,10 +45,17 @@ export const DeckModel = types
     sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
     globalConflicts: types.optional(types.array(GlobalFlashcardModel), []),
     soundOption: types.optional(
-      types.enumeration([SoundOptions.CUSTOM, SoundOptions.FRONT, SoundOptions.BACK]),
+      types.enumeration([
+        SoundOptions.FRONT,
+        SoundOptions.BACK,
+        SoundOptions.EXTRA,
+        SoundOptions.EXTRA_ARRAY,
+        SoundOptions.SUB_HEADER,
+      ]),
       SoundOptions.FRONT,
     ),
     playSoundAutomatically: types.optional(types.boolean, false),
+    addNewCardsPerDay: types.optional(types.boolean, false),
     playSoundLanguage: types.optional(
       types.enumeration([
         SoundLanguage.ENGLISH,
@@ -150,7 +133,16 @@ export const DeckModel = types
       const queryIndex = self.queuedQueries.findIndex((curr) => curr.id === query.id)
       if (queryIndex != -1) {
         self.queuedQueries.splice(queryIndex, 1)
-        console.log("we remove the query", query)
+        console.log("we removed from the quuery", queryIndex)
+      }
+    },
+    removeFromQueriesByProgressId(id: string) {
+      const queryIndex = self.queuedQueries.findIndex(
+        (curr) => JSON.parse(curr.variables).id === id,
+      )
+      if (queryIndex != -1) {
+        self.queuedQueries.splice(queryIndex, 1)
+        console.log("we removed from the quuery", queryIndex)
       }
     },
     setTranslateLanguage(language: TranslateLanguage) {
@@ -164,6 +156,9 @@ export const DeckModel = types
     },
     togglePlaySoundAutomatically() {
       self.playSoundAutomatically = !self.playSoundAutomatically
+    },
+    toggleAddNewCardsPerDay() {
+      self.addNewCardsPerDay = !self.addNewCardsPerDay
     },
     getConflicts: flow(function* () {
       if (!self.global_deck_id) {
@@ -224,18 +219,15 @@ export const DeckModel = types
         destroy(flashcard)
       }
     },
-    deleteCardProgress: (cardProgress: CardProgress) => {
+    deleteCardProgress: (cardProgress: CardProgressSnapshotIn) => {
       const flashcard = self?.flashcards?.find((card) => card.id === cardProgress.flashcard_id)
       const progress = flashcard?.card_progress?.find((progress) => progress.id === cardProgress.id)
-      const mostRecentProgress = flashcard?.mostRecentProgress
       //ideally we would want to set our next_shown to the last card progress in the list if it doesnt
       if (progress) {
         destroy(progress)
-        if (mostRecentProgress && mostRecentProgress?.next_shown) {
-          flashcard.next_shown = mostRecentProgress.next_shown
-          console.log("destroyed", mostRecentProgress)
+        if (flashcard?.mostRecentProgress && flashcard?.mostRecentProgress?.next_shown) {
+          flashcard.next_shown = flashcard?.mostRecentProgress?.next_shown
         } else {
-          console.log("destroyeddfs", mostRecentProgress)
           flashcard.next_shown = new Date()
         }
         return true

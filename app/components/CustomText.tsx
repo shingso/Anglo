@@ -51,6 +51,8 @@ export interface CustomTextProps extends RNTextProps {
    * Children components.
    */
   children?: React.ReactNode
+
+  presetColors?: any
 }
 
 /**
@@ -61,12 +63,17 @@ export interface CustomTextProps extends RNTextProps {
  */
 export function CustomText(props: CustomTextProps) {
   const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
-
+  const theme = useTheme()
+  const $presetColors = {
+    default: theme.colors.foreground1,
+    secondary: theme.colors.foreground2,
+    brand: theme.colors.brandForeground1,
+  }
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
-  const theme = useTheme()
   const preset: Presets = $presets[props.preset] ? props.preset : "default"
-  const $styles = [$rtlStyle, $presets[preset], { color: theme.colors.foreground1 }, $styleOverride]
+  const colors: Presets = $presetColors[props.presetColors] ? props.presetColors : "default"
+  const $styles = [$rtlStyle, $presets[preset], { color: $presetColors[colors] }, $styleOverride]
 
   return (
     <View style={{ flexDirection: "row", flexWrap: "wrap" }}>

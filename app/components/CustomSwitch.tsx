@@ -13,6 +13,7 @@ import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { Easing, color } from "react-native-reanimated"
 import { useTheme } from "@react-navigation/native"
+import { useEffect } from "react"
 
 export interface CustomSwitchProps {
   /**
@@ -46,19 +47,20 @@ export const CustomSwitch = observer(function CustomSwitch(props: CustomSwitchPr
 
   const moveToggle = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [2, 28],
+    outputRange: [2, 22],
   })
 
   const color = isOn ? onColor : offColor
 
-  animatedValue.setValue(isOn ? 0 : 1)
-
-  Animated.timing(animatedValue, {
-    toValue: isOn ? 1 : 0,
-    duration: 300,
-    easing: Easing.linear,
-    useNativeDriver: false,
-  }).start()
+  useEffect(() => {
+    animatedValue.setValue(isOn ? 0 : 1)
+    Animated.timing(animatedValue, {
+      toValue: isOn ? 1 : 0,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false,
+    }).start()
+  }, [isOn])
 
   return (
     <View style={$container}>
@@ -87,7 +89,7 @@ const $container: ViewStyle = {
 }
 
 const $toggleContainer: ViewStyle = {
-  width: 56,
+  width: 50,
   height: 30,
   borderRadius: 15,
   justifyContent: "center",

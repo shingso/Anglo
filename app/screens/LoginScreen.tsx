@@ -226,13 +226,6 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             Dont have an account yet?
           </CustomText>
 
-          {/*      <CustomText
-            preset="body2Strong"
-            onPress={() => navigation.navigate(AppRoutes.USER_SETUP)}
-          >
-            User Setup
-          </CustomText> */}
-
           <View
             style={{
               flexDirection: "row",

@@ -65,11 +65,7 @@ export const GlobalConflictScreen: FC<GlobalConflictScreenProps> = observer(
     }
     return (
       <Screen style={$root}>
-        <Header
-          leftIcon="caretLeft"
-          onLeftPress={() => navigation.goBack()}
-          title={"Updates"}
-        ></Header>
+        <Header title={"Updates"}></Header>
         <View style={$container}>
           <FlatList
             keyExtractor={(item) => item.id}

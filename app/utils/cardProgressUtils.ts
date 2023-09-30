@@ -123,7 +123,9 @@ export const insertCardProgress = async (
   return null
 }
 
-export const deleteCardProgress = async (cardProgress: CardProgress): Promise<boolean> => {
+export const deleteCardProgress = async (
+  cardProgress: CardProgressSnapshotIn,
+): Promise<boolean> => {
   try {
     const { status, error } = await supabase
       .from("card_progress")

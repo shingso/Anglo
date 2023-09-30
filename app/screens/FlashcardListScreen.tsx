@@ -21,7 +21,7 @@ import {
   Text,
   TextField,
 } from "app/components"
-import { Deck, Flashcard, FlashcardModel, useStores } from "app/models"
+import { Deck, Flashcard, FlashcardModel, QueryFunctions, useStores } from "app/models"
 import { spacing, custom_colors, custom_palette } from "app/theme"
 import { format } from "date-fns"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
@@ -37,17 +37,13 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { showErrorToast } from "app/utils/errorUtils"
 import { deleteFlashcard, calculateFlashcardProgress } from "app/utils/flashcardUtils"
-import { removeFlashcardFromDeck } from "app/utils/deckUtils"
-import { borderRadius } from "app/theme/borderRadius"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "app/models"
-
+import { v4 as uuidv4 } from "uuid"
 interface FlashcardListScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"FlashcardList">> {}
 
 export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
   function FlashcardListScreen() {
-    const { deckStore } = useStores()
+    const { deckStore, settingsStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const theme = useTheme()
     const flashcards = deckStore?.selectedDeck?.flashcards
@@ -84,10 +80,17 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
     }
 
     const removeFlashcard = async (flashcard: Flashcard, deck: Deck) => {
-      const deleted = await removeFlashcardFromDeck(flashcard, deck)
-      if (deleted) {
-        selectedFlashcardModalRef.current.close()
+      if (settingsStore.isOffline) {
+        const deleteQuery = {
+          id: uuidv4(),
+          variables: JSON.stringify(flashcard),
+          function: QueryFunctions.DELETE_FLASHCARD,
+        }
+        deck.addToQueuedQueries(deleteQuery)
       }
+      deck.deleteFlashcard(flashcard)
+      const isCardDeleted = await deleteFlashcard(flashcard)
+      selectedFlashcardModalRef.current.close()
       setDeleteFlashcardModalVisible(false)
     }
 
@@ -226,7 +229,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 Add new flashcard
               </CustomText>
 
-              <LineWord text="or"></LineWord>
+              {/*  <LineWord text="or"></LineWord>
               <Icon
                 color={theme.colors.foreground1}
                 icon="fluent_globe_search"
@@ -236,7 +239,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               ></Icon>
               <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
                 Search premade flashcards
-              </CustomText>
+              </CustomText> */}
             </View>
           )}
         </View>
@@ -278,13 +281,13 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             flashcard={selectedFlashcard}
             deck={deckStore.selectedDeck}
           ></EditFlashcard>
-          <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
+          {/*    <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
           <CustomText>Rep: {flashcardStatistics.currentRepetition}</CustomText>
           <CustomText>Max Time: {flashcardStatistics.timeElapsed}</CustomText>
           <CustomText>Left: {flashcardStatistics.correctSwipes}</CustomText>
           <CustomText>Middle: {flashcardStatistics.middleSwipe}</CustomText>
           <CustomText>Right: {flashcardStatistics.failedSwipe}</CustomText>
-          <CustomText>Total Swipes: {flashcardStatistics.total}</CustomText>
+          <CustomText>Total Swipes: {flashcardStatistics.total}</CustomText> */}
         </BottomSheet>
         <CustomModal
           mainAction={() => removeFlashcard(selectedFlashcard, deckStore.selectedDeck)}

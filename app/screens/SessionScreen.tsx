@@ -75,7 +75,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       longestElapsed: 0,
       //how many have moved onto the next level? because just right might be failed + success
     })
-    const currentFlashcards = deck.sessionCards
+    const currentFlashcards = deck?.sessionCards
     const currentFlashcard = currentFlashcards?.length > 0 ? currentFlashcards[0] : null
     const [newNote, setNewNote] = useState("")
     const notesModalRef = useRef<BottomSheetModal>()
@@ -85,8 +85,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       () => (!!currentFlashcard && !!currentFlashcard?.notes ? currentFlashcard.notes : null),
       [currentFlashcard],
     )
-    const [previousProgressId, setPreviousProgressId] = useState(null)
-    const [sessionProgressLog, setSessionProgressLog] = useState([])
+    const [sessionProgressLog, setSessionProgressLog] = useState<CardProgressSnapshotIn[]>([])
 
     useEffect(() => {
       reloadDefaultSettings()
@@ -98,16 +97,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       }
       //this is to make the tutorial modal pop up
       //loadSettings()
-
-      //we need to set the initial previous id for the undo button
-      const loadPreviousProgressId = async () => {
-        const { localId } = await returnRemoteAndLocalMostRecent()
-        //console.log("we have the local id here!!!", localId)
-        if (localId) {
-          setPreviousProgressId(localId)
-        }
-      }
-      loadPreviousProgressId()
     }, [])
 
     const navigateHome = () => {
@@ -144,6 +133,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           function: QueryFunctions.INSERT_CARD_PROGRESS,
         })
       }
+      //Add to card progress automatically updates the flashcard next shown
       flashcard.addToCardProgress(progress)
       const response = await addToFlashcardProgress(progress)
       return progress
@@ -231,37 +221,38 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
 
     const undo = async () => {
       if (!sessionProgressLog || sessionProgressLog?.length === 0) {
-        showErrorToast("Error", "Could not undo")
+        showErrorToast("Could not undo")
       }
 
       const lastProgressLog = sessionProgressLog[sessionProgressLog?.length - 1]
       //if we find it inside the queue array then we delete it else can can query this statement
-
-      const deletedRemote = await deleteCardProgress(lastProgressLog)
       //TODO confirm deck was deleted/add error handling if it was not deleted
-      deckStore.selectedDeck.deleteCardProgress(lastProgressLog)
-      //we can assume that it exists because it doesnt exists in the logs
-
-      //if it does exits in the queued queries then all we need to do is remove it
-      //else we can fire the delete card progress -> if it exists -> if we are offline/fails -> add to the quied queries
-
-      const undoTimeShown = subMinutes(
-        new Date(),
-        lastProgressLog?.[Card_Progress_Fields.TIME_ELAPSED],
-      )
-      const undoFlashcard = deckStore?.selectedDeck?.getFlashcardById(lastProgressLog.flashcard_id)
-      const updatedFlashcard = {
-        [Flashcard_Fields.ID]: undoFlashcard.id,
-        [Flashcard_Fields.NEXT_SHOWN]: undoTimeShown,
+      //TODO this can still cause a problem if the session lost connection mid way as in it was online -> then offline -> undo
+      //in this case we would need to add the delete card progress into our array -> for now we might be able to reply that we could not undo
+      if (settingsStore.isOffline) {
+        deckStore.selectedDeck.removeFromQueriesByProgressId(lastProgressLog?.id)
+      } else {
+        const deletedRemote = await deleteCardProgress(lastProgressLog)
+        const undoTimeShown = subMinutes(
+          new Date(),
+          lastProgressLog?.[Card_Progress_Fields.TIME_ELAPSED],
+        )
+        const undoFlashcard = deckStore?.selectedDeck?.getFlashcardById(
+          lastProgressLog.flashcard_id,
+        )
+        const updatedFlashcard = {
+          [Flashcard_Fields.ID]: undoFlashcard.id,
+          [Flashcard_Fields.NEXT_SHOWN]: undoTimeShown,
+        }
+        const flashcardResponse = await updateFlashcard(updatedFlashcard)
       }
-      const flashcardResponse = await updateFlashcard(updatedFlashcard)
-      //setFlashcardNextShown(undoFlashcard, undoTimeShown)
-      //remove the processed undo progress from log
+
       setSessionProgressLog((prev) => {
         return [...prev.filter((progress) => progress.id !== lastProgressLog.id)]
       })
-      deckStore.selectedDeck.addFlashcardToSession(lastProgressLog.flashcard_id)
 
+      deckStore.selectedDeck.addFlashcardToSession(lastProgressLog.flashcard_id)
+      deckStore.selectedDeck.deleteCardProgress(lastProgressLog)
       //Fix all of the sync data
       // - Set it to the last card progress that was inserted before it -> we can find this out by...looking at the deckstore
       // or we can ge tit by looking at the local store in general
@@ -288,6 +279,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         return [progressId]
       })
     }
+
     const hasSessionCards = deck?.sessionCards && deck?.sessionCards?.length > 0
     return (
       <Screen style={$root}>

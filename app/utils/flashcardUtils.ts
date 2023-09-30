@@ -32,6 +32,21 @@ export enum Flashcard_Fields {
   DIFFICULTIY = "difficulty",
 }
 
+const mapFlashcardToInput = (flashcard: any) => {
+  return {
+    [Flashcard_Fields.DECK_ID]: flashcard.deck_id,
+    [Flashcard_Fields.FRONT]: flashcard.front,
+    [Flashcard_Fields.BACK]: flashcard?.back,
+    [Flashcard_Fields.EXTRA]: flashcard?.extra,
+    [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard.extra_array : [],
+    [Flashcard_Fields.SUB_HEADER]: flashcard?.sub_header,
+    [Flashcard_Fields.TYPE]: flashcard?.type,
+    [Flashcard_Fields.DIFFICULTIY]: flashcard?.difficulty,
+    [Flashcard_Fields.PICTURE_URL]: flashcard.picture_url,
+    [Flashcard_Fields.ID]: flashcard?.id,
+  }
+}
+
 export const mapReponseToFlashcard = (flashcard: FlashcardSnapshotIn): FlashcardSnapshotIn => {
   return {
     [Flashcard_Fields.ID]: flashcard?.id,
@@ -70,20 +85,7 @@ export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn>
   try {
     const { data, error } = await supabase
       .from("flashcards")
-      .insert([
-        {
-          [Flashcard_Fields.DECK_ID]: flashcard.deck_id,
-          [Flashcard_Fields.FRONT]: flashcard.front,
-          [Flashcard_Fields.BACK]: flashcard?.back,
-          [Flashcard_Fields.EXTRA]: flashcard?.extra,
-          [Flashcard_Fields.EXTRA_ARRAY]: flashcard?.extra_array ? flashcard.extra_array : [],
-          [Flashcard_Fields.SUB_HEADER]: flashcard?.sub_header,
-          [Flashcard_Fields.TYPE]: flashcard?.type,
-          [Flashcard_Fields.DIFFICULTIY]: flashcard?.difficulty,
-          [Flashcard_Fields.PICTURE_URL]: flashcard.picture_url,
-          [Flashcard_Fields.ID]: flashcard?.id,
-        },
-      ])
+      .insert([mapFlashcardToInput(flashcard)])
       .select()
     console.log("we are logging the response to this", data, error)
     if (data && data.length > 0) {

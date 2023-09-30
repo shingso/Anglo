@@ -40,12 +40,8 @@ import {
 // @ts-ignore
 export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscribe">> = observer(
   function SubscribeScreen() {
-    // Pull in navigation via hook
-    // const navigation = useNavigation()
     const { confirmPayment, presentPaymentSheet } = useStripe()
-    const { subscriptionStore } = useStores()
-    const [products, setProducts] = useState([])
-
+    const { subscriptionStore, settingsStore } = useStores()
     const { isPlatformPaySupported, confirmPlatformPayPayment } = usePlatformPay()
 
     useEffect(() => {
@@ -84,6 +80,10 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const endSubscription = async () => {
+      if (settingsStore?.isOffline) {
+        showErrorToast("Currently offline", "Go online to cancel your subscription")
+        return
+      }
       if (subscriptionStore?.subscription?.subscription_id) {
         console.log("ending subscription")
         cancelSubscription(subscriptionStore?.subscription?.subscription_id)
@@ -93,6 +93,10 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const initializeSubscriptionPaymentSheet = async () => {
+      if (settingsStore?.isOffline) {
+        showErrorToast("Currently offline", "Go online to subscribe")
+        return
+      }
       const {
         paymentIntent: paymentInput,
         ephemeralKey,
@@ -117,6 +121,10 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const initializePaymentSheet = async (subLength: string) => {
+      if (settingsStore?.isOffline) {
+        showErrorToast("Currently offline", "Go online to subscribe")
+        return
+      }
       const {
         paymentIntent: paymentIntentInput,
         ephemeralKey,

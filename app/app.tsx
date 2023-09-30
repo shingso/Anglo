@@ -122,19 +122,13 @@ function App(props: AppProps) {
     return (
       <View style={{ paddingRight: spacing.size200 }}>
         {text1 && !text2 && (
-          <CustomText
-            style={{ color: custom_palette.white, marginBottom: spacing.size20 }}
-            preset="body2"
-          >
+          <CustomText style={{ color: custom_palette.white }} preset="body2">
             {text1}
           </CustomText>
         )}
         {text1 && text2 && (
           <View>
-            <CustomText
-              style={{ color: custom_palette.white, marginBottom: spacing.size20 }}
-              preset="body2Strong"
-            >
+            <CustomText style={{ color: custom_palette.white }} preset="body2Strong">
               {text1}
             </CustomText>
             <CustomText style={{ color: custom_palette.white }} preset="caption1">

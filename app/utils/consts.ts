@@ -1,4 +1,5 @@
 import { IconTypes } from "app/components/Icon"
+
 import { Dimensions } from "react-native"
 
 export const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -87,7 +88,77 @@ export const SortTypeIcon: { [key: string]: IconTypes } = {
 }
 
 export enum SoundOptions {
-  CUSTOM = "custom",
   FRONT = "front",
   BACK = "back",
+  EXTRA = "extra",
+  SUB_HEADER = "sub_header",
+  EXTRA_ARRAY = "extra_array",
 }
+
+export enum SoundLanguage {
+  ENGLISH = "en-US",
+  SPANISH_MX = "es-MX", //Mexico spanish
+  KOREAN = "ko-KR",
+  GERMAN = "de-DE",
+  FRENCH = "fr-FR",
+  DUTCH = "nl-NL",
+  MANDARIN = "zh-CN",
+  JAPANESE = "ja-JP",
+  THAI = "th-TH",
+}
+
+export enum TranslateLanguage {
+  ENGLISH = "english",
+  SPANISH = "spanish",
+  KOREAN = "korean",
+  GERMAN = "german",
+  FRENCH = "french",
+  DUTCH = "dutch",
+  MANDARIN = "mandarin",
+  JAPANESE = "japanese",
+  THAI = "thai",
+}
+
+export const aiLanguageOptions = [
+  TranslateLanguage.ENGLISH,
+  TranslateLanguage.SPANISH,
+  TranslateLanguage.MANDARIN,
+  TranslateLanguage.GERMAN,
+  TranslateLanguage.JAPANESE,
+  TranslateLanguage.FRENCH,
+  TranslateLanguage.KOREAN,
+  TranslateLanguage.DUTCH,
+  TranslateLanguage.THAI,
+]
+
+export const languageLabels = {
+  [SoundLanguage.ENGLISH]: "English",
+  [SoundLanguage.SPANISH_MX]: "Spanish",
+  [SoundLanguage.MANDARIN]: "Mandarin",
+  [SoundLanguage.GERMAN]: "German",
+  [SoundLanguage.JAPANESE]: "Japanese",
+  [SoundLanguage.FRENCH]: "French",
+  [SoundLanguage.KOREAN]: "Korean",
+  [SoundLanguage.DUTCH]: "Dutch",
+  [SoundLanguage.THAI]: "Thai",
+}
+
+export const soundLanguageOptions = [
+  SoundLanguage.ENGLISH,
+  SoundLanguage.SPANISH_MX,
+  SoundLanguage.MANDARIN,
+  SoundLanguage.GERMAN,
+  SoundLanguage.JAPANESE,
+  SoundLanguage.FRENCH,
+  SoundLanguage.KOREAN,
+  SoundLanguage.DUTCH,
+  SoundLanguage.THAI,
+]
+
+export const soundSettingOptions = [
+  SoundOptions.FRONT,
+  SoundOptions.BACK,
+  SoundOptions.EXTRA,
+  SoundOptions.EXTRA_ARRAY,
+  SoundOptions.SUB_HEADER,
+]

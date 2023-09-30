@@ -45,7 +45,6 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
   } = props
   const $styles = [$styleOverride]
 
-  const [editing, setEditing] = useState(false)
   const [text, setText] = useState(initialValue)
   const theme = useTheme()
   const textInputRef = useRef<TextInput>(null)
@@ -62,64 +61,46 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
   }, [])
 
   useEffect(() => {
+    setText(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
     if (focus) {
-      setEditing(true)
       textInputRef?.current?.focus()
     }
   }, [focus])
-
-  const handleTap = () => {
-    setEditing(true)
-  }
 
   const handleTextChange = (value) => {
     setText(value)
   }
 
   const handleBlur = () => {
-    setEditing(false)
     onSubmit(text)
   }
 
   return (
-    <TouchableOpacity onPress={handleTap}>
-      {editing ? (
-        <TextInput
-          ref={textInputRef}
-          style={[
-            $presets?.[preset] ? $presets[preset] : null,
-            $styles,
-            {
-              color: theme.colors.foreground1,
-              padding: 0,
-            },
-          ]}
-          value={text}
-          onChangeText={handleTextChange}
-          onBlur={handleBlur}
-          autoFocus
-          blurOnSubmit={true}
-          placeholderTextColor={theme.colors.foreground2}
-          testID={testID + "_edit"}
-          multiline={multiline}
-          placeholder={placeholder}
-        />
-      ) : (
-        <CustomText
-          testID={testID}
-          style={[$styles, !text ? $placeholderStyle : {}]}
-          preset={preset}
-        >
-          {text || placeholder}
-        </CustomText>
-      )}
-    </TouchableOpacity>
+    <TextInput
+      ref={textInputRef}
+      style={[
+        $presets?.[preset] ? $presets[preset] : null,
+        $styles,
+        {
+          color: theme.colors.foreground1,
+          padding: 0,
+        },
+      ]}
+      value={text}
+      onChangeText={handleTextChange}
+      onBlur={handleBlur}
+      autoFocus={false}
+      blurOnSubmit={true}
+      placeholderTextColor={theme.colors.foreground2}
+      testID={testID + "_edit"}
+      multiline={true}
+      placeholder={placeholder}
+    />
   )
 })
-
-const $container: ViewStyle = {
-  justifyContent: "center",
-}
 
 const $text: TextStyle = {
   fontFamily: typography.primary.normal,

@@ -13,6 +13,7 @@ import { supabase } from "../services/supabase/supabase"
 import { ScrollView } from "react-native-gesture-handler"
 import { AppRoutes, AppStackParamList } from "../utils/consts"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
+import { importGlobalDeckById } from "app/utils/globalDecksUtils"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -28,42 +29,25 @@ import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 // @ts-ignore
 export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">> = observer(
   function DeckAddScreen({ route }) {
+    const { deck } = route.params
     const { deckStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-
-    const { deck } = route.params
     const flashcards = deck.private_global_flashcards
+
     useEffect(() => {
       navigation.setOptions({ headerTitle: deck?.title })
     }, [])
 
     const importDeck = async () => {
-      cloneDeck(deck.id, deck.title)
+      const newDeck = await importGlobalDeckById(deck.id, deck.title, newPerDay)
+      if (newDeck && newDeck?.id) {
+        deckStore.addDeckFromRemote(newDeck?.id)
+      }
       navigation.navigate(AppRoutes.DECKS)
     }
 
     const [startingValue, setStartingValue] = useState(10)
     const [newPerDay, setNewPerDay] = useState(3)
-
-    const addNewRemoteDeckToStore = async (id: string) => {
-      const deckResponse = await getDeck(id)
-      if (deckResponse) {
-        deckStore.addDeck(deckResponse)
-      }
-    }
-
-    const cloneDeck = async (deck_id: String, deck_title: String) => {
-      let { data: deck, error } = await supabase.rpc("import_global_deck", {
-        deck_id: deck_id,
-        deck_title: deck_title,
-        [Deck_Fields.NEW_PER_DAY]: newPerDay,
-      })
-      if (deck?.id) {
-        const res = await addNewRemoteDeckToStore(deck.id)
-        const localDeck = deckStore.getDeckById(deck.id)
-        addCardsToShow(localDeck, startingValue)
-      }
-    }
 
     return (
       <Screen style={$root}>
@@ -82,16 +66,6 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
             {deck.description}
           </CustomText>
         ) : null}
-
-        {/*  <View style={{ marginVertical: spacing.medium }}>
-          <CustomText preset="body1Strong">Initial Starting</CustomText>
-          <CustomText preset="caption1">How many cards do you plan on studying now?</CustomText>
-        </View>
-
-        <View style={{ marginVertical: spacing.medium }}>
-          <CustomText preset="body1Strong">Cards Per Day</CustomText>
-          <CustomText preset="caption1">The amount of new cards added per day</CustomText>
-        </View> */}
         <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
           {flashcards?.length} cards
         </CustomText>
@@ -132,23 +106,4 @@ const $root: ViewStyle = {
   flex: 1,
   padding: spacing.size200,
   backgroundColor: custom_colors.background5,
-}
-
-const $dropdown: ViewStyle = {
-  borderWidth: 0,
-}
-
-const $dropdownContainer: ViewStyle = {
-  borderWidth: 0,
-  borderTopWidth: 1,
-  borderTopColor: colors.border,
-}
-
-const $dropdownSelectedContainer: ViewStyle = {
-  backgroundColor: colors.palette.neutral300,
-}
-
-const $dropdownSelectedLabel: TextStyle = {
-  color: colors.white,
-  fontFamily: typography.primary.medium,
 }

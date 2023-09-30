@@ -7,6 +7,7 @@ import { Button, Card, CustomText, Icon, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Education_Levels, User, updateUser } from "../utils/userUtils"
 import { importGlobalDeckById } from "app/utils/globalDecksUtils"
+import { useStores } from "app/models"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -26,7 +27,7 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
 
     // Pull in navigation via hook
     // const navigation = useNavigation()
-
+    const { deckStore } = useStores()
     const promoDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
 
     const educationList = Object.values(Education_Levels).map((level) => {
@@ -40,16 +41,17 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
       updateUser(user)
     }
 
-    const submitData = () => {}
-
     const importSATVocabDeck = async () => {
-      importGlobalDeckById("340a0dc1-3767-455d-a8f6-cad938ea9827", "SAT Vocabulary")
+      const deck = await importGlobalDeckById(promoDeckId, "SAT Vocabulary")
+      if (deck && deck?.id) {
+        deckStore.addDeckFromRemote(deck?.id)
+      }
     }
 
     return (
       <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
         <View style={$container}>
-          <CustomText preset="title1">Help us teach you</CustomText>
+          <CustomText preset="title1">Do you know your vocabulary?</CustomText>
           <CustomText></CustomText>
           <Card
             onPress={() => importSATVocabDeck()}
@@ -74,9 +76,6 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
               </View>
             }
           ></Card>
-          <Button style={{ marginTop: "auto" }} preset="custom_outline">
-            Save
-          </Button>
         </View>
       </Screen>
     )
