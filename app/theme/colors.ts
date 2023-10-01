@@ -239,7 +239,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   ...DefaultTheme,
-
+  dark: true,
   colors: {
     ...DefaultTheme.colors,
     background: custom_palette.grey8,
