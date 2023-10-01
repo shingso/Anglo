@@ -200,7 +200,11 @@ export function Screen(props: ScreenProps) {
 
   return (
     <View style={[$containerStyle, { backgroundColor: theme.colors.canvas }, $containerInsets]}>
-      <StatusBar style={statusBarStyle} {...StatusBarProps} />
+      <StatusBar
+        backgroundColor={theme.colors.canvas}
+        style={theme?.dark ? "light" : "dark"}
+        {...StatusBarProps}
+      />
 
       <KeyboardAvoidingView
         behavior={isIos ? "padding" : undefined}
