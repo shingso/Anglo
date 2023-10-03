@@ -54,7 +54,9 @@ export const Flashcard = observer(function Flashcard(props: FlashcardProps) {
               <CustomText style={$cardHeading} preset="largeTitle">
                 {card.front}
               </CustomText>
-              <CustomText preset="caption2">{card?.sub_header}</CustomText>
+              {card?.sub_header ? (
+                <CustomText preset="caption2">{card?.sub_header}</CustomText>
+              ) : null}
             </View>
           </View>
         }
@@ -130,8 +132,8 @@ const $contentContainer: ViewStyle = {
 
 const $cardImage: ImageStyle = {
   borderRadius: borderRadius.corner40,
-  height: 150,
-  width: 150,
+  height: 250,
+  width: "100%",
 }
 
 const $back: ViewStyle = {}

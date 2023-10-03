@@ -41,6 +41,7 @@ import { useTheme } from "@react-navigation/native"
 import { getAIDefinition } from "app/utils/openAiUtils"
 import { CustomModal } from "./CustomModal"
 import { v4 as uuidv4 } from "uuid"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 export interface EditFlashcardProps {
   /**
@@ -88,8 +89,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
       extraArrayRef?.current?.blur()
     })
-
-    // Clean up the listener when the component unmounts
     return () => {
       keyboardDidHideListener.remove()
     }
@@ -203,6 +202,10 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       }
     }
     return null
+  }
+
+  const removeImage = () => {
+    updateSelectedFlashcard(Flashcard_Fields.PICTURE_URL, "")
   }
 
   const updateSelectedFlashcard = (key: string, value: any) => {
@@ -421,12 +424,31 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         />
       </View>
       {selectedFlashcardReference?.picture_url ? (
-        <Image
-          style={{ height: 150, width: 150, borderRadius: borderRadius.corner80 }}
-          source={{
-            uri: selectedFlashcardReference?.picture_url,
-          }}
-        ></Image>
+        <View style={{ position: "relative" }}>
+          <View
+            style={{
+              position: "absolute",
+              right: 4,
+              top: 4,
+              zIndex: 20,
+              backgroundColor: theme.colors.background4,
+              justifyContent: "center",
+              alignItems: "center",
+              width: 24,
+              height: 24,
+              borderRadius: 40,
+            }}
+          >
+            <Icon onPress={() => removeImage()} icon="x" size={16}></Icon>
+          </View>
+
+          <Image
+            style={{ height: 250, width: "100%", borderRadius: borderRadius.corner80 }}
+            source={{
+              uri: selectedFlashcardReference?.picture_url,
+            }}
+          ></Image>
+        </View>
       ) : null}
 
       <CustomModal
