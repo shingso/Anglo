@@ -1,4 +1,4 @@
-import { Instance, SnapshotIn, SnapshotOut, flow, types } from "mobx-state-tree"
+import { Instance, SnapshotIn, SnapshotOut, flow, onSnapshot, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 import { Subscription, SubscriptionModel, SubscriptionSnapshotIn } from "./Subscription"
 import { getSubscription } from "../utils/subscriptionUtils"
@@ -26,11 +26,8 @@ export const SubscriptionStoreModel = types
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     getSubscription: flow(function* () {
-      //Will replace the store with the remote state
-
       const result: SubscriptionSnapshotIn[] = yield getSubscription()
       const subscriptionModel: Subscription = SubscriptionModel.create(result)
-
       self.subscription = subscriptionModel
       return result
     }),

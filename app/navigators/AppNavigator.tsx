@@ -191,6 +191,8 @@ const HomeScreens = () => {
       initialRouteName={AppRoutes.HOME}
       screenOptions={{
         headerShown: false,
+        //TODO fix on IOS we still need a better solution
+        animation: "slide_from_right",
         headerTitleAlign: "center",
         headerTitleStyle: { fontSize: 18, fontFamily: typography.primary.bold },
         header: (props) => {

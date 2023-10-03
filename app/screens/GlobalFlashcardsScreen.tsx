@@ -30,7 +30,6 @@ import {
   CustomModal,
   CustomText,
   CustomTag,
-  EditableText,
   EditFlashcard,
 } from "../components"
 import { colors, custom_colors, spacing, typography } from "../theme"

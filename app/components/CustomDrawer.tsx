@@ -228,7 +228,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           text="Smarter"
         ></DrawerItem>
         <DrawerItem
-          icon="fluent_settings_outline"
+          icon="settings"
           onPress={() => navigation.navigate(AppRoutes.SETTINGS)}
           text="Settings"
         ></DrawerItem>
