@@ -111,10 +111,7 @@ export const iconRegistry = {
   menu: require("../../assets/icons/menu.png"),
   more: require("../../assets/icons/more.png"),
   pin: require("../../assets/icons/pin.png"),
-  podcast: require("../../assets/icons/podcast.png"),
 
-  slack: require("../../assets/icons/slack.png"),
-  view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
 
   more_horiz: require("../../assets/icons/more_horiz.png"),
@@ -202,6 +199,7 @@ export const iconRegistry = {
   settings: require("../../assets/icons/fluent_settings_outline.png"),
   circle: require("../../assets/icons/circle.png"),
   circle_check_filled: require("../../assets/icons/circle_check_filled.png"),
+  dismiss: require("../../assets/icons/dismiss.png"),
 }
 
 const $imageStyle: ImageStyle = {

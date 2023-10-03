@@ -11,7 +11,8 @@ import { showErrorToast } from "./errorUtils"
 import { shuffle } from "./helperUtls"
 import { Deck, DeckSnapshotIn } from "../models/Deck"
 import { Flashcard } from "../models/Flashcard"
-
+import { QueryFunctions } from "app/models"
+import { v4 as uuidv4 } from "uuid"
 export enum Deck_Fields {
   ID = "id",
   TITLE = "title",
@@ -174,22 +175,4 @@ export const deleteDeck = async (id: string) => {
   try {
     const { data, error } = await supabase.from("decks").delete().eq(Deck_Fields.ID, id)
   } catch (error) {}
-}
-
-export const removeFlashcardFromDeck = async (
-  flashcard: Flashcard,
-  deck: Deck,
-): Promise<boolean> => {
-  console.log("we RAN have deleted")
-  const isCardDeleted = await deleteFlashcard(flashcard)
-
-  if (isCardDeleted) {
-    console.log("we have deleted")
-    deck.deleteFlashcard(flashcard)
-    return true
-  } else {
-    console.log("we have NOT deleted")
-    showErrorToast("Error", "Card was not deleted, please try again.")
-  }
-  return false
 }

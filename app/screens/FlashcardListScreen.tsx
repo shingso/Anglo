@@ -50,8 +50,13 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       ? deckStore?.selectedDeck?.flashcards
       : []
     const [searchTerm, setSearchTerm] = useState("")
-    const [sortOption, setSortOption] = useState(null)
+    const [sortOption, setSortOption] = useState(SortType.ACTIVE)
     const sortOptions = [SortType.DATE_ADDDED, SortType.ACTIVE, SortType.ALPHABETICAL]
+    const SortOptionLabels = {
+      [SortType.DATE_ADDDED]: "Date added",
+      [SortType.ACTIVE]: "Active",
+      [SortType.ALPHABETICAL]: "Alphabetical",
+    }
     const sortModalRef = useRef<BottomSheetModal>()
     const [deleteFlashcardModalVisible, setDeleteFlashcardModalVisible] = useState(false)
     const selectedFlashcardModalRef = useRef<BottomSheetModal>()
@@ -75,8 +80,8 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
     }
 
     const openEditFlashcard = () => {
-      selectedFlashcardModalRef?.current.present()
       setEditFlashcardVisible(true)
+      selectedFlashcardModalRef?.current.present()
     }
 
     const removeFlashcard = async (flashcard: Flashcard, deck: Deck) => {
@@ -122,12 +127,26 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             title={deckStore.selectedDeck?.title}
             customHeader={
               <View style={{ flexDirection: "row", gap: spacing.size200 }}>
-                <Icon
+                {/*         <Icon
                   icon="fluent_add_circle"
                   color={theme.colors.foreground1}
                   onPress={() => openAddNewFlashcard()}
                   size={22}
-                ></Icon>
+                ></Icon> */}
+                <Button
+                  /*       LeftAccessory={() => (
+                    <Icon
+                      icon="fluent_add_circle"
+                      color={"white"}
+                      style={{ marginRight: spacing.size80 }}
+                      onPress={() => openAddNewFlashcard()}
+                      size={16}
+                    ></Icon>
+                  )} */
+                  preset="custom_default_small"
+                >
+                  Add new
+                </Button>
                 {/*       <Icon
                   color={theme.colors.foreground1}
                   icon="fluent_globe_search"
@@ -155,6 +174,15 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 size={20}
               ></Icon>
             )}
+            RightAccessory={(props) => (
+              <Icon
+                containerStyle={props.style}
+                icon="dismiss"
+                onPress={() => setSearchTerm("")}
+                color={custom_colors.foreground3}
+                size={18}
+              ></Icon>
+            )}
             onChangeText={setSearchTerm}
           ></TextField>
 
@@ -174,14 +202,8 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                   style={{ color: theme.colors.brandBackground1 }}
                   preset="caption1Strong"
                 >
-                  Status
+                  Sorted by: {SortOptionLabels[sortOption]}
                 </CustomText>
-                <Icon
-                  icon="fluent_sort"
-                  onPress={() => sortModalRef?.current?.present()}
-                  color={theme.colors.brandBackground1}
-                  size={14}
-                ></Icon>
               </View>
             </View>
           ) : null}
@@ -212,7 +234,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 alignItems: "center",
               }}
             >
-              <CustomText style={{ marginBottom: spacing.size200 }} preset="title3">
+              <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
                 Add some cards
               </CustomText>
               <CustomText style={{ marginBottom: spacing.size200 }} preset="body2">
@@ -228,31 +250,39 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
                 Add new flashcard
               </CustomText>
-
-              {/*  <LineWord text="or"></LineWord>
-              <Icon
-                color={theme.colors.foreground1}
-                icon="fluent_globe_search"
-                style={{ marginBottom: spacing.size40 }}
-                onPress={() => openAddNewFlashcard()}
-                size={22}
-              ></Icon>
-              <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
-                Search premade flashcards
-              </CustomText> */}
             </View>
           )}
         </View>
 
-        <BottomSheet ref={sortModalRef} customSnap={["50%"]}>
-          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
-            Sort by
-          </CustomText>
+        <BottomSheet ref={sortModalRef} customSnap={["60%"]}>
+          <View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: spacing.size120,
+                paddingTop: spacing.size80,
+              }}
+            >
+              <CustomText preset="caption1" presetColors="secondary">
+                Sort flashcards by
+              </CustomText>
+            </View>
+            <View
+              style={{
+                height: 0.2,
+                backgroundColor: theme.colors.foreground3,
+                marginHorizontal: -16,
+                marginBottom: spacing.size120,
+              }}
+            ></View>
+          </View>
           <View>
             {sortOptions.map((option) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
+                    setSortOption(option)
                     deckStore?.selectedDeck?.sortFlashcardsByType(option)
                     sortModalRef?.current.dismiss()
                   }}
@@ -276,11 +306,13 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           ref={selectedFlashcardModalRef}
           customSnap={["85"]}
         >
-          <EditFlashcard
-            onDelete={() => setDeleteFlashcardModalVisible(true)}
-            flashcard={selectedFlashcard}
-            deck={deckStore.selectedDeck}
-          ></EditFlashcard>
+          {
+            <EditFlashcard
+              onDelete={() => setDeleteFlashcardModalVisible(true)}
+              flashcard={selectedFlashcard}
+              deck={deckStore.selectedDeck}
+            ></EditFlashcard>
+          }
           {/*    <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
           <CustomText>Rep: {flashcardStatistics.currentRepetition}</CustomText>
           <CustomText>Max Time: {flashcardStatistics.timeElapsed}</CustomText>
@@ -294,7 +326,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           mainActionLabel={"Delete"}
           secondaryAction={() => setDeleteFlashcardModalVisible(false)}
           visible={deleteFlashcardModalVisible}
-          header={"Warning"}
+          header={"Delete flashcard"}
           body={"Are you sure you want to delete this flashcard? This action cannot be undone"}
         ></CustomModal>
       </Screen>

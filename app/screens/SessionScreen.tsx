@@ -300,11 +300,11 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                     ? custom_colors.foreground3
                     : custom_colors.foreground1
                 }
-                size={30}
+                size={24}
               />
-              <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={26} />
-              <Icon onPress={() => showNotes()} icon="notes" size={28} />
-              <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={28} />
+              <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
+              <Icon onPress={() => showNotes()} icon="notes" size={24} />
+              <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
             </View>
           </View>
         )}
