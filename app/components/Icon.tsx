@@ -112,7 +112,7 @@ export const iconRegistry = {
   more: require("../../assets/icons/more.png"),
   pin: require("../../assets/icons/pin.png"),
   podcast: require("../../assets/icons/podcast.png"),
-  settings: require("../../assets/icons/settings.png"),
+
   slack: require("../../assets/icons/slack.png"),
   view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
@@ -160,7 +160,7 @@ export const iconRegistry = {
   fluent_edit: require("../../assets/icons/fluent_edit.png"),
   fluent_nav: require("../../assets/icons/fluent_nav.png"),
   fluent_settings: require("../../assets/icons/fluent_settings.png"),
-  fluent_settings_outline: require("../../assets/icons/fluent_settings_outline.png"),
+
   fluent_sort: require("../../assets/icons/fluent_sort.png"),
   fluent_add: require("../../assets/icons/fluent_add.png"),
   fluent_add_square: require("../../assets/icons/fluent_add_square.png"),
@@ -199,6 +199,9 @@ export const iconRegistry = {
   flashcards: require("../../assets/icons/flashcards.png"),
   checkmark: require("../../assets/icons/checkmark.png"),
   repeat_arrow: require("../../assets/icons/repeat_arrow.png"),
+  settings: require("../../assets/icons/fluent_settings_outline.png"),
+  circle: require("../../assets/icons/circle.png"),
+  circle_check_filled: require("../../assets/icons/circle_check_filled.png"),
 }
 
 const $imageStyle: ImageStyle = {
