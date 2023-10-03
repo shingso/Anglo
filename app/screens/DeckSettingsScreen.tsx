@@ -11,7 +11,6 @@ import {
   CustomRadioButton,
   CustomSwitch,
   CustomText,
-  EditableText,
   Header,
   Icon,
   LineWord,
@@ -87,7 +86,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
 
     const data = useMemo(
       () =>
-        Array(25)
+        Array(26)
           .fill(0)
           .map((_, index) => index),
       [],
@@ -133,20 +132,81 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
 
     const renderItem = useCallback(
       ({ item }) => (
-        <TouchableOpacity onPress={() => onSubmitNewCardsPerDay(item)}>
-          <View
-            style={{
-              paddingVertical: spacing.size160,
-              paddingHorizontal: spacing.size200,
-              backgroundColor: item === newPerDay ? custom_colors.background5 : null,
-            }}
-          >
-            <CustomText preset="body2">{item}</CustomText>
-          </View>
-        </TouchableOpacity>
+        <OptionComponent
+          key={item}
+          title={item}
+          onPress={onSubmitNewCardsPerDay}
+          option={item}
+          currentSelected={newPerDay}
+        ></OptionComponent>
       ),
       [newPerDay],
     )
+
+    const ModalHeader = (props) => {
+      const { title } = props
+      return (
+        <View>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              paddingBottom: spacing.size200,
+              paddingTop: spacing.size80,
+            }}
+          >
+            <CustomText preset="caption1" presetColors="secondary">
+              {title}
+            </CustomText>
+          </View>
+          <View
+            style={{
+              height: 0.2,
+              backgroundColor: theme.colors.foreground3,
+              marginHorizontal: -16,
+              marginBottom: spacing.size120,
+            }}
+          ></View>
+        </View>
+      )
+    }
+
+    const OptionComponent = (props) => {
+      const { option, title, onPress, currentSelected } = props
+      return (
+        <TouchableOpacity onPress={() => (onPress ? onPress(option) : null)} key={option}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Icon
+              icon={option === currentSelected ? "circle_check_filled" : "circle"}
+              size={22}
+              color={
+                option === currentSelected
+                  ? theme.colors.brandBackground1
+                  : theme.colors.foreground2
+              }
+              style={{ marginRight: spacing.size160 }}
+            ></Icon>
+            <View
+              style={{
+                borderBottomColor: theme.colors.foreground3,
+                borderBottomWidth: 0.3,
+                paddingVertical: spacing.size120 + spacing.size20,
+
+                flex: 1,
+                height: "100%",
+              }}
+            >
+              <CustomText preset="body2">{title}</CustomText>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )
+    }
 
     return (
       <Screen style={$root}>
@@ -181,7 +241,10 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 >
                   <TouchableOpacity onPress={() => openCardsPerDay()}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      <CustomText preset="body1" style={{ color: "#242424" }}>
+                      <CustomText
+                        preset="body1"
+                        presetColors={addNewCardsPerDay ? "brand" : "secondary"}
+                      >
                         {deckStore?.selectedDeck?.new_per_day} cards per day
                       </CustomText>
                       <Icon
@@ -233,9 +296,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 <TouchableOpacity onPress={() => openCardsPerDay()}>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <View>
-                      <CustomText preset="body1" style={{ color: "#242424" }}>
-                        Play sound automatically
-                      </CustomText>
+                      <CustomText preset="body1">Play sound automatically</CustomText>
                       <CustomText preset="caption2" presetColors={"secondary"}>
                         Sound will play when back is shown.
                       </CustomText>
@@ -276,9 +337,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     }}
                   >
                     <View>
-                      <CustomText preset="body1" style={{ color: "#242424" }}>
-                        {languageLabels[languageSettings]}
-                      </CustomText>
+                      <CustomText preset="body1">{languageLabels[languageSettings]}</CustomText>
                       <CustomText preset="caption2" presetColors={"secondary"}>
                         Language sound will be played in.
                       </CustomText>
@@ -307,9 +366,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     }}
                   >
                     <View>
-                      <CustomText preset="body1" style={{ color: "#242424" }}>
-                        Front
-                      </CustomText>
+                      <CustomText preset="body1">Front</CustomText>
                       <CustomText preset="caption2" presetColors={"secondary"}>
                         Field of the card that will be read.
                       </CustomText>
@@ -348,10 +405,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     }}
                   >
                     <View>
-                      <CustomText
-                        preset="body1"
-                        style={{ color: "#242424", marginBottom: spacing.size20 }}
-                      >
+                      <CustomText preset="body1" style={{ marginBottom: spacing.size20 }}>
                         {aiLanguage?.charAt(0)?.toUpperCase() + aiLanguage?.slice(1)}
                       </CustomText>
                       <CustomText preset="caption2" presetColors={"secondary"}>
@@ -404,19 +458,9 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           ></Card>
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
-          <View style={{ marginBottom: spacing.size200, marginTop: spacing.size120 }}>
-            <Icon
-              onPress={() => cardsPerDayModelRef?.current?.dismiss()}
-              style={{ marginBottom: spacing.size120 }}
-              size={26}
-              icon="x"
-            ></Icon>
-            <CustomText style={{ marginBottom: spacing.size160 }} preset="body1Strong">
-              New cards added per day
-            </CustomText>
-            <CustomText preset="body2">Set how many random cards will be added per day</CustomText>
-          </View>
+          <ModalHeader title={"Number of cards to be automatically each day"}></ModalHeader>
           <FlatList
+            contentContainerStyle={{ paddingBottom: 240 }}
             showsVerticalScrollIndicator={false}
             data={data}
             keyExtractor={(i) => i}
@@ -424,69 +468,50 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           ></FlatList>
         </BottomSheet>
 
-        <BottomSheet ref={aiLanguageModelRef} customSnap={["75%"]}>
-          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
-            Generate cards in language:
-          </CustomText>
-          <View>
-            {aiLanguageOptions.map((option) => {
-              return (
-                <TouchableOpacity onPress={() => setAILanguageSettings(option)} key={option}>
-                  <View style={{ paddingVertical: spacing.size100 }}>
-                    <CustomText
-                      style={option === aiLanguage ? { color: custom_palette.primary80 } : null}
-                      preset="body1Strong"
-                    >
-                      {option}
-                    </CustomText>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
+        <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"Use selected language for AI generated flashcards"}></ModalHeader>
+          {aiLanguageOptions.map((option) => {
+            return (
+              <OptionComponent
+                key={option}
+                title={option}
+                onPress={setAILanguageSettings}
+                option={option}
+                currentSelected={aiLanguage}
+              ></OptionComponent>
+            )
+          })}
         </BottomSheet>
 
-        <BottomSheet ref={soundLanguageModelRef} customSnap={["75%"]}>
-          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
-            Generate cards in language:
-          </CustomText>
+        <BottomSheet ref={soundLanguageModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"Sound will play in the selected language"}></ModalHeader>
           <View>
             {soundLanguageOptions.map((option) => {
               return (
-                <TouchableOpacity onPress={() => setPlayLanguageSetting(option)} key={option}>
-                  <View style={{ paddingVertical: spacing.size100 }}>
-                    <CustomText
-                      style={
-                        option === languageSettings ? { color: custom_palette.primary80 } : null
-                      }
-                      preset="body1Strong"
-                    >
-                      {languageLabels[option]}
-                    </CustomText>
-                  </View>
-                </TouchableOpacity>
+                <OptionComponent
+                  key={option}
+                  title={languageLabels[option]}
+                  onPress={setPlayLanguageSetting}
+                  option={option}
+                  currentSelected={languageSettings}
+                ></OptionComponent>
               )
             })}
           </View>
         </BottomSheet>
 
-        <BottomSheet ref={soundSettingsModelRef} customSnap={["75%"]}>
-          <CustomText style={{ marginVertical: spacing.size120 }} preset="body1Strong">
-            Play sound for:
-          </CustomText>
+        <BottomSheet ref={soundSettingsModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"Sound will play for the selected field"}></ModalHeader>
           <View>
             {soundSettingOptions.map((option) => {
               return (
-                <TouchableOpacity onPress={() => setSoundOption(option)} key={option}>
-                  <View style={{ paddingVertical: spacing.size100 }}>
-                    <CustomText
-                      style={option === soundSettings ? { color: custom_palette.primary80 } : null}
-                      preset="body1Strong"
-                    >
-                      {option}
-                    </CustomText>
-                  </View>
-                </TouchableOpacity>
+                <OptionComponent
+                  key={option}
+                  title={option}
+                  onPress={setSoundOption}
+                  option={option}
+                  currentSelected={soundSettings}
+                ></OptionComponent>
               )
             })}
           </View>
