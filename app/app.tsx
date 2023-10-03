@@ -170,9 +170,8 @@ function App(props: AppProps) {
         }}
       >
         <StripeProvider
-          publishableKey={
-            "pk_test_51NJMe6FbJw5QnWpVUZQKgzRHNzhdlM7xGl7AQaGh05j4yjhKUnsZfoB9d6KlRZ3IZt1yJ3AVtmVsMImH5G1EOiHJ00f7TywaIf"
-          }
+          publishableKey={Config.STRIPE_API_PK}
+          //TODO stripe settings
           merchantIdentifier="merchant.identifier" // required for Apple Pay
           urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
         >

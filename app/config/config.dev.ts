@@ -7,4 +7,6 @@
  */
 export default {
   API_URL: "https://api.rss2json.com/v1/",
+  STRIPE_API_PK:
+    "pk_test_51NJMe6FbJw5QnWpVUZQKgzRHNzhdlM7xGl7AQaGh05j4yjhKUnsZfoB9d6KlRZ3IZt1yJ3AVtmVsMImH5G1EOiHJ00f7TywaIf",
 }
