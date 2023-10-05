@@ -38,6 +38,7 @@ import {
   FreeStudySessionScreen,
   DeckHomeScreen,
   GlobalDecksScreen,
+  MultiAddAiScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
@@ -153,6 +154,7 @@ const AboutStackScreens = () => {
         }}
         component={TermsOfServiceScreen}
       />
+
       <Stack.Screen
         name={AppRoutes.PRIVACY_POLICY}
         options={{
@@ -214,6 +216,13 @@ const HomeScreens = () => {
         }}
         name={AppRoutes.TUTORIAL}
         component={TutorialScreen}
+      />
+      <Stack.Screen
+        name={AppRoutes.MUTLI_ADD_AI}
+        options={{
+          headerShown: true,
+        }}
+        component={MultiAddAiScreen}
       />
       <Stack.Screen
         options={{

@@ -26,8 +26,8 @@ import {
   QueryFunctions,
   useStores,
 } from "../models"
-import { colors, custom_colors, custom_palette, spacing } from "../theme"
-import { useNavigation } from "@react-navigation/native"
+import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import {
   loadOrInitalizeSettings,
   reloadDefaultSettings,
@@ -66,6 +66,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
   function SessionScreen() {
     const { deckStore, settingsStore } = useStores()
     const deck = deckStore.selectedDeck
+    const theme = useTheme()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [sessionStats, setSessionStats] = useState({
       right: 0,
@@ -283,32 +284,34 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const hasSessionCards = deck?.sessionCards && deck?.sessionCards?.length > 0
     return (
       <Screen style={$root}>
-        <Header title={deck.title}></Header>
-        {hasSessionCards && (
-          <View style={$count_container}>
-            <CustomText
-              preset="body1Strong"
-              text={deck?.sessionCards?.length.toString()}
-            ></CustomText>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
-              <Icon
-                onPress={() => undo()}
-                disabled={sessionProgressLog.length === 0}
-                icon="undo"
-                color={
-                  sessionProgressLog.length === 0
-                    ? custom_colors.foreground3
-                    : custom_colors.foreground1
-                }
-                size={24}
-              />
-              <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
-              <Icon onPress={() => showNotes()} icon="notes" size={24} />
-              <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
+        <Header
+          title={deck.title}
+          customHeader={
+            <View style={$count_container}>
+              <CustomText
+                preset="title2"
+                style={{ marginRight: spacing.size320, fontFamily: typography.primary.normal }}
+                text={deck?.sessionCards?.length.toString()}
+              ></CustomText>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
+                <Icon
+                  onPress={() => undo()}
+                  disabled={sessionProgressLog.length === 0}
+                  icon="undo"
+                  color={
+                    sessionProgressLog.length === 0
+                      ? theme.colors.foreground3
+                      : theme.colors.foreground1
+                  }
+                  size={24}
+                />
+                <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
+                <Icon onPress={() => showNotes()} icon="notes" size={24} />
+                <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
+              </View>
             </View>
-          </View>
-        )}
-
+          }
+        ></Header>
         {hasSessionCards ? (
           <SwipeCards
             currentDeck={deckStore.selectedDeck}
@@ -465,12 +468,7 @@ const $count_container: ViewStyle = {
   flexDirection: "row",
   alignContent: "center",
   justifyContent: "space-between",
-  borderColor: custom_colors.background5,
-  // borderBottomWidth: 0.6,
-  //borderTopWidth: 0.6,
   alignItems: "center",
-  paddingHorizontal: spacing.extraLarge,
-  paddingTop: spacing.size200,
 }
 
 const $sessions_statistics: ViewStyle = {

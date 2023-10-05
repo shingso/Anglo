@@ -457,7 +457,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         mainActionLabel={"Close"}
         visible={errorModalVisible}
         header={"Rate limit reached"}
-        body={"You've reached the free limit of 3 AI generated cards per day. Subscribe for more."}
+        body={"You've reached the free limit of 20 AI generated cards per day. Subscribe for more."}
       ></CustomModal>
     </View>
   )

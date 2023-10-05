@@ -26,6 +26,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/consts"
 import { updateMostRecentLocalId } from "../utils/remote_sync/remoteSyncUtils"
 import { borderRadius } from "../theme/borderRadius"
 import { CustomText } from "./CustomText"
+import { HEADER_HEIGHT } from "./Header"
 
 export interface SwipeCardsProps {
   /**
@@ -266,8 +267,8 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
 
 const $container: ViewStyle = {
   justifyContent: "center",
-  //TODO: Figure out the exact number
-  height: SCREEN_HEIGHT - 110,
+
+  height: SCREEN_HEIGHT - HEADER_HEIGHT,
   width: "100%",
 
   padding: spacing.large,

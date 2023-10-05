@@ -41,6 +41,7 @@ export type AppStackParamList = {
   Free_Study: undefined
   Free_Study_Session: undefined
   Deck_Home: undefined
+  Multi_Add_AI: undefined
 }
 
 export enum AppRoutes {
@@ -73,6 +74,7 @@ export enum AppRoutes {
   FREE_STUDY = "Free_Study",
   FREE_STUDY_SESSION = "Free_Study_Session",
   DECK_HOME = "Deck_Home",
+  MUTLI_ADD_AI = "Multi_Add_AI",
 }
 
 export const SortTypeLabels = {

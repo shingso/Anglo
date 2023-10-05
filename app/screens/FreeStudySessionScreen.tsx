@@ -19,7 +19,7 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { useStores, Flashcard, CardProgressSnapshotIn } from "app/models"
-import { spacing, custom_colors, colors } from "app/theme"
+import { spacing, custom_colors, colors, typography } from "app/theme"
 import { Card_Progress_Fields, deleteCardProgress } from "app/utils/cardProgressUtils"
 import { AppStackParamList, AppRoutes } from "app/utils/consts"
 import { showErrorToast } from "app/utils/errorUtils"
@@ -88,39 +88,33 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
     const pronouceCurrentWord = () => {
       Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        Speech.speak(currentFlashcards[0]?.back)
+        const soundOption = deckStore?.selectedDeck?.soundOption
+        const languageOption = deckStore?.selectedDeck?.playSoundLanguage
+        if (currentFlashcards[0]?.[soundOption.toString()]) {
+          Speech.speak(currentFlashcards[0]?.[soundOption.toString()], { language: languageOption })
+        }
       }
     }
 
     return (
       <Screen style={$root}>
-        <Header containerStyle={{ zIndex: 1, elevation: 4 }} title={deck.title}></Header>
-        {deck?.sessionCards && deck?.sessionCards?.length > 0 && (
-          <View style={$count_container}>
-            <Text style={$count_style} text={deck?.sessionCards?.length.toString()} />
-            <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size320 }}>
-              <Icon
-                onPress={() => editFlashcard()}
-                icon="fluent_edit_outline"
-                color={custom_colors.foreground1}
-                size={26}
-              />
-              <Icon
-                onPress={() => showNotes()}
-                icon="fluent_note_edit"
-                color={custom_colors.foreground1}
-                size={28}
-              />
-              <Icon
-                icon="sound"
-                onPress={() => pronouceCurrentWord()}
-                color={custom_colors.foreground1}
-                size={28}
-              />
+        <Header
+          title={deck.title}
+          customHeader={
+            <View style={$count_container}>
+              <CustomText
+                preset="title2"
+                style={{ marginRight: spacing.size320, fontFamily: typography.primary.normal }}
+                text={deck?.sessionCards?.length.toString()}
+              ></CustomText>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
+                <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
+                <Icon onPress={() => showNotes()} icon="notes" size={24} />
+                <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
+              </View>
             </View>
-          </View>
-        )}
-
+          }
+        ></Header>
         {deck?.sessionCards && deck?.sessionCards?.length > 0 ? (
           <SwipeCards
             currentDeck={deckStore.selectedDeck}
@@ -184,7 +178,6 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
             />
           </View>
         </BottomSheet>
-
         <BottomSheet
           onDismiss={() => deckStore.selectedDeck.removeSelectedFlashcard()}
           ref={selectedFlashcardModalRef}
@@ -212,12 +205,7 @@ const $count_container: ViewStyle = {
   flexDirection: "row",
   alignContent: "center",
   justifyContent: "space-between",
-  borderColor: custom_colors.background5,
-  // borderBottomWidth: 0.6,
-  borderTopWidth: 0.6,
   alignItems: "center",
-  paddingHorizontal: spacing.extraLarge,
-  paddingTop: spacing.size200,
 }
 
 const $sessions_statistics: ViewStyle = {
@@ -231,35 +219,6 @@ const $count_style: TextStyle = {
   marginRight: 2,
   lineHeight: 24,
   textAlignVertical: "center",
-}
-
-const $modal: ViewStyle = {
-  backgroundColor: "white",
-  padding: 0,
-  borderRadius: 8,
-  //animationIn="zoomIn"
-  //animationOut="zoomOut"
-}
-
-const $buttons_container: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "flex-end",
-}
-
-const $modal_header: ViewStyle = {
-  paddingBottom: spacing.small,
-  paddingHorizontal: spacing.medium,
-  marginHorizontal: -spacing.medium,
-  borderBottomWidth: 1,
-  borderBottomColor: colors.border,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-}
-
-const $modal_header_title: TextStyle = {
-  fontSize: 18,
-  fontWeight: "bold",
 }
 
 const $text_input_wrapper: ViewStyle = {
@@ -276,21 +235,4 @@ const $notes_container: ViewStyle = {
   justifyContent: "space-between",
   alignContent: "center",
   marginBottom: spacing.large,
-}
-
-const $tutorial_title: TextStyle = {
-  marginBottom: spacing.medium,
-}
-
-const $confirm_leave_container: ViewStyle = {
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}
-
-const $confirm_leave_actions: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-around",
-  width: "100%",
 }

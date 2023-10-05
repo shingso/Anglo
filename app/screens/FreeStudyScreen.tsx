@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { FlatList, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
-import { Button, FlashcardListItem, Icon, Screen, Text } from "app/components"
+import { Button, FlashcardListItem, Icon, Screen, Text, TextField } from "app/components"
 import { FlashcardModel, useStores } from "app/models"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 import { useNavigation } from "@react-navigation/native"
@@ -20,6 +20,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
   const flashcards = deckStore?.selectedDeck?.flashcards ? deckStore?.selectedDeck?.flashcards : []
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
   const [unselectedFlashcards, setUnselectedFlashcards] = useState([])
+  const [searchTerm, setSearchTerm] = useState<string>("")
 
   const addToUnselectedFlashcards = (flashcardId: string) => {
     setUnselectedFlashcards((prev) => {
@@ -56,7 +57,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
   return (
     <Screen style={$root} preset="fixed">
       <View style={$container}>
-        <View style={{ flexDirection: "row", gap: spacing.size100 }}>
+        <View style={{ flexDirection: "row", gap: spacing.size100, flexWrap: "wrap" }}>
           <Button
             style={{ marginBottom: spacing.size120 }}
             onPress={() => clearUnselectedFlashcards()}
@@ -78,18 +79,49 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           >
             Inactive
           </Button>
-          {/*      <Button
+          <Button
             style={{ marginBottom: spacing.size120 }}
             onPress={() => goToFreeStudySession()}
             preset="custom_secondary_small"
           >
             Start
-          </Button> */}
+          </Button>
         </View>
+        <TextField
+          value={searchTerm}
+          autoCorrect={false}
+          autoCapitalize={"none"}
+          autoComplete={"off"}
+          placeholder="Search"
+          containerStyle={{
+            marginBottom: spacing.size120,
+          }}
+          LeftAccessory={(props) => (
+            <Icon
+              containerStyle={props.style}
+              icon="search"
+              color={custom_colors.foreground3}
+              size={20}
+            ></Icon>
+          )}
+          RightAccessory={(props) => (
+            <Icon
+              containerStyle={props.style}
+              icon="dismiss"
+              onPress={() => setSearchTerm("")}
+              color={custom_colors.foreground3}
+              size={18}
+            ></Icon>
+          )}
+          onChangeText={setSearchTerm}
+        ></TextField>
+
         <FlatList
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          data={getSnapshot(flashcards as IStateTreeNode)}
+          data={getSnapshot(flashcards as IStateTreeNode).filter(
+            (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
+          )}
           renderItem={({ item, index }) => (
             <FlashcardListItem
               onPress={() =>

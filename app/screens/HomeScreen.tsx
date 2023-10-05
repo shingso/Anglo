@@ -51,20 +51,12 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
 
-    const goToTutorial = async () => {
-      const res = await getTutorialSeen()
-      if (res === null && deckStore?.decks?.length <= 0) {
-        navigation.navigate(AppRoutes.TUTORIAL)
-        saveTutorialSeen(true)
-      }
-    }
-
     useEffect(() => {
       //getGlobalDeckConflicts()
       addNewCardsToShowToDecks()
       //TODO Figure these out we do always want to go to tutorail check and getUserBought deck/subscription status
       // getMostRecentCardProgress()
-      goToTutorial()
+
       // boughtDeckStore.getUserBoughtDecks()
     }, [])
 
