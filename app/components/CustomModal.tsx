@@ -57,7 +57,9 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
           <CustomText preset="body1Strong" style={{ marginBottom: spacing.size120 }}>
             {header}
           </CustomText>
-          <CustomText preset="body2">{body}</CustomText>
+          <CustomText presetColors="secondary" preset="body2">
+            {body}
+          </CustomText>
         </View>
         {children && <View style={{ marginBottom: spacing.size160 }}>{children}</View>}
         <View style={{ flexDirection: "row", gap: spacing.size120 }}>

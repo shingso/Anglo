@@ -26,6 +26,7 @@ import {
 } from "./GlobalFlashcard"
 import { CardProgress, CardProgressSnapshotIn } from "./CardProgress"
 import { QueryModel, QuerySnapshotIn } from "./Query"
+import { CustomPromptModel } from "./CustomPrompt"
 
 /**
  * Model description here for TypeScript hints.
@@ -43,6 +44,7 @@ export const DeckModel = types
     [Deck_Fields.LAST_GLOBAL_SYNC]: types.maybe(types.Date), //this is used for global deck syncing
     selectedFlashcard: types.maybe(types.safeReference(FlashcardModel)),
     sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
+    customPrompts: types.optional(CustomPromptModel, {}),
     globalConflicts: types.optional(types.array(GlobalFlashcardModel), []),
     soundOption: types.optional(
       types.enumeration([

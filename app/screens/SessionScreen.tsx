@@ -290,7 +290,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             <View style={$count_container}>
               <CustomText
                 preset="title2"
-                style={{ marginRight: spacing.size320, fontFamily: typography.primary.normal }}
+                style={{ marginLeft: spacing.size120, fontFamily: typography.primary.normal }}
                 text={deck?.sessionCards?.length.toString()}
               ></CustomText>
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
@@ -327,76 +327,25 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             swipeRight={() => navigateHome()}
             children={
               <View style={$sessions_statistics}>
-                <CustomText preset="body1">Lorum</CustomText>
-                <View
-                  style={{
-                    borderColor: custom_palette.grey82,
-                    borderWidth: 1.2,
-                    width: "100%",
-                    padding: spacing.size120,
-                    borderRadius: borderRadius.corner80,
-                  }}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Icon
-                      style={{ marginRight: spacing.size80 }}
-                      icon="fluent_lightbulb"
-                      size={20}
-                    ></Icon>
-                    <CustomText>Cards passed : {sessionStats.left}</CustomText>
+                <CustomText preset="title1" style={{ fontFamily: typography.primary.light }}>
+                  The progress you've made
+                </CustomText>
+                <View style={{ gap: spacing.size160 }}>
+                  <View>
+                    <CustomText preset="body1">{sessionStats.left}</CustomText>
+                    <CustomText preset="caption1">Cards passed</CustomText>
                   </View>
-                </View>
-                <View
-                  style={{
-                    borderColor: custom_palette.grey82,
-                    borderWidth: 1.2,
-                    width: "100%",
-                    padding: spacing.size120,
-                    borderRadius: borderRadius.corner80,
-                  }}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Icon
-                      style={{ marginRight: spacing.size80 }}
-                      icon="fluent_lightbulb"
-                      size={20}
-                    ></Icon>
-                    <CustomText>Total card reviewed: {sessionStats.totalSwipes}</CustomText>
+                  <View>
+                    <CustomText preset="body1">{sessionStats.totalSwipes}</CustomText>
+                    <CustomText preset="caption1">Total swipes</CustomText>
                   </View>
-                </View>
-                <View
-                  style={{
-                    borderColor: custom_palette.grey82,
-                    borderWidth: 1.2,
-                    width: "100%",
-                    padding: spacing.size120,
-                    borderRadius: borderRadius.corner80,
-                  }}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Icon
-                      style={{ marginRight: spacing.size80 }}
-                      icon="fluent_lightbulb"
-                      size={20}
-                    ></Icon>
-                    <CustomText>
-                      Longest Elapsed: {millisecondsToTime(sessionStats?.longestElapsed * 60000)}
+                  <View>
+                    <CustomText preset="body1">
+                      {millisecondsToTime(sessionStats?.longestElapsed * 60000)}
                     </CustomText>
+                    <CustomText preset="caption1">Longest recall period</CustomText>
                   </View>
                 </View>
-                {/* <CustomText style={{ marginBottom: spacing.size200 }} preset="title2">
-                  Horray! You have just learned more words
-                </CustomText>
-                <CustomText>Passed</CustomText>
-                <CustomText>{sessionStats.left}</CustomText>
-                <CustomText>Redo: {sessionStats.right}</CustomText>
-                <CustomText>Total card reviewed: {sessionStats.totalSwipes}</CustomText>
-                <CustomText>
-                  Largest Elapsed: {millisecondsToTime(sessionStats?.longestElapsed * 60000)}
-                </CustomText>
-                <CustomText style={{ marginTop: "auto" }} preset="caption1Strong">
-                  Swipe to go back home
-                </CustomText> */}
               </View>
             }
           ></CustomSwipeCards>
@@ -469,6 +418,8 @@ const $count_container: ViewStyle = {
   alignContent: "center",
   justifyContent: "space-between",
   alignItems: "center",
+
+  flex: 1,
 }
 
 const $sessions_statistics: ViewStyle = {
