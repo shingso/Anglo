@@ -81,42 +81,13 @@ export const BottomSheet = forwardRef(function BottomSheet(
         ref={bottomSheetRef}
         snapPoints={snapPoints}
       >
-        <View style={{ flex: 1 }}>
-          <View style={$modal_header}>
-            <View style={$buttons_container}>
-              {header && <View style={$header}>{header}</View>}
-              {title && <CustomText preset="body2Strong">{title}</CustomText>}
-            </View>
-          </View>
-          <View style={$modal_content}>{children}</View>
-        </View>
+        <View style={$styles}>{children}</View>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   )
 })
 
 const $container: ViewStyle = {
-  justifyContent: "center",
-}
-
-const $modal_header: ViewStyle = {
-  paddingHorizontal: spacing.large,
-  //borderBottomWidth: 1,
-  //borderBottomColor: colors.border,
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-}
-
-const $modal_content: ViewStyle = { paddingHorizontal: spacing.medium }
-
-const $buttons_container: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  width: "100%",
-  justifyContent: "center",
-}
-
-const $header: ViewStyle = {
+  paddingHorizontal: spacing.size160,
   flex: 1,
 }
