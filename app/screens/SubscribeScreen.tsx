@@ -25,6 +25,7 @@ import {
   processProductPayment,
   processSubscriptionPayment,
 } from "app/utils/subscriptionUtils"
+import { isAfter } from "date-fns"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -43,6 +44,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     const { confirmPayment, presentPaymentSheet } = useStripe()
     const { subscriptionStore, settingsStore } = useStores()
     const { isPlatformPaySupported, confirmPlatformPayPayment } = usePlatformPay()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
       const getGooglePaySupport = async () => {
@@ -85,8 +87,11 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         return
       }
       if (subscriptionStore?.subscription?.subscription_id) {
-        console.log("ending subscription")
-        cancelSubscription(subscriptionStore?.subscription?.subscription_id)
+        const res = await subscriptionStore.subscription.cancelSubscription()
+        if (!res) {
+          showErrorToast("Error occured when trying to cancel subscription")
+        }
+        //TODO add a response for the cancel subscription ->  it can only be the main subscrition cancel
       } else {
         console.log("could not end because no id")
       }
@@ -97,6 +102,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         showErrorToast("Currently offline", "Go online to subscribe")
         return
       }
+      setLoading(true)
       const {
         paymentIntent: paymentInput,
         ephemeralKey,
@@ -118,6 +124,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       if (paymentIntent?.status == "Succeeded") {
         subscriptionStore.getSubscription()
       }
+      setLoading(false)
     }
 
     const initializePaymentSheet = async (subLength: string) => {
@@ -125,6 +132,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         showErrorToast("Currently offline", "Go online to subscribe")
         return
       }
+      setLoading(true)
       const {
         paymentIntent: paymentIntentInput,
         ephemeralKey,
@@ -146,6 +154,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       if (paymentIntent?.status == "Succeeded") {
         subscriptionStore.getSubscription()
       }
+      setLoading(false)
     }
 
     const SubscriptionFeaturesList = () => {
@@ -204,13 +213,14 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
 
     return (
       <Screen style={$root} preset="scroll">
-        {!subscriptionStore?.hasActiveSubscription ? (
+        {!subscriptionStore?.hasActiveSubscription() ? (
           <View style={$container}>
             <CustomText style={{ marginBottom: spacing.size160 }}>
               Cancel anytime, no fees, simple and hassle free
             </CustomText>
             <SubscriptionFeaturesList></SubscriptionFeaturesList>
             <Card
+              disabled={loading}
               onPress={() => initializeSubscriptionPaymentSheet()}
               style={{
                 marginBottom: spacing.size160,
@@ -317,6 +327,8 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             <CustomText preset="title2" style={{ marginBottom: spacing.size200 }}>
               You currently have an active subscription
             </CustomText>
+            <CustomText>{JSON.stringify(subscriptionStore.subscription)}</CustomText>
+
             <SubscriptionFeaturesList></SubscriptionFeaturesList>
             <Card
               onPress={() => endSubscription()}

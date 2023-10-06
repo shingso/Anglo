@@ -34,6 +34,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     const selectedDeck = deckStore?.selectedDeck
     const globalDeckId = selectedDeck?.global_deck_id
     const [importPurchasedDeckVisible, setImportPurchasedDeckVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
       const setPaidFlashcards = async () => {
@@ -68,6 +69,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     }
 
     const initializePaymentSheet = async () => {
+      setLoading(true)
       const {
         paymentIntent: paymentInput,
         ephemeralKey,
@@ -94,6 +96,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         setImportPurchasedDeckVisible(true)
         boughtDeckStore.addToBoughtDecks(globalDeckId)
       }
+      setLoading(false)
     }
 
     const getPaidGlobalFlashcards = async () => {
