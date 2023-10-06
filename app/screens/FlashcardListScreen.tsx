@@ -104,10 +104,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       openEditFlashcard()
     }
 
-    const goToGlobalFlashcards = () => {
-      navigation.navigate(AppRoutes.GLOBAL_FLASHCARDS)
-    }
-
     const selectFlashcard = (flashcard: Flashcard) => {
       deckStore.selectedDeck.selectFlashcard(flashcard)
       openEditFlashcard()
