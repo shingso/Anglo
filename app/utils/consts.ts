@@ -20,7 +20,6 @@ export type AppStackParamList = {
   Decks: undefined
   Flashcard_List: undefined
   Global_Decks: undefined
-  Global_Flashcards: undefined
   Deck_Add: { deck: any }
   Settings: undefined
   About: undefined
@@ -53,7 +52,6 @@ export enum AppRoutes {
   SESSION = "Session",
   FLASHCARD_LIST = "Flashcard_List",
   GLOBAL_DECKS = "Global_Decks",
-  GLOBAL_FLASHCARDS = "Global_Flashcards",
   DECK_ADD = "Deck_Add",
   SETTINGS = "Settings",
   PASSWORD_RESET = "Password_Reset",

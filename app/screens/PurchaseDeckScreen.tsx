@@ -37,16 +37,6 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-      const setPaidFlashcards = async () => {
-        const cards = await getGlobalDeckById(globalDeckId)
-        const paidCard = cards?.global_flashcards?.filter((card) => !card.free)
-        setPaidCardsPreview(paidCard)
-      }
-
-      setPaidFlashcards()
-    }, [])
-
-    useEffect(() => {
       const setPurchasabeDeck = async () => {
         const paidCount = await getPaidFlashcardsCountByDeckId(globalDeckId)
         setPaidCardsCount(paidCount)

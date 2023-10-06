@@ -260,7 +260,6 @@ const HomeScreens = () => {
         }}
         component={PurchaseDeckScreen}
       />
-      <Stack.Screen name={AppRoutes.GLOBAL_FLASHCARDS} component={GlobalFlashcardsScreen} />
       <Stack.Screen name={AppRoutes.GLOBAL_CONFLICT} component={GlobalConflictScreen} />
       <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
       <Stack.Screen name={AppRoutes.SESSION} component={SessionScreen} />

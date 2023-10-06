@@ -167,7 +167,7 @@ export const DeckModel = types
         return
       }
       const originalGlobalDeck = yield getGlobalDeckById(self.global_deck_id)
-      const globalFlashcards = originalGlobalDeck.global_flashcards
+      const globalFlashcards = originalGlobalDeck.private_global_flashcards
       const conflicts: GlobalFlashcardSnapshotIn[] = []
       globalFlashcards.forEach((card) => {
         if (
