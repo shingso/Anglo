@@ -122,6 +122,7 @@ export const DeckModel = types
     },
 
     doesDeckAlreadyContainFlashcard(front: String) {
+      if (!front) return false
       return !!self.flashcards.find((flashcard) => flashcard.front === front)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
