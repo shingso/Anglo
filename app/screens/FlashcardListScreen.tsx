@@ -143,6 +143,22 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                       size={16}
                     ></Icon>
                   )} */
+                  onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
+                  preset="custom_default_small"
+                >
+                  AI
+                </Button>
+                <Button
+                  /*       LeftAccessory={() => (
+                    <Icon
+                      icon="fluent_add_circle"
+                      color={"white"}
+                      style={{ marginRight: spacing.size80 }}
+                      onPress={() => openAddNewFlashcard()}
+                      size={16}
+                    ></Icon>
+                  )} */
+                  onPress={() => openAddNewFlashcard()}
                   preset="custom_default_small"
                 >
                   Add new

@@ -11,9 +11,11 @@ import {
   CustomRadioButton,
   CustomSwitch,
   CustomText,
+  HEADER_HEIGHT,
   Header,
   Icon,
   LineWord,
+  PromptSettings,
   Screen,
   Text,
   TextField,
@@ -32,10 +34,11 @@ import {
   SoundLanguage,
   TranslateLanguage,
   soundSettingOptions,
+  SCREEN_HEIGHT,
 } from "../utils/consts"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
-import { FlatList } from "react-native-gesture-handler"
+import { FlatList, ScrollView } from "react-native-gesture-handler"
 import { borderRadius } from "app/theme/borderRadius"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -60,6 +63,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
     const aiLanguageModelRef = useRef<BottomSheetModal>()
+    const customPromptModelRef = useRef<BottomSheetModal>()
     const soundLanguageModelRef = useRef<BottomSheetModal>()
     const soundSettingsModelRef = useRef<BottomSheetModal>()
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
@@ -209,7 +213,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     }
 
     return (
-      <Screen style={$root}>
+      <Screen style={$root} preset="scroll">
         <Header title={"Settings"}></Header>
         <View style={$container}>
           {/*   <EditableText
@@ -409,8 +413,44 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                         {aiLanguage?.charAt(0)?.toUpperCase() + aiLanguage?.slice(1)}
                       </CustomText>
                       <CustomText preset="caption2" presetColors={"secondary"}>
-                        AI will currently translate the card into when generating a flashcard.
+                        AI will create the response in selected language.
                       </CustomText>
+                    </View>
+                    <Icon
+                      icon="caret_right"
+                      color="#242424"
+                      style={{ marginLeft: spacing.size80 }}
+                      size={16}
+                    ></Icon>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            }
+          ></Card>
+
+          <Card
+            disabled={true}
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size160,
+              minHeight: 0,
+              elevation: 0,
+              marginTop: spacing.size80,
+              marginBottom: spacing.size80,
+              borderRadius: 16,
+            }}
+            ContentComponent={
+              <View>
+                <TouchableOpacity onPress={() => customPromptModelRef?.current?.present()}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      <CustomText preset="body1">Set custom prompts</CustomText>
                     </View>
                     <Icon
                       icon="caret_right"
@@ -459,13 +499,20 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
           <ModalHeader title={"Number of cards to be automatically each day"}></ModalHeader>
-          <FlatList
+          <ScrollView
             contentContainerStyle={{ paddingBottom: 240 }}
             showsVerticalScrollIndicator={false}
-            data={data}
-            keyExtractor={(i) => i}
-            renderItem={renderItem}
-          ></FlatList>
+          >
+            {data.map((num) => (
+              <OptionComponent
+                key={num}
+                title={num}
+                onPress={onSubmitNewCardsPerDay}
+                option={num}
+                currentSelected={newPerDay}
+              ></OptionComponent>
+            ))}
+          </ScrollView>
         </BottomSheet>
 
         <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
@@ -481,6 +528,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               ></OptionComponent>
             )
           })}
+        </BottomSheet>
+
+        <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"Set custom prompts for fields"}></ModalHeader>
+          <PromptSettings deck={selectedDeck}></PromptSettings>
         </BottomSheet>
 
         <BottomSheet ref={soundLanguageModelRef} customSnap={["85%"]}>
@@ -550,4 +602,6 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   padding: spacing.size200,
   height: "100%",
+  //TODO figure better way to determine this height
+  minHeight: SCREEN_HEIGHT - HEADER_HEIGHT,
 }

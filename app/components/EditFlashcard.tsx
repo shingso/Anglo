@@ -10,7 +10,7 @@ import {
   Keyboard,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, custom_colors, spacing, typography } from "app/theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { borderRadius } from "app/theme/borderRadius"
 import { CustomTag } from "./CustomTag"
@@ -42,6 +42,7 @@ import { getAIDefinition } from "app/utils/openAiUtils"
 import { CustomModal } from "./CustomModal"
 import { v4 as uuidv4 } from "uuid"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { Loading } from "./Loading"
 
 export interface EditFlashcardProps {
   /**
@@ -80,7 +81,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
   )
-
+  const deckCustomPrompts = deck?.customPrompts
   useEffect(() => {
     setSelectedFlashcard(mapToEditableFlashcard(flashcard))
   }, [flashcard])
@@ -122,8 +123,17 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       if (deck?.translateLanguage && deck?.translateLanguage != "english") {
         language = deck?.translateLanguage
       }
+
       setLoading(true)
-      const data = await getAIDefinition(selectedFlashcardReference?.front, language)
+      const data = await getAIDefinition(
+        selectedFlashcardReference?.front,
+        language,
+        deckCustomPrompts?.backPrompt,
+        deckCustomPrompts?.extraPrompt,
+        deckCustomPrompts?.extraArrayPrompt,
+        deckCustomPrompts?.subheaderPrompt,
+      )
+      console.log(data, "ai call")
       if (!!data?.error) {
         setErrorModalVisible(true)
         setLoading(false)
@@ -133,9 +143,10 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       if (data) {
         setSelectedFlashcard((prev) => ({
           ...prev,
-          back: data?.definition,
+          back: data?.back,
           extra: data?.extra,
-          extra_array: [...prev.extra_array, ...(data?.synonyms || [])],
+          sub_header: data?.subheader,
+          extra_array: [...(data?.extra_array || [])],
         }))
       }
     }
@@ -258,6 +269,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       const updatedFlashcard = await updateFlashcard(flashcardReference)
     }
   }
+  //check if flashcard exists -> if it does display a modal else dont
 
   const [focusBack, setFocusBack] = useState(false)
   const [focusCaption, setFocusCaption] = useState(false)
@@ -293,19 +305,15 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       {loading && (
         <View
           style={{
-            zIndex: 1000,
-            height: "100%",
-            width: "100%",
+            zIndex: 1,
             position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
             top: 0,
-            right: 0,
-            left: 0,
             bottom: 0,
+            right: -spacing.size160,
+            left: -spacing.size160,
           }}
         >
-          <ActivityIndicator size={32}></ActivityIndicator>
+          <Loading></Loading>
         </View>
       )}
       {flashcard?.next_shown ? (
@@ -320,6 +328,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
             gap: spacing.size280,
             alignSelf: "flex-end",
             flex: 1,
+            marginTop: spacing.size40,
             justifyContent: "flex-end",
           }}
         >
@@ -353,6 +362,12 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           </View>
         </View>
       </View>
+      {!flashcard && deck?.doesDeckAlreadyContainFlashcard(selectedFlashcardReference?.front) ? (
+        <CustomText preset="caption1" presetColors={"danger"}>
+          Duplicate front
+        </CustomText>
+      ) : null}
+
       <EditableText
         style={{ marginBottom: spacing.size120 }}
         preset="title1"
@@ -464,7 +479,8 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 })
 
 const $container: ViewStyle = {
-  justifyContent: "center",
+  flex: 1,
+  paddingBottom: spacing.size200,
 }
 
 const $modal_header: ViewStyle = {

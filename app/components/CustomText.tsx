@@ -68,6 +68,7 @@ export function CustomText(props: CustomTextProps) {
     default: theme.colors.foreground1,
     secondary: theme.colors.foreground2,
     brand: theme.colors.brandForeground1,
+    danger: theme.colors.dangerForeground2,
   }
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children

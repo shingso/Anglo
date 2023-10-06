@@ -8,6 +8,8 @@ import {
   CustomText,
   Flashcard,
   FlashcardListItem,
+  HEADER_HEIGHT,
+  Loading,
   Screen,
   Text,
   TextField,
@@ -18,6 +20,7 @@ import { showSuccessToast } from "app/utils/errorUtils"
 import { Flashcard_Fields, addFlashcard } from "app/utils/flashcardUtils"
 import { getAIDefinition } from "app/utils/openAiUtils"
 import { v4 as uuidv4 } from "uuid"
+import { SCREEN_HEIGHT } from "@gorhom/bottom-sheet"
 
 interface MultiAddAiScreenProps extends AppStackScreenProps<"MultiAddAi"> {}
 
@@ -39,7 +42,10 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
   const submitInput = () => {
     if (input) {
-      addToWords(input)
+      const parsedInput = input?.split(",")
+      parsedInput.forEach((word) => {
+        addToWords(word?.trim())
+      })
       setInput("")
     }
   }
@@ -56,7 +62,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
     for await (const word of words) {
       const data = await getAIDefinition(word)
-
+      setLoading(true)
       if (data) {
         //check if valid flashcard
         if (!data?.definition) return
@@ -64,15 +70,16 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
           [Flashcard_Fields.ID]: uuidv4(),
           [Flashcard_Fields.DECK_ID]: selectedDeck.id,
           [Flashcard_Fields.FRONT]: word,
-          [Flashcard_Fields.BACK]: data.definition,
+          [Flashcard_Fields.BACK]: data.back,
           [Flashcard_Fields.EXTRA]: data.extra ? data.extra : null,
-          [Flashcard_Fields.EXTRA_ARRAY]: data?.synonyms ? data.synonyms : [],
+          [Flashcard_Fields.EXTRA_ARRAY]: data?.extra_array ? data.extra_array : [],
         }
         const addedFlashcard = await addFlashcard(flashcard)
         selectedDeck.addFlashcard(addedFlashcard)
         !!addedFlashcard ? success.push(word) : errors.push(word)
       }
     }
+    setLoading(false)
     setResults(success)
     setErrors(errors)
     showSuccessToast(`${success.length} cards generated`)
@@ -82,43 +89,62 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
   // const navigation = useNavigation()
   return (
     <Screen style={$root} preset="scroll">
-      <View
-        style={{
-          flexDirection: "row",
-          marginBottom: spacing.size320,
-          flexWrap: "wrap",
-          gap: spacing.size80,
-        }}
-      >
-        {words.map((word) => {
-          return <CustomTag onPress={() => removeWord(word)} key={word} text={word}></CustomTag>
-        })}
-      </View>
-      <TextField
-        placeholder="Add words to create multiple flashcards with AI"
-        onChangeText={setInput}
-        value={input}
-        blurOnSubmit={false}
-        containerStyle={{ marginBottom: spacing.size400 }}
-        onSubmitEditing={submitInput}
-      ></TextField>
+      <View style={{ height: "100%" }}>
+        {/*   <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: -20,
+            bottom: 0,
+            left: -20,
+            zIndex: 1,
+          }}
+        >
+          <Loading></Loading>
+        </View> */}
+        <View style={$container}>
+          <View
+            style={{
+              flexDirection: "row",
+              marginBottom: spacing.size320,
+              flexWrap: "wrap",
+              gap: spacing.size80,
+            }}
+          >
+            {words.map((word) => {
+              return <CustomTag onPress={() => removeWord(word)} key={word} text={word}></CustomTag>
+            })}
+          </View>
+          <TextField
+            placeholder="Add words to create multiple flashcards with AI"
+            onChangeText={setInput}
+            value={input}
+            blurOnSubmit={false}
+            containerStyle={{ marginBottom: spacing.size400 }}
+            onSubmitEditing={submitInput}
+          ></TextField>
 
-      <Button onPress={() => generateCards()} preset="custom_default">
-        Generate cards
-      </Button>
+          <Button onPress={() => generateCards()} preset="custom_default">
+            Generate cards
+          </Button>
 
-      {results && (
-        <View style={{ marginTop: spacing.size200 }}>
-          {results.map((word) => {
-            return <FlashcardListItem flashcard={{ front: word }}></FlashcardListItem>
-          })}
+          {results && (
+            <View style={{ marginTop: spacing.size200 }}>
+              {results.map((word) => {
+                return <FlashcardListItem flashcard={{ front: word }}></FlashcardListItem>
+              })}
+            </View>
+          )}
         </View>
-      )}
+      </View>
     </Screen>
   )
 })
 
 const $root: ViewStyle = {
   flex: 1,
+}
+
+const $container: ViewStyle = {
   padding: spacing.size200,
 }

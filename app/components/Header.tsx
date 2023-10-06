@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from "react-native"
 import { isRTL, translate } from "../i18n"
-import { colors, custom_colors, spacing } from "../theme"
+import { colors, custom_colors, custom_palette, spacing } from "../theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
@@ -149,8 +149,9 @@ interface HeaderActionProps {
  */
 export function Header(props: HeaderProps) {
   const navigation = useNavigation()
+  const theme = useTheme()
   const {
-    backgroundColor = "transparent",
+    backgroundColor = theme.colors.canvas,
     //backgroundColor = theme.colors.background2,
     LeftActionComponent,
     leftIcon,
@@ -216,17 +217,19 @@ export function Header(props: HeaderProps) {
             /> */}
           </View>
         )}
-        {customHeader && customHeader}
-        {/*         <HeaderAction
-          tx={rightTx}
-          text={rightText}
-          icon={rightIcon}
-          iconColor={rightIconColor}
-          onPress={onRightPress}
-          txOptions={rightTxOptions}
-          backgroundColor={backgroundColor}
-          ActionComponent={RightActionComponent}
-        /> */}
+        {!!customHeader && customHeader}
+        {rightIcon && (
+          <HeaderAction
+            tx={rightTx}
+            text={rightText}
+            icon={rightIcon}
+            iconColor={rightIconColor}
+            onPress={onRightPress}
+            txOptions={rightTxOptions}
+            backgroundColor={backgroundColor}
+            ActionComponent={RightActionComponent}
+          />
+        )}
       </View>
     </View>
   )
@@ -254,6 +257,17 @@ function HeaderAction(props: HeaderActionProps) {
 
   if (icon) {
     return (
+      /*   <View
+        style={{
+          width: 44,
+          height: 44,
+          backgroundColor: custom_palette.grey74,
+          //borderWidth: 1.2,
+          borderRadius: 50,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      > */
       <Icon
         size={20}
         icon={icon}
@@ -262,14 +276,15 @@ function HeaderAction(props: HeaderActionProps) {
         containerStyle={[$actionIconContainer, { backgroundColor }]}
         style={isRTL ? { transform: [{ rotate: "180deg" }] } : {}}
       />
+      /*   </View> */
     )
   }
 
   return <View style={[$actionFillerContainer, { backgroundColor }]} />
 }
-
+export const HEADER_HEIGHT = 56
 const $wrapper: ViewStyle = {
-  height: 56,
+  height: HEADER_HEIGHT,
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
@@ -303,6 +318,7 @@ const $actionIconContainer: ViewStyle = {
   justifyContent: "center",
   height: "100%",
   //paddingHorizontal: spacing.size160,
+  marginLeft: spacing.size20,
   zIndex: 2,
 }
 

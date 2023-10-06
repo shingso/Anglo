@@ -9,25 +9,25 @@ export const CustomPromptModel = types
   .props({
     backPrompt: types.maybeNull(types.string),
     extraPrompt: types.maybeNull(types.string),
-    captionPrompt: types.maybeNull(types.string),
+    subheaderPrompt: types.maybeNull(types.string),
     extraArrayPrompt: types.maybeNull(types.string),
   })
   .actions(withSetPropAction)
-  .views((self) => ({
+  .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
     setBackPrompt(prompt: string) {
       self.backPrompt = prompt
     },
     setExtraPrompt(prompt: string) {
       self.extraPrompt = prompt
     },
-    setCaptionPrompt(prompt: string) {
-      self.captionPrompt = prompt
+    setSubheaderPrompt(prompt: string) {
+      self.subheaderPrompt = prompt
     },
     setExtraArrayPrompt(prompt: string) {
       self.extraArrayPrompt = prompt
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 export interface CustomPrompt extends Instance<typeof CustomPromptModel> {}
 export interface CustomPromptSnapshotOut extends SnapshotOut<typeof CustomPromptModel> {}
