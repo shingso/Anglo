@@ -21,20 +21,6 @@ export const getUserBoughtDecks = async (): Promise<UserBoughtDecksResponse[]> =
   }
 }
 
-export const importPurchasedCards = async (deckId: string, globalDeckId: string) => {
-  try {
-    let { data, error } = await supabase.rpc("import_purchased_cards", {
-      deck_id: deckId,
-      global_deck_id: globalDeckId,
-    })
-    // we should return the most recent id so that we cna update it it
-    // get the decks and update the most recent id
-    console.log("we purchased the deck", data, error)
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 export const insertFlashcardsAndReturn = async (
   deckId: string,
   globalDeckId: string,
