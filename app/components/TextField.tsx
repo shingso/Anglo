@@ -1,5 +1,6 @@
 import React, { ComponentType, forwardRef, Ref, useImperativeHandle, useRef } from "react"
 import {
+  Platform,
   StyleProp,
   TextInput,
   TextInputProps,
@@ -247,7 +248,7 @@ const $inputWrapperStyle: ViewStyle = {
 
 const $inputStyle: TextStyle = {
   flex: 1,
-  alignSelf: "stretch",
+  alignSelf: Platform.OS === "ios" ? "center" : "stretch",
   fontFamily: typography.primary.normal,
   color: custom_colors.foreground1,
   //fontSize: 17,
