@@ -3,19 +3,22 @@ import { ActivityIndicator, StyleProp, TextStyle, View, ViewStyle } from "react-
 import { observer } from "mobx-react-lite"
 import { colors, spacing, typography } from "app/theme"
 import { borderRadius } from "app/theme/borderRadius"
+import { CustomText } from "."
 
 export interface LoadingProps {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
+
+  text?: String
 }
 
 /**
  * Describe your component here
  */
 export const Loading = observer(function Loading(props: LoadingProps) {
-  const { style } = props
+  const { style, text } = props
   const $styles = [$container, style]
 
   return (
@@ -30,9 +33,19 @@ export const Loading = observer(function Loading(props: LoadingProps) {
           alignItems: "center",
           elevation: 1,
           marginBottom: spacing.size400,
+          paddingHorizontal: !!text ? 40 : 20,
         }}
       >
-        <ActivityIndicator color={"#8F8F8F"} size={36}></ActivityIndicator>
+        <ActivityIndicator
+          color={"#8F8F8F"}
+          style={{ marginBottom: !!text ? spacing.size80 : 0 }}
+          size={36}
+        ></ActivityIndicator>
+        {text ? (
+          <CustomText preset="body1" style={{ color: "white" }}>
+            {text}
+          </CustomText>
+        ) : null}
       </View>
     </View>
   )
