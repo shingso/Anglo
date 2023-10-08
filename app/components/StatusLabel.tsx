@@ -31,4 +31,5 @@ const $container: TextStyle = {
   paddingVertical: 2,
   borderRadius: borderRadius.corner80,
   backgroundColor: custom_colors.successBackground1,
+  overflow: "hidden",
 }
