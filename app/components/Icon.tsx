@@ -111,7 +111,7 @@ export const iconRegistry = {
   menu: require("../../assets/icons/menu.png"),
   more: require("../../assets/icons/more.png"),
   pin: require("../../assets/icons/pin.png"),
-
+  view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
 
   more_horiz: require("../../assets/icons/more_horiz.png"),
