@@ -113,9 +113,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.anglo"
+    namespace "com.shing.anglo"
     defaultConfig {
-        applicationId "com.anglo"
+        applicationId "com.shing.anglo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package com.anglo;
+package com.shing.anglo;
 
 import android.app.Application;
 import android.content.res.Configuration;

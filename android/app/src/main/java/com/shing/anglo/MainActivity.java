@@ -1,4 +1,4 @@
-package com.anglo;
+package com.shing.anglo;
 
 import android.os.Build;
 import android.os.Bundle;
