@@ -113,6 +113,10 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       return calculateFlashcardProgress(selectedFlashcard)
     }, [selectedFlashcard])
 
+    const searchSnapshotFlashcards = getSnapshot(flashcards as IStateTreeNode).filter(
+      (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
+    )
+
     return (
       <Screen style={$root}>
         <View style={$container}>
@@ -122,7 +126,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             onLeftPress={() => navigation.goBack()}
             title={deckStore.selectedDeck?.title}
             customHeader={
-              <View style={{ flexDirection: "row", gap: spacing.size200 }}>
+              <View style={{ flexDirection: "row", gap: spacing.size120 }}>
                 {/*         <Icon
                   icon="fluent_add_circle"
                   color={theme.colors.foreground1}
@@ -140,7 +144,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                     ></Icon>
                   )} */
                   onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
-                  preset="custom_default_small"
+                  preset="custom_outline_small"
                 >
                   AI
                 </Button>
@@ -207,7 +211,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 marginHorizontal: spacing.size120,
               }}
             >
-              <CustomText preset="caption1Strong">{flashcards.length}</CustomText>
+              <CustomText preset="caption1Strong">{searchSnapshotFlashcards?.length}</CustomText>
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size40 }}>
                 <CustomText
                   onPress={() => sortModalRef?.current?.present()}
@@ -224,9 +228,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: spacing.size200 }}
               showsVerticalScrollIndicator={false}
-              data={getSnapshot(flashcards as IStateTreeNode).filter(
-                (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
-              )}
+              data={searchSnapshotFlashcards}
               renderItem={({ item, index }) => (
                 <FlashcardListItem
                   key={item.id}

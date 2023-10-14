@@ -38,7 +38,7 @@ import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
 import { useTheme } from "@react-navigation/native"
-import { getAIDefinition, getAIDefintionWithDeckPrompts } from "app/utils/openAiUtils"
+import { getAIDefintionWithDeckPrompts } from "app/utils/openAiUtils"
 import { CustomModal } from "./CustomModal"
 import { v4 as uuidv4 } from "uuid"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -120,8 +120,11 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
     if (selectedFlashcardReference?.front) {
       setLoading(true)
-      const data = await getAIDefintionWithDeckPrompts(deck, selectedFlashcardReference?.front)
-      if (!!data?.error) {
+      const { data, remaining } = await getAIDefintionWithDeckPrompts(
+        deck,
+        selectedFlashcardReference?.front,
+      )
+      if (!data) {
         setErrorModalVisible(true)
         setLoading(false)
         return
@@ -132,7 +135,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           ...prev,
           back: data?.back,
           extra: data?.extra,
-          sub_header: data?.subheader,
+          sub_header: data?.sub_header,
           extra_array: [...(data?.extra_array || [])],
         }))
       }

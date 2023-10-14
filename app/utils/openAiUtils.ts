@@ -1,5 +1,11 @@
+import { FlashcardSnapshotIn } from "app/models"
 import { Deck } from "app/models/Deck"
 import { supabase } from "app/services/supabase/supabase"
+
+export interface AIResponse {
+  data?: Partial<FlashcardSnapshotIn>
+  remaining?: number
+}
 
 export const getAIDefinition = async (
   word: string,
@@ -8,7 +14,7 @@ export const getAIDefinition = async (
   extraPrompt: string = null,
   extraArrayPrompt: string = null,
   subheaderPrompt: string = null,
-): Promise<any> => {
+): Promise<AIResponse> => {
   const { data, error } = await supabase.functions.invoke("ai-functions", {
     body: JSON.stringify({
       word,
@@ -19,10 +25,15 @@ export const getAIDefinition = async (
       subheaderPrompt,
     }),
   })
-  return data
+  console.log(data, error)
+  if (data) return data
+  return null
 }
 
-export const getAIDefintionWithDeckPrompts = async (deck: Deck, word: string): Promise<any> => {
+export const getAIDefintionWithDeckPrompts = async (
+  deck: Deck,
+  word: string,
+): Promise<AIResponse> => {
   let language = null
   if (deck?.translateLanguage && deck?.translateLanguage != "english") {
     language = deck?.translateLanguage

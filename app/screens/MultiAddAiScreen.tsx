@@ -128,7 +128,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
     const errors = []
     setLoading(true)
     for await (const word of words) {
-      const data = await getAIDefintionWithDeckPrompts(selectedDeck, word)
+      const { data, remaining } = await getAIDefintionWithDeckPrompts(selectedDeck, word)
       setProgress((prev) => prev + 1)
       if (data && data?.back) {
         //check if valid flashcard
@@ -137,13 +137,13 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
           [Flashcard_Fields.DECK_ID]: selectedDeck.id,
           [Flashcard_Fields.FRONT]: word,
           [Flashcard_Fields.BACK]: data.back,
-          [Flashcard_Fields.EXTRA]: data.extra ? data.extra : null,
+          [Flashcard_Fields.SUB_HEADER]: data?.sub_header,
+          [Flashcard_Fields.EXTRA]: data?.extra ? data.extra : null,
           [Flashcard_Fields.EXTRA_ARRAY]: data?.extra_array ? data.extra_array : [],
         }
         const addedFlashcard = await addFlashcard(flashcard)
-
         const deckCard = selectedDeck.addFlashcard(addedFlashcard)
-        console.log(deckCard)
+
         !!deckCard ? success.push(deckCard) : errors.push(word)
       } else {
         errors.push(word)
