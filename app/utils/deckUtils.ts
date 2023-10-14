@@ -10,7 +10,7 @@ import {
 import { showErrorToast } from "./errorUtils"
 import { shuffle } from "./helperUtls"
 import { Deck, DeckSnapshotIn } from "../models/Deck"
-import { Flashcard } from "../models/Flashcard"
+import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
 import { QueryFunctions } from "app/models"
 import { v4 as uuidv4 } from "uuid"
 export enum Deck_Fields {
@@ -132,43 +132,52 @@ export const getRandomFlashcards = (cards: Flashcard[], amount: number): Flashca
   return shuffle(cards).slice(0, amount)
 }
 
-export const addCardsToShow = async (deck: Deck, amount: number): Promise<DeckSnapshotIn> => {
+export const addCardsToShow = async (
+  deck: Deck,
+  amount: number,
+  isOffline: boolean,
+): Promise<FlashcardSnapshotIn[]> => {
   if (!deck) {
     return null
   }
+  const date = new Date()
   const filteredCards = deck.flashcards.filter((card) => !card?.next_shown)
   const newCardsToShow: Flashcard[] = getRandomFlashcards(filteredCards, amount)
-  const startFlashcardResponse = startMultipleFlashcards(newCardsToShow)
-  const response = await updateDeckLastAdded(deck)
-  return response
+
+  newCardsToShow.forEach((card) => card.updateFlashcard({ [Flashcard_Fields.NEXT_SHOWN]: date }))
+  const mappedFlashcards = newCardsToShow.map((card) => {
+    return { [Flashcard_Fields.NEXT_SHOWN]: date, [Flashcard_Fields.ID]: card.id }
+  })
+
+  if (isOffline) {
+    deck.addToQueuedQueries({
+      id: uuidv4(),
+      variables: JSON.stringify(mappedFlashcards),
+      function: QueryFunctions.UPSERT_FLASHCARDS,
+    })
+    return mappedFlashcards
+  }
+  const flashcardReponse = await upsertMultipleFlashcards(mappedFlashcards)
+  return flashcardReponse
 }
 
-const startMultipleFlashcards = async (flashcards: Flashcard[]) => {
-  const date = new Date()
+/* export const startMultipleFlashcards = async (flashcards: Flashcard[], date: Date) => {
   const mappedFlashcards = flashcards.map((card) => {
     return { [Flashcard_Fields.NEXT_SHOWN]: date, [Flashcard_Fields.ID]: card.id }
   })
   const flashcardReponse = await upsertMultipleFlashcards(mappedFlashcards)
-  //TODO handling flashcard response failed
-  flashcards.forEach((card) => card.updateFlashcard({ [Flashcard_Fields.NEXT_SHOWN]: date }))
-}
+  return flashcardReponse
+} */
 
 export const updateDeckLastAdded = async (deck: Deck): Promise<DeckSnapshotIn> => {
   const updatedDeck = {
     last_added: new Date(),
     id: deck.id,
   }
+  deck.updateDeck(updatedDeck)
+  //TODO fix this
   const deckResponse = await updateDeck(updatedDeck)
-  deck.updateDeck(deckResponse)
-  return deckResponse
-}
-
-export const addNewDailyCardsToShow = async (deck: Deck) => {
-  if (deck?.last_added && isSameDay(deck.last_added, new Date())) {
-    return
-  }
-
-  addCardsToShow(deck, deck.new_per_day)
+  return updatedDeck
 }
 
 export const deleteDeck = async (id: string) => {

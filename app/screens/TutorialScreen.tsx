@@ -9,7 +9,7 @@ import { Button, CustomText, Icon, Screen, Text } from "app/components"
 
 import { saveTutorialSeen } from "app/utils/storage/tutorialUtils"
 import { getAllKeys } from "app/utils/storage"
-import { custom_palette, spacing } from "app/theme"
+import { custom_palette, spacing, typography } from "app/theme"
 import { ScrollView } from "react-native-gesture-handler"
 import { color } from "react-native-reanimated"
 import { ExpandingDot } from "react-native-animated-pagination-dots"
@@ -52,7 +52,7 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
     {
       key: "two",
       title: "Our memory spans",
-      text: "When we try to memorize something, our brains will forget the information over a period of time",
+      text: "When we memorize something, our brains will forget the information over a period of time",
       //image: require("../../assets/images/goldfish_in_bowl.png"),
       backgroundColor: "#febe29",
     },
@@ -60,7 +60,7 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       key: "three",
       title: "Spaced repitition",
       //image: require("../../assets/images/girl_looking_at_phone.png"),
-      text: "By revisting what we are trying to memorize before the we completely forget it, we can extend our memory retention",
+      text: "By revisting what we are trying to memorize before the we completely forget it, we can extend our memory retention.",
       backgroundColor: "#22bcb5",
     },
     {
@@ -103,9 +103,14 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
   const ScrollViewComponent = (props) => {
     const { title, body } = props
     return (
-      <View style={{ width, height, padding: spacing.size200 }}>
-        <CustomText>{title}</CustomText>
-        <CustomText>{body}</CustomText>
+      <View style={{ width, height, padding: spacing.size280 }}>
+        <CustomText
+          preset="title1"
+          style={{ fontFamily: typography.primary.light, marginBottom: spacing.size160 }}
+        >
+          {title}
+        </CustomText>
+        <CustomText preset="body1">{body}</CustomText>
       </View>
     )
   }

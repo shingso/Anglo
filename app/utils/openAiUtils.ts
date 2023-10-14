@@ -1,3 +1,4 @@
+import { Deck } from "app/models/Deck"
 import { supabase } from "app/services/supabase/supabase"
 
 export const getAIDefinition = async (
@@ -19,4 +20,20 @@ export const getAIDefinition = async (
     }),
   })
   return data
+}
+
+export const getAIDefintionWithDeckPrompts = async (deck: Deck, word: string): Promise<any> => {
+  let language = null
+  if (deck?.translateLanguage && deck?.translateLanguage != "english") {
+    language = deck?.translateLanguage
+  }
+  const deckCustomPrompts = deck?.customPrompts
+  return await getAIDefinition(
+    word,
+    language,
+    deckCustomPrompts?.backPrompt,
+    deckCustomPrompts?.extraPrompt,
+    deckCustomPrompts?.extraArrayPrompt,
+    deckCustomPrompts?.subheaderPrompt,
+  )
 }

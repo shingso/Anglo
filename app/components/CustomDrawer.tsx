@@ -169,11 +169,6 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           <View style={{ gap: 16, flexDirection: "row" }}>
             <Icon
               size={24}
-              onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
-              icon="fluent_lightbulb"
-            ></Icon>
-            <Icon
-              size={24}
               onPress={() =>
                 settingsStore?.isOffline
                   ? showErrorToast("Currently offline", "Go online to add a new deck")

@@ -38,7 +38,7 @@ import { Dot } from "./Dot"
 import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
 import { useTheme } from "@react-navigation/native"
-import { getAIDefinition } from "app/utils/openAiUtils"
+import { getAIDefinition, getAIDefintionWithDeckPrompts } from "app/utils/openAiUtils"
 import { CustomModal } from "./CustomModal"
 import { v4 as uuidv4 } from "uuid"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -119,21 +119,8 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     }
 
     if (selectedFlashcardReference?.front) {
-      let language = null
-      if (deck?.translateLanguage && deck?.translateLanguage != "english") {
-        language = deck?.translateLanguage
-      }
-
       setLoading(true)
-      const data = await getAIDefinition(
-        selectedFlashcardReference?.front,
-        language,
-        deckCustomPrompts?.backPrompt,
-        deckCustomPrompts?.extraPrompt,
-        deckCustomPrompts?.extraArrayPrompt,
-        deckCustomPrompts?.subheaderPrompt,
-      )
-      console.log(data, "ai call")
+      const data = await getAIDefintionWithDeckPrompts(deck, selectedFlashcardReference?.front)
       if (!!data?.error) {
         setErrorModalVisible(true)
         setLoading(false)
@@ -245,7 +232,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       deck.addFlashcard(flashcardReference)
       showSuccessToast(`${flashcardReference.front} added to ${deck.title}`)
       onAddCallBack ? onAddCallBack() : null
-
       if (settingsStore.isOffline) {
         deck.addToQueuedQueries({
           id: uuidv4(),

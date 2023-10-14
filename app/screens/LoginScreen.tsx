@@ -13,7 +13,7 @@ import {
   TextFieldAccessoryProps,
 } from "../components"
 import { useNavigation } from "@react-navigation/native"
-import { colors, custom_colors, spacing } from "../theme"
+import { colors, custom_colors, spacing, typography } from "../theme"
 import { supabase } from "../services/supabase/supabase"
 import * as Google from "expo-auth-session/providers/google"
 import { makeRedirectUri } from "expo-auth-session"
@@ -141,7 +141,10 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
       <Screen safeAreaEdges={["top", "bottom"]} style={$root} preset="fixed">
         <View style={$container}>
           <View style={{ width: 300, marginBottom: spacing.size320 }}>
-            <CustomText preset="title1" style={{ marginBottom: spacing.size40 }}>
+            <CustomText
+              preset="title1"
+              style={{ marginBottom: spacing.size40, fontFamily: typography.primary.semiBold }}
+            >
               Study anywhere, know it everywhere
             </CustomText>
           </View>

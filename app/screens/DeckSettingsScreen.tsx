@@ -15,9 +15,11 @@ import {
   Header,
   Icon,
   LineWord,
+  ModalHeader,
   PromptSettings,
   Screen,
   Text,
+  Option,
   TextField,
 } from "../components"
 import { Deck, DeckSnapshotIn, useStores } from "../models"
@@ -132,84 +134,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       }
       const updatedDeck = await updateDeck(newDeck)
       deckStore.selectedDeck.updateDeck(updatedDeck)
-    }
-
-    const renderItem = useCallback(
-      ({ item }) => (
-        <OptionComponent
-          key={item}
-          title={item}
-          onPress={onSubmitNewCardsPerDay}
-          option={item}
-          currentSelected={newPerDay}
-        ></OptionComponent>
-      ),
-      [newPerDay],
-    )
-
-    const ModalHeader = (props) => {
-      const { title } = props
-      return (
-        <View>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              paddingBottom: spacing.size200,
-              paddingTop: spacing.size80,
-            }}
-          >
-            <CustomText preset="caption1" presetColors="secondary">
-              {title}
-            </CustomText>
-          </View>
-          <View
-            style={{
-              height: 0.2,
-              backgroundColor: theme.colors.foreground3,
-              marginHorizontal: -16,
-              marginBottom: spacing.size120,
-            }}
-          ></View>
-        </View>
-      )
-    }
-
-    const OptionComponent = (props) => {
-      const { option, title, onPress, currentSelected } = props
-      return (
-        <TouchableOpacity onPress={() => (onPress ? onPress(option) : null)} key={option}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Icon
-              icon={option === currentSelected ? "circle_check_filled" : "circle"}
-              size={22}
-              color={
-                option === currentSelected
-                  ? theme.colors.brandBackground1
-                  : theme.colors.foreground2
-              }
-              style={{ marginRight: spacing.size160 }}
-            ></Icon>
-            <View
-              style={{
-                borderBottomColor: theme.colors.foreground3,
-                borderBottomWidth: 0.3,
-                paddingVertical: spacing.size120 + spacing.size20,
-
-                flex: 1,
-                height: "100%",
-              }}
-            >
-              <CustomText preset="body2">{title}</CustomText>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )
     }
 
     return (
@@ -504,13 +428,13 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             showsVerticalScrollIndicator={false}
           >
             {data.map((num) => (
-              <OptionComponent
+              <Option
                 key={num}
                 title={num}
                 onPress={onSubmitNewCardsPerDay}
                 option={num}
                 currentSelected={newPerDay}
-              ></OptionComponent>
+              ></Option>
             ))}
           </ScrollView>
         </BottomSheet>
@@ -519,13 +443,13 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           <ModalHeader title={"Use selected language for AI generated flashcards"}></ModalHeader>
           {aiLanguageOptions.map((option) => {
             return (
-              <OptionComponent
+              <Option
                 key={option}
                 title={option}
                 onPress={setAILanguageSettings}
                 option={option}
                 currentSelected={aiLanguage}
-              ></OptionComponent>
+              ></Option>
             )
           })}
         </BottomSheet>
@@ -540,13 +464,13 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           <View>
             {soundLanguageOptions.map((option) => {
               return (
-                <OptionComponent
+                <Option
                   key={option}
                   title={languageLabels[option]}
                   onPress={setPlayLanguageSetting}
                   option={option}
                   currentSelected={languageSettings}
-                ></OptionComponent>
+                ></Option>
               )
             })}
           </View>
@@ -557,13 +481,13 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           <View>
             {soundSettingOptions.map((option) => {
               return (
-                <OptionComponent
+                <Option
                   key={option}
                   title={option}
                   onPress={setSoundOption}
                   option={option}
                   currentSelected={soundSettings}
-                ></OptionComponent>
+                ></Option>
               )
             })}
           </View>

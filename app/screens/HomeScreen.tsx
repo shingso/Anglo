@@ -22,13 +22,26 @@ import {
   Header,
   HomeForecast,
   Icon,
+  LineWord,
   Screen,
   Text,
   TextField,
 } from "../components"
-import { addDeck, addNewDailyCardsToShow } from "../utils/deckUtils"
+import {
+  addCardsToShow,
+  addDeck,
+  getRandomFlashcards,
+  updateDeckLastAdded,
+} from "../utils/deckUtils"
 import { supabase, supabseStorageUrl } from "../services/supabase/supabase"
-import { Deck, useStores } from "../models"
+import {
+  Deck,
+  DeckSnapshotIn,
+  Flashcard,
+  FlashcardSnapshotIn,
+  QueryFunctions,
+  useStores,
+} from "../models"
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import {
@@ -44,19 +57,35 @@ import { vocabulary_words } from "../../assets/words"
 import { AppRoutes, AppStackParamList, SortType } from "../utils/consts"
 import { AppStackScreenProps } from "app/navigators"
 import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUtils"
+import { isSameDay } from "date-fns"
+import { Flashcard_Fields, upsertMultipleFlashcards } from "app/utils/flashcardUtils"
+import { v4 as uuidv4 } from "uuid"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
-    const { deckStore, boughtDeckStore, subscriptionStore } = useStores()
+    const { deckStore, boughtDeckStore, subscriptionStore, settingsStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const addNewDailyCardsToShow = async (deck: Deck) => {
+      if (deck?.last_added && isSameDay(deck.last_added, new Date())) {
+        return
+      }
+      addCardsToShow(deck, deck.new_per_day, settingsStore?.isOffline)
+      const response = await updateDeckLastAdded(deck)
+    }
 
     useEffect(() => {
       //getGlobalDeckConflicts()
-      addNewCardsToShowToDecks()
-      //TODO Figure these out we do always want to go to tutorail check and getUserBought deck/subscription status
-      // getMostRecentCardProgress()
+      //Add new cards for deck
+      deckStore.decks.forEach((deck) => {
+        if (deck?.addNewCardsPerDay) {
+          addNewDailyCardsToShow(deck)
+        }
+      })
 
+      // getMostRecentCardProgress()
       // boughtDeckStore.getUserBoughtDecks()
     }, [])
 
@@ -103,14 +132,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
 
       checkRemoteForConflict()
     }, [])
-
-    const addNewCardsToShowToDecks = () => {
-      deckStore.decks.forEach((deck) => {
-        if (deck?.addNewCardsPerDay) {
-          addNewDailyCardsToShow(deck)
-        }
-      })
-    }
 
     const getGlobalDeckConflicts = () => {
       deckStore.decks.forEach((deck) => {
@@ -162,7 +183,34 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
               Good Afternoon
             </CustomText> */}
           </View>
-          <HomeForecast></HomeForecast>
+
+          {deckStore?.decks?.length > 0 ? (
+            <HomeForecast></HomeForecast>
+          ) : (
+            <View style={{ padding: spacing.size200 }}>
+              <View style={{ marginBottom: spacing.size400 }}>
+                <CustomText
+                  preset="title1"
+                  style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
+                >
+                  Get started by adding a deck
+                </CustomText>
+                <CustomText preset="body1">See premade decks</CustomText>
+                <CustomText preset="caption1">
+                  Recommended for vocabulary words and languages
+                </CustomText>
+                <LineWord text={"or"}></LineWord>
+                <CustomText preset="body1">Add your own custom deck</CustomText>
+                <CustomText preset="caption1">Quickly build a custom deck using AI</CustomText>
+              </View>
+              <CustomText
+                preset="title1"
+                style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
+              >
+                Learn more about learning
+              </CustomText>
+            </View>
+          )}
           <CustomModal
             header={"Conflict Detected!"}
             body={

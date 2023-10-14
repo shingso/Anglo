@@ -1,6 +1,11 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { addFlashcard, deleteFlashcard, updateFlashcard } from "app/utils/flashcardUtils"
+import {
+  addFlashcard,
+  deleteFlashcard,
+  updateFlashcard,
+  upsertMultipleFlashcards,
+} from "app/utils/flashcardUtils"
 import { insertCardProgress } from "app/utils/cardProgressUtils"
 
 /**
@@ -12,12 +17,14 @@ export enum QueryFunctions {
   INSERT_FLASHCARD = "insert_flashcard",
   INSERT_CARD_PROGRESS = "insert_card_progress",
   DELETE_FLASHCARD = "delete_flashcard",
+  UPSERT_FLASHCARDS = "upsert_flashcards",
 }
 export const functionsMap = {
   [QueryFunctions.UPDATE_FLASHCARD]: updateFlashcard,
   [QueryFunctions.INSERT_FLASHCARD]: addFlashcard,
   [QueryFunctions.INSERT_CARD_PROGRESS]: insertCardProgress,
   [QueryFunctions.DELETE_FLASHCARD]: deleteFlashcard,
+  [QueryFunctions.UPSERT_FLASHCARDS]: upsertMultipleFlashcards,
 }
 
 export const QueryModel = types
@@ -29,6 +36,7 @@ export const QueryModel = types
       QueryFunctions.INSERT_FLASHCARD,
       QueryFunctions.INSERT_CARD_PROGRESS,
       QueryFunctions.DELETE_FLASHCARD,
+      QueryFunctions.UPSERT_FLASHCARDS,
     ]),
     variables: types.maybeNull(types.string),
   })

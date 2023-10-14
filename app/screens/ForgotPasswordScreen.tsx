@@ -36,9 +36,10 @@ export const ForgotPasswordScreen: FC<StackScreenProps<AppStackScreenProps, "For
         path: "reset",
       })
       let { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
+        redirectTo: "http://localhost:3000/auth/callback",
       })
-      console.log(data, error)
+
+      console.log(data, JSON.stringify(error))
       if (data) {
         showSuccessToast(
           "Password reset email sent",

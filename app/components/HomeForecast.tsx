@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle, Text, Image } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, custom_colors, spacing, typography } from "app/theme"
+import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 
 import { Card } from "./Card"
 import { ScrollView } from "react-native-gesture-handler"
@@ -97,8 +97,19 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
   }
 
   return (
-    <View style={{ paddingHorizontal: spacing.size160 }}>
-      <Card
+    <View style={$container}>
+      <CustomText
+        style={{ marginBottom: spacing.size400, fontFamily: typography.primary.light }}
+        preset="display"
+        presetColors="secondary"
+      >
+        {deckStore.decks
+          .reduce((prev, deck) => {
+            return prev + deck?.todaysCards?.length
+          }, 0)
+          .toString()}
+      </CustomText>
+      {/*    <Card
         onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
         style={{
           marginTop: spacing.size160,
@@ -140,17 +151,15 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
             </View>
           </LinearGradient>
         }
-      ></Card>
-
-      <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
+      ></Card> */}
+      {/*   <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
         <CustomText preset="title3">{"Today"}</CustomText>
         <View>
           <CustomText preset="body2">
             {format(new Date(), "EEEE")} {format(new Date(), "do")}
           </CustomText>
         </View>
-      </View>
-
+      </View> */}
       <View>
         {deckStore.decks.map((deck) => {
           return (
@@ -158,17 +167,47 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               onPress={() => selectDeck(deck)}
               key={deck.id}
               style={{
-                minHeight: 0,
-                elevation: 2,
+                minHeight: 150,
+                elevation: 0,
                 marginBottom: spacing.size100,
+                borderRadius: 26,
+                //backgroundColor: custom_palette.primary130,
               }}
               ContentComponent={
                 <View
                   style={{
-                    paddingHorizontal: spacing.size160,
+                    paddingHorizontal: spacing.size120,
                     paddingVertical: spacing.size80,
                   }}
                 >
+                  <View
+                    style={{
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <CustomText preset="body1">{deck?.todaysCards?.length?.toString()}</CustomText>
+                    {/* <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel> */}
+                    <View
+                      style={{
+                        width: 44,
+                        height: 44,
+                        backgroundColor: custom_palette.grey74,
+                        //borderWidth: 1.2,
+                        borderRadius: 50,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        alignSelf: "flex-end",
+                      }}
+                    >
+                      <Icon
+                        icon="fluent_play_outline"
+                        color={custom_palette.white}
+                        size={22}
+                      ></Icon>
+                    </View>
+                  </View>
                   <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <View
                       style={{
@@ -178,8 +217,10 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                         flex: 1,
                       }}
                     >
-                      <CustomText preset="body2Strong">{deck.title}</CustomText>
-                      <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel>
+                      <CustomText style={{ marginTop: 16 }} preset="title2">
+                        {deck?.title?.toUpperCase()}
+                      </CustomText>
+                      {/*   <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel> */}
                     </View>
                     {/*  <Icon
                       icon="fluent_play_outline"
@@ -194,16 +235,19 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
           )
         })}
       </View>
-
+      {/* <CustomText preset="body2Strong" onPress={() => navigation.navigate(AppRoutes.USER_SETUP)}>
+        User Setup
+      </CustomText> */}
+      {/* 
       <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
         <CustomText preset="title3">{"This week"}</CustomText>
-      </View>
-      <ScrollView
+      </View> */}
+      {/*   <ScrollView
         contentContainerStyle={{ gap: spacing.size40 }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {getDates(addDays(new Date(), 1), addDays(new Date(), 6)).map((date) => {
+        {getDates(addDays(new Date(), 2), addDays(new Date(), 7)).map((date) => {
           return (
             <Card
               key={date}
@@ -219,8 +263,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
             ></Card>
           )
         })}
-      </ScrollView>
-
+      </ScrollView> */}
       {/*  <Card
         style={{ padding: spacing.size200, margin: spacing.size120 }}
         ContentComponent={
@@ -278,7 +321,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
 })
 
 const $container: ViewStyle = {
-  justifyContent: "center",
+  paddingHorizontal: spacing.size200,
 }
 
 const $text: TextStyle = {

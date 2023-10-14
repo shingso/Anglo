@@ -20,7 +20,6 @@ import {
   FlashcardListScreen,
   ForgotPasswordScreen,
   GlobalConflictScreen,
-  GlobalFlashcardsScreen,
   HomeScreen,
   LoginScreen,
   OpenSourceScreen,
@@ -171,6 +170,13 @@ const AboutStackScreens = () => {
         }}
         component={OpenSourceScreen}
       />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name={AppRoutes.TUTORIAL}
+        component={TutorialScreen}
+      />
     </Stack.Navigator>
   )
 }
@@ -210,20 +216,8 @@ const HomeScreens = () => {
     >
       <Drawer.Screen name={AppRoutes.HOME} component={DrawerHome} />
       <Stack.Screen name={AppRoutes.SETTINGS} component={SettingsScreen} />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={AppRoutes.TUTORIAL}
-        component={TutorialScreen}
-      />
-      <Stack.Screen
-        name={AppRoutes.MUTLI_ADD_AI}
-        options={{
-          headerShown: true,
-        }}
-        component={MultiAddAiScreen}
-      />
+
+      <Stack.Screen name={AppRoutes.MUTLI_ADD_AI} component={MultiAddAiScreen} />
       <Stack.Screen
         options={{
           headerShown: true,

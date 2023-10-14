@@ -31,6 +31,13 @@ export const AboutScreen: FC<StackScreenProps<AppStackScreenProps, "About">> = o
           <CustomText
             style={$item}
             preset="body2Strong"
+            onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
+          >
+            How to study better
+          </CustomText>
+          <CustomText
+            style={$item}
+            preset="body2Strong"
             onPress={() => navigation.navigate(AppRoutes.TERMS_OF_SERVICE)}
           >
             Term of Service

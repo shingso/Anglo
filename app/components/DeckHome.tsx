@@ -3,7 +3,7 @@ import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
-import { AppRoutes } from "app/utils/consts"
+import { AppRoutes, languageLabels } from "app/utils/consts"
 import { CustomText } from "./CustomText"
 import { Icon } from "./Icon"
 import { Deck, useStores } from "app/models"
@@ -17,6 +17,8 @@ import {
   getPaidFlashcardsCountByDeckId,
   getProductExistsByProductId,
 } from "app/utils/subscriptionUtils"
+import { useTheme } from "@react-navigation/native"
+import { addCardsToShow } from "app/utils/deckUtils"
 
 export interface DeckHomeProps {
   /**
@@ -33,10 +35,11 @@ export interface DeckHomeProps {
 export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   const { style, deck, navigation } = props
   const $styles = [$container, style]
-  const { deckStore, boughtDeckStore } = useStores()
+  const { deckStore, boughtDeckStore, settingsStore } = useStores()
   const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
   const [isPurchasable, setIsPurchasable] = useState<Boolean>(false)
   const selectedDeck = deckStore?.selectedDeck
+  const theme = useTheme()
 
   useEffect(() => {
     const setPurchasabeDeck = async () => {
@@ -67,15 +70,18 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
     <View style={$styles}>
       <View style={{ marginHorizontal: spacing.size160 }}>
         <View style={{ marginTop: spacing.size60 }}>
-          {/*     <CustomText style={{ marginBottom: spacing.size240 }} preset="title1">
+          <CustomText
+            style={{ marginBottom: spacing.size240, fontFamily: typography.primary.light }}
+            preset="title1"
+          >
             {selectedDeck?.title}
-          </CustomText> */}
+          </CustomText>
 
           <Card
             onPress={() => startSession(selectedDeck)}
             style={{
-              minHeight: 0,
-              elevation: 1,
+              minHeight: 300,
+              elevation: 0,
               marginBottom: spacing.size80,
             }}
             ContentComponent={
@@ -92,18 +98,35 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     marginBottom: spacing.size100,
                     flexDirection: "row",
                     justifyContent: "space-between",
+                    alignItems: "flex-start",
                   }}
                 >
                   <CustomText style={{ fontSize: 52 }}>
                     {selectedDeck?.todaysCards?.length}
                   </CustomText>
-                  <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      backgroundColor: custom_palette.primary80,
+                      // backgroundColor: custom_palette.grey74,
+                      //borderWidth: 1.2,
+                      borderRadius: 50,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      alignSelf: "flex-end",
+                      marginBottom: spacing.size280,
+                    }}
+                  >
+                    <Icon icon="fluent_play_outline" color={custom_palette.white} size={22}></Icon>
+                  </View>
+                  {/*   <CustomText style={{ marginBottom: spacing.size60 }} preset="title1">
                     {selectedDeck?.cardProgressCount}
-                  </CustomText>
+                  </CustomText> */}
 
                   {/*   <Icon icon="play" color={custom_colors.brandForeground1} size={28}></Icon> */}
                 </View>
-                <View>
+                <View style={{ marginTop: 100, marginBottom: spacing.size160 }}>
                   <View
                     style={{
                       flexDirection: "row",
@@ -112,9 +135,13 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     }}
                   >
                     <CustomText style={{ color: custom_palette.primary60 }} preset="caption1Strong">
-                      {selectedDeck?.cardProgressCount} /{" "}
-                      {(selectedDeck?.cardProgressCount || 0) +
-                        (selectedDeck?.todaysCards?.length || 0)}
+                      Progress:{" "}
+                      {Math.trunc(
+                        (selectedDeck?.cardProgressCount /
+                          (selectedDeck?.todaysCards?.length + selectedDeck?.cardProgressCount)) *
+                          100,
+                      )}
+                      %
                     </CustomText>
                   </View>
                   <View
@@ -146,10 +173,38 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                     </LinearGradient>
                   </View>
                 </View>
+                <View style={{ flexDirection: "row", gap: spacing.size80, flexWrap: "wrap" }}>
+                  {selectedDeck?.addNewCardsPerDay ? (
+                    <StatusLabel
+                      text={deckStore?.selectedDeck?.new_per_day + " added cards per day"}
+                    ></StatusLabel>
+                  ) : (
+                    <StatusLabel
+                      style={{
+                        backgroundColor: theme.colors.dangerBackground1,
+                        color: theme.colors.dangerForeground2,
+                      }}
+                      text={"No cards added automatically"}
+                    ></StatusLabel>
+                  )}
+                  <StatusLabel
+                    style={{
+                      backgroundColor: custom_palette.primary90,
+                      color: "white",
+                    }}
+                    text={languageLabels[selectedDeck?.playSoundLanguage]}
+                  ></StatusLabel>
+                  <StatusLabel
+                    style={{
+                      backgroundColor: custom_palette.primary90,
+                      color: "white",
+                    }}
+                    text={selectedDeck?.soundOption}
+                  ></StatusLabel>
+                </View>
               </View>
             }
           ></Card>
-
           {/*     <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
             Study
           </CustomText> */}
@@ -223,12 +278,11 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               }
             ></Card>
           </View> */}
-
           <Card
             onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
             style={{
               minHeight: 0,
-              elevation: 1,
+              elevation: 0,
             }}
             ContentComponent={
               <View
@@ -239,9 +293,9 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                   alignItems: "center",
                 }}
               >
-                <Icon icon="swipe_right" style={{ marginRight: spacing.size120 }} size={22}></Icon>
+                <Icon icon="repeat_arrow" style={{ marginRight: spacing.size120 }} size={22}></Icon>
                 <View>
-                  <CustomText preset="body1Strong">{"Free study"}</CustomText>
+                  <CustomText preset="body1">{"Free study"}</CustomText>
                 </View>
               </View>
             }
@@ -254,27 +308,20 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             alignItems: "center",
             justifyContent: "space-between",
             marginHorizontal: spacing.size80,
+            marginBottom: spacing.size120,
           }}
         >
-          <CustomText
-            style={{ marginBottom: spacing.size120, color: custom_colors.foreground2 }}
-            preset="body2Strong"
-          >
-            Flashcards
+          <CustomText preset="body1Strong">Flashcards</CustomText>
+          <CustomText style={{ color: custom_colors.brandForeground1 }} preset="caption1Strong">
+            View all
           </CustomText>
-          {/*   <CustomText
-                  style={{ color: custom_colors.brandForeground1 }}
-                  preset="caption1Strong"
-                >
-                  View all
-                </CustomText> */}
         </View>
         <Card
           onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
           style={{
             marginBottom: spacing.size80,
             minHeight: 0,
-            elevation: 1,
+            elevation: 0,
           }}
           ContentComponent={
             <View
@@ -289,24 +336,19 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Icon icon="flashcards" style={{ marginRight: spacing.size120 }} size={24}></Icon>
                 <View>
-                  <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-                    <CustomText preset="body1Strong">
-                      {selectedDeck?.flashcards.length + " "}
-                    </CustomText>
-                    <CustomText style={{ color: custom_palette.grey38 }} preset="caption1Strong">
-                      cards
-                    </CustomText>
-                  </View>
+                  <CustomText preset="body1">
+                    {selectedDeck?.flashcards.length + " cards"}
+                  </CustomText>
                 </View>
               </View>
-              <StatusLabel
+              {/*     <StatusLabel
                 style={{
                   marginLeft: spacing.size200,
                   backgroundColor: custom_palette.primary80,
                   color: "white",
                 }}
                 text={selectedDeck?.activeCardsCount?.toString() + " active"}
-              ></StatusLabel>
+              ></StatusLabel> */}
               {/*    <Icon icon="caretRight" color={custom_colors.foreground2} size={22}></Icon> */}
             </View>
           }
@@ -319,7 +361,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{
               minHeight: 0,
-              elevation: 1,
+              elevation: 0,
               marginBottom: spacing.size80,
             }}
             ContentComponent={
@@ -337,17 +379,45 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
                   size={22}
                 ></Icon>
                 <View>
-                  <CustomText preset="body2Strong">{`Get ${paidCardsCount} more premium cards`}</CustomText>
+                  <CustomText preset="body1">{`Get ${paidCardsCount} more premium cards`}</CustomText>
                 </View>
               </View>
             }
           ></Card>
         ) : null}
+
         <Card
+          onPress={() => addCardsToShow(deck, 5, settingsStore.isOffline)}
+          style={{
+            minHeight: 0,
+            elevation: 0,
+            marginBottom: spacing.size80,
+          }}
+          ContentComponent={
+            <View
+              style={{
+                paddingHorizontal: spacing.size120,
+                paddingVertical: spacing.size80,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                icon="fluent_add_circle"
+                style={{ marginRight: spacing.size120 }}
+                size={22}
+              ></Icon>
+              <View>
+                <CustomText preset="body1">{`Start 5 cards`}</CustomText>
+              </View>
+            </View>
+          }
+        ></Card>
+        {/*     <Card
           onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
           style={{
             minHeight: 0,
-            elevation: 1,
+            elevation: 0,
             flex: 1,
             marginBottom: 2,
           }}
@@ -367,7 +437,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               >
                 <Icon
                   style={{ marginRight: spacing.size120 }}
-                  icon="fluent_settings_outline"
+                  icon="settings"
                   size={22}
                 ></Icon>
                 <CustomText preset="body2Strong">Settings</CustomText>
@@ -379,7 +449,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
               </View>
             </View>
           }
-        ></Card>
+        ></Card> */}
       </View>
     </View>
   )

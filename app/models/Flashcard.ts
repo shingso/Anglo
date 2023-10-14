@@ -3,8 +3,9 @@ import { Flashcard_Fields } from "../utils/flashcardUtils"
 import { CardProgress, CardProgressModel, CardProgressSnapshotIn } from "./CardProgress"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 import { Flashcard } from "../components/Flashcard"
-import { isToday } from "date-fns"
-
+import { endOfDay, isAfter, isToday } from "date-fns"
+import { now } from "mobx-utils"
+import { calculateEasinessFactor } from "app/utils/superMemoUtils"
 /**
  * Model description here for TypeScript hints.
  */
@@ -39,6 +40,9 @@ export const FlashcardModel = types
         return r.created_at! > a.created_at! ? r : a
       })
     },
+    get easeFactor() {
+      return calculateEasinessFactor(self.card_progress)
+    },
     get todaysCardProgresses() {
       if (!self?.card_progress || !(self.card_progress.length > 0)) {
         return []
@@ -46,6 +50,14 @@ export const FlashcardModel = types
       return self.card_progress.filter(
         (progress) => progress?.created_at && isToday(progress.created_at),
       )
+    },
+
+    get passedTodaysCardProgress() {
+      const date = new Date() //now(600000)
+      // console.log("passed todays cards ran", date)
+      return this.todaysCardProgresses.reduce((prev, progress) => {
+        return prev + (isAfter(progress.next_shown, endOfDay(date)) ? 1 : 0)
+      }, 0)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
@@ -71,7 +83,6 @@ export const FlashcardModel = types
       const cardProgressModel = CardProgressModel.create(cardProgress)
       self.card_progress.push(cardProgressModel)
       self.next_shown = cardProgress.next_shown as Date
-      //whenever we do this we want to update or own
     },
     addNote(note: string) {
       self.notes.replace([...self.notes, note])

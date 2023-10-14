@@ -101,5 +101,4 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 const $root: ViewStyle = {
   flex: 1,
   padding: spacing.size200,
-  backgroundColor: custom_colors.background5,
 }

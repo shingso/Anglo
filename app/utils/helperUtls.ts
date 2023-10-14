@@ -22,7 +22,7 @@ export const shuffle = (array: any[]) => {
 }
 
 export const capitalizeFirstLetter = (string: string): string => {
-  if (!!string) {
+  if (!string) {
     return ""
   }
   return string.charAt(0).toUpperCase() + string.slice(1)

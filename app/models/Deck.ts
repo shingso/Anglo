@@ -12,7 +12,15 @@ import {
 import { Deck_Fields } from "../utils/deckUtils"
 import { Flashcard, FlashcardModel, FlashcardSnapshotIn } from "./Flashcard"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { SortType, SoundLanguage, SoundOptions, TranslateLanguage } from "../utils/consts"
+import {
+  SortType,
+  SoundLanguage,
+  SoundOptions,
+  TranslateLanguage,
+  playSoundLanguageArray,
+  soundOptionArray,
+  translateLanguageArray,
+} from "../utils/consts"
 import { getGlobalDeckById } from "../utils/globalDecksUtils"
 import {
   Global_Flashcard_Fields,
@@ -27,6 +35,7 @@ import {
 import { CardProgress, CardProgressSnapshotIn } from "./CardProgress"
 import { QueryModel, QuerySnapshotIn } from "./Query"
 import { CustomPromptModel } from "./CustomPrompt"
+import { AiGenerationResponseModel } from "./AiGenerationResponse"
 
 /**
  * Model description here for TypeScript hints.
@@ -46,46 +55,21 @@ export const DeckModel = types
     sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
     customPrompts: types.optional(CustomPromptModel, {}),
     globalConflicts: types.optional(types.array(GlobalFlashcardModel), []),
-    soundOption: types.optional(
-      types.enumeration([
-        SoundOptions.FRONT,
-        SoundOptions.BACK,
-        SoundOptions.EXTRA,
-        SoundOptions.EXTRA_ARRAY,
-        SoundOptions.SUB_HEADER,
-      ]),
-      SoundOptions.FRONT,
-    ),
+    soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),
     playSoundAutomatically: types.optional(types.boolean, false),
     addNewCardsPerDay: types.optional(types.boolean, false),
+    aiGeneratedResponse: types.optional(AiGenerationResponseModel, {
+      errors: [],
+      success: [],
+    }),
     playSoundLanguage: types.optional(
-      types.enumeration([
-        SoundLanguage.ENGLISH,
-        SoundLanguage.SPANISH_MX,
-        SoundLanguage.KOREAN,
-        SoundLanguage.GERMAN,
-        SoundLanguage.FRENCH,
-        SoundLanguage.DUTCH,
-        SoundLanguage.MANDARIN,
-        SoundLanguage.JAPANESE,
-        SoundLanguage.THAI,
-      ]),
+      types.enumeration(playSoundLanguageArray),
       SoundLanguage.ENGLISH,
     ),
 
     queuedQueries: types.optional(types.array(QueryModel), []),
     translateLanguage: types.optional(
-      types.enumeration([
-        TranslateLanguage.ENGLISH,
-        TranslateLanguage.SPANISH,
-        TranslateLanguage.KOREAN,
-        TranslateLanguage.GERMAN,
-        TranslateLanguage.MANDARIN,
-        TranslateLanguage.JAPANESE,
-        TranslateLanguage.FRENCH,
-        TranslateLanguage.DUTCH,
-        TranslateLanguage.THAI,
-      ]),
+      types.enumeration(translateLanguageArray),
       TranslateLanguage.ENGLISH,
     ),
   })
@@ -104,6 +88,11 @@ export const DeckModel = types
       }, 0)
     },
     get cardProgressCount() {
+      return self.flashcards.reduce((prev, card) => {
+        return prev + card.passedTodaysCardProgress
+      }, 0)
+    },
+    get cardProgressToday() {
       return self.flashcards.reduce((prev, card) => {
         return (
           prev +
@@ -196,9 +185,11 @@ export const DeckModel = types
 
     addFlashcard: (flashcard: FlashcardSnapshotIn) => {
       if (!flashcard) {
-        return
+        return null
       }
-      self.flashcards.push(FlashcardModel.create(flashcard))
+      const model = FlashcardModel.create(flashcard)
+      self.flashcards.push(model)
+      return model
     },
     addMutlipleFlashcards: (flashcards: FlashcardSnapshotIn[]) => {
       const flashcardModels = flashcards.map((card) => FlashcardModel.create(card))

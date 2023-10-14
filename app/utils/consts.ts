@@ -119,6 +119,37 @@ export enum TranslateLanguage {
   THAI = "thai",
 }
 
+export const soundOptionArray = [
+  SoundOptions.FRONT,
+  SoundOptions.BACK,
+  SoundOptions.EXTRA,
+  SoundOptions.EXTRA_ARRAY,
+  SoundOptions.SUB_HEADER,
+]
+
+export const translateLanguageArray = [
+  TranslateLanguage.ENGLISH,
+  TranslateLanguage.SPANISH,
+  TranslateLanguage.KOREAN,
+  TranslateLanguage.GERMAN,
+  TranslateLanguage.MANDARIN,
+  TranslateLanguage.JAPANESE,
+  TranslateLanguage.FRENCH,
+  TranslateLanguage.DUTCH,
+  TranslateLanguage.THAI,
+]
+
+export const playSoundLanguageArray = [
+  SoundLanguage.ENGLISH,
+  SoundLanguage.SPANISH_MX,
+  SoundLanguage.KOREAN,
+  SoundLanguage.GERMAN,
+  SoundLanguage.FRENCH,
+  SoundLanguage.DUTCH,
+  SoundLanguage.MANDARIN,
+  SoundLanguage.JAPANESE,
+  SoundLanguage.THAI,
+]
 export const aiLanguageOptions = [
   TranslateLanguage.ENGLISH,
   TranslateLanguage.SPANISH,
