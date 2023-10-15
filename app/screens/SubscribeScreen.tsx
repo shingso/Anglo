@@ -97,6 +97,21 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       }
     }
 
+    const reactivateSubscription = async () => {
+      if (settingsStore?.isOffline) {
+        showErrorToast("Currently offline", "Go online to reactivate your subscription")
+        return
+      }
+      if (subscriptionStore?.subscription?.subscription_id) {
+        const res = await subscriptionStore.subscription.resumeSubscription()
+        if (!res) {
+          showErrorToast("Error occured when trying to resume subscription")
+        }
+      } else {
+        console.log("could not resume because no id")
+      }
+    }
+
     const initializeSubscriptionPaymentSheet = async () => {
       if (settingsStore?.isOffline) {
         showErrorToast("Currently offline", "Go online to subscribe")
@@ -160,17 +175,6 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     const SubscriptionFeaturesList = () => {
       return (
         <View>
-          <View style={{ marginBottom: spacing.size200 }}>
-            {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
-              Personalized learning algorithm
-            </CustomText>
-            <CustomText preset="caption1">
-              AI algorithm will be continiously trained and updated with your information, creating
-              a more personalized and efficient learning experience.
-            </CustomText>
-          </View>
-
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
@@ -327,20 +331,58 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             <CustomText preset="title2" style={{ marginBottom: spacing.size200 }}>
               You currently have an active subscription
             </CustomText>
-            <CustomText>{JSON.stringify(subscriptionStore.subscription)}</CustomText>
 
+            {subscriptionStore.subscription.cancel_at_end && (
+              <CustomText preset="body1" style={{ marginBottom: spacing.size200 }}>
+                You subscription has been canceled, you will continue to have subscription benefits
+                till the end of the current period.
+              </CustomText>
+            )}
+
+            {!subscriptionStore.isSubscribed && (
+              <View>
+                <CustomText preset="body1" style={{ marginBottom: spacing.size40 }}>
+                  Your subcription will end on
+                </CustomText>
+                <CustomText preset="body1Strong" style={{ marginBottom: spacing.size200 }}>
+                  {subscriptionStore?.subscription?.end_date?.toDateString()}
+                </CustomText>
+              </View>
+            )}
             <SubscriptionFeaturesList></SubscriptionFeaturesList>
-            <Card
-              onPress={() => endSubscription()}
-              style={{
-                marginBottom: spacing.size160,
-                elevation: 4,
-                minHeight: 0,
-                paddingHorizontal: spacing.size200,
-                paddingVertical: spacing.size120,
-              }}
-              ContentComponent={<CustomText preset="body2Strong">Cancel Subscription</CustomText>}
-            ></Card>
+            {subscriptionStore.isSubscribed && (
+              <View>
+                {!subscriptionStore.subscription.cancel_at_end ? (
+                  <Card
+                    onPress={() => endSubscription()}
+                    style={{
+                      marginBottom: spacing.size160,
+                      elevation: 4,
+                      minHeight: 0,
+                      paddingHorizontal: spacing.size200,
+                      paddingVertical: spacing.size120,
+                    }}
+                    ContentComponent={
+                      <CustomText preset="body2Strong">Cancel Subscription</CustomText>
+                    }
+                  ></Card>
+                ) : (
+                  <Card
+                    onPress={() => reactivateSubscription()}
+                    style={{
+                      marginBottom: spacing.size160,
+                      elevation: 4,
+                      minHeight: 0,
+                      paddingHorizontal: spacing.size200,
+                      paddingVertical: spacing.size120,
+                    }}
+                    ContentComponent={
+                      <CustomText preset="body2Strong">Reactive subscription</CustomText>
+                    }
+                  ></Card>
+                )}
+              </View>
+            )}
           </View>
         )}
       </Screen>

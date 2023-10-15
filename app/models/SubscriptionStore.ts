@@ -23,12 +23,16 @@ export const SubscriptionStoreModel = types
         !!self.subscription?.subscription_id
       )
     },
+    get isSubscribed() {
+      return !!self?.subscription?.subscription_id
+    },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     getSubscription: flow(function* () {
       const result: SubscriptionSnapshotIn[] = yield getSubscription()
       const subscriptionModel: Subscription = SubscriptionModel.create(result)
       self.subscription = subscriptionModel
+      console.log("we are currently getting the subscription")
       return result
     }),
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

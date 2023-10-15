@@ -1,6 +1,10 @@
 import { Instance, SnapshotIn, SnapshotOut, flow, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { Subscription_Fields, cancelSubscription } from "../utils/subscriptionUtils"
+import {
+  Subscription_Fields,
+  cancelSubscription,
+  reactivateSubscription,
+} from "../utils/subscriptionUtils"
 import { showErrorToast } from "app/utils/errorUtils"
 
 /**
@@ -14,6 +18,7 @@ export const SubscriptionModel = types
     [Subscription_Fields.START_DATE]: types.maybe(types.Date),
     [Subscription_Fields.END_DATE]: types.maybe(types.Date),
     [Subscription_Fields.SUBSCRIPTION_ID]: types.maybe(types.string),
+    [Subscription_Fields.CANCEL_AT_END]: types.maybe(types.boolean),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -27,7 +32,20 @@ export const SubscriptionModel = types
       }
       const result = yield cancelSubscription(self?.subscription_id)
       if (result) {
-        self.subscription_id = undefined
+        self.cancel_at_end = true
+      }
+      return result
+    }),
+
+    resumeSubscription: flow(function* () {
+      //Will replace the store with the remote state
+      if (!self.subscription_id) {
+        showErrorToast("Could not reactivate subscription")
+        return false
+      }
+      const result = yield reactivateSubscription(self?.subscription_id)
+      if (result) {
+        self.cancel_at_end = false
       }
       return result
     }),
