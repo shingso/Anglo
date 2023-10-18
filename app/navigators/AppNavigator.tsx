@@ -38,6 +38,7 @@ import {
   DeckHomeScreen,
   GlobalDecksScreen,
   MultiAddAiScreen,
+  RestartOverdueScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
@@ -247,12 +248,13 @@ const HomeScreens = () => {
         component={SubscribeScreen}
       />
 
+      <Stack.Screen name={AppRoutes.RESTART_OVERDUE} component={PurchaseDeckScreen} />
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
         options={{
           headerShown: true,
         }}
-        component={PurchaseDeckScreen}
+        component={RestartOverdueScreen}
       />
       <Stack.Screen name={AppRoutes.GLOBAL_CONFLICT} component={GlobalConflictScreen} />
       <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
@@ -270,7 +272,7 @@ const HomeScreens = () => {
 const AppStack = observer(function AppStack() {
   const netInfo = useNetInfo()
   const navigation = useNavigation()
-  const { deckStore, settingsStore, authStore } = useStores()
+  const { deckStore, settingsStore, authStore, subscriptionStore } = useStores()
 
   useEffect(() => {
     if (netInfo.isConnected === null) {
@@ -313,6 +315,7 @@ const AppStack = observer(function AppStack() {
 
       if (_event === "SIGNED_IN") {
         deckStore.getDecks()
+        //subscriptionStore.getSubscription()
       }
 
       if (session?.access_token) {
