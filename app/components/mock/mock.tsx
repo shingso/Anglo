@@ -4,7 +4,12 @@ import {
   DeckStoreSnapshotIn,
   DeckModel,
   DeckStoreModel,
+  SettingsStoreSnapshotIn,
+  SettingsStoreModel,
+  SubscriptionStoreModel,
+  SubscriptionModel,
 } from "app/models"
+import { SoundOptions } from "app/utils/consts"
 import { subDays, addDays } from "date-fns"
 import { v4 as uuidv4 } from "uuid"
 
@@ -50,6 +55,19 @@ const mockBackValues = [
   "molt anim id est lrum",
 ]
 
+const mockExtraValues = [
+  "occcats cupidaat non prodent",
+  "occacate cupidteet non",
+  "mollitexa anim id est lborum",
+  "occaecaexa cupidasdatat non proent",
+  "occaesasdt cupiasddatat non",
+  "molt ansaadim id est laseorum",
+  "mlit asnm id estlbasrum",
+  "ocaecea cupdasetat non prent",
+  "occaet cupextrradatat non extsd",
+  "molest anism id ests lrum extra",
+]
+
 export const generateMockFlashcards = (number: number, deckId?: string): FlashcardSnapshotIn[] => {
   const mockFlashcards = []
   for (var i = 0; i < number; i++) {
@@ -57,6 +75,8 @@ export const generateMockFlashcards = (number: number, deckId?: string): Flashca
       id: uuidv4(),
       front: mockFrontValues[Math.floor(Math.random() * mockBackValues.length)],
       back: mockBackValues[Math.floor(Math.random() * mockBackValues.length)],
+      extra: mockExtraValues[Math.floor(Math.random() * mockExtraValues.length)],
+      extra_array: [],
       next_shown:
         Math.random() > 0.5
           ? subDays(
@@ -64,7 +84,7 @@ export const generateMockFlashcards = (number: number, deckId?: string): Flashca
               Math.floor(Math.random() * 6),
             )
           : undefined,
-      sub_header: mockFrontValues[Math.floor(Math.random() * mockBackValues.length)],
+      sub_header: mockFrontValues[Math.floor(Math.random() * mockFrontValues.length)],
     }
     if (deckId) {
       flashcard.deck_id = deckId
@@ -83,6 +103,8 @@ export const mockDeckModel: DeckSnapshotIn = {
   new_per_day: Math.floor(Math.random() * 20),
   last_global_sync: new Date(),
   global_deck_id: "41b3a893-b270-4595-bf0c-6518d38e6c6",
+
+  //soundOption: SoundOptions.FRONT,
 }
 
 export const mockDeckModelCreate = DeckModel.create(mockDeckModel)
@@ -91,6 +113,18 @@ export const mockDeckStoreCreate = DeckStoreModel.create({
   decks: [mockDeckModel],
 })
 
+export const mockSubscriptionStoreCreate = SubscriptionStoreModel.create({
+  subscription: SubscriptionModel.create({
+    end_date: addDays(new Date(), 5),
+  }),
+})
 export const mockDeckStoreModel: DeckStoreSnapshotIn = {
   decks: [mockDeckModel],
 }
+
+export const mockSettingStore: SettingsStoreSnapshotIn = {
+  isOffline: true,
+  isDarkMode: false,
+}
+
+export const mockSettingStoreCreate = SettingsStoreModel.create(mockSettingStore)

@@ -1,8 +1,5 @@
-import { DeckModel, DeckSnapshotIn } from "./Deck"
-import { FlashcardSnapshotIn } from "./Flashcard"
-import { v4 as uuidv4 } from "uuid"
+import { DeckModel } from "./Deck"
 import { addDays, endOfDay, isBefore, subDays } from "date-fns"
-import { DeckStoreSnapshotIn } from "./DeckStore"
 import { generateMockFlashcards, mockDeckModel } from "app/components/mock/mock"
 
 test("can be select flashcard", () => {
@@ -11,6 +8,7 @@ test("can be select flashcard", () => {
   const randomFlashcard = flashcards[Math.floor(Math.random() * flashcards.length)]
   instance.selectFlashcard(randomFlashcard)
   expect(instance.selectedFlashcard).toEqual(randomFlashcard)
+  expect(true).toEqual(true)
 })
 
 test("can remove selected flashcard", () => {

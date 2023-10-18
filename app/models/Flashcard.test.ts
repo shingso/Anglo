@@ -4,11 +4,6 @@ import { FlashcardModel } from "./Flashcard"
 import { mockDeckModel } from "app/components/mock/mock"
 import { CardProgressSnapshotIn } from "./CardProgress"
 import { v4 as uuidv4 } from "uuid"
-test("can be created", () => {
-  //const instance = FlashcardModel.create({})
-
-  expect(true).toBeTruthy()
-})
 
 test("can update flashcard", () => {
   const instance = DeckModel.create(mockDeckModel)

@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { Linking, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps } from "../navigators"
-import { Button, Card, Icon, LineWord, Screen, Text } from "../components"
+import { Button, Card, Icon, LineWord, Loading, Screen, Text } from "../components"
 import { custom_colors, spacing } from "app/theme"
 import { CustomText } from "app/components/CustomText"
 import {
@@ -41,7 +41,6 @@ import { isAfter } from "date-fns"
 // @ts-ignore
 export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscribe">> = observer(
   function SubscribeScreen() {
-    const { confirmPayment, presentPaymentSheet } = useStripe()
     const { subscriptionStore, settingsStore } = useStores()
     const { isPlatformPaySupported, confirmPlatformPayPayment } = usePlatformPay()
     const [loading, setLoading] = useState(false)
@@ -50,7 +49,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       const getGooglePaySupport = async () => {
         const res = await getProducts()
         if (!(await isPlatformPaySupported({ googlePay: { testEnv: true } }))) {
-          showErrorToast("Google pay not supported")
+          showErrorToast("Google pay error")
           return
         } else {
           //showSuccessToast("Google pay supported")
@@ -216,7 +215,12 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     return (
-      <Screen style={$root} preset="scroll">
+      <Screen style={$root} contentContainerStyle={{ flexGrow: 1 }} preset="scroll">
+        {loading && (
+          <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 2 }}>
+            <Loading></Loading>
+          </View>
+        )}
         {!subscriptionStore?.hasActiveSubscription() ? (
           <View style={$container}>
             <CustomText style={{ marginBottom: spacing.size160 }}>

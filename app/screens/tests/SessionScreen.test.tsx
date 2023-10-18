@@ -3,14 +3,27 @@ import React from "react"
 import { SessionScreen } from "../SessionScreen"
 import { useNavigation } from "@react-navigation/native"
 import { useStores } from "app/models"
-import { mockDeckStoreCreate } from "app/components/mock/mock"
+import { mockDeckStoreCreate, mockSettingStoreCreate } from "app/components/mock/mock"
 
 jest.mock("../../models/helpers/useStores", () => ({
   useStores: () => ({
     deckStore: mockDeckStoreCreate,
+    settingsStore: mockSettingStoreCreate,
   }),
 }))
 jest.mock("../../utils/flashcardUtils")
+
+/* const mockedNavigate = jest.fn()
+
+jest.mock("@react-navigation/native", () => {
+  const actualNav = jest.requireActual("@react-navigation/native")
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: mockedNavigate,
+    }),
+  }
+}) */
 
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -25,8 +38,9 @@ test("session screen works", async () => {
   const { deckStore } = useStores()
   deckStore.selectDeck(deckStore.decks[0])
   deckStore.selectedDeck.setSessionCards()
+  const navigation = useNavigation()
   const firstSessionCard = deckStore.selectedDeck.sessionCards[0]
-  const screen = render(<SessionScreen navigation={useNavigation()} route={undefined} />)
+  const screen = render(<SessionScreen navigation={navigation} route={undefined} />)
   expect(screen).toBeTruthy()
   expect(screen.getAllByText(firstSessionCard.front)).toBeTruthy()
 })
@@ -35,9 +49,10 @@ test("right swipe works", async () => {
   const { deckStore } = useStores()
   deckStore.selectDeck(deckStore.decks[0])
   deckStore.selectedDeck.setSessionCards()
+  const navigation = useNavigation()
   const sessionCardCount = deckStore.selectedDeck.sessionCards.length
   const firstSessionCard = deckStore.selectedDeck.sessionCards[0]
-  const screen = render(<SessionScreen navigation={useNavigation()} route={undefined} />)
+  const screen = render(<SessionScreen navigation={navigation} route={undefined} />)
   expect(screen).toBeTruthy()
   expect(screen.getAllByText(sessionCardCount.toString())).toBeTruthy()
   expect(screen.getAllByText(firstSessionCard.front)[0]).toBeTruthy()
@@ -49,11 +64,12 @@ test("add note", async () => {
   const { deckStore } = useStores()
   deckStore.selectDeck(deckStore.decks[0])
   deckStore.selectedDeck.setSessionCards()
-  const screen = render(<SessionScreen navigation={useNavigation()} route={undefined} />)
+  const navigation = useNavigation()
+  const screen = render(<SessionScreen navigation={navigation} route={undefined} />)
   expect(screen).toBeTruthy()
-  expect(screen.getByTestId("fluent_note_edit")).toBeTruthy()
+  expect(screen.getByTestId("fluent_edit_outline")).toBeTruthy()
   await act(() => {
-    fireEvent.press(screen.getByTestId("fluent_note_edit"))
+    fireEvent.press(screen.getByTestId("fluent_edit_outline"))
   })
 
   //expect(screen.getByPlaceholderText("note")).toBeTruthy()

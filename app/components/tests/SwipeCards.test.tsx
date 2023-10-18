@@ -17,7 +17,6 @@ jest.mock("../../models/helpers/useStores", () => ({
 
 test("can be created", async () => {
   const { deckStore } = useStores()
-  console.log(deckStore)
   deckStore.selectDeck(deckStore.decks[0])
 
   deckStore.selectedDeck.setSessionCards()

@@ -164,25 +164,29 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     ])
   }
 
-  const startFlashcard = async (flashcard: Flashcard) => {
+  const startFlashcard = async (flashcard: Flashcard, deck: Deck) => {
     if (!flashcard?.id) {
       return
     }
-
+    const now = new Date()
     const updatedFlashcard = {
       [Flashcard_Fields.ID]: flashcard.id,
-      [Flashcard_Fields.NEXT_SHOWN]: new Date(),
+      [Flashcard_Fields.NEXT_SHOWN]: now,
+    }
+    flashcard.updateFlashcard(updatedFlashcard)
+    setSelectedFlashcard((prev) => ({
+      ...prev,
+      [Flashcard_Fields.NEXT_SHOWN]: now,
+    }))
+    if (settingsStore.isOffline) {
+      deck.addToQueuedQueries({
+        id: uuidv4(),
+        variables: JSON.stringify(updatedFlashcard),
+        function: QueryFunctions.UPDATE_FLASHCARD,
+      })
+      return
     }
     const updateReponse = await updateFlashcard(updatedFlashcard)
-    if (updateReponse) {
-      flashcard.updateFlashcard(updateReponse)
-      setSelectedFlashcard((prev) => ({
-        ...prev,
-        [Flashcard_Fields.NEXT_SHOWN]: updateReponse?.next_shown,
-      }))
-    } else {
-      flashcard.updateFlashcard(updatedFlashcard)
-    }
   }
 
   const pickImage = async () => {
@@ -328,7 +332,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           {!flashcard?.next_shown && flashcard?.deck_id ? (
             <Icon
               size={28}
-              onPress={() => startFlashcard(flashcard)}
+              onPress={() => startFlashcard(flashcard, deck)}
               icon="fluent_play_outline"
             ></Icon>
           ) : null}

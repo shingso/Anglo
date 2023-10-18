@@ -23,6 +23,37 @@ jest.doMock("react-native", () => {
   )
 })
 
+const mockedNavigate = jest.fn()
+jest.mock("@react-navigation/native", () => {
+  const actualNav = jest.requireActual("@react-navigation/native")
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: mockedNavigate,
+    }),
+  }
+})
+
+/* jest.mock("@react-navigation/native", () => {
+  const actualNav = jest.requireActual("@react-navigation/native")
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: jest.fn(),
+      dispatch: jest.fn(),
+    }),
+  }
+})
+ */
+const mockStripe = {
+  confirmPayment: jest.fn(),
+  presentPaymentSheet: jest.fn(),
+}
+
+const mockPlatformPay = {
+  isPlatformPaySupported: jest.fn(),
+  confirmPlatformPayPayment: jest.fn(),
+}
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
 )
@@ -32,6 +63,15 @@ jest.mock("i18n-js", () => ({
   t: (key: string, params: Record<string, string>) => {
     return `${key} ${JSON.stringify(params)}`
   },
+}))
+
+jest.mock("@stripe/stripe-react-native", () => ({
+  StripeProvider: jest.fn(({ children }) => children),
+  CardField: jest.fn(() => null),
+  presentPaymentSheet: jest.fn(),
+  initPaymentSheet: jest.fn(),
+  usePlatformPay: jest.fn(() => mockPlatformPay),
+  useStripe: jest.fn(() => mockStripe),
 }))
 
 declare const tron // eslint-disable-line @typescript-eslint/no-unused-vars

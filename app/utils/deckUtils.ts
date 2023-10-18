@@ -11,8 +11,9 @@ import { showErrorToast } from "./errorUtils"
 import { shuffle } from "./helperUtls"
 import { Deck, DeckSnapshotIn } from "../models/Deck"
 import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
-import { QueryFunctions } from "app/models"
+
 import { v4 as uuidv4 } from "uuid"
+import { QueryFunctions } from "app/models/Query"
 export enum Deck_Fields {
   ID = "id",
   TITLE = "title",

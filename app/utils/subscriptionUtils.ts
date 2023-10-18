@@ -86,7 +86,7 @@ export interface Product {
 export const getProducts = async (): Promise<Product[]> => {
   try {
     let { data, error } = await supabase.from("products").select("*")
-    console.log("products", data, error)
+
     if (data && data?.length > 0) {
       return data
     }
