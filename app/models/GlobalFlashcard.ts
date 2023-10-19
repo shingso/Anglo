@@ -6,7 +6,7 @@ export enum ConflictTypes {
   UPDATE = "update",
   INSERT = "insert",
 }
-
+//TODO CURRENTLY UNUSED/REVIEW AND REMOVE
 /**
  * Model description here for TypeScript hints.
  */

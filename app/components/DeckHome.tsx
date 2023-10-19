@@ -312,9 +312,9 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           }}
         >
           <CustomText preset="body1Strong">Flashcards</CustomText>
-          <CustomText style={{ color: custom_colors.brandForeground1 }} preset="caption1Strong">
+          {/*     <CustomText style={{ color: custom_colors.brandForeground1 }} preset="caption1Strong">
             View all
-          </CustomText>
+          </CustomText> */}
         </View>
         <Card
           onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
@@ -385,7 +385,33 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
             }
           ></Card>
         ) : null}
-
+        <Card
+          onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
+          style={{
+            minHeight: 0,
+            elevation: 0,
+            marginBottom: spacing.size80,
+          }}
+          ContentComponent={
+            <View
+              style={{
+                paddingHorizontal: spacing.size120,
+                paddingVertical: spacing.size80,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Icon
+                icon="fluent_lightbulb"
+                style={{ marginRight: spacing.size120 }}
+                size={22}
+              ></Icon>
+              <View>
+                <CustomText preset="body1">{`Use AI to generate cards`}</CustomText>
+              </View>
+            </View>
+          }
+        ></Card>
         <Card
           onPress={() => addCardsToShow(deck, 5, settingsStore.isOffline)}
           style={{
@@ -457,6 +483,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
 
 const $container: ViewStyle = {
   justifyContent: "center",
+  paddingBottom: spacing.size280,
 }
 
 const $text: TextStyle = {

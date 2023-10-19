@@ -113,11 +113,19 @@ export const mockDeckStoreCreate = DeckStoreModel.create({
   decks: [mockDeckModel],
 })
 
-export const mockSubscriptionStoreCreate = SubscriptionStoreModel.create({
+export const mockSubscriptionStoreHasSubCreate = SubscriptionStoreModel.create({
   subscription: SubscriptionModel.create({
     end_date: addDays(new Date(), 5),
   }),
 })
+
+export const mockSubscriptionStoreNoSubCreate = SubscriptionStoreModel.create({
+  subscription: SubscriptionModel.create({
+    end_date: undefined,
+    subscription_id: undefined,
+  }),
+})
+
 export const mockDeckStoreModel: DeckStoreSnapshotIn = {
   decks: [mockDeckModel],
 }

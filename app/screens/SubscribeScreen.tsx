@@ -36,7 +36,7 @@ import { isAfter } from "date-fns"
 // - Import your screen, and add it to the stack:
 //     `<Stack.Screen name="Subscribe" component={SubscribeScreen} />`
 // Hint: Look for the 🔥!
-
+export const HAS_SUBSCRIPTION_TITLE = "You currently have an active subscription"
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
 export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscribe">> = observer(
@@ -48,7 +48,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     useEffect(() => {
       const getGooglePaySupport = async () => {
         const res = await getProducts()
-        if (!(await isPlatformPaySupported({ googlePay: { testEnv: true } }))) {
+        if (!(await isPlatformPaySupported())) {
           showErrorToast("Google pay error")
           return
         } else {
@@ -201,15 +201,6 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             </CustomText>
             <CustomText preset="caption1">Autogenerate flashcards using AI</CustomText>
           </View>
-
-          {/*    <View style={{ marginBottom: spacing.size200 }}>
-            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
-              Insightful statistics
-            </CustomText>
-            <CustomText style={{ marginBottom: spacing.size320 }} preset="caption1">
-              Visualize the progress you are making with comprehensive statistics.
-            </CustomText>
-          </View> */}
         </View>
       )
     }
@@ -333,7 +324,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         ) : (
           <View style={$container}>
             <CustomText preset="title2" style={{ marginBottom: spacing.size200 }}>
-              You currently have an active subscription
+              {HAS_SUBSCRIPTION_TITLE}
             </CustomText>
 
             {subscriptionStore.subscription.cancel_at_end && (

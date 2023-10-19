@@ -1,4 +1,4 @@
-import { endOfDay, isAfter, isBefore, isToday } from "date-fns"
+import { differenceInMinutes, endOfDay, isAfter, isBefore, isToday } from "date-fns"
 import {
   destroy,
   Instance,
@@ -91,6 +91,17 @@ export const DeckModel = types
       return self.flashcards.reduce((prev, card) => {
         return prev + card.passedTodaysCardProgress
       }, 0)
+    },
+
+    get overdueCards() {
+      const now = new Date()
+      return self.flashcards.filter((card) => {
+        const lastProgress = card?.mostRecentProgress
+        if (!lastProgress) return true
+        const setElapsed = lastProgress.time_elapsed
+        const currentElapsed = differenceInMinutes(now, lastProgress.created_at)
+        return setElapsed * 1.5 < currentElapsed
+      })
     },
     get cardProgressToday() {
       return self.flashcards.reduce((prev, card) => {

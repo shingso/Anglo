@@ -209,6 +209,8 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
               >
                 Learn more about learning
               </CustomText>
+              <CustomText preset="body1">See how you can memorize better</CustomText>
+              <CustomText preset="caption1">Learn new learning techniques</CustomText>
             </View>
           )}
           <CustomModal
