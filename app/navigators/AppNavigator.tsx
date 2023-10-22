@@ -25,7 +25,6 @@ import {
   OpenSourceScreen,
   ProgressConflictScreen,
   PurchaseDeckScreen,
-  ResetPasswordScreen,
   SessionScreen,
   SettingsScreen,
   SignUpScreen,
@@ -108,11 +107,6 @@ const LoginStackScreens = () => {
         options={{ headerShown: false }}
         name={AppRoutes.SIGN_UP}
         component={SignUpScreen}
-      />
-      <Stack.Screen
-        options={{ title: "Password Reset" }}
-        name={AppRoutes.PASSWORD_RESET}
-        component={ResetPasswordScreen}
       />
       <Stack.Screen
         options={{ title: "Password Reset" }}
@@ -248,13 +242,13 @@ const HomeScreens = () => {
         component={SubscribeScreen}
       />
 
-      <Stack.Screen name={AppRoutes.RESTART_OVERDUE} component={PurchaseDeckScreen} />
+      <Stack.Screen name={AppRoutes.RESTART_OVERDUE} component={RestartOverdueScreen} />
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
         options={{
           headerShown: true,
         }}
-        component={RestartOverdueScreen}
+        component={PurchaseDeckScreen}
       />
       <Stack.Screen name={AppRoutes.GLOBAL_CONFLICT} component={GlobalConflictScreen} />
       <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
