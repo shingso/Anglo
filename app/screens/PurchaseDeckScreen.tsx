@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { AppStackScreenProps } from "app/navigators"
+import { AppStackScreenProps, navigate } from "app/navigators"
 import { Button, CustomModal, CustomText, FlashcardListItem, Screen, Text } from "app/components"
 import { custom_colors, custom_palette, spacing, typography } from "app/theme"
 
@@ -23,19 +23,22 @@ import {
 } from "app/utils/subscriptionUtils"
 import { Deck, DeckSnapshotIn, Flashcard, FlashcardSnapshotIn } from "app/models"
 import { updateDeck } from "app/utils/deckUtils"
+import { useNavigation } from "@react-navigation/native"
+import { AppRoutes } from "app/utils/consts"
 
 interface PurchaseDeckScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"PurchaseDeck">> {}
 
 export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
   function PurchaseDeckScreen() {
-    const { deckStore } = useStores()
+    const { deckStore, subscriptionStore } = useStores()
     const [paidCardsPreview, setPaidCardsPreview] = useState([])
     const [paidCardsCount, setPaidCardsCount] = useState<number>(0)
     const selectedDeck = deckStore?.selectedDeck
     const globalDeckId = selectedDeck?.global_deck_id
     const [importPurchasedDeckVisible, setImportPurchasedDeckVisible] = useState(false)
     const [loading, setLoading] = useState(false)
+    const navigation = useNavigation()
 
     useEffect(() => {
       const setPurchasabeDeck = async () => {
@@ -48,46 +51,6 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         setPurchasabeDeck()
       }
     }, [globalDeckId])
-
-    const fetchPaymentSheetParamsBuyDeck = async (deckId: string) => {
-      const user = await supabase.auth.getUser()
-      const res = await processProductPayment(`deck_${deckId}`, user.data.user.id)
-      return {
-        paymentIntent: res.paymentIntent,
-        ephemeralKey: res.ephemeralKey,
-        customer: res.customer,
-      }
-    }
-
-    const initializePaymentSheet = async () => {
-      setLoading(true)
-      const {
-        paymentIntent: paymentInput,
-        ephemeralKey,
-        customer,
-      } = await fetchPaymentSheetParamsBuyDeck(globalDeckId)
-
-      const { paymentIntent, error } = await confirmPlatformPayPayment(paymentInput, {
-        googlePay: {
-          testEnv: true,
-          merchantName: "Anglo",
-          merchantCountryCode: "US",
-          currencyCode: "USD",
-          billingAddressConfig: {
-            format: PlatformPay.BillingAddressFormat.Full,
-            isPhoneNumberRequired: true,
-            isRequired: true,
-          },
-        },
-      })
-
-      if (paymentIntent?.status == "Succeeded") {
-        //const res = await getPaidGlobalFlashcards()
-        //console.log(res)
-        setImportPurchasedDeckVisible(true)
-      }
-      setLoading(false)
-    }
 
     const getPaidGlobalFlashcards = async () => {
       importPaidGlobalCards(globalDeckId, deckStore.selectedDeck)
@@ -135,14 +98,17 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
             mainAction={() => getPaidGlobalFlashcards()}
             visible={importPurchasedDeckVisible}
           ></CustomModal>
-          <PlatformPayButton
-            type={PlatformPay.ButtonType.Pay}
-            onPress={() => initializePaymentSheet()}
-            style={{
-              width: "100%",
-              height: 50,
-            }}
-          />
+
+          {!subscriptionStore.hasActiveSubscription() ? (
+            <Button
+              preset="custom_default"
+              onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
+            >
+              Go to subscription
+            </Button>
+          ) : (
+            <Button preset="custom_default">Import</Button>
+          )}
         </View>
       </Screen>
     )
