@@ -129,10 +129,16 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
                   ? addToUnselectedFlashcards(item.id)
                   : removeFromUnselectedFlashcards(item.id)
               }
-              RightComponent={
+              LeftComponent={
                 !unselectedFlashcards.includes(item.id) ? (
-                  <Icon size={20} color={custom_colors.successForeground2} icon="checkmark"></Icon>
-                ) : null
+                  <Icon
+                    size={20}
+                    color={custom_colors.successForeground1}
+                    icon="circle_check_filled"
+                  ></Icon>
+                ) : (
+                  <Icon size={20} color={custom_palette.grey50} icon="circle"></Icon>
+                )
               }
               key={item.id}
               flashcard={item}

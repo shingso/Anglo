@@ -16,6 +16,7 @@ export interface FlashcardListItemProps {
   onPress?: Function
   flashcard: any
   RightComponent?: any
+  LeftComponent?: any
 }
 
 /**
@@ -24,7 +25,7 @@ export interface FlashcardListItemProps {
 export const FlashcardListItem = observer(function FlashcardListItem(
   props: FlashcardListItemProps,
 ) {
-  const { style, onPress, flashcard, RightComponent } = props
+  const { style, onPress, flashcard, RightComponent, LeftComponent } = props
   const $styles = [$container, style]
 
   return (
@@ -52,7 +53,17 @@ export const FlashcardListItem = observer(function FlashcardListItem(
                 alignItems: "center",
               }}
             >
-              <CustomText preset="body2">{flashcard.front}</CustomText>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: spacing.size80,
+                }}
+              >
+                {LeftComponent && LeftComponent}
+                <CustomText preset="body2">{flashcard.front}</CustomText>
+              </View>
               {RightComponent && RightComponent}
             </View>
           }

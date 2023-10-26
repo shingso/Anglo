@@ -329,7 +329,7 @@ const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
   reversed: { backgroundColor: colors.palette.neutral700 },
   small_success: { backgroundColor: colors.palette.neutral800 },
   custom_filled: { backgroundColor: custom_colors.brandBackground1Pressed },
-  custom_outline: { backgroundColor: custom_palette.grey82 },
+  custom_outline: { opacity: 0.4 },
   clear: { backgroundColor: "transparent" },
   circle_icon: { backgroundColor: colors.palette.primary400 },
   custom_default: { backgroundColor: custom_colors.brandBackground1Pressed },
