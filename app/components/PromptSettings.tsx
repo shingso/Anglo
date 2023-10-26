@@ -48,24 +48,28 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
       <View style={{ gap: spacing.size160 }}>
         <TextField
           label="Back"
+          testID="back_input"
           value={backPrompt}
           onChangeText={setBackPrompt}
           onSubmitEditing={() => submitBackPrompt()}
         ></TextField>
         <TextField
           label="Subheader"
+          testID="subheader_input"
           value={subheaderPrompt}
           onChangeText={setSubheaderPrompt}
           onSubmitEditing={() => submitSubheaderPrompt()}
         ></TextField>
         <TextField
           label="Extra"
+          testID="extra_input"
           value={extraPrompt}
           onChangeText={setExtraPrompt}
           onSubmitEditing={() => submitExtraPrompt()}
         ></TextField>
         <TextField
           label="Extra Array"
+          testID="extra_array_input"
           value={extraArrayPrompt}
           onChangeText={setExtraArrayPrompt}
           onSubmitEditing={() => submitExtraArrayPrompt()}

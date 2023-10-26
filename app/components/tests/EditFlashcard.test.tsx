@@ -50,14 +50,14 @@ test("can update and save flashcard", async () => {
     await act(() => {
       inputEdit.props.onBlur()
     })
-    console.log("field value", randomFlashcard?.[field])
-    expect(randomFlashcard?.[field]).toEqual(field + "_newValue")
+    // console.log("field value", randomFlashcard?.[field])
+    // expect(randomFlashcard?.[field]).toEqual(field + "_newValue")
   }
 
   updateField("front")
-  //updateField("back")
-  //updateField("extra")
-  //updateField("sub_header")
+  updateField("back")
+  updateField("extra")
+  updateField("sub_header")
   //we should test clearing the extra array -- this test is for extra aray
   fireEvent.press(screen.getByTestId("extra_array_edit"))
   const inputEditExtra = screen.getByTestId("extra_array_edit")
@@ -72,6 +72,10 @@ test("can update and save flashcard", async () => {
   await act(async () => {
     fireEvent.press(saveIconButton)
   })
+  expect(randomFlashcard?.front).toEqual("front_newValue")
+  expect(randomFlashcard?.back).toEqual("back_newValue")
+  expect(randomFlashcard?.extra).toEqual("extra_newValue")
+  expect(randomFlashcard?.sub_header).toEqual("sub_header_newValue")
   //await waitFor(() => expect(flashcardUtils.updateFlashcard).toHaveBeenCalledTimes(1))
   // expect(randomFlashcard?.["extra_array"]).toEqual(["test"])
 })

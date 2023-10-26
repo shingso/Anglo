@@ -1,7 +1,7 @@
 import * as React from "react"
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, spacing, typography } from "../theme"
+import { colors, custom_palette, spacing, typography } from "../theme"
 import { Text } from "./Text"
 import Modal from "react-native-modal"
 import { Button } from "./Button"
@@ -23,6 +23,8 @@ export interface CustomModalProps {
   header?: String
   body: String
   children?: any
+  mainPreset?: any
+  secondaryPreset?: any
 }
 
 /**
@@ -40,6 +42,8 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
     header,
     body,
     children,
+    mainPreset,
+    secondaryPreset,
   } = props
   const $styles = [$container, style]
   const theme = useTheme()
@@ -64,14 +68,19 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
         {children && <View style={{ marginBottom: spacing.size160 }}>{children}</View>}
         <View style={{ flexDirection: "row", gap: spacing.size120 }}>
           {secondaryAction ? (
-            <Button style={{ flex: 1 }} preset="custom_outline" onPress={() => secondaryAction()}>
+            <Button
+              style={{ flex: 1, borderColor: custom_palette.grey68 }}
+              textStyle={{ color: custom_palette.grey46 }}
+              preset={secondaryPreset || "custom_outline"}
+              onPress={() => secondaryAction()}
+            >
               {secondaryActionLabel || "Cancel"}
             </Button>
           ) : null}
           <Button
             disabled={mainActionDisabled}
             style={{ flex: 1 }}
-            preset="custom_filled"
+            preset={mainPreset || "custom_filled"}
             onPress={() => mainAction()}
           >
             {mainActionLabel || "Confirm"}

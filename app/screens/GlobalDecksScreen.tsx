@@ -80,13 +80,15 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
             onChangeText={setSearchTerm}
           ></TextField>
 
-          <ScrollView
+          {/*           <ScrollView
             contentContainerStyle={{
               gap: 12,
+              backgroundColor: "green",
             }}
             style={{
               paddingHorizontal: spacing.size160,
               marginBottom: spacing.size160,
+              flexShrink: 1,
             }}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -102,14 +104,15 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                 </View>
               )
             })}
-          </ScrollView>
-
+          </ScrollView> */}
           <FlatList
+            style={{}}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               gap: 12,
               // padding: 2,
+
               marginHorizontal: 16,
               paddingBottom: spacing.size200,
             }}
@@ -162,7 +165,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
 )
 
 const $root: ViewStyle = {
-  flex: 1,
+  // flex: 1,
 }
 
 const $content_container: ViewStyle = {
