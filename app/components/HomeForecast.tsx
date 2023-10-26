@@ -31,7 +31,7 @@ export interface HomeForecastProps {
 export const HomeForecast = observer(function HomeForecast(props: HomeForecastProps) {
   const { style } = props
   const $styles = [$container, style]
-  const { deckStore, boughtDeckStore } = useStores()
+  const { deckStore } = useStores()
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
   const dateFormat = "yyyy-MM-dd"
   const [weeklyForecast, setWeeklyForecast] = useState({})

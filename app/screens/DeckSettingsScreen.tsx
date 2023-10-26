@@ -52,7 +52,7 @@ import { FlatList, ScrollView } from "react-native-gesture-handler"
 // @ts-ignore
 export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckSettings">> =
   observer(function DeckSettingsScreen() {
-    const { deckStore, boughtDeckStore } = useStores()
+    const { deckStore } = useStores()
     const selectedDeck = deckStore?.selectedDeck
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [newPerDay, setNewPerDay] = useState(deckStore?.selectedDeck?.new_per_day)
@@ -349,47 +349,46 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }
           ></Card>
 
-          {boughtDeckStore.isDeckBought(selectedDeck?.global_deck_id) &&
-            !selectedDeck.paid_imported && (
-              <Card
-                disabled={true}
-                style={{
-                  paddingHorizontal: spacing.size160,
-                  paddingVertical: spacing.size160,
-                  minHeight: 0,
-                  elevation: 0,
-                  marginTop: spacing.size80,
-                  marginBottom: spacing.size80,
-                  borderRadius: 16,
-                }}
-                ContentComponent={
-                  <View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <View>
-                        <CustomText preset="body1" presetColors={"secondary"}>
-                          Import premium cards
-                        </CustomText>
-                        <CustomText preset="caption2" presetColors={"secondary"}>
-                          There are cards you haven't imported yet
-                        </CustomText>
-                      </View>
-                      <Icon
-                        icon="caret_right"
-                        color="#242424"
-                        style={{ marginLeft: spacing.size80 }}
-                        size={16}
-                      ></Icon>
+          {!selectedDeck.paid_imported && (
+            <Card
+              disabled={true}
+              style={{
+                paddingHorizontal: spacing.size160,
+                paddingVertical: spacing.size160,
+                minHeight: 0,
+                elevation: 0,
+                marginTop: spacing.size80,
+                marginBottom: spacing.size80,
+                borderRadius: 16,
+              }}
+              ContentComponent={
+                <View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      <CustomText preset="body1" presetColors={"secondary"}>
+                        Import premium cards
+                      </CustomText>
+                      <CustomText preset="caption2" presetColors={"secondary"}>
+                        There are cards you haven't imported yet
+                      </CustomText>
                     </View>
+                    <Icon
+                      icon="caret_right"
+                      color="#242424"
+                      style={{ marginLeft: spacing.size80 }}
+                      size={16}
+                    ></Icon>
                   </View>
-                }
-              ></Card>
-            )}
+                </View>
+              }
+            ></Card>
+          )}
 
           <Card
             disabled={true}

@@ -64,7 +64,7 @@ import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
-    const { deckStore, boughtDeckStore, subscriptionStore, settingsStore } = useStores()
+    const { deckStore, settingsStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -78,16 +78,12 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     }
 
     useEffect(() => {
-      //getGlobalDeckConflicts()
       //Add new cards for deck
       deckStore.decks.forEach((deck) => {
         if (deck?.addNewCardsPerDay) {
           addNewDailyCardsToShow(deck)
         }
       })
-
-      // getMostRecentCardProgress()
-      // boughtDeckStore.getUserBoughtDecks()
     }, [])
 
     useEffect(() => {

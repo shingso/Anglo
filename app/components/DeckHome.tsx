@@ -35,7 +35,7 @@ export interface DeckHomeProps {
 export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
   const { style, deck, navigation } = props
   const $styles = [$container, style]
-  const { deckStore, boughtDeckStore, settingsStore } = useStores()
+  const { deckStore, settingsStore } = useStores()
   const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
   const [isPurchasable, setIsPurchasable] = useState<Boolean>(false)
   const selectedDeck = deckStore?.selectedDeck
@@ -354,9 +354,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           }
         ></Card>
 
-        {!boughtDeckStore.isDeckBought(selectedDeck?.global_deck_id) &&
-        isPurchasable &&
-        !!paidCardsCount ? (
+        {isPurchasable && !!paidCardsCount ? (
           <Card
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{

@@ -118,10 +118,6 @@ export const DeckModel = types
     getFlashcardById: (id: string) => {
       return self.flashcards.find((card) => card.id === id)
     },
-    isDeckBought(boughtDeckIds: string[]) {
-      return boughtDeckIds.find((item) => item === self.global_deck_id)
-    },
-
     doesDeckAlreadyContainFlashcard(front: String) {
       if (!front) return false
       return !!self.flashcards.find((flashcard) => flashcard.front === front)

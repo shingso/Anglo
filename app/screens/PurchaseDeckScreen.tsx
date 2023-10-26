@@ -29,7 +29,7 @@ interface PurchaseDeckScreenProps
 
 export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
   function PurchaseDeckScreen() {
-    const { deckStore, boughtDeckStore } = useStores()
+    const { deckStore } = useStores()
     const [paidCardsPreview, setPaidCardsPreview] = useState([])
     const [paidCardsCount, setPaidCardsCount] = useState<number>(0)
     const selectedDeck = deckStore?.selectedDeck
@@ -85,7 +85,6 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         //const res = await getPaidGlobalFlashcards()
         //console.log(res)
         setImportPurchasedDeckVisible(true)
-        boughtDeckStore.addToBoughtDecks(globalDeckId)
       }
       setLoading(false)
     }

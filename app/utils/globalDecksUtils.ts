@@ -1,8 +1,8 @@
-import { Deck, DeckSnapshotIn } from "app/models"
+import { Deck, DeckSnapshotIn, FlashcardSnapshotIn } from "app/models"
 import { supabase } from "../services/supabase/supabase"
-import { insertFlashcardsAndReturn } from "./boughtDecksUtils"
 import { updateDeck } from "./deckUtils"
 import { Global_Flashcard_Fields } from "./globalFlashcardsUtils"
+import { mapReponseToFlashcard } from "./flashcardUtils"
 
 export enum Global_Deck_Fields {
   ID = "id",
@@ -83,7 +83,7 @@ export const importFreeGlobalDeckById = async (
 }
 
 export const importPaidGlobalCards = async (globalDeckId: string, deck: Deck) => {
-  const addedFlashcards = await insertFlashcardsAndReturn(deck.id, globalDeckId)
+  const addedFlashcards = await insertPaidFlashcardsIntoDeck(deck.id, globalDeckId)
   //maybe we should possibly add it on the backend
   if (addedFlashcards && addedFlashcards?.length > 0) {
     //this is not an offline mode thing so it shouldnt ever need to update -> we should just update on the BE if it has added the cards
@@ -94,5 +94,25 @@ export const importPaidGlobalCards = async (globalDeckId: string, deck: Deck) =>
     }
     const res = await updateDeck(updatedDeck)
     deck.updatePaidImport(true)
+  }
+}
+
+export const insertPaidFlashcardsIntoDeck = async (
+  deckId: string,
+  globalDeckId: string,
+): Promise<FlashcardSnapshotIn[]> => {
+  try {
+    let { data, error } = await supabase.rpc("import_paid_deck_flashcards", {
+      deck_id_param: deckId,
+      selected_deck_id: globalDeckId,
+    })
+    console.log("we purchased the deck", data, error)
+    if (data) {
+      return data.map((card) => mapReponseToFlashcard(card))
+    }
+    return null
+  } catch (error) {
+    console.log(error)
+    return null
   }
 }
