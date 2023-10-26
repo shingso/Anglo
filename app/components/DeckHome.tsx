@@ -386,7 +386,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           ></Card>
         ) : null}
         <Card
-          onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
+          onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
           style={{
             minHeight: 0,
             elevation: 0,

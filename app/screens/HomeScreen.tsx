@@ -60,6 +60,7 @@ import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUti
 import { isSameDay } from "date-fns"
 import { Flashcard_Fields, upsertMultipleFlashcards } from "app/utils/flashcardUtils"
 import { v4 as uuidv4 } from "uuid"
+import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
@@ -138,6 +139,43 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
         deck.getConflicts()
       })
     }
+    const promoDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
+    const importSATVocabDeck = async () => {
+      const deck = await importFreeGlobalDeckById(promoDeckId, "SAT Vocabulary")
+      if (deck && deck?.id) {
+        deckStore.addDeckFromRemote(deck?.id)
+      }
+    }
+
+    const DeckItem = (props) => {
+      const { title, caption, onPress } = props
+      return (
+        <Card
+          onPress={() => (onPress ? onPress() : null)}
+          style={{
+            minHeight: 0,
+            elevation: 0,
+          }}
+          ContentComponent={
+            <View
+              style={{
+                paddingHorizontal: spacing.size120,
+                paddingVertical: spacing.size80,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <View>
+                <CustomText preset="body1">{title}</CustomText>
+                <CustomText preset="caption2" presetColors={"secondary"}>
+                  {caption}
+                </CustomText>
+              </View>
+            </View>
+          }
+        ></Card>
+      )
+    }
 
     return (
       <Screen safeAreaEdges={["bottom", "top"]} style={$root}>
@@ -195,10 +233,20 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 >
                   Get started by adding a deck
                 </CustomText>
-                <CustomText preset="body1">See premade decks</CustomText>
-                <CustomText preset="caption1">
-                  Recommended for vocabulary words and languages
+
+                <CustomText
+                  presetColors={"secondary"}
+                  preset="caption1Strong"
+                  style={{ marginBottom: spacing.size80 }}
+                >
+                  Recommended decks
                 </CustomText>
+                <DeckItem
+                  onPress={() => importSATVocabDeck()}
+                  title={"SAT Vocabulary"}
+                  caption={"Common and essential SAT vocabulary words"}
+                ></DeckItem>
+
                 <LineWord text={"or"}></LineWord>
                 <CustomText preset="body1">Add your own custom deck</CustomText>
                 <CustomText preset="caption1">Quickly build a custom deck using AI</CustomText>

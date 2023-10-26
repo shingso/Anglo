@@ -38,12 +38,8 @@ import {
   soundSettingOptions,
   SCREEN_HEIGHT,
 } from "../utils/consts"
-import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { FlatList, ScrollView } from "react-native-gesture-handler"
-import { borderRadius } from "app/theme/borderRadius"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../models"
 
 // STOP! READ ME FIRST!
 // To fix the TS error below, you'll need to add the following things in your navigation config:
@@ -56,7 +52,7 @@ import { borderRadius } from "app/theme/borderRadius"
 // @ts-ignore
 export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckSettings">> =
   observer(function DeckSettingsScreen() {
-    const { deckStore } = useStores()
+    const { deckStore, boughtDeckStore } = useStores()
     const selectedDeck = deckStore?.selectedDeck
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [newPerDay, setNewPerDay] = useState(deckStore?.selectedDeck?.new_per_day)
@@ -67,7 +63,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const aiLanguageModelRef = useRef<BottomSheetModal>()
     const customPromptModelRef = useRef<BottomSheetModal>()
     const soundLanguageModelRef = useRef<BottomSheetModal>()
-    const soundSettingsModelRef = useRef<BottomSheetModal>()
+    const soundFieldModelRef = useRef<BottomSheetModal>()
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
     const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
@@ -90,7 +86,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       setAddNewCardsPerDay(deckStore.selectedDeck.addNewCardsPerDay)
     }, [])
 
-    const data = useMemo(
+    const numberOfCards = useMemo(
       () =>
         Array(26)
           .fill(0)
@@ -127,8 +123,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       selectedDeck.setTranslateLanguage(language)
     }
 
-    const updateSelectedDeck = async (deck: Partial<Deck>) => {
-      const newDeck: Partial<Deck> = {
+    const updateSelectedDeck = async (deck: DeckSnapshotIn) => {
+      const newDeck: DeckSnapshotIn = {
         ...deck,
         id: deckStore.selectedDeck.id,
       }
@@ -150,6 +146,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           ></EditableText> */}
           <View style={{ marginBottom: spacing.size200 }}>
             <Card
+              testID="cards_per_day"
               style={{
                 paddingHorizontal: spacing.size160,
                 paddingVertical: spacing.size120,
@@ -285,7 +282,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     marginBottom: spacing.size120,
                   }}
                 />
-                <TouchableOpacity onPress={() => soundSettingsModelRef?.current?.present()}>
+                <TouchableOpacity onPress={() => soundFieldModelRef?.current?.present()}>
                   <View
                     style={{
                       flexDirection: "row",
@@ -351,6 +348,48 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               </View>
             }
           ></Card>
+
+          {boughtDeckStore.isDeckBought(selectedDeck?.global_deck_id) &&
+            !selectedDeck.paid_imported && (
+              <Card
+                disabled={true}
+                style={{
+                  paddingHorizontal: spacing.size160,
+                  paddingVertical: spacing.size160,
+                  minHeight: 0,
+                  elevation: 0,
+                  marginTop: spacing.size80,
+                  marginBottom: spacing.size80,
+                  borderRadius: 16,
+                }}
+                ContentComponent={
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View>
+                        <CustomText preset="body1" presetColors={"secondary"}>
+                          Import premium cards
+                        </CustomText>
+                        <CustomText preset="caption2" presetColors={"secondary"}>
+                          There are cards you haven't imported yet
+                        </CustomText>
+                      </View>
+                      <Icon
+                        icon="caret_right"
+                        color="#242424"
+                        style={{ marginLeft: spacing.size80 }}
+                        size={16}
+                      ></Icon>
+                    </View>
+                  </View>
+                }
+              ></Card>
+            )}
 
           <Card
             disabled={true}
@@ -427,7 +466,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             contentContainerStyle={{ paddingBottom: 240 }}
             showsVerticalScrollIndicator={false}
           >
-            {data.map((num) => (
+            {numberOfCards.map((num) => (
               <Option
                 key={num}
                 title={num}
@@ -476,7 +515,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           </View>
         </BottomSheet>
 
-        <BottomSheet ref={soundSettingsModelRef} customSnap={["85%"]}>
+        <BottomSheet ref={soundFieldModelRef} customSnap={["85%"]}>
           <ModalHeader title={"Sound will play for the selected field"}></ModalHeader>
           <View>
             {soundSettingOptions.map((option) => {
