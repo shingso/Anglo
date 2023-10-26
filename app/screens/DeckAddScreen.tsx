@@ -9,7 +9,7 @@ import { Deck, FlashcardModel, useStores } from "../models"
 import { useNavigation } from "@react-navigation/native"
 import { colors, custom_colors, typography } from "../theme"
 import { AppRoutes, AppStackParamList } from "../utils/consts"
-import { importGlobalDeckById } from "app/utils/globalDecksUtils"
+import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -35,7 +35,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     }, [])
 
     const importDeck = async () => {
-      const newDeck = await importGlobalDeckById(deck.id, deck.title, newPerDay)
+      const newDeck = await importFreeGlobalDeckById(deck.id, deck.title, newPerDay)
       if (newDeck && newDeck?.id) {
         deckStore.addDeckFromRemote(newDeck?.id)
       }

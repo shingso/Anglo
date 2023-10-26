@@ -28,13 +28,8 @@ import {
 } from "../models"
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import {
-  loadOrInitalizeSettings,
-  reloadDefaultSettings,
-  Settings_Fields,
-  toggleSetting,
-} from "../utils/settingsUtil"
-import * as Speech from "expo-speech"
+import { loadOrInitalizeSettings, reloadDefaultSettings } from "../utils/settingsUtil"
+import { pronouceFlashcardWithDeckSettings } from "../utils/soundUtils"
 import {
   Flashcard_Fields,
   addToFlashcardProgress,
@@ -48,7 +43,7 @@ import { getSnapshot } from "mobx-state-tree"
 
 import { millisecondsToTime } from "../utils/helperUtls"
 import Modal from "react-native-modal"
-import { AppRoutes, AppStackParamList, AppStackScreenProps, SCREEN_WIDTH } from "../utils/consts"
+import { AppRoutes, AppStackParamList, SCREEN_WIDTH } from "../utils/consts"
 import { Card_Progress_Fields, deleteCardProgress } from "../utils/cardProgressUtils"
 import {
   getRemoteRecentUpdate,
@@ -61,6 +56,7 @@ import { calculateNextInterval } from "app/utils/superMemoUtils"
 import { addDays, addMinutes, differenceInMinutes, subMinutes } from "date-fns"
 import { borderRadius } from "app/theme/borderRadius"
 import { v4 as uuidv4 } from "uuid"
+import { AppStackScreenProps } from "app/navigators"
 
 export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>> = observer(
   function SessionScreen() {
@@ -210,13 +206,8 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     }
 
     const pronouceCurrentWord = () => {
-      Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        const soundOption = deckStore?.selectedDeck?.soundOption
-        const languageOption = deckStore?.selectedDeck?.playSoundLanguage
-        if (currentFlashcards[0]?.[soundOption.toString()]) {
-          Speech.speak(currentFlashcards[0]?.[soundOption.toString()], { language: languageOption })
-        }
+        pronouceFlashcardWithDeckSettings(deckStore.selectedDeck, currentFlashcards[0])
       }
     }
 

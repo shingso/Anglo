@@ -6,7 +6,7 @@ import { AppStackScreenProps } from "../navigators"
 import { Button, Card, CustomText, Icon, Screen, Text } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Education_Levels, User, updateUser } from "../utils/userUtils"
-import { importGlobalDeckById } from "app/utils/globalDecksUtils"
+import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 import { useStores } from "app/models"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -42,7 +42,7 @@ export const UserSetupScreen: FC<StackScreenProps<AppStackScreenProps, "UserSetu
     }
 
     const importSATVocabDeck = async () => {
-      const deck = await importGlobalDeckById(promoDeckId, "SAT Vocabulary")
+      const deck = await importFreeGlobalDeckById(promoDeckId, "SAT Vocabulary")
       if (deck && deck?.id) {
         deckStore.addDeckFromRemote(deck?.id)
       }

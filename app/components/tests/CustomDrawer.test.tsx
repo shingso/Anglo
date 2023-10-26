@@ -10,6 +10,6 @@ jest.mock("react-native-safe-area-context", () => {
 })
 
 test("can render custom drawer", async () => {
-  //const screen = render(<CustomDrawer navigation={null}></CustomDrawer>)
+  const screen = render(<CustomDrawer navigation={null}></CustomDrawer>)
   expect(true).toBeTruthy()
 })

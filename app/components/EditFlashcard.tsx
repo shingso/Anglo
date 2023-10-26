@@ -107,6 +107,24 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     }
   }
 
+  const resetFlashcard = async (flashcard: Flashcard, deck: Deck) => {
+    const updatedFlashcard: FlashcardSnapshotIn = {
+      id: flashcard?.id,
+      next_shown: undefined,
+    }
+    flashcard.updateFlashcard(updatedFlashcard)
+    if (settingsStore.isOffline) {
+      deck.addToQueuedQueries({
+        id: uuidv4(),
+        variables: JSON.stringify(updatedFlashcard),
+        function: QueryFunctions.UPSERT_FLASHCARDS,
+      })
+      return updatedFlashcard
+    }
+    const res = await updateFlashcard(updatedFlashcard)
+    return updatedFlashcard
+  }
+
   const useAIDefinition = async () => {
     if (settingsStore.isOffline) {
       showErrorToast("Currently offline", "Go online to use AI to generate a flashcards")
@@ -311,7 +329,9 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       )}
       {flashcard?.next_shown ? (
         <View style={{ position: "absolute", top: 0, left: 0 }}>
-          <StatusLabel text={"Active"}></StatusLabel>
+          <TouchableOpacity onPress={() => resetFlashcard(flashcard, deck)}>
+            <StatusLabel text={"Active"}></StatusLabel>
+          </TouchableOpacity>
         </View>
       ) : null}
       <View style={$modal_header}>

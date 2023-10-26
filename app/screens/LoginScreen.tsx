@@ -96,6 +96,10 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
       navigation.navigate(AppRoutes.SIGN_UP)
     }
 
+    const goToPasswordResetWeb = () => {
+      Linking.openURL("https://spacedmemo.com/passwordrecovery")
+    }
+
     const goToForgotPassword = () => {
       navigation.navigate(AppRoutes.FORGOT_PASSWORD)
     }
@@ -173,7 +177,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
           <Button style={$inputContainer} preset="custom_default" onPress={() => signInWithEmail()}>
             Sign In
           </Button>
-          <CustomText preset="body2Strong" onPress={() => goToForgotPassword()}>
+          <CustomText preset="body2Strong" onPress={() => goToPasswordResetWeb()}>
             Forgot your password?
           </CustomText>
 

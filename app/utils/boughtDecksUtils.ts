@@ -26,7 +26,7 @@ export const insertFlashcardsAndReturn = async (
   globalDeckId: string,
 ): Promise<FlashcardSnapshotIn[]> => {
   try {
-    let { data, error } = await supabase.rpc("insert_flashcards_and_return", {
+    let { data, error } = await supabase.rpc("import_paid_deck_flashcards", {
       deck_id_param: deckId,
       selected_deck_id: globalDeckId,
     })

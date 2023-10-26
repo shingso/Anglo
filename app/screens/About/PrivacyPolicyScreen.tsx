@@ -201,7 +201,7 @@ export const PrivacyPolicyScreen: FC<StackScreenProps<AppStackScreenProps, "Priv
             title={"Contact Us"}
             body={[
               "If you have any questions about this Privacy Policy, You can contact us:",
-              "todo@gmail.com",
+              "support@spacedmemo.com",
             ]}
           ></Section>
         </View>

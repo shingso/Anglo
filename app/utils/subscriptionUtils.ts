@@ -86,7 +86,6 @@ export interface Product {
 export const getProducts = async (): Promise<Product[]> => {
   try {
     let { data, error } = await supabase.from("products").select("*")
-
     if (data && data?.length > 0) {
       return data
     }
@@ -112,7 +111,6 @@ export const getPaidFlashcardsCountByDeckId = async (deck_id: string) => {
     .select("*", { count: "exact" })
     .eq("deck_id", deck_id)
     .eq("free", false)
-
   return count
 }
 
@@ -121,7 +119,7 @@ export const getPaidFlashcardsPreview = async (deck_id: string) => {
     let { data, error } = await supabase
       .from("private_global_flashcards")
       .select("id, front")
-      .limit(25)
+      .limit(20)
       .eq("deck_id", deck_id)
       .eq("free", false)
     console.log(data, error)

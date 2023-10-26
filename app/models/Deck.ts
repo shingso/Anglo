@@ -49,6 +49,7 @@ export const DeckModel = types
     [Deck_Fields.FLASHCARDS]: types.optional(types.array(FlashcardModel), []),
     [Deck_Fields.LAST_ADDED]: types.maybe(types.Date),
     [Deck_Fields.NEW_PER_DAY]: types.maybe(types.number),
+    [Deck_Fields.PAID_IMPORTED]: types.maybe(types.boolean),
     [Deck_Fields.GLOBAL_DECK_ID]: types.maybe(types.string), //id of the global deck that this deck is cloned from
     [Deck_Fields.LAST_GLOBAL_SYNC]: types.maybe(types.Date), //this is used for global deck syncing
     selectedFlashcard: types.maybe(types.safeReference(FlashcardModel)),
@@ -97,7 +98,7 @@ export const DeckModel = types
       const now = new Date()
       return self.flashcards.filter((card) => {
         const lastProgress = card?.mostRecentProgress
-        if (!lastProgress) return true
+        if (!lastProgress) return false
         const setElapsed = lastProgress.time_elapsed
         const currentElapsed = differenceInMinutes(now, lastProgress.created_at)
         return setElapsed * 1.5 < currentElapsed
@@ -320,6 +321,9 @@ export const DeckModel = types
       self.last_global_sync = deck?.last_global_sync
         ? new Date(deck.last_global_sync)
         : new Date(self.last_global_sync)
+    },
+    updatePaidImport: (imported: boolean) => {
+      self.paid_imported = imported
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

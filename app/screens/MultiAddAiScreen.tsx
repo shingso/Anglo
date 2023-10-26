@@ -24,9 +24,9 @@ import {
 } from "app/components"
 import { spacing } from "app/theme"
 import { Deck, FlashcardSnapshotIn, useStores } from "app/models"
-import { showDefaultToast, showSuccessToast } from "app/utils/errorUtils"
+import { showDefaultToast, showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { Flashcard_Fields, addFlashcard } from "app/utils/flashcardUtils"
-import { getAIDefintionWithDeckPrompts } from "app/utils/openAiUtils"
+import { getAIDefintionWithDeckPrompts, getRemainingRateLimit } from "app/utils/openAiUtils"
 import { v4 as uuidv4 } from "uuid"
 import { BottomSheetModal, SCREEN_HEIGHT } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
@@ -52,8 +52,9 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
   const selectedFlashcardModalRef = useRef<BottomSheetModal>()
   const aiLanguageModelRef = useRef<BottomSheetModal>()
   const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
+  const [limitRemaining, setLimitRemaining] = useState(null)
   // if we leave in the middle we still want to see the response
-
+  const wordsLimit = 20
   useEffect(() => {
     const res = navigation.addListener("beforeRemove", (e) => {
       /*    if (!loading) {
@@ -67,36 +68,41 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
   const appState = useRef(AppState.currentState)
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (appState.current.match("/inactive|background/") && nextAppState === "active") {
-        console.log("App has come to the foreground!")
+    const getRemainingLimit = async () => {
+      const data = await getRemainingRateLimit()
+      console.log(data, "response from limit")
+      if (data && data?.remaining) {
+        setLimitRemaining(data?.remaining)
       }
-
-      appState.current = nextAppState
-
-      console.log("AppState", appState.current)
-    })
-
-    return () => {
-      subscription.remove()
     }
+    getRemainingLimit()
   }, [])
 
   const addToWords = (word: string) => {
-    /*   if (words?.length > 25) {
-      showDefaultToast("Maximum 25 cards at a time")
-      return
-    }
- */
     if (!words.includes(word)) {
       setWords((prev) => [...prev, word])
     }
   }
 
   const submitInput = () => {
+    const wordsLength = words.length
+    if (wordsLength >= wordsLimit) {
+      showErrorToast("Too many words", `Maximum ${wordsLimit} words at a time`)
+      return
+    }
     if (input) {
       const parsedInput = input?.split(",")
-      parsedInput.forEach((word) => {
+      const addLength = parsedInput?.length
+      let wordsToAdd = parsedInput
+      if (wordsLength + addLength > wordsLimit) {
+        const remaining = wordsLimit - wordsLength
+        wordsToAdd = wordsToAdd.slice(0, remaining)
+        showErrorToast(
+          "Too many words",
+          `Maximum ${wordsLimit} words at a time, some words have been removed`,
+        )
+      }
+      wordsToAdd.forEach((word) => {
         addToWords(word?.trim())
       })
       setInput("")
@@ -145,6 +151,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
         const deckCard = selectedDeck.addFlashcard(addedFlashcard)
 
         !!deckCard ? success.push(deckCard) : errors.push(word)
+        setLimitRemaining(remaining)
       } else {
         errors.push(word)
       }
@@ -158,8 +165,6 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
     showSuccessToast(`${success.length} cards generated`)
   }
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
     <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="scroll">
       <Header></Header>
@@ -184,6 +189,11 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
               <CustomText preset="body1" style={{ marginBottom: spacing.size160 }}>
                 Generate multiple with AI
               </CustomText>
+              {limitRemaining !== null && (
+                <CustomText style={{ marginBottom: spacing.size120 }}>
+                  Remaining rate: {limitRemaining}
+                </CustomText>
+              )}
               <Card
                 disabled={true}
                 style={{

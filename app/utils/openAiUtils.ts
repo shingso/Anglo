@@ -25,9 +25,14 @@ export const getAIDefinition = async (
       subheaderPrompt,
     }),
   })
-  console.log(data, error)
   if (data) return data
-  return null
+  return {}
+}
+
+export const getRemainingRateLimit = async () => {
+  const { data, error } = await supabase.functions.invoke("getRateLimit")
+  console.log(data, error, "remaining response")
+  return data
 }
 
 export const getAIDefintionWithDeckPrompts = async (

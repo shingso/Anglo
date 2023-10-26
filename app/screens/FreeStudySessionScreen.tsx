@@ -25,7 +25,7 @@ import { AppStackParamList, AppRoutes } from "app/utils/consts"
 import { showErrorToast } from "app/utils/errorUtils"
 import { Flashcard_Fields, insertNote, removeNote } from "app/utils/flashcardUtils"
 import { getSnapshot } from "mobx-state-tree"
-import * as Speech from "expo-speech"
+import { pronouceFlashcardWithDeckSettings } from "../utils/soundUtils"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "app/models"
 
@@ -86,13 +86,8 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
     }
 
     const pronouceCurrentWord = () => {
-      Speech.stop()
       if (currentFlashcards && currentFlashcards.length > 0) {
-        const soundOption = deckStore?.selectedDeck?.soundOption
-        const languageOption = deckStore?.selectedDeck?.playSoundLanguage
-        if (currentFlashcards[0]?.[soundOption.toString()]) {
-          Speech.speak(currentFlashcards[0]?.[soundOption.toString()], { language: languageOption })
-        }
+        pronouceFlashcardWithDeckSettings(deckStore.selectedDeck, currentFlashcards[0])
       }
     }
 

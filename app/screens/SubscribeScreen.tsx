@@ -231,7 +231,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
               ContentComponent={
                 <View>
                   <CustomText preset="body2Strong">Subscription plan</CustomText>
-                  <CustomText preset="body1">$3.99 per month</CustomText>
+                  <CustomText preset="body1">$4.99 per month</CustomText>
                 </View>
               }
             ></Card>
@@ -256,7 +256,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 >
                   <View>
                     <CustomText preset="body2Strong">6 month subscription</CustomText>
-                    <CustomText preset="body1">$19.95</CustomText>
+                    <CustomText preset="body1">$26.99</CustomText>
                   </View>
                   <View
                     style={{
@@ -272,7 +272,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                     }}
                   >
                     <CustomText preset="body2Strong" style={{ color: custom_colors.background1 }}>
-                      -20%
+                      -10%
                     </CustomText>
                   </View>
                 </View>
@@ -290,7 +290,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
               ContentComponent={
                 <View>
                   <CustomText preset="body2Strong">12 month subscription</CustomText>
-                  <CustomText preset="body1">$29.99</CustomText>
+                  <CustomText preset="body1">$44.99</CustomText>
                   <View
                     style={{
                       backgroundColor: custom_colors.brandBackground1,
@@ -305,7 +305,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                     }}
                   >
                     <CustomText preset="body1Strong" style={{ color: custom_colors.background1 }}>
-                      -45%
+                      -25%
                     </CustomText>
                   </View>
                 </View>

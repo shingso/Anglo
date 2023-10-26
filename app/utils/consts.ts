@@ -107,6 +107,7 @@ export enum SoundLanguage {
   MANDARIN = "zh-CN",
   JAPANESE = "ja-JP",
   THAI = "th-TH",
+  ITALIAN = "it-IT",
 }
 
 export enum TranslateLanguage {
@@ -119,6 +120,7 @@ export enum TranslateLanguage {
   MANDARIN = "mandarin",
   JAPANESE = "japanese",
   THAI = "thai",
+  ITALIAN = "ITALIAN",
 }
 
 export const soundOptionArray = [
@@ -139,6 +141,7 @@ export const translateLanguageArray = [
   TranslateLanguage.FRENCH,
   TranslateLanguage.DUTCH,
   TranslateLanguage.THAI,
+  TranslateLanguage.ITALIAN,
 ]
 
 export const playSoundLanguageArray = [
@@ -151,6 +154,7 @@ export const playSoundLanguageArray = [
   SoundLanguage.MANDARIN,
   SoundLanguage.JAPANESE,
   SoundLanguage.THAI,
+  SoundLanguage.ITALIAN,
 ]
 export const aiLanguageOptions = [
   TranslateLanguage.ENGLISH,
@@ -162,6 +166,7 @@ export const aiLanguageOptions = [
   TranslateLanguage.KOREAN,
   TranslateLanguage.DUTCH,
   TranslateLanguage.THAI,
+  TranslateLanguage.ITALIAN,
 ]
 
 export const languageLabels = {
@@ -174,6 +179,7 @@ export const languageLabels = {
   [SoundLanguage.KOREAN]: "Korean",
   [SoundLanguage.DUTCH]: "Dutch",
   [SoundLanguage.THAI]: "Thai",
+  [SoundLanguage.ITALIAN]: "Italian",
 }
 
 export const soundLanguageOptions = [
@@ -186,6 +192,7 @@ export const soundLanguageOptions = [
   SoundLanguage.KOREAN,
   SoundLanguage.DUTCH,
   SoundLanguage.THAI,
+  SoundLanguage.ITALIAN,
 ]
 
 export const soundSettingOptions = [

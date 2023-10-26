@@ -18,6 +18,7 @@ import { useState } from "react"
 import { DrawerContentScrollView } from "@react-navigation/drawer"
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types"
 import { showErrorToast } from "app/utils/errorUtils"
+import { LineWord } from "./LineWord"
 
 export interface CustomDrawerProps {
   /**
@@ -47,13 +48,17 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
     if (subscriptionStore.hasActiveSubscription()) {
       return true
     }
-    if (deckStore?.decks?.length && deckStore.decks.length > freeLimitDeck) {
+    if (deckStore?.decks?.length && deckStore.decks.length >= freeLimitDeck) {
       return false
     }
     return true
   }
 
   const confirmAddNewDeck = (title) => {
+    if (settingsStore.isOffline) {
+      showErrorToast("Currently offline", "Go online to add a new deck")
+      return
+    }
     if (canMakeDeckPastFreeLimit()) {
       addNewDeck(title)
     } else {
@@ -63,6 +68,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
 
   const addNewDeck = async (title: string) => {
     const addedDeck = await addDeck({ title })
+    //TODO add query to backend
     if (addedDeck) {
       deckStore.addDeck(addedDeck)
     }
@@ -147,12 +153,12 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           }}
         >
           <CustomText
-            preset="title1"
+            preset="title2"
             style={{
               marginBottom: spacing.size160,
             }}
           >
-            Anglo
+            Spaced Memo
           </CustomText>
         </View>
         <View
@@ -186,6 +192,27 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               icon="fluent_globe_search"
             ></Icon>
           </View>
+        </View>
+        <View>
+          <Icon
+            size={24}
+            onPress={() =>
+              settingsStore?.isOffline
+                ? showErrorToast("Currently offline", "Go online to view global decks")
+                : navigation.navigate(AppRoutes.GLOBAL_DECKS)
+            }
+            icon="fluent_globe_search"
+          ></Icon>
+          <LineWord text={"or"}></LineWord>
+          <Icon
+            size={24}
+            onPress={() =>
+              settingsStore?.isOffline
+                ? showErrorToast("Currently offline", "Go online to add a new deck")
+                : setNewDeckModalVisible(true)
+            }
+            icon="fluent_add_circle"
+          ></Icon>
         </View>
         {deckStore.decks.map((deck) => {
           return (

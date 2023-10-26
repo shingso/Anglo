@@ -11,9 +11,9 @@ import { showErrorToast } from "./errorUtils"
 import { shuffle } from "./helperUtls"
 import { Deck, DeckSnapshotIn } from "../models/Deck"
 import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
-
 import { v4 as uuidv4 } from "uuid"
 import { QueryFunctions } from "app/models/Query"
+
 export enum Deck_Fields {
   ID = "id",
   TITLE = "title",
@@ -22,6 +22,7 @@ export enum Deck_Fields {
   NEW_PER_DAY = "new_per_day",
   GLOBAL_DECK_ID = "global_deck_id",
   LAST_GLOBAL_SYNC = "last_global_sync",
+  PAID_IMPORTED = "paid_imported",
 }
 
 export const newPerDayList = [
@@ -79,6 +80,7 @@ const mapDeckResponse = (deck: any): DeckSnapshotIn => {
     [Deck_Fields.LAST_GLOBAL_SYNC]: deck?.last_global_sync
       ? new Date(deck.last_global_sync)
       : undefined,
+    [Deck_Fields.PAID_IMPORTED]: deck?.paid_imported,
   }
 }
 
@@ -107,7 +109,7 @@ export const addDeck = async (deck: any): Promise<DeckSnapshotIn> => {
   return null
 }
 
-export const updateDeck = async (deck: Partial<Deck>) => {
+export const updateDeck = async (deck: Partial<DeckSnapshotIn>) => {
   try {
     const { data, error } = await supabase
       .from("decks")

@@ -4,11 +4,11 @@ import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import { Button, CustomModal, CustomText, FlashcardListItem, Screen, Text } from "app/components"
-import { custom_colors, custom_palette, spacing } from "app/theme"
+import { custom_colors, custom_palette, spacing, typography } from "app/theme"
 
 import { getGlobalDeckById } from "app/utils/globalDecksUtils"
 import { FlatList } from "react-native-gesture-handler"
-import { insertFlashcardsAndReturn } from "app/utils/boughtDecksUtils"
+import { importPaidGlobalCards } from "app/utils/globalDecksUtils"
 import { useStores } from "../models/helpers/useStores"
 import { supabase } from "app/services/supabase/supabase"
 import {
@@ -21,7 +21,8 @@ import {
   getPaidFlashcardsPreview,
   processProductPayment,
 } from "app/utils/subscriptionUtils"
-import { Flashcard, FlashcardSnapshotIn } from "app/models"
+import { Deck, DeckSnapshotIn, Flashcard, FlashcardSnapshotIn } from "app/models"
+import { updateDeck } from "app/utils/deckUtils"
 
 interface PurchaseDeckScreenProps
   extends NativeStackScreenProps<AppStackScreenProps<"PurchaseDeck">> {}
@@ -30,7 +31,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
   function PurchaseDeckScreen() {
     const { deckStore, boughtDeckStore } = useStores()
     const [paidCardsPreview, setPaidCardsPreview] = useState([])
-    const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
+    const [paidCardsCount, setPaidCardsCount] = useState<number>(0)
     const selectedDeck = deckStore?.selectedDeck
     const globalDeckId = selectedDeck?.global_deck_id
     const [importPurchasedDeckVisible, setImportPurchasedDeckVisible] = useState(false)
@@ -90,28 +91,35 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     }
 
     const getPaidGlobalFlashcards = async () => {
-      const addedFlashcards = await insertFlashcardsAndReturn(
-        deckStore.selectedDeck.id,
-        globalDeckId,
-      )
-      if (addedFlashcards && addedFlashcards?.length > 0) {
-        deckStore.selectedDeck.addMutlipleFlashcards(addedFlashcards)
-      }
+      importPaidGlobalCards(globalDeckId, deckStore.selectedDeck)
     }
 
     return (
       <Screen style={$root}>
         <View style={$container}>
-          <CustomText preset="title3" style={{ marginBottom: spacing.size120 }}>
-            Get more cards
+          <CustomText
+            preset="title1"
+            style={{ marginBottom: spacing.size120, fontFamily: typography.primary.light }}
+          >
+            Get even more premium cards
           </CustomText>
-          <CustomText preset="body1">{paidCardsCount.toString()} more cards</CustomText>
-          <CustomText style={{ marginBottom: spacing.size40 }} preset="caption1">
-            Card preview
+          <CustomText style={{ marginBottom: spacing.size40 }} preset="body1">
+            {paidCardsCount.toString()} more cards available!
+          </CustomText>
+          <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
+            Heres a look at some of the words you'll get
           </CustomText>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={paidCardsPreview}
             keyExtractor={(item) => item.id}
+            ListFooterComponent={
+              <View style={{ paddingVertical: spacing.size120 }}>
+                <CustomText preset="body1Strong">
+                  and {(paidCardsCount - paidCardsPreview?.length).toString()} more...
+                </CustomText>
+              </View>
+            }
             renderItem={({ item }) => {
               return (
                 <View key={item.id}>
