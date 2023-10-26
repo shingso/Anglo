@@ -187,11 +187,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
-              Customizable sound settings
+              Premium decks
             </CustomText>
-            <CustomText preset="caption1">
-              Play the back, extra sentence, or a combination of sounds in different languages.
-            </CustomText>
+            <CustomText preset="caption1">Access all premium decks</CustomText>
           </View>
 
           <View style={{ marginBottom: spacing.size200 }}>
@@ -199,7 +197,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
               AI Flashcards
             </CustomText>
-            <CustomText preset="caption1">Autogenerate flashcards using AI</CustomText>
+            <CustomText preset="caption1">
+              Increase rate limit to 1000 flashcards per month
+            </CustomText>
           </View>
         </View>
       )

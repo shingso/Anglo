@@ -34,8 +34,6 @@ export const mapToSubscription = (subscription: Subscription): SubscriptionSnaps
 export const getSubscription = async (): Promise<SubscriptionSnapshotIn> => {
   try {
     let { data, error } = await supabase.from("subscription").select("*")
-    //TODO handle when there is no internet what to do
-    //console.log("subscription", data, error)
     if (data && data?.length > 0) {
       return mapToSubscription(data[0])
     }

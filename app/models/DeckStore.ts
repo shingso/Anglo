@@ -17,6 +17,12 @@ export const DeckStoreModel = types
     getDeckById: (id: string) => {
       return self.decks.filter((decks) => decks.id === id)[0]
     },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((self) => ({
+    saveDecks: (deckSnapshot: DeckSnapshotIn[]) => {
+      const deckModels: Deck[] = deckSnapshot.map((c) => DeckModel.create(c))
+      self.decks.replace(deckModels)
+    },
     addDeck: (deck: any) => {
       //TODO do a check if the deck already exists if it does maybe we should replace
       if (self.decks.filter((decks) => decks.id === deck.id).length > 0) {
@@ -25,14 +31,7 @@ export const DeckStoreModel = types
       }
       self.decks.push(DeckModel.create(deck))
     },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((self) => ({
-    saveDecks: (deckSnapshot: DeckSnapshotIn[]) => {
-      const deckModels: Deck[] = deckSnapshot.map((c) => DeckModel.create(c))
-      self.decks.replace(deckModels)
-    },
   }))
-
   .actions((self) => ({
     getDecks: flow(function* () {
       //Will replace the store with the remote state

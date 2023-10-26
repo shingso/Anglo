@@ -19,6 +19,7 @@ import { DrawerContentScrollView } from "@react-navigation/drawer"
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types"
 import { showErrorToast } from "app/utils/errorUtils"
 import { LineWord } from "./LineWord"
+import { AddDeckModal } from "./AddDeckModal"
 
 export interface CustomDrawerProps {
   /**
@@ -32,10 +33,9 @@ export interface CustomDrawerProps {
  */
 export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerProps) {
   const { navigation } = props
-  const { deckStore, subscriptionStore, authStore, settingsStore } = useStores()
+  const { deckStore, authStore, settingsStore } = useStores()
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
-  const [deckLimitModalVisbile, setDeckLimitModalVisible] = useState(false)
-  const [deckTitle, setDeckTitle] = useState("")
+
   const theme = useTheme()
   const selectDeck = (deck) => {
     deckStore.selectDeck(deck)
@@ -43,42 +43,9 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
     navigation.closeDrawer()
   }
 
-  const freeLimitDeck = 2
-  const canMakeDeckPastFreeLimit = (): boolean => {
-    if (subscriptionStore.hasActiveSubscription()) {
-      return true
-    }
-    if (deckStore?.decks?.length && deckStore.decks.length >= freeLimitDeck) {
-      return false
-    }
-    return true
-  }
-
-  const confirmAddNewDeck = (title) => {
-    if (settingsStore.isOffline) {
-      showErrorToast("Currently offline", "Go online to add a new deck")
-      return
-    }
-    if (canMakeDeckPastFreeLimit()) {
-      addNewDeck(title)
-    } else {
-      setDeckLimitModalVisible(true)
-    }
-  }
-
-  const addNewDeck = async (title: string) => {
-    const addedDeck = await addDeck({ title })
-    //TODO add query to backend
-    if (addedDeck) {
-      deckStore.addDeck(addedDeck)
-    }
-    setDeckTitle("")
-    setNewDeckModalVisible(false)
-  }
-
   const closeModal = () => {
-    setDeckTitle("")
     setNewDeckModalVisible(false)
+    navigation.closeDrawer()
   }
 
   const signOut = async () => {
@@ -120,31 +87,11 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
       {...props}
     >
       <View>
-        <CustomModal
-          header={"New deck"}
-          body={"Choose a title for your new deck"}
-          secondaryAction={() => closeModal()}
-          mainAction={() => confirmAddNewDeck(deckTitle)}
-          children={
-            <TextField
-              placeholder="Title"
-              value={deckTitle}
-              onChangeText={setDeckTitle}
-            ></TextField>
-          }
+        <AddDeckModal
           visible={newDeckModalVisbile}
-        ></CustomModal>
-
-        <CustomModal
-          header={"Deck limit reached"}
-          body={
-            "In our deck slots available. If you'd like more slots, consider upgrading to premium."
-          }
-          secondaryAction={() => setDeckLimitModalVisible(false)}
-          mainAction={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
-          visible={deckLimitModalVisbile}
-        ></CustomModal>
-
+          addCallback={() => closeModal()}
+          closeCallback={() => closeModal()}
+        ></AddDeckModal>
         <View
           style={{
             borderBottomWidth: 0.5,

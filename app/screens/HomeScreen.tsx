@@ -12,6 +12,7 @@ import {
 } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import {
+  AddDeckModal,
   BottomModal,
   BottomSheet,
   Button,
@@ -67,6 +68,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     const { deckStore, settingsStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [conflictModalVisibile, setConflictModalVisible] = useState(false)
+    const [addDeckModalVisible, setAddDeckModalVisible] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const addNewDailyCardsToShow = async (deck: Deck) => {
@@ -144,7 +146,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     }
 
     const DeckItem = (props) => {
-      const { title, caption, onPress } = props
+      const { title, caption, onPress, source } = props
       return (
         <Card
           onPress={() => (onPress ? onPress() : null)}
@@ -159,8 +161,10 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 paddingVertical: spacing.size80,
                 flexDirection: "row",
                 alignItems: "center",
+                gap: spacing.size160,
               }}
             >
+              {source && <Image style={{ height: 36, width: 36 }} source={source} />}
               <View>
                 <CustomText preset="body1">{title}</CustomText>
                 <CustomText preset="caption2" presetColors={"secondary"}>
@@ -174,7 +178,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     }
 
     return (
-      <Screen safeAreaEdges={["bottom", "top"]} style={$root}>
+      <Screen safeAreaEdges={["bottom", "top"]} style={$root} preset="scroll">
         <View style={$container}>
           {/*   <Header
             onLeftPress={() => navigation.openDrawer()}
@@ -237,15 +241,59 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 >
                   Recommended decks
                 </CustomText>
-                <DeckItem
-                  onPress={() => importSATVocabDeck()}
-                  title={"SAT Vocabulary"}
-                  caption={"Common and essential SAT vocabulary words"}
-                ></DeckItem>
+
+                <View style={{ gap: 8 }}>
+                  <DeckItem
+                    source={require("../../assets/icons/sat_1600.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"SAT Vocabulary"}
+                    caption={"Common and essential SAT vocabulary words"}
+                  ></DeckItem>
+                  <DeckItem
+                    source={require("../../assets/icons/mexico.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"Spanish"}
+                    caption={"Basic and common spanish words"}
+                  ></DeckItem>
+                  <DeckItem
+                    source={require("../../assets/icons/china.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"Chinese (Mandarin)"}
+                    caption={"Basic and common chinese words"}
+                  ></DeckItem>
+                  <DeckItem
+                    source={require("../../assets/icons/germany.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"German"}
+                    caption={"Basic and common german words"}
+                  ></DeckItem>
+                  <DeckItem
+                    source={require("../../assets/icons/france.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"French"}
+                    caption={"Basic and common french words"}
+                  ></DeckItem>
+                  <DeckItem
+                    source={require("../../assets/icons/italy.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"Italian"}
+                    caption={"Basic and common italian words"}
+                  ></DeckItem>
+
+                  <DeckItem
+                    source={require("../../assets/icons/japan.png")}
+                    onPress={() => importSATVocabDeck()}
+                    title={"Japanese"}
+                    caption={"Basic and common japanese words"}
+                  ></DeckItem>
+                </View>
 
                 <LineWord text={"or"}></LineWord>
-                <CustomText preset="body1">Add your own custom deck</CustomText>
-                <CustomText preset="caption1">Quickly build a custom deck using AI</CustomText>
+                <DeckItem
+                  onPress={() => setAddDeckModalVisible(true)}
+                  title={"Add your own custom deck"}
+                  caption={"Quickly build a custom deck using AI"}
+                ></DeckItem>
               </View>
               <CustomText
                 preset="title1"
@@ -257,6 +305,11 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
               <CustomText preset="caption1">Learn new learning techniques</CustomText>
             </View>
           )}
+          <AddDeckModal
+            closeCallback={() => setAddDeckModalVisible(false)}
+            addCallback={() => setAddDeckModalVisible(false)}
+            visible={addDeckModalVisible}
+          ></AddDeckModal>
           <CustomModal
             header={"Conflict Detected!"}
             body={

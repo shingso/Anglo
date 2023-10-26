@@ -80,7 +80,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           <Card
             onPress={() => startSession(selectedDeck)}
             style={{
-              minHeight: 300,
+              // minHeight: 300,
               elevation: 0,
               marginBottom: spacing.size80,
             }}
@@ -126,7 +126,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
 
                   {/*   <Icon icon="play" color={custom_colors.brandForeground1} size={28}></Icon> */}
                 </View>
-                <View style={{ marginTop: 100, marginBottom: spacing.size160 }}>
+                <View style={{ marginBottom: spacing.size160 }}>
                   <View
                     style={{
                       flexDirection: "row",
@@ -354,7 +354,7 @@ export const DeckHome = observer(function DeckHome(props: DeckHomeProps) {
           }
         ></Card>
 
-        {isPurchasable && !!paidCardsCount ? (
+        {isPurchasable && !!paidCardsCount && !selectedDeck?.paid_imported ? (
           <Card
             onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
             style={{
