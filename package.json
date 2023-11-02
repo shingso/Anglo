@@ -44,6 +44,7 @@
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.0.2",
+    "@react-navigation/stack": "^6.3.18",
     "@stripe/stripe-react-native": "^0.30.0",
     "@supabase/supabase-js": "^2.33.1",
     "apisauce": "2.1.5",
