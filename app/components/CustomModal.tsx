@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_palette, spacing, typography } from "../theme"
 import { Text } from "./Text"
@@ -53,12 +53,13 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
         style={{
           backgroundColor: theme.colors.background3,
           //minHeight: 160,
-          borderRadius: borderRadius.corner120,
+          borderRadius: 20, //borderRadius.corner120,
           padding: spacing.size200,
+          paddingHorizontal: spacing.size240,
         }}
       >
-        <View style={{ marginBottom: spacing.size160 }}>
-          <CustomText preset="body1Strong" style={{ marginBottom: spacing.size120 }}>
+        <View style={{ marginBottom: spacing.size80 }}>
+          <CustomText preset="title3" style={{ marginBottom: spacing.size120 }}>
             {header}
           </CustomText>
           <CustomText presetColors="secondary" preset="body2">
@@ -66,25 +67,31 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
           </CustomText>
         </View>
         {children && <View style={{ marginBottom: spacing.size160 }}>{children}</View>}
-        <View style={{ flexDirection: "row", gap: spacing.size120 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: spacing.size280,
+            justifyContent: "flex-end",
+            marginTop: spacing.size200,
+            paddingHorizontal: spacing.size80,
+          }}
+        >
           {secondaryAction ? (
-            <Button
-              style={{ flex: 1, borderColor: custom_palette.grey68 }}
-              textStyle={{ color: custom_palette.grey46 }}
-              preset={secondaryPreset || "custom_outline"}
-              onPress={() => secondaryAction()}
-            >
-              {secondaryActionLabel || "Cancel"}
-            </Button>
+            <TouchableOpacity onPress={() => secondaryAction()}>
+              <CustomText preset="body2Strong" style={{ fontFamily: typography.primary.medium }}>
+                {secondaryActionLabel || "Cancel"}
+              </CustomText>
+            </TouchableOpacity>
           ) : null}
-          <Button
-            disabled={mainActionDisabled}
-            style={{ flex: 1 }}
-            preset={mainPreset || "custom_filled"}
-            onPress={() => mainAction()}
-          >
-            {mainActionLabel || "Confirm"}
-          </Button>
+          <TouchableOpacity onPress={() => mainAction()}>
+            <CustomText
+              presetColors={"brand"}
+              style={{ fontFamily: typography.primary.medium }}
+              preset="body2Strong"
+            >
+              {mainActionLabel || "Confirm"}
+            </CustomText>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>

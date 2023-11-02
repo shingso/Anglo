@@ -202,3 +202,11 @@ export const soundSettingOptions = [
   SoundOptions.EXTRA_ARRAY,
   SoundOptions.SUB_HEADER,
 ]
+
+export const starterSpanishDeckId = "89813480-0dd2-432b-ae7e-2dc601f9a680"
+export const starterSATVocabularyDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
+export const starterGermanDeckId = "0c4947d2-6b76-4967-93e7-b444ffee30bb"
+export const starterJapaneseDeckId = "4f94f837-da58-475a-888a-cc7635978726"
+export const starterFrenchDeckId = "aa9520cc-69d6-44d8-988f-20245478c3cd"
+export const starterItalianDeckId = "cf0a68f9-3659-4d58-a73c-8d103aa88b2c"
+export const starterMandarinDeckId = "4fabe92a-26cb-49b8-9472-c96ac7350866"

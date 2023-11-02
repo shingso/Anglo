@@ -1,4 +1,4 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotIn, SnapshotOut, getSnapshot, types } from "mobx-state-tree"
 import { Flashcard_Fields } from "../utils/flashcardUtils"
 import { CardProgress, CardProgressModel, CardProgressSnapshotIn } from "./CardProgress"
 import { withSetPropAction } from "./helpers/withSetPropAction"
@@ -41,6 +41,9 @@ export const FlashcardModel = types
       })
     },
     get easeFactor() {
+      if (!self.card_progress || self?.card_progress.length === 0) {
+        return 2.5
+      }
       return calculateEasinessFactor(self.card_progress)
     },
     get todaysCardProgresses() {

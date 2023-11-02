@@ -12,6 +12,7 @@ export enum Global_Deck_Fields {
   ORIGINAL_ID = "original_id",
   OWNER_ID = "owner_id",
   LAST_UPDATED = "last_updated",
+  ICON = "icon",
 }
 
 export interface GlobalDeck {
@@ -22,12 +23,14 @@ export interface GlobalDeck {
   [Global_Deck_Fields.ORIGINAL_ID]?: string
   [Global_Deck_Fields.OWNER_ID]?: string
   [Global_Deck_Fields.LAST_UPDATED]?: Date
+  [Global_Deck_Fields.ICON]?: string
 }
 
 export const getGlobalDeckById = async (deck_id: string) => {
   let { data: deck, error } = await supabase
     .from("global_decks")
     .select("*, private_global_flashcards(*)")
+    .eq("private_global_flashcards.free", true)
     .eq(Global_Deck_Fields.ID, deck_id)
   if (deck && deck?.length > 0) {
     return deck[0]
@@ -40,6 +43,7 @@ export const searchGlobalDecks = async (searchTerm: string) => {
   let { data, error } = await supabase
     .from("global_decks")
     .select("*, private_global_flashcards(*)")
+    .eq("private_global_flashcards.free", true)
     .ilike("title", search)
     .limit(10)
   if (data && data?.length > 0) {

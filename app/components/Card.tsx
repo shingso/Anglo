@@ -296,22 +296,37 @@ const $containerPresets = {
       height: 140,
     },
   ] as StyleProp<ViewStyle>,
+  action: [
+    $containerBase,
+    {
+      elevation: 0,
+      minHeight: 0,
+      paddingHorizontal: spacing.size200,
+      paddingVertical: spacing.size160,
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+    },
+  ] as StyleProp<ViewStyle>,
 }
 
 const $headingPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
   deck: {},
+  action: {},
 }
 
 const $contentPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
   deck: {},
+  action: {},
 }
 
 const $footerPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
   deck: {},
+  action: {},
 }

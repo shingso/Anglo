@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ScrollView, TouchableOpacity, View, ViewStyle } from "react-native"
+import { ScrollView, TouchableOpacity, View, ViewStyle, Image } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import {
   Button,
@@ -119,7 +119,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
             data={decks}
             renderItem={({ item, index }) => (
               <Card
-                style={{ elevation: 2 }}
+                style={{ elevation: 0 }}
                 key={item.id}
                 onPress={() => goToDeckAdd(item)}
                 ContentComponent={
@@ -129,18 +129,38 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                       paddingHorizontal: spacing.size120,
                     }}
                   >
-                    <CustomText style={{ marginBottom: spacing.size20 }} preset="body1Strong">
-                      {item?.title}
-                    </CustomText>
-                    <CustomText style={{ marginBottom: spacing.size80 }} preset="body2">
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: spacing.size80,
+                        marginBottom: spacing.size20,
+                      }}
+                    >
+                      {item?.icon && (
+                        <Image
+                          style={{ height: 22, width: 22 }}
+                          source={{
+                            uri: item?.icon,
+                          }}
+                        />
+                      )}
+                      <CustomText style={{ marginBottom: spacing.size80 }} preset="body1">
+                        {item?.title}
+                      </CustomText>
+                    </View>
+                    <CustomText style={{ marginBottom: spacing.size80 }} preset="caption2">
                       {item?.private_global_flashcards?.length} cards
                     </CustomText>
                     {item?.description ? (
-                      <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
+                      <CustomText
+                        presetColors={"secondary"}
+                        style={{ marginBottom: spacing.size80 }}
+                        preset="caption1"
+                      >
                         {item?.description}
                       </CustomText>
                     ) : null}
-                    <CustomText
+                    {/*  <CustomText
                       preset="caption1Strong"
                       style={{
                         marginBottom: spacing.size40,
@@ -152,7 +172,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                       }}
                     >
                       Premium
-                    </CustomText>
+                    </CustomText> */}
                   </View>
                 }
               ></Card>

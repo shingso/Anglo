@@ -61,9 +61,12 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
         <View style={$container}>
           <CustomText
             preset="title1"
-            style={{ marginBottom: spacing.size120, fontFamily: typography.primary.light }}
+            style={{ marginBottom: spacing.size40, fontFamily: typography.primary.light }}
           >
             Get even more premium cards
+          </CustomText>
+          <CustomText style={{ marginBottom: spacing.size120 }} preset="caption1">
+            Subscribe to get access to these cards.
           </CustomText>
           <CustomText style={{ marginBottom: spacing.size40 }} preset="body1">
             {paidCardsCount.toString()} more cards available!
@@ -92,8 +95,8 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
           ></FlatList>
 
           <CustomModal
-            header={"Deck purchased"}
-            body={"Import the deck below or add or cards"}
+            header={"Import deck"}
+            body={"Import the cards into the current deck?"}
             secondaryAction={() => setImportPurchasedDeckVisible(false)}
             mainAction={() => getPaidGlobalFlashcards()}
             visible={importPurchasedDeckVisible}
@@ -107,7 +110,9 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
               Go to subscription
             </Button>
           ) : (
-            <Button preset="custom_default">Import</Button>
+            <Button onPress={() => setImportPurchasedDeckVisible(true)} preset="custom_default">
+              Import
+            </Button>
           )}
         </View>
       </Screen>

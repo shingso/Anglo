@@ -19,7 +19,6 @@ import {
   Card,
   CustomModal,
   CustomText,
-  DeckHome,
   Header,
   HomeForecast,
   Icon,
@@ -29,6 +28,7 @@ import {
   TextField,
 } from "../components"
 import {
+  Deck_Fields,
   addCardsToShow,
   addDeck,
   getRandomFlashcards,
@@ -55,13 +55,14 @@ import format from "date-fns/format"
 import isEqual from "lodash/isEqual"
 import { wordsApi } from "../services/dictionaryApi/wordsApi"
 import { vocabulary_words } from "../../assets/words"
-import { AppRoutes, AppStackParamList, SortType } from "../utils/consts"
+import { AppRoutes, AppStackParamList, SortType, starterSATVocabularyDeckId } from "../utils/consts"
 import { AppStackScreenProps } from "app/navigators"
 import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUtils"
 import { isSameDay } from "date-fns"
 import { Flashcard_Fields, upsertMultipleFlashcards } from "app/utils/flashcardUtils"
 import { v4 as uuidv4 } from "uuid"
 import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
+import { showSuccessToast } from "app/utils/errorUtils"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
@@ -137,12 +138,11 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
         deck.getConflicts()
       })
     }
-    const promoDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
+
     const importSATVocabDeck = async () => {
-      const deck = await importFreeGlobalDeckById(promoDeckId, "SAT Vocabulary")
-      if (deck && deck?.id) {
-        deckStore.addDeckFromRemote(deck?.id)
-      }
+      navigation.navigate(AppRoutes.DECK_ADD, {
+        deck: { [Deck_Fields.ID]: starterSATVocabularyDeckId },
+      })
     }
 
     const DeckItem = (props) => {
@@ -253,56 +253,64 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     source={require("../../assets/icons/mexico.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"Spanish"}
-                    caption={"Basic and common spanish words"}
+                    caption={"Basic and common Spanish words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/china.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"Chinese (Mandarin)"}
-                    caption={"Basic and common chinese words"}
+                    caption={"Basic and common Chinese words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/germany.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"German"}
-                    caption={"Basic and common german words"}
+                    caption={"Basic and common German words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/france.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"French"}
-                    caption={"Basic and common french words"}
+                    caption={"Basic and common French words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/italy.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"Italian"}
-                    caption={"Basic and common italian words"}
+                    caption={"Basic and common Italian words"}
                   ></DeckItem>
 
                   <DeckItem
                     source={require("../../assets/icons/japan.png")}
                     onPress={() => importSATVocabDeck()}
                     title={"Japanese"}
-                    caption={"Basic and common japanese words"}
+                    caption={"Basic and common Japanese words"}
                   ></DeckItem>
                 </View>
 
                 <LineWord text={"or"}></LineWord>
                 <DeckItem
+                  source={require("../../assets/icons/custom_deck_icon.png")}
                   onPress={() => setAddDeckModalVisible(true)}
                   title={"Add your own custom deck"}
                   caption={"Quickly build a custom deck using AI"}
                 ></DeckItem>
               </View>
-              <CustomText
-                preset="title1"
-                style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
-              >
-                Learn more about learning
-              </CustomText>
-              <CustomText preset="body1">See how you can memorize better</CustomText>
-              <CustomText preset="caption1">Learn new learning techniques</CustomText>
+              <View style={{ marginBottom: spacing.size320 }}>
+                <CustomText
+                  preset="title1"
+                  style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
+                >
+                  Learn more about learning
+                </CustomText>
+                <DeckItem
+                  source={require("../../assets/icons/qanda.png")}
+                  title={"Get the most out of studying"}
+                  caption={"Learn more about spaced memorization"}
+                ></DeckItem>
+                {/*      <CustomText preset="body1">See how you can memorize better</CustomText>
+              <CustomText preset="caption1">Learn new learning techniques</CustomText> */}
+              </View>
             </View>
           )}
           <AddDeckModal

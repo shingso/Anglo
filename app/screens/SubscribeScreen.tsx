@@ -352,13 +352,16 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                     onPress={() => endSubscription()}
                     style={{
                       marginBottom: spacing.size160,
-                      elevation: 4,
+                      elevation: 0,
                       minHeight: 0,
                       paddingHorizontal: spacing.size200,
                       paddingVertical: spacing.size120,
                     }}
                     ContentComponent={
-                      <CustomText preset="body2Strong">Cancel Subscription</CustomText>
+                      <View>
+                        <CustomText preset="body2Strong">Cancel Subscription</CustomText>
+                        <CustomText preset="caption1">End your subscription</CustomText>
+                      </View>
                     }
                   ></Card>
                 ) : (

@@ -171,8 +171,8 @@ function App(props: AppProps) {
         <StripeProvider
           publishableKey={Config.STRIPE_API_PK}
           //TODO stripe settings
-          merchantIdentifier="merchant.identifier" // required for Apple Pay
-          urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+          merchantIdentifier="merchant.com.spacedmemo"
+          //urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
         >
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
             <ErrorBoundary catchErrors={Config.catchErrors}>

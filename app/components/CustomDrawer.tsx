@@ -140,27 +140,31 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
             ></Icon>
           </View>
         </View>
-        <View>
-          <Icon
-            size={24}
-            onPress={() =>
-              settingsStore?.isOffline
-                ? showErrorToast("Currently offline", "Go online to view global decks")
-                : navigation.navigate(AppRoutes.GLOBAL_DECKS)
-            }
-            icon="fluent_globe_search"
-          ></Icon>
-          <LineWord text={"or"}></LineWord>
-          <Icon
-            size={24}
-            onPress={() =>
-              settingsStore?.isOffline
-                ? showErrorToast("Currently offline", "Go online to add a new deck")
-                : setNewDeckModalVisible(true)
-            }
-            icon="fluent_add_circle"
-          ></Icon>
-        </View>
+
+        {deckStore?.decks?.length === 0 && (
+          <View>
+            <Icon
+              size={24}
+              onPress={() =>
+                settingsStore?.isOffline
+                  ? showErrorToast("Currently offline", "Go online to view global decks")
+                  : navigation.navigate(AppRoutes.GLOBAL_DECKS)
+              }
+              icon="fluent_globe_search"
+            ></Icon>
+            <LineWord text={"or"}></LineWord>
+            <Icon
+              size={24}
+              onPress={() =>
+                settingsStore?.isOffline
+                  ? showErrorToast("Currently offline", "Go online to add a new deck")
+                  : setNewDeckModalVisible(true)
+              }
+              icon="fluent_add_circle"
+            ></Icon>
+          </View>
+        )}
+
         {deckStore.decks.map((deck) => {
           return (
             <TouchableOpacity onPress={() => selectDeck(deck)} key={deck.id}>

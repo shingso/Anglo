@@ -3,7 +3,15 @@ import { observer } from "mobx-react-lite"
 import { FlatList, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
-import { Button, FlashcardListItem, Icon, Screen, Text, TextField } from "app/components"
+import {
+  Button,
+  CustomText,
+  FlashcardListItem,
+  Icon,
+  Screen,
+  Text,
+  TextField,
+} from "app/components"
 import { FlashcardModel, useStores } from "app/models"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 import { useNavigation } from "@react-navigation/native"
@@ -39,12 +47,14 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
   }
 
   const setActiveFlashcards = () => {
-    const activeFlashcards = flashcards.filter((card) => !!card?.next_shown).map((card) => card.id)
+    const activeFlashcards = flashcards.filter((card) => !card?.next_shown).map((card) => card.id)
     setUnselectedFlashcards(activeFlashcards)
   }
 
   const setInactiveFlashcards = () => {
-    const inactiveFlashcards = flashcards.filter((card) => !card?.next_shown).map((card) => card.id)
+    const inactiveFlashcards = flashcards
+      .filter((card) => !!card?.next_shown)
+      .map((card) => card.id)
     setUnselectedFlashcards(inactiveFlashcards)
   }
 
@@ -52,6 +62,11 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
     const selectedFlashcards = flashcards.filter((card) => !unselectedFlashcards.includes(card.id))
     deckStore.selectedDeck.setCustomSessioncards(selectedFlashcards)
     navigation.navigate(AppRoutes.FREE_STUDY_SESSION)
+  }
+
+  const setDifficultCards = () => {
+    const easyFlashcards = flashcards.filter((card) => card.easeFactor > 2).map((card) => card.id)
+    setUnselectedFlashcards(easyFlashcards)
   }
 
   return (
@@ -71,6 +86,13 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
             preset="custom_secondary_small"
           >
             Active
+          </Button>
+          <Button
+            style={{ marginBottom: spacing.size120 }}
+            onPress={() => setDifficultCards()}
+            preset="custom_secondary_small"
+          >
+            Difficult
           </Button>
           <Button
             style={{ marginBottom: spacing.size120 }}
@@ -115,20 +137,29 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           )}
           onChangeText={setSearchTerm}
         ></TextField>
-
+        <CustomText style={{ marginBottom: spacing.size80 }}>
+          Selected flashcards: {flashcards.length - unselectedFlashcards.length}
+        </CustomText>
         <FlatList
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          data={getSnapshot(flashcards as IStateTreeNode).filter(
-            (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
-          )}
+          data={getSnapshot(flashcards as IStateTreeNode)
+            .filter((card) => card?.front && card.front?.toLowerCase().includes(searchTerm))
+            .sort((a, b) =>
+              unselectedFlashcards.includes(a.id) === unselectedFlashcards.includes(b.id)
+                ? 0
+                : unselectedFlashcards.includes(a.id)
+                ? 1
+                : -1,
+            )}
           renderItem={({ item, index }) => (
             <FlashcardListItem
-              onPress={() =>
-                !unselectedFlashcards.includes(item.id)
-                  ? addToUnselectedFlashcards(item.id)
-                  : removeFromUnselectedFlashcards(item.id)
-              }
+              // onPress={() =>
+              //   !unselectedFlashcards.includes(item.id)
+              //     ? addToUnselectedFlashcards(item.id)
+              //     : removeFromUnselectedFlashcards(item.id)
+              // }
+              onPress={() => console.log(item)}
               LeftComponent={
                 !unselectedFlashcards.includes(item.id) ? (
                   <Icon
@@ -140,6 +171,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
                   <Icon size={20} color={custom_palette.grey50} icon="circle"></Icon>
                 )
               }
+              RightComponent={<CustomText>{item.easeFactor}</CustomText>}
               key={item.id}
               flashcard={item}
             ></FlashcardListItem>

@@ -3,13 +3,13 @@ import { observer } from "mobx-react-lite"
 import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
-import { Button, Card, CustomText, Screen, Text } from "../components"
+import { Button, Card, CustomText, FlashcardListItem, Loading, Screen, Text } from "../components"
 import { spacing } from "../theme/spacing"
 import { Deck, FlashcardModel, useStores } from "../models"
 import { useNavigation } from "@react-navigation/native"
 import { colors, custom_colors, typography } from "../theme"
 import { AppRoutes, AppStackParamList } from "../utils/consts"
-import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
+import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -28,14 +28,25 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     const { deck } = route.params
     const { deckStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-    const flashcards = deck.private_global_flashcards
+    const [selectedDeck, setSelectedDeck] = useState(deck)
+    const flashcards = selectedDeck?.private_global_flashcards || []
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
       navigation.setOptions({ headerTitle: deck?.title })
+      const getGlobalDeck = async (id: string) => {
+        const globalDeck = await getGlobalDeckById(id)
+        if (globalDeck) {
+          setSelectedDeck(globalDeck)
+        }
+      }
+      if (!deck?.private_global_flashcards && deck?.id) {
+        getGlobalDeck(deck.id)
+      }
     }, [])
 
     const importDeck = async () => {
-      const newDeck = await importFreeGlobalDeckById(deck.id, deck.title, newPerDay)
+      const newDeck = await importFreeGlobalDeckById(selectedDeck.id, selectedDeck.title, newPerDay)
       if (newDeck && newDeck?.id) {
         deckStore.addDeckFromRemote(newDeck?.id)
       }
@@ -47,9 +58,6 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 
     return (
       <Screen style={$root}>
-        <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
-          {deck.title}
-        </CustomText>
         <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
           <Button
             preset="custom_default_small"
@@ -57,9 +65,17 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
             onPress={() => importDeck()}
           ></Button>
         </View>
-        {deck?.description ? (
-          <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
-            {deck.description}
+        <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
+          {selectedDeck.title}
+        </CustomText>
+
+        {selectedDeck?.description ? (
+          <CustomText
+            style={{ marginBottom: spacing.size200 }}
+            preset="caption1"
+            presetColors={"secondary"}
+          >
+            {selectedDeck.description}
           </CustomText>
         ) : null}
         <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
@@ -72,24 +88,8 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           data={flashcards}
           renderItem={({ item, index }) => (
             <TouchableOpacity
-              style={{ paddingVertical: spacing.size20 }}
               key={item.id}
-              children={
-                <Card
-                  style={{
-                    width: "100%",
-                    padding: 0,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    elevation: 0,
-                    borderRadius: 4,
-                    paddingHorizontal: spacing.size160,
-                    paddingVertical: spacing.size120,
-                    minHeight: 0,
-                  }}
-                  ContentComponent={<CustomText preset="body2">{item.front}</CustomText>}
-                ></Card>
-              }
+              children={<FlashcardListItem flashcard={item}></FlashcardListItem>}
             ></TouchableOpacity>
           )}
         ></FlatList>
