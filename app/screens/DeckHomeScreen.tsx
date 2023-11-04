@@ -319,6 +319,37 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
             }
           ></Card>
 
+          <Card
+            onPress={() => navigation.navigate(AppRoutes.RESTART_OVERDUE)}
+            style={{
+              minHeight: 0,
+              elevation: 0,
+              marginBottom: spacing.size80,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  paddingHorizontal: spacing.size120,
+                  paddingVertical: spacing.size40,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Image
+                  style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                  source={require("../../assets/icons/coding.png")}
+                />
+                <View>
+                  <CustomText preset="body1">{`Reset overdue`}</CustomText>
+                  <CustomText
+                    presetColors={"secondary"}
+                    preset="caption2"
+                  >{`Reset overdue cards`}</CustomText>
+                </View>
+              </View>
+            }
+          ></Card>
+
           <View style={{ flexDirection: "row", gap: spacing.size80 }}>
             <Card
               onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}

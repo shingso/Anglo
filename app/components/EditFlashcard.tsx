@@ -110,7 +110,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const resetFlashcard = async (flashcard: Flashcard, deck: Deck) => {
     const updatedFlashcard: FlashcardSnapshotIn = {
       id: flashcard?.id,
-      next_shown: undefined,
+      [Flashcard_Fields.NEXT_SHOWN]: null,
     }
     flashcard.updateFlashcard(updatedFlashcard)
     if (settingsStore.isOffline) {

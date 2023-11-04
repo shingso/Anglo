@@ -98,8 +98,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
 
   return (
     <View style={$container}>
-      <CustomText
-        style={{ marginBottom: spacing.size400, fontFamily: typography.primary.light }}
+      {/*    <CustomText
+        style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
         preset="display"
         presetColors="secondary"
       >
@@ -108,7 +108,45 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
             return prev + deck?.todaysCards?.length
           }, 0)
           .toString()}
-      </CustomText>
+      </CustomText> */}
+      <ScrollView
+        style={{ marginBottom: spacing.size160 }}
+        contentContainerStyle={{ gap: spacing.size40 }}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      >
+        <Card
+          style={{ minWidth: 80, elevation: 0, margin: 2 }}
+          ContentComponent={
+            <View>
+              <CustomText preset="body2">Today</CustomText>
+              <CustomText preset="body2Strong">
+                {deckStore.decks
+                  .reduce((prev, deck) => {
+                    return prev + deck?.todaysCards?.length
+                  }, 0)
+                  .toString()}
+              </CustomText>
+            </View>
+          }
+        ></Card>
+        {getDates(addDays(new Date(), 2), addDays(new Date(), 7)).map((date) => {
+          return (
+            <Card
+              key={date}
+              style={{ minWidth: 80, elevation: 0, margin: 2 }}
+              ContentComponent={
+                <View>
+                  <CustomText preset="body2">{format(new Date(date), "do")}</CustomText>
+                  <CustomText preset="body2Strong">
+                    {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
+                  </CustomText>
+                </View>
+              }
+            ></Card>
+          )
+        })}
+      </ScrollView>
       {/*    <Card
         onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
         style={{
@@ -167,10 +205,9 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               onPress={() => selectDeck(deck)}
               key={deck.id}
               style={{
-                minHeight: 150,
                 elevation: 0,
                 marginBottom: spacing.size100,
-                borderRadius: 26,
+
                 //backgroundColor: custom_palette.primary130,
               }}
               ContentComponent={
@@ -180,7 +217,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     paddingVertical: spacing.size80,
                   }}
                 >
-                  <View
+                  {/*       <View
                     style={{
                       justifyContent: "space-between",
                       flexDirection: "row",
@@ -188,7 +225,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     }}
                   >
                     <CustomText preset="body1">{deck?.todaysCards?.length?.toString()}</CustomText>
-                    {/* <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel> */}
+             
                     <View
                       style={{
                         width: 44,
@@ -207,28 +244,26 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                         size={22}
                       ></Icon>
                     </View>
+                  </View> */}
+                  <View
+                    style={{
+                      flexDirection: "row",
+
+                      alignItems: "center",
+                    }}
+                  >
+                    {!!deck?.picture_url && (
+                      <Image
+                        style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                        source={{
+                          uri: deck.picture_url,
+                        }}
+                      />
+                    )}
+
+                    <CustomText preset="title3">{deck?.title}</CustomText>
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        flex: 1,
-                      }}
-                    >
-                      <CustomText style={{ marginTop: 16 }} preset="title2">
-                        {deck?.title?.toUpperCase()}
-                      </CustomText>
-                      {/*   <StatusLabel text={deck?.todaysCards?.length?.toString()}></StatusLabel> */}
-                    </View>
-                    {/*  <Icon
-                      icon="fluent_play_outline"
-                      containerStyle={{ alignSelf: "center" }}
-                      color={custom_colors.foreground1}
-                      size={20}
-                    ></Icon> */}
-                  </View>
+                  <CustomText preset="body1">{deck?.todaysCards?.length?.toString()}</CustomText>
                 </View>
               }
             ></Card>
@@ -242,28 +277,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
       <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
         <CustomText preset="title3">{"This week"}</CustomText>
       </View> */}
-      {/*   <ScrollView
-        contentContainerStyle={{ gap: spacing.size40 }}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      >
-        {getDates(addDays(new Date(), 2), addDays(new Date(), 7)).map((date) => {
-          return (
-            <Card
-              key={date}
-              style={{ minWidth: 110, elevation: 1, margin: 2, minHeight: 120 }}
-              ContentComponent={
-                <View>
-                  <CustomText preset="body2">{format(new Date(date), "do")}</CustomText>
-                  <CustomText preset="body2Strong">
-                    {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
-                  </CustomText>
-                </View>
-              }
-            ></Card>
-          )
-        })}
-      </ScrollView> */}
+
       {/*  <Card
         style={{ padding: spacing.size200, margin: spacing.size120 }}
         ContentComponent={

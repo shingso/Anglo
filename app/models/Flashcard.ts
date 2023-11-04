@@ -16,7 +16,7 @@ export const FlashcardModel = types
     [Flashcard_Fields.ID]: types.identifier,
     [Flashcard_Fields.FRONT]: types.maybe(types.string),
     [Flashcard_Fields.BACK]: types.maybe(types.string),
-    [Flashcard_Fields.NEXT_SHOWN]: types.maybe(types.Date),
+    [Flashcard_Fields.NEXT_SHOWN]: types.maybeNull(types.Date),
     [Flashcard_Fields.DECK_ID]: types.maybe(types.string),
     [Flashcard_Fields.CARD_PROGRESS]: types.optional(types.array(CardProgressModel), []),
     [Flashcard_Fields.NOTES]: types.optional(types.array(types.string), []),
@@ -70,9 +70,6 @@ export const FlashcardModel = types
           return
         }
         switch (key) {
-          case Flashcard_Fields.NEXT_SHOWN:
-            self[key] = value === undefined ? undefined : new Date(value as any)
-            break
           case Flashcard_Fields.EXTRA_ARRAY:
             self.extra_array.replace(value as any)
             break

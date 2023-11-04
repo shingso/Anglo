@@ -23,6 +23,7 @@ export enum Deck_Fields {
   GLOBAL_DECK_ID = "global_deck_id",
   LAST_GLOBAL_SYNC = "last_global_sync",
   PAID_IMPORTED = "paid_imported",
+  PICTURE_URL = "picture_url",
 }
 
 export const newPerDayList = [
@@ -70,6 +71,7 @@ const mapDeckResponse = (deck: any): DeckSnapshotIn => {
   return {
     [Deck_Fields.ID]: deck.id,
     [Deck_Fields.TITLE]: deck?.title,
+    [Deck_Fields.PICTURE_URL]: deck?.picture_url ? deck.picture_url : undefined,
     [Deck_Fields.NEW_PER_DAY]:
       deck?.new_per_day || deck?.new_per_day === 0 ? deck.new_per_day : undefined,
     [Deck_Fields.GLOBAL_DECK_ID]: deck?.global_deck_id ? deck.global_deck_id : undefined,

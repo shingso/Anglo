@@ -49,6 +49,7 @@ export const DeckModel = types
     [Deck_Fields.FLASHCARDS]: types.optional(types.array(FlashcardModel), []),
     [Deck_Fields.LAST_ADDED]: types.maybe(types.Date),
     [Deck_Fields.NEW_PER_DAY]: types.maybe(types.number),
+    [Deck_Fields.PICTURE_URL]: types.maybe(types.string),
     [Deck_Fields.PAID_IMPORTED]: types.maybe(types.boolean),
     [Deck_Fields.GLOBAL_DECK_ID]: types.maybe(types.string), //id of the global deck that this deck is cloned from
     [Deck_Fields.LAST_GLOBAL_SYNC]: types.maybe(types.Date), //this is used for global deck syncing
@@ -97,6 +98,9 @@ export const DeckModel = types
     get overdueCards() {
       const now = new Date()
       return self.flashcards.filter((card) => {
+        if (!card.next_shown) {
+          return false
+        }
         const lastProgress = card?.mostRecentProgress
         if (!lastProgress) return false
         const setElapsed = lastProgress.time_elapsed
@@ -264,48 +268,6 @@ export const DeckModel = types
     },
     setCustomSessioncards: (cards: any) => {
       self.sessionCards = cards
-    },
-    sortFlashcardsByType: (type: SortType) => {
-      if (!type) {
-        return null
-      }
-
-      switch (type) {
-        case SortType.DATE_ADDDED: {
-          self.flashcards.replace(
-            self.flashcards.sort((a, b) => {
-              if (!a?.created_at) {
-                return 1
-              }
-              if (!b?.created_at) {
-                return -1
-              }
-              return b.created_at.getTime() - a.created_at.getTime()
-            }),
-          )
-          break
-        }
-        case SortType.ALPHABETICAL: {
-          self.flashcards.replace(self.flashcards.sort((a, b) => a?.front.localeCompare(b?.front)))
-          break
-        }
-        case SortType.ACTIVE: {
-          self.flashcards.replace(
-            self.flashcards.sort((a, b) => {
-              if (!a?.next_shown) {
-                return 1
-              }
-              if (!b?.next_shown) {
-                return -1
-              }
-              return b.next_shown.getTime() - a.next_shown.getTime()
-            }),
-          )
-          break
-        }
-        default:
-          break
-      }
     },
     updateDeck: (deck: Partial<DeckSnapshotIn>) => {
       if (!deck) {

@@ -57,6 +57,39 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       [SortType.ACTIVE]: "Active",
       [SortType.ALPHABETICAL]: "Alphabetical",
     }
+
+    const sortingFunction = (sortType) => {
+      switch (sortType) {
+        case SortType.ACTIVE:
+          return (a: Flashcard, b: Flashcard) => {
+            if (!a?.next_shown) {
+              return 1
+            }
+            if (!b?.next_shown) {
+              return -1
+            }
+
+            return new Date(b.next_shown).getTime() - new Date(a.next_shown).getTime()
+          }
+        case SortType.ALPHABETICAL:
+          return (a: Flashcard, b: Flashcard) => {
+            return a?.front.localeCompare(b?.front)
+          }
+        case SortType.DATE_ADDDED:
+          return (a, b) => {
+            if (!a?.created_at) {
+              return 1
+            }
+            if (!b?.created_at) {
+              return -1
+            }
+            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          }
+
+        default:
+          return () => {}
+      }
+    }
     const sortModalRef = useRef<BottomSheetModal>()
     const [deleteFlashcardModalVisible, setDeleteFlashcardModalVisible] = useState(false)
     const selectedFlashcardModalRef = useRef<BottomSheetModal>()
@@ -113,9 +146,9 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       return calculateFlashcardProgress(selectedFlashcard)
     }, [selectedFlashcard])
 
-    const searchSnapshotFlashcards = getSnapshot(flashcards as IStateTreeNode).filter(
-      (card) => card?.front && card.front?.toLowerCase().includes(searchTerm),
-    )
+    const searchSnapshotFlashcards = getSnapshot(flashcards as IStateTreeNode)
+      .filter((card) => card?.front && card.front?.toLowerCase().includes(searchTerm))
+      .sort(sortingFunction(sortOption))
 
     return (
       <Screen style={$root}>
@@ -297,8 +330,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                 <TouchableOpacity
                   onPress={() => {
                     setSortOption(option)
-                    deckStore?.selectedDeck?.sortFlashcardsByType(option)
-                    sortModalRef?.current.dismiss()
                   }}
                   key={option}
                 >
