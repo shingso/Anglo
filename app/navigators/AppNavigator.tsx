@@ -309,7 +309,7 @@ const AppStack = observer(function AppStack() {
 
       if (_event === "SIGNED_IN") {
         deckStore.getDecks()
-        //subscriptionStore.getSubscription()
+        subscriptionStore.getSubscription()
       }
 
       if (session?.access_token) {
