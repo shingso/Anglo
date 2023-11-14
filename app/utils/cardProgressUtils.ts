@@ -59,7 +59,7 @@ export const mapResponseToCardProgress = (progress: any): CardProgressSnapshotIn
       ? new Date(progress.created_at)
       : undefined,
     [Card_Progress_Fields.NEXT_SHOWN]: progress?.next_shown
-      ? new Date(progress.created_at)
+      ? new Date(progress.next_shown)
       : undefined,
     [Card_Progress_Fields.TIME_ELAPSED]:
       progress?.time_elapsed || progress?.time_elapsed === 0 ? progress.time_elapsed : undefined,
