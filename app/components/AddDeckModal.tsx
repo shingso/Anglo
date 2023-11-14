@@ -5,12 +5,13 @@ import { colors, typography } from "app/theme"
 import { Text } from "app/components/Text"
 import { CustomModal } from "./CustomModal"
 import { TextField } from "./TextField"
-import { useStores } from "app/models"
+import { SubscriptionStore, useStores } from "app/models"
 import { showErrorToast } from "app/utils/errorUtils"
 import { useState } from "react"
 import { addDeck } from "app/utils/deckUtils"
 import { useNavigation } from "@react-navigation/native"
-import { AppRoutes } from "app/utils/consts"
+import { AppRoutes, AppStackParamList, freeLimitDeck } from "app/utils/consts"
+import { StackNavigationProp } from "@react-navigation/stack"
 
 export interface AddDeckModalProps {
   /**
@@ -30,8 +31,7 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
   const { deckStore, subscriptionStore, settingsStore } = useStores()
   const $styles = [$container, style]
   const [deckTitle, setDeckTitle] = useState("")
-  const freeLimitDeck = 2
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
 
   const canMakeDeckPastFreeLimit = (): boolean => {
     if (subscriptionStore.hasActiveSubscription()) {

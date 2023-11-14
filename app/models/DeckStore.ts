@@ -11,13 +11,9 @@ export const DeckStoreModel = types
   .props({
     decks: types.optional(types.array(DeckModel), []),
     selectedDeck: types.maybe(types.safeReference(DeckModel)),
+    loading: types.optional(types.boolean, false),
   })
   .actions(withSetPropAction)
-  .views((self) => ({
-    getDeckById: (id: string) => {
-      return self.decks.filter((decks) => decks.id === id)[0]
-    },
-  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
     saveDecks: (deckSnapshot: DeckSnapshotIn[]) => {
       const deckModels: Deck[] = deckSnapshot.map((c) => DeckModel.create(c))
@@ -35,10 +31,11 @@ export const DeckStoreModel = types
   .actions((self) => ({
     getDecks: flow(function* () {
       //Will replace the store with the remote state
+      self.loading = true
       destroy(self.decks)
       const result: DeckSnapshotIn[] = yield getUserDecks()
       self.saveDecks(result)
-
+      self.loading = false
       return result
     }),
     selectDeck: (deck: Deck) => {

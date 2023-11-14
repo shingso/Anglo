@@ -23,6 +23,7 @@ import {
   HomeForecast,
   Icon,
   LineWord,
+  Loading,
   Screen,
   Text,
   TextField,
@@ -55,7 +56,18 @@ import format from "date-fns/format"
 import isEqual from "lodash/isEqual"
 import { wordsApi } from "../services/dictionaryApi/wordsApi"
 import { vocabulary_words } from "../../assets/words"
-import { AppRoutes, AppStackParamList, SortType, starterSATVocabularyDeckId } from "../utils/consts"
+import {
+  AppRoutes,
+  AppStackParamList,
+  SortType,
+  starterFrenchDeckId,
+  starterGermanDeckId,
+  starterItalianDeckId,
+  starterJapaneseDeckId,
+  starterMandarinDeckId,
+  starterSATVocabularyDeckId,
+  starterSpanishDeckId,
+} from "../utils/consts"
 import { AppStackScreenProps } from "app/navigators"
 import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUtils"
 import { isSameDay } from "date-fns"
@@ -72,7 +84,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     const [addDeckModalVisible, setAddDeckModalVisible] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const addNewDailyCardsToShow = async (deck: Deck) => {
+    const startNewDailyCardsForDeck = async (deck: Deck) => {
       if (deck?.last_added && isSameDay(deck.last_added, new Date())) {
         return
       }
@@ -84,7 +96,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
       //Add new cards for deck
       deckStore.decks.forEach((deck) => {
         if (deck?.addNewCardsPerDay) {
-          addNewDailyCardsToShow(deck)
+          startNewDailyCardsForDeck(deck)
         }
       })
     }, [])
@@ -139,9 +151,9 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
       })
     }
 
-    const importSATVocabDeck = async () => {
+    const importStarterDeckById = async (id: string) => {
       navigation.navigate(AppRoutes.DECK_ADD, {
-        deck: { [Deck_Fields.ID]: starterSATVocabularyDeckId },
+        deck: { [Deck_Fields.ID]: id },
       })
     }
 
@@ -177,6 +189,14 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
       )
     }
 
+    if (deckStore?.loading) {
+      return (
+        <Screen safeAreaEdges={["bottom", "top"]}>
+          <Loading></Loading>
+        </Screen>
+      )
+    }
+
     return (
       <Screen safeAreaEdges={["bottom", "top"]} style={$root} preset="scroll">
         <View style={$container}>
@@ -201,7 +221,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 width: 44,
                 height: 44,
                 backgroundColor: custom_palette.grey74,
-                //borderWidth: 1.2,
                 borderRadius: 50,
                 justifyContent: "center",
                 alignItems: "center",
@@ -214,12 +233,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 size={22}
               ></Icon>
             </View>
-            {/* <CustomText
-              preset="title3"
-              style={{ marginLeft: spacing.size200, fontFamily: typography.fonts.roboto.light }}
-            >
-              Good Afternoon
-            </CustomText> */}
           </View>
 
           {deckStore?.decks?.length > 0 ? (
@@ -245,44 +258,44 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                 <View style={{ gap: 8 }}>
                   <DeckItem
                     source={require("../../assets/icons/sat_1600.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterSATVocabularyDeckId)}
                     title={"SAT Vocabulary"}
                     caption={"Common and essential SAT vocabulary words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/mexico.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterSpanishDeckId)}
                     title={"Spanish"}
                     caption={"Basic and common Spanish words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/china.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterMandarinDeckId)}
                     title={"Chinese (Mandarin)"}
                     caption={"Basic and common Chinese words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/germany.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterGermanDeckId)}
                     title={"German"}
                     caption={"Basic and common German words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/france.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterFrenchDeckId)}
                     title={"French"}
                     caption={"Basic and common French words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/italy.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterItalianDeckId)}
                     title={"Italian"}
                     caption={"Basic and common Italian words"}
                   ></DeckItem>
 
                   <DeckItem
                     source={require("../../assets/icons/japan.png")}
-                    onPress={() => importSATVocabDeck()}
+                    onPress={() => importStarterDeckById(starterJapaneseDeckId)}
                     title={"Japanese"}
                     caption={"Basic and common Japanese words"}
                   ></DeckItem>

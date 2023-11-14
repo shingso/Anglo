@@ -9,6 +9,7 @@ import {
   CustomText,
   Header,
   Icon,
+  Loading,
   Screen,
   Text,
   TextField,
@@ -38,13 +39,16 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
     const [searchTerm, setSearchTerm] = useState("")
     const [decks, setDecks] = useState([])
     const [selectedTag, setSelectedTag] = useState(null)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
       const getDecks = async (searchTerm) => {
+        setLoading(true)
         const data = await searchGlobalDecks(searchTerm)
         if (data) {
           setDecks((prev) => data)
         }
+        setLoading(false)
       }
 
       getDecks(searchTerm).catch(() => {
@@ -105,62 +109,65 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
               )
             })}
           </ScrollView> */}
-          <FlatList
-            style={{}}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              gap: 12,
-              // padding: 2,
+          {loading ? (
+            <Loading></Loading>
+          ) : (
+            <FlatList
+              style={{}}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                gap: 12,
+                // padding: 2,
 
-              marginHorizontal: 16,
-              paddingBottom: spacing.size200,
-            }}
-            data={decks}
-            renderItem={({ item, index }) => (
-              <Card
-                style={{ elevation: 0 }}
-                key={item.id}
-                onPress={() => goToDeckAdd(item)}
-                ContentComponent={
-                  <View
-                    style={{
-                      paddingVertical: spacing.size80,
-                      paddingHorizontal: spacing.size120,
-                    }}
-                  >
+                marginHorizontal: 16,
+                paddingBottom: spacing.size200,
+              }}
+              data={decks}
+              renderItem={({ item, index }) => (
+                <Card
+                  style={{ elevation: 0 }}
+                  key={item.id}
+                  onPress={() => goToDeckAdd(item)}
+                  ContentComponent={
                     <View
                       style={{
-                        flexDirection: "row",
-                        gap: spacing.size80,
-                        marginBottom: spacing.size20,
+                        paddingVertical: spacing.size80,
+                        paddingHorizontal: spacing.size120,
                       }}
                     >
-                      {item?.icon && (
-                        <Image
-                          style={{ height: 22, width: 22 }}
-                          source={{
-                            uri: item?.icon,
-                          }}
-                        />
-                      )}
-                      <CustomText style={{ marginBottom: spacing.size80 }} preset="body1">
-                        {item?.title}
-                      </CustomText>
-                    </View>
-                    <CustomText style={{ marginBottom: spacing.size80 }} preset="caption2">
-                      {item?.private_global_flashcards?.length} cards
-                    </CustomText>
-                    {item?.description ? (
-                      <CustomText
-                        presetColors={"secondary"}
-                        style={{ marginBottom: spacing.size80 }}
-                        preset="caption1"
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          gap: spacing.size80,
+                          marginBottom: spacing.size20,
+                        }}
                       >
-                        {item?.description}
+                        {item?.icon && (
+                          <Image
+                            style={{ height: 22, width: 22 }}
+                            source={{
+                              uri: item?.icon,
+                            }}
+                          />
+                        )}
+                        <CustomText style={{ marginBottom: spacing.size80 }} preset="body1">
+                          {item?.title}
+                        </CustomText>
+                      </View>
+                      <CustomText style={{ marginBottom: spacing.size80 }} preset="caption2">
+                        {item?.private_global_flashcards?.length} cards
                       </CustomText>
-                    ) : null}
-                    {/*  <CustomText
+                      {item?.description ? (
+                        <CustomText
+                          presetColors={"secondary"}
+                          style={{ marginBottom: spacing.size80 }}
+                          preset="caption1"
+                        >
+                          {item?.description}
+                        </CustomText>
+                      ) : null}
+                      {/*  <CustomText
                       preset="caption1Strong"
                       style={{
                         marginBottom: spacing.size40,
@@ -173,11 +180,12 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                     >
                       Premium
                     </CustomText> */}
-                  </View>
-                }
-              ></Card>
-            )}
-          ></FlatList>
+                    </View>
+                  }
+                ></Card>
+              )}
+            ></FlatList>
+          )}
         </View>
       </Screen>
     )

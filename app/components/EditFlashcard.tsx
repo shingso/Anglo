@@ -53,7 +53,6 @@ export interface EditFlashcardProps {
   onDelete?: Function
   onAddCallBack?: Function
   deck?: Deck
-  customSaveFlashcard?: Function
 }
 
 /**
@@ -72,12 +71,13 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     }
   }
 
-  const { style, flashcard, onDelete, onAddCallBack, deck, customSaveFlashcard } = props
+  const { style, flashcard, onDelete, onAddCallBack, deck } = props
   const $styles = [$container, style]
   const { settingsStore } = useStores()
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
   const [errorModalVisible, setErrorModalVisible] = useState(false)
+  const [duplicateModalVisible, setDuplicateModalVisibleModalVisible] = useState(false)
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
   )
@@ -254,8 +254,12 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       flashcardReference.deck_id = deck.id
       flashcardReference.id = uuidv4()
       flashcardReference.created_at = new Date()
-      deck.addFlashcard(flashcardReference)
+      const flashcardModel = deck.addFlashcard(flashcardReference)
+      if (!deck?.selectedFlashcard) {
+        deck.selectFlashcard(flashcardModel)
+      }
       showSuccessToast(`${flashcardReference.front} added to ${deck.title}`)
+
       onAddCallBack ? onAddCallBack() : null
       if (settingsStore.isOffline) {
         deck.addToQueuedQueries({
@@ -267,6 +271,8 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       }
       const addedFlashcard = await addFlashcard(flashcardReference)
     } else {
+      console.log("updating the flashcard here")
+      //this is a null flashcard in our case because its a new flashcard...we need to mmake sure the flasghcard refnerec exists s
       flashcard?.updateFlashcard(flashcardReference)
       setSelectedFlashcard({ ...flashcardReference })
       if (settingsStore.isOffline) {
@@ -309,6 +315,11 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     /*  if (!flashcard) {
       extraArrayRef.current.focus()
     } */
+  }
+
+  const confirmSaveDuplicate = () => {
+    saveFlashcard(flashcard, selectedFlashcardReference, deck)
+    setDuplicateModalVisibleModalVisible(false)
   }
 
   return (
@@ -366,8 +377,9 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
             <Icon
               size={28}
               onPress={() =>
-                customSaveFlashcard
-                  ? customSaveFlashcard(selectedFlashcardReference, deck)
+                deck.doesDeckAlreadyContainFlashcard(selectedFlashcardReference?.front) &&
+                !selectedFlashcardReference?.id
+                  ? setDuplicateModalVisibleModalVisible(true)
                   : saveFlashcard(flashcard, selectedFlashcardReference, deck)
               }
               icon="fluent_save"
@@ -375,11 +387,11 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           </View>
         </View>
       </View>
-      {!flashcard && deck?.doesDeckAlreadyContainFlashcard(selectedFlashcardReference?.front) ? (
+      {/* {!flashcard && deck?.doesDeckAlreadyContainFlashcard(selectedFlashcardReference?.front) ? (
         <CustomText preset="caption1" presetColors={"danger"}>
           Duplicate front
         </CustomText>
-      ) : null}
+      ) : null} */}
 
       <EditableText
         style={{ marginBottom: spacing.size120 }}
@@ -485,7 +497,19 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         mainActionLabel={"Close"}
         visible={errorModalVisible}
         header={"Rate limit reached"}
-        body={"You've reached the free limit of 20 AI generated cards per day. Subscribe for more."}
+        body={
+          "You've reached the free limit of 50 AI generated cards per month. Subscribe to increase rate limit to 1000 per month."
+        }
+      ></CustomModal>
+      <CustomModal
+        mainAction={() => confirmSaveDuplicate()}
+        mainActionLabel={"Add"}
+        secondaryAction={() => setDuplicateModalVisibleModalVisible(false)}
+        visible={duplicateModalVisible}
+        header={"Duplicate flashcard"}
+        body={
+          "A flashcard with this front already exists, would you like to add this card anyways?"
+        }
       ></CustomModal>
     </View>
   )

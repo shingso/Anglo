@@ -21,6 +21,7 @@ import {
   Text,
   Option,
   TextField,
+  EditableText,
 } from "../components"
 import { Deck, DeckSnapshotIn, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -37,6 +38,8 @@ import {
   TranslateLanguage,
   soundSettingOptions,
   SCREEN_HEIGHT,
+  startOptions,
+  startOptionLabels,
 } from "../utils/consts"
 import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { FlatList, ScrollView } from "react-native-gesture-handler"
@@ -64,6 +67,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const customPromptModelRef = useRef<BottomSheetModal>()
     const soundLanguageModelRef = useRef<BottomSheetModal>()
     const soundFieldModelRef = useRef<BottomSheetModal>()
+    const startModeModelRef = useRef<BottomSheetModal>()
+    const [startMode, setStartMode] = useState(selectedDeck?.startMode)
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
     const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
@@ -101,6 +106,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
 
     const onSubmitDeckTitle = (title) => {
       setDeckTitle(title)
+      //update the deck name on offline mode or should we even let
       updateSelectedDeck({ [Deck_Fields.TITLE]: title })
     }
 
@@ -136,14 +142,14 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       <Screen style={$root} preset="scroll">
         <Header title={"Settings"}></Header>
         <View style={$container}>
-          {/*   <EditableText
+          <EditableText
             style={{ marginBottom: spacing.size120 }}
             preset="title1"
             placeholder="Title"
             testID="title"
             onSubmit={(value) => onSubmitDeckTitle(value)}
             initialValue={deckTitle}
-          ></EditableText> */}
+          ></EditableText>
           <View style={{ marginBottom: spacing.size200 }}>
             <Card
               testID="cards_per_day"
@@ -187,6 +193,49 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       setAddNewCardsPerDay(!addNewCardsPerDay)
                     }}
                   ></CustomSwitch>
+                </View>
+              }
+            ></Card>
+            <Card
+              testID="start_mode"
+              style={{
+                paddingHorizontal: spacing.size160,
+                paddingVertical: spacing.size120,
+                minHeight: 0,
+                elevation: 0,
+                marginBottom: spacing.size80,
+                borderRadius: 16,
+              }}
+              ContentComponent={
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <TouchableOpacity onPress={() => startModeModelRef?.current?.present()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <CustomText
+                        preset="body1"
+                        presetColors={addNewCardsPerDay ? "brand" : "secondary"}
+                      >
+                        {startOptionLabels[startMode]}
+                      </CustomText>
+                      <Icon
+                        icon="caret_right"
+                        color="#242424"
+                        style={{ marginLeft: spacing.size80 }}
+                        size={16}
+                      ></Icon>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               }
             ></Card>
@@ -525,6 +574,23 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   onPress={setSoundOption}
                   option={option}
                   currentSelected={soundSettings}
+                ></Option>
+              )
+            })}
+          </View>
+        </BottomSheet>
+
+        <BottomSheet ref={startModeModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"Cards per day will be added based on"}></ModalHeader>
+          <View>
+            {startOptions.map((option) => {
+              return (
+                <Option
+                  key={option}
+                  title={startOptionLabels[option]}
+                  onPress={setStartMode}
+                  option={option}
+                  currentSelected={startMode}
                 ></Option>
               )
             })}

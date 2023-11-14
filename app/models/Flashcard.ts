@@ -47,6 +47,7 @@ export const FlashcardModel = types
       return calculateEasinessFactor(self.card_progress)
     },
     get todaysCardProgresses() {
+      //TODO CHECK ON THIS PORGRESS
       if (!self?.card_progress || !(self.card_progress.length > 0)) {
         return []
       }
@@ -59,6 +60,7 @@ export const FlashcardModel = types
       const date = new Date() //now(600000)
       // console.log("passed todays cards ran", date)
       return this.todaysCardProgresses.reduce((prev, progress) => {
+        //if it got moved pass the end of today it shouild be moved...a card can only be passed once per day anyways
         return prev + (isAfter(progress.next_shown, endOfDay(date)) ? 1 : 0)
       }, 0)
     },

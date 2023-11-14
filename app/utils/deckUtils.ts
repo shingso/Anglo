@@ -13,6 +13,7 @@ import { Deck, DeckSnapshotIn } from "../models/Deck"
 import { Flashcard, FlashcardSnapshotIn } from "../models/Flashcard"
 import { v4 as uuidv4 } from "uuid"
 import { QueryFunctions } from "app/models/Query"
+import { StartOption } from "./consts"
 
 export enum Deck_Fields {
   ID = "id",
@@ -137,6 +138,31 @@ export const getRandomFlashcards = (cards: Flashcard[], amount: number): Flashca
   return shuffle(cards).slice(0, amount)
 }
 
+export const getCardsForDeckOption = (deck: Deck, amount: number): Flashcard[] => {
+  const date = new Date()
+  const filteredCards = deck.flashcards.filter((card) => !card?.next_shown)
+
+  switch (deck?.startMode) {
+    case StartOption.RANDOM:
+      return getRandomFlashcards(filteredCards, amount)
+    case StartOption.DATE_ADDED:
+      return filteredCards
+        .sort((a, b) => {
+          if (!a?.created_at) {
+            return 1
+          }
+          if (!b?.created_at) {
+            return -1
+          }
+
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        })
+        .slice(0, amount)
+    default:
+      return filteredCards
+  }
+}
+
 export const addCardsToShow = async (
   deck: Deck,
   amount: number,
@@ -145,10 +171,9 @@ export const addCardsToShow = async (
   if (!deck) {
     return null
   }
-  const date = new Date()
-  const filteredCards = deck.flashcards.filter((card) => !card?.next_shown)
-  const newCardsToShow: Flashcard[] = getRandomFlashcards(filteredCards, amount)
 
+  const date = new Date()
+  const newCardsToShow = getCardsForDeckOption(deck, amount)
   newCardsToShow.forEach((card) => card.updateFlashcard({ [Flashcard_Fields.NEXT_SHOWN]: date }))
   const mappedFlashcards = newCardsToShow.map((card) => {
     return { [Flashcard_Fields.NEXT_SHOWN]: date, [Flashcard_Fields.ID]: card.id }

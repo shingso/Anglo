@@ -3,12 +3,21 @@ import { observer } from "mobx-react-lite"
 import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
-import { Button, Card, CustomText, FlashcardListItem, Loading, Screen, Text } from "../components"
+import {
+  Button,
+  Card,
+  CustomModal,
+  CustomText,
+  FlashcardListItem,
+  Loading,
+  Screen,
+  Text,
+} from "../components"
 import { spacing } from "../theme/spacing"
 import { Deck, FlashcardModel, useStores } from "../models"
 import { useNavigation } from "@react-navigation/native"
 import { colors, custom_colors, typography } from "../theme"
-import { AppRoutes, AppStackParamList } from "../utils/consts"
+import { AppRoutes, AppStackParamList, freeLimitDeck } from "../utils/consts"
 import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 
 // import { useNavigation } from "@react-navigation/native"
@@ -26,11 +35,22 @@ import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDec
 export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">> = observer(
   function DeckAddScreen({ route }) {
     const { deck } = route.params
-    const { deckStore } = useStores()
+    const { deckStore, subscriptionStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [selectedDeck, setSelectedDeck] = useState(deck)
     const flashcards = selectedDeck?.private_global_flashcards || []
     const [loading, setLoading] = useState(false)
+    const [deckLimitModalVisible, setDeckLimitModalVisible] = useState(false)
+
+    const canMakeDeckPastFreeLimit = (): boolean => {
+      if (subscriptionStore.hasActiveSubscription()) {
+        return true
+      }
+      if (deckStore?.decks?.length && deckStore.decks.length >= freeLimitDeck) {
+        return false
+      }
+      return true
+    }
 
     useEffect(() => {
       navigation.setOptions({ headerTitle: deck?.title })
@@ -46,6 +66,11 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     }, [])
 
     const importDeck = async () => {
+      if (!canMakeDeckPastFreeLimit()) {
+        setDeckLimitModalVisible(true)
+        return
+      }
+
       const newDeck = await importFreeGlobalDeckById(selectedDeck.id, selectedDeck.title, newPerDay)
       if (newDeck && newDeck?.id) {
         deckStore.addDeckFromRemote(newDeck?.id)
@@ -93,6 +118,14 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
             ></TouchableOpacity>
           )}
         ></FlatList>
+        <CustomModal
+          header={"Deck limit reached"}
+          body={"Subscribe to add more decks"}
+          secondaryAction={() => setDeckLimitModalVisible(false)}
+          mainActionLabel={"Subscribe"}
+          mainAction={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
+          visible={deckLimitModalVisible}
+        />
       </Screen>
     )
   },

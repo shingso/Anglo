@@ -210,3 +210,16 @@ export const starterJapaneseDeckId = "4f94f837-da58-475a-888a-cc7635978726"
 export const starterFrenchDeckId = "aa9520cc-69d6-44d8-988f-20245478c3cd"
 export const starterItalianDeckId = "cf0a68f9-3659-4d58-a73c-8d103aa88b2c"
 export const starterMandarinDeckId = "4fabe92a-26cb-49b8-9472-c96ac7350866"
+
+export enum StartOption {
+  RANDOM = "random",
+  DATE_ADDED = "date_added",
+}
+
+export const startOptions = [StartOption.RANDOM, StartOption.DATE_ADDED]
+export const startOptionLabels = {
+  [StartOption.RANDOM]: "Random",
+  [StartOption.DATE_ADDED]: "Added order",
+}
+
+export const freeLimitDeck = 2

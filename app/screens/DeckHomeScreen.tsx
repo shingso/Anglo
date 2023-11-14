@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react"
+import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { Alert, View, ViewStyle, Image } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
@@ -9,8 +9,11 @@ import {
   Header,
   Icon,
   Screen,
+  Option,
   Text,
   BottomSheet,
+  ModalHeader,
+  Button,
 } from "app/components"
 import { Deck, useStores } from "app/models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -22,6 +25,8 @@ import { spacing, custom_palette, typography } from "app/theme"
 import { borderRadius } from "app/theme/borderRadius"
 import { addCardsToShow } from "app/utils/deckUtils"
 import { LinearGradient } from "expo-linear-gradient"
+import { ScrollView } from "react-native-gesture-handler"
+import { type } from "@testing-library/react-native/build/user-event/type"
 
 interface DeckHomeScreenProps extends AppStackScreenProps<"DeckHome"> {}
 
@@ -31,6 +36,16 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
   const selectedDeck = deckStore?.selectedDeck
   const selectedFlashcardModalRef = useRef<BottomSheetModal>()
   const navigation = useNavigation()
+  const cardsPerDayModelRef = useRef<BottomSheetModal>()
+  const [newPerDay, setNewPerDay] = useState(1)
+
+  const numberOfCards = useMemo(
+    () =>
+      Array(26)
+        .fill(0, 1, 26)
+        .map((_, index) => index),
+    [],
+  )
 
   useEffect(() => {
     const setPurchasabeDeck = async () => {
@@ -50,6 +65,16 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
     } else {
       showSuccessToast("There are no more cards for today")
     }
+  }
+
+  const totalProgress =
+    (selectedDeck?.todaysCards?.length || 0) + (selectedDeck?.cardProgressCount || 0)
+  const todaysProgress =
+    totalProgress !== 0 ? Math.trunc((selectedDeck?.cardProgressCount / totalProgress) * 100) : 0
+
+  const startCards = () => {
+    addCardsToShow(selectedDeck, newPerDay, settingsStore.isOffline)
+    cardsPerDayModelRef?.current?.close()
   }
 
   return (
@@ -84,7 +109,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   justifyContent: "space-between",
                 }}
               >
-                {selectedDeck?.todaysCards?.length + selectedDeck?.cardProgressCount !== 0 && (
+                {totalProgress !== 0 ? (
                   <View>
                     <View
                       style={{
@@ -97,6 +122,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       <CustomText style={{ fontSize: 52 }}>
                         {selectedDeck?.todaysCards?.length}
                       </CustomText>
+                      <CustomText>passed {selectedDeck?.cardProgressCount}</CustomText>
                       <View
                         style={{
                           width: 44,
@@ -128,14 +154,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                           style={{ color: custom_palette.primary60 }}
                           preset="caption1Strong"
                         >
-                          Progress:{" "}
-                          {Math.trunc(
-                            (selectedDeck?.cardProgressCount /
-                              (selectedDeck?.todaysCards?.length +
-                                selectedDeck?.cardProgressCount)) *
-                              100,
-                          )}
-                          %
+                          Progress: {todaysProgress}%
                         </CustomText>
                       </View>
 
@@ -150,12 +169,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                         <LinearGradient
                           style={{
                             borderRadius: borderRadius.corner80,
-                            width: `${
-                              (selectedDeck?.cardProgressCount /
-                                (selectedDeck?.todaysCards?.length +
-                                  selectedDeck?.cardProgressCount)) *
-                              100
-                            }%`,
+                            width: `${todaysProgress}%`,
                           }}
                           colors={[custom_palette.primary140, custom_palette.primary100]}
                           start={{ x: 0, y: 0.1 }}
@@ -170,11 +184,61 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       </View>
                     </View>
                   </View>
+                ) : (
+                  <View>
+                    {selectedDeck?.flashcards?.length > 0 ? (
+                      <CustomText>No cards due today</CustomText>
+                    ) : (
+                      <CustomText>Add some flashcards to get started</CustomText>
+                    )}
+                  </View>
                 )}
               </View>
             }
           ></Card>
-
+          <View style={{ flexDirection: "row", gap: spacing.size80 }}>
+            <Card
+              onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
+              preset="action"
+              ContentComponent={
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  {/*   <Icon icon="repeat_arrow" style={{ marginRight: spacing.size120 }} size={22}></Icon> */}
+                  <Image
+                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                    source={require("../../assets/icons/coding.png")}
+                  />
+                  <View>
+                    <CustomText preset="body1">{"Free study"}</CustomText>
+                  </View>
+                </View>
+              }
+            ></Card>
+            <Card
+              onPress={() => cardsPerDayModelRef?.current.present()}
+              preset="action"
+              ContentComponent={
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image
+                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                    source={require("../../assets/icons/coding.png")}
+                  />
+                  <View>
+                    <CustomText preset="body1">{`Start cards`}</CustomText>
+                  </View>
+                </View>
+              }
+            ></Card>
+          </View>
           <View
             style={{
               flexDirection: "row",
@@ -185,7 +249,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               marginBottom: spacing.size120,
             }}
           >
-            <CustomText preset="body2Strong" presetColors={"secondary"}>
+            <CustomText
+              preset="title1"
+              style={{ fontFamily: typography.primary.light }}
+              //presetColors={"secondary"}
+            >
               Flashcards
             </CustomText>
             {/*     <CustomText style={{ color: custom_colors.brandForeground1 }} preset="caption1Strong">
@@ -214,6 +282,10 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   <View>
                     <CustomText preset="title2" style={{ fontFamily: typography.primary.medium }}>
                       {selectedDeck?.flashcards.length + " cards"}
+                    </CustomText>
+                    <CustomText preset="caption2" style={{ fontFamily: typography.primary.medium }}>
+                      {selectedDeck?.flashcards.filter((card) => !!card?.next_shown).length +
+                        " cards started"}
                     </CustomText>
                   </View>
                 </View>
@@ -269,11 +341,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   alignItems: "center",
                 }}
               >
-                {/*   <Icon
-                icon="fluent_lightbulb"
-                style={{ marginRight: spacing.size120 }}
-                size={22}
-              ></Icon> */}
                 <Image
                   style={{ height: 36, width: 36, marginRight: spacing.size120 }}
                   source={require("../../assets/icons/coding.png")}
@@ -318,7 +385,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               </View>
             }
           ></Card>
-
+          {/* 
           <Card
             onPress={() => navigation.navigate(AppRoutes.RESTART_OVERDUE)}
             style={{
@@ -348,51 +415,8 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                 </View>
               </View>
             }
-          ></Card>
+          ></Card> */}
 
-          <View style={{ flexDirection: "row", gap: spacing.size80 }}>
-            <Card
-              onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
-              preset="action"
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  {/*   <Icon icon="repeat_arrow" style={{ marginRight: spacing.size120 }} size={22}></Icon> */}
-                  <Image
-                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
-                    source={require("../../assets/icons/coding.png")}
-                  />
-                  <View>
-                    <CustomText preset="body1">{"Free study"}</CustomText>
-                  </View>
-                </View>
-              }
-            ></Card>
-            <Card
-              onPress={() => addCardsToShow(selectedDeck, 5, settingsStore.isOffline)}
-              preset="action"
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
-                    source={require("../../assets/icons/coding.png")}
-                  />
-                  <View>
-                    <CustomText preset="body1">{`Start cards`}</CustomText>
-                  </View>
-                </View>
-              }
-            ></Card>
-          </View>
           {/*     <Card
           onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
           style={{
@@ -433,7 +457,30 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
         </View>
       </View>
       <BottomSheet ref={selectedFlashcardModalRef} customSnap={["85"]}>
-        <EditFlashcard flashcard={null} deck={selectedDeck}></EditFlashcard>
+        <EditFlashcard
+          flashcard={selectedDeck.selectedFlashcard}
+          deck={selectedDeck}
+        ></EditFlashcard>
+      </BottomSheet>
+      <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
+        <ModalHeader title={"Number of cards to start"}></ModalHeader>
+        <Button preset="custom_default_small" onPress={() => startCards()}>
+          Start
+        </Button>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 240 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {numberOfCards.map((num) => (
+            <Option
+              key={num}
+              onPress={setNewPerDay}
+              title={num}
+              option={num}
+              currentSelected={newPerDay}
+            ></Option>
+          ))}
+        </ScrollView>
       </BottomSheet>
     </Screen>
   )

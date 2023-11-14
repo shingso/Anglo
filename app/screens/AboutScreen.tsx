@@ -20,11 +20,8 @@ import { AppStackParamList, AppRoutes } from "../utils/consts"
 // @ts-ignore
 export const AboutScreen: FC<StackScreenProps<AppStackScreenProps, "About">> = observer(
   function AboutScreen() {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
-
-    // Pull in navigation via hook
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
+
     return (
       <Screen style={$root} preset="scroll">
         <View style={$container}>

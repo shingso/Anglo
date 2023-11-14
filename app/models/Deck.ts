@@ -16,9 +16,11 @@ import {
   SortType,
   SoundLanguage,
   SoundOptions,
+  StartOption,
   TranslateLanguage,
   playSoundLanguageArray,
   soundOptionArray,
+  startOptions,
   translateLanguageArray,
 } from "../utils/consts"
 import { getGlobalDeckById } from "../utils/globalDecksUtils"
@@ -60,6 +62,7 @@ export const DeckModel = types
     soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),
     playSoundAutomatically: types.optional(types.boolean, false),
     addNewCardsPerDay: types.optional(types.boolean, false),
+    startMode: types.optional(types.enumeration(startOptions), StartOption.DATE_ADDED),
     aiGeneratedResponse: types.optional(AiGenerationResponseModel, {
       errors: [],
       success: [],
@@ -154,6 +157,9 @@ export const DeckModel = types
     },
     setSoundOption(option: SoundOptions) {
       self.soundOption = option
+    },
+    setStartMode(option: StartOption) {
+      self.startMode = option
     },
     setPlaySoundLanguage(language: SoundLanguage) {
       self.playSoundLanguage = language

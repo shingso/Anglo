@@ -351,13 +351,12 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           ref={selectedFlashcardModalRef}
           customSnap={["85"]}
         >
-          {
-            <EditFlashcard
-              onDelete={() => setDeleteFlashcardModalVisible(true)}
-              flashcard={selectedFlashcard}
-              deck={deckStore.selectedDeck}
-            ></EditFlashcard>
-          }
+          <EditFlashcard
+            onDelete={() => setDeleteFlashcardModalVisible(true)}
+            flashcard={selectedFlashcard}
+            deck={deckStore.selectedDeck}
+          ></EditFlashcard>
+
           {/*    <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
           <CustomText>Rep: {flashcardStatistics.currentRepetition}</CustomText>
           <CustomText>Max Time: {flashcardStatistics.timeElapsed}</CustomText>

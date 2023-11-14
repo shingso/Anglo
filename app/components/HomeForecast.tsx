@@ -62,7 +62,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
   }
 
   //what i want to display is the next showns for the next week for all the decks combine them all
-
+  //gradiants  style={{ padding: 8, margin: -8, borderRadius: borderRadius.corner80 }}
+  //  colors={["#5F0F40", "#310E68"]}
   const getWeeklyForecast = () => {
     const weeklyForecast: {
       [key: string]: Flashcard[]
@@ -120,7 +121,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
           ContentComponent={
             <View>
               <CustomText preset="body2">Today</CustomText>
-              <CustomText preset="body2Strong">
+              <CustomText preset="title3" style={{ fontFamily: typography.primary.medium }}>
                 {deckStore.decks
                   .reduce((prev, deck) => {
                     return prev + deck?.todaysCards?.length
@@ -137,8 +138,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               style={{ minWidth: 80, elevation: 0, margin: 2 }}
               ContentComponent={
                 <View>
-                  <CustomText preset="body2">{format(new Date(date), "do")}</CustomText>
-                  <CustomText preset="body2Strong">
+                  <CustomText preset="caption1">{format(new Date(date), "do")}</CustomText>
+                  <CustomText preset="title3" style={{ fontFamily: typography.primary.light }}>
                     {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
                   </CustomText>
                 </View>
@@ -147,57 +148,6 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
           )
         })}
       </ScrollView>
-      {/*    <Card
-        onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
-        style={{
-          marginTop: spacing.size160,
-
-          minHeight: 0,
-          elevation: 4,
-        }}
-        ContentComponent={
-          <LinearGradient
-            // Button Linear Gradient
-            style={{ padding: 8, margin: -8, borderRadius: borderRadius.corner80 }}
-            colors={["#5F0F40", "#310E68"]}
-            //colors={["#9921e8", "#5f72be"]}
-
-            start={{ x: 0, y: 0.1 }}
-          >
-            <View
-              style={{
-                paddingHorizontal: spacing.size160,
-                paddingVertical: spacing.size40,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Icon
-                icon="fluent_lightbulb"
-                style={{ marginRight: spacing.size160 }}
-                size={32}
-                color="white"
-              ></Icon>
-              <View>
-                <CustomText style={{ color: "white" }} preset="body1Strong">
-                  {"Get Smarter"}
-                </CustomText>
-                <CustomText style={{ color: "white" }} preset="caption1">
-                  {"Retain information even better"}
-                </CustomText>
-              </View>
-            </View>
-          </LinearGradient>
-        }
-      ></Card> */}
-      {/*   <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
-        <CustomText preset="title3">{"Today"}</CustomText>
-        <View>
-          <CustomText preset="body2">
-            {format(new Date(), "EEEE")} {format(new Date(), "do")}
-          </CustomText>
-        </View>
-      </View> */}
       <View>
         {deckStore.decks.map((deck) => {
           return (
@@ -207,49 +157,16 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               style={{
                 elevation: 0,
                 marginBottom: spacing.size100,
-
-                //backgroundColor: custom_palette.primary130,
+                paddingHorizontal: spacing.size200,
+                paddingVertical: spacing.size160,
               }}
               ContentComponent={
-                <View
-                  style={{
-                    paddingHorizontal: spacing.size120,
-                    paddingVertical: spacing.size80,
-                  }}
-                >
-                  {/*       <View
-                    style={{
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CustomText preset="body1">{deck?.todaysCards?.length?.toString()}</CustomText>
-             
-                    <View
-                      style={{
-                        width: 44,
-                        height: 44,
-                        backgroundColor: custom_palette.grey74,
-                        //borderWidth: 1.2,
-                        borderRadius: 50,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        alignSelf: "flex-end",
-                      }}
-                    >
-                      <Icon
-                        icon="fluent_play_outline"
-                        color={custom_palette.white}
-                        size={22}
-                      ></Icon>
-                    </View>
-                  </View> */}
+                <View>
                   <View
                     style={{
                       flexDirection: "row",
-
                       alignItems: "center",
+                      marginBottom: spacing.size240,
                     }}
                   >
                     {!!deck?.picture_url && (
@@ -261,75 +178,25 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                       />
                     )}
 
-                    <CustomText preset="title3">{deck?.title}</CustomText>
+                    <CustomText preset="body1" style={{ fontFamily: typography.primary.medium }}>
+                      {deck?.title}
+                    </CustomText>
                   </View>
-                  <CustomText preset="body1">{deck?.todaysCards?.length?.toString()}</CustomText>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                    <CustomText preset="body2">{deck?.todaysCards?.length?.toString()}</CustomText>
+                    <CustomText presetColors={"secondary"} preset="body2">
+                      {deck?.flashcards?.length?.toString() + " cards"}
+                    </CustomText>
+                  </View>
                 </View>
               }
             ></Card>
           )
         })}
       </View>
-      {/* <CustomText preset="body2Strong" onPress={() => navigation.navigate(AppRoutes.USER_SETUP)}>
-        User Setup
-      </CustomText> */}
-      {/* 
-      <View style={{ marginTop: spacing.size200, marginBottom: spacing.size120 }}>
-        <CustomText preset="title3">{"This week"}</CustomText>
-      </View> */}
-
-      {/*  <Card
-        style={{ padding: spacing.size200, margin: spacing.size120 }}
-        ContentComponent={
-          <View>
-            <MaskedView
-              style={{ height: 24, width: 200 }}
-              maskElement={
-                <View
-                  style={{
-                    height: 24,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: spacing.size60,
-                  }}
-                >
-                  <Image
-                    style={[{ tintColor: "black" }, { width: 24, height: 24 }]}
-                    source={require("../../assets/icons/fluent_lightbulb.png")}
-                  />
-                  <CustomText preset="title3">Get Smart</CustomText>
-                </View>
-              }
-            >
-              <LinearGradient
-                colors={["cadetblue", "#fabada"]}
-                start={{ x: 1, y: 1 }}
-                end={{ x: 0, y: 0.33 }}
-                style={{ flex: 1 }}
-              />
-            </MaskedView>
-
-            <CustomText preset="title3">Today</CustomText>
-            <CustomText preset="caption2" style={{ marginBottom: 20 }}>
-              Sat 14th
-            </CustomText>
-            {deckStore?.decks.map((deck) => {
-              return (
-                <TouchableOpacity key={deck.id} onPress={() => deckStore.selectDeck(deck)}>
-                  <View style={{ marginBottom: spacing.size320 }}>
-                    <View>
-                      <CustomText preset="body1Strong" style={{ marginBottom: spacing.size40 }}>
-                        {deck.title}
-                      </CustomText>
-                      <CustomText preset="body1">{deck.todaysCards.length} </CustomText>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
-        }
-      ></Card> */}
+      {/*    <Button preset="custom_default" onPress={() => deckStore.getDecks()}>
+        Refresh decks
+      </Button> */}
     </View>
   )
 })
