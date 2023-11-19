@@ -110,13 +110,14 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
           }, 0)
           .toString()}
       </CustomText> */}
+
       <ScrollView
         style={{ marginBottom: spacing.size160 }}
         contentContainerStyle={{ gap: spacing.size40 }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        <Card
+        {/*    <Card
           style={{ minWidth: 80, elevation: 0, margin: 2 }}
           ContentComponent={
             <View>
@@ -130,16 +131,26 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               </CustomText>
             </View>
           }
-        ></Card>
+        ></Card> */}
         {getDates(addDays(new Date(), 2), addDays(new Date(), 7)).map((date) => {
           return (
             <Card
               key={date}
               style={{ minWidth: 80, elevation: 0, margin: 2 }}
               ContentComponent={
-                <View>
-                  <CustomText preset="caption1">{format(new Date(date), "do")}</CustomText>
-                  <CustomText preset="title3" style={{ fontFamily: typography.primary.light }}>
+                <View style={{ alignItems: "center" }}>
+                  <View
+                    style={{
+                      alignItems: "center",
+                    }}
+                  >
+                    <CustomText preset="caption1">{format(new Date(date), "eee")}</CustomText>
+                    <CustomText preset="caption1Strong">{format(new Date(date), "do")}</CustomText>
+                  </View>
+                  <CustomText
+                    preset="title3"
+                    style={{ fontFamily: typography.primary.light, marginTop: spacing.size40 }}
+                  >
                     {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
                   </CustomText>
                 </View>
@@ -159,34 +170,87 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 marginBottom: spacing.size100,
                 paddingHorizontal: spacing.size200,
                 paddingVertical: spacing.size160,
+                minHeight: 150,
               }}
               ContentComponent={
-                <View>
+                <View
+                  style={{
+                    justifyContent: "space-between",
+
+                    flex: 1,
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
-                      alignItems: "center",
+
                       marginBottom: spacing.size240,
+                      justifyContent: "space-between",
                     }}
                   >
+                    <CustomText preset="body1" style={{ fontFamily: typography.primary.medium }}>
+                      {deck?.title}
+                    </CustomText>
                     {!!deck?.picture_url && (
                       <Image
-                        style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                        style={{ height: 44, width: 44 }}
                         source={{
                           uri: deck.picture_url,
                         }}
                       />
                     )}
-
-                    <CustomText preset="body1" style={{ fontFamily: typography.primary.medium }}>
-                      {deck?.title}
-                    </CustomText>
                   </View>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <CustomText preset="body2">{deck?.todaysCards?.length?.toString()}</CustomText>
-                    <CustomText presetColors={"secondary"} preset="body2">
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      gap: spacing.size120,
+                      alignItems: "center",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        // borderWidth: 1,
+                        //  paddingHorizontal: 12,
+                        borderRadius: 12,
+                        paddingVertical: 4,
+                        borderColor: custom_palette.grey50,
+                      }}
+                    >
+                      <Icon
+                        icon="fluent_play_outline"
+                        size={20}
+                        style={{ marginRight: spacing.size80 }}
+                      ></Icon>
+                      <CustomText preset="body1">
+                        {deck?.todaysCards?.length?.toString()}
+                      </CustomText>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        //   borderWidth: 1,
+                        paddingHorizontal: 12,
+                        borderRadius: 12,
+                        paddingVertical: 4,
+                        borderColor: custom_palette.grey50,
+                      }}
+                    >
+                      <Icon
+                        icon="flashcards"
+                        size={20}
+                        style={{ marginRight: spacing.size80 }}
+                      ></Icon>
+                      <CustomText preset="body1">{deck?.flashcards?.length?.toString()}</CustomText>
+                    </View>
+
+                    {/*   <CustomText presetColors={"secondary"} preset="body2">
                       {deck?.flashcards?.length?.toString() + " cards"}
-                    </CustomText>
+                    </CustomText> */}
                   </View>
                 </View>
               }

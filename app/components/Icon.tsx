@@ -201,6 +201,7 @@ export const iconRegistry = {
   circle_check_filled: require("../../assets/icons/circle_check_filled.png"),
   dismiss: require("../../assets/icons/dismiss.png"),
   mexico: require("../../assets/icons/mexico.png"),
+  sun: require("../../assets/icons/sun.png"),
 }
 
 const $imageStyle: ImageStyle = {

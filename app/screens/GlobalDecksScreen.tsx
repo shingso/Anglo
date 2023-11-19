@@ -63,11 +63,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
     return (
       <Screen style={$root}>
         <View style={$content_container}>
-          <Header
-            leftIcon="caret_left"
-            onLeftPress={() => navigation.goBack()}
-            title={"Global Decks"}
-          ></Header>
+          <Header title={"Premade decks"}></Header>
 
           <TextField
             containerStyle={{ marginBottom: spacing.size120, paddingHorizontal: spacing.size160 }}

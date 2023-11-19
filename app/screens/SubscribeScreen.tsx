@@ -20,7 +20,6 @@ import { LinearGradient } from "expo-linear-gradient"
 import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { supabase } from "app/services/supabase/supabase"
 import {
-  cancelSubscription,
   getProducts,
   processProductPayment,
   processSubscriptionPayment,
@@ -56,6 +55,15 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         }
       }
       getGooglePaySupport()
+    }, [])
+
+    useEffect(() => {
+      const getSubscription = async () => {
+        setLoading(true)
+        const res = await subscriptionStore.getSubscription()
+        setLoading(false)
+      }
+      getSubscription()
     }, [])
 
     const fetchSubscriptionPaymentSheet = async (subId: string) => {
@@ -176,30 +184,28 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         <View>
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
               Unlimited deck size
             </CustomText>
-            <CustomText preset="caption1">
+            <CustomText preset="body1">
               Keep track of as many topics as want with unlimited deck space.
             </CustomText>
           </View>
 
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
               Premium decks
             </CustomText>
-            <CustomText preset="caption1">Access all premium decks</CustomText>
+            <CustomText preset="body1">Access all premium decks</CustomText>
           </View>
 
           <View style={{ marginBottom: spacing.size200 }}>
             {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
               AI Flashcards
             </CustomText>
-            <CustomText preset="caption1">
-              Increase rate limit to 1000 flashcards per month
-            </CustomText>
+            <CustomText preset="body1">Increase rate limit to 1000 flashcards per month</CustomText>
           </View>
         </View>
       )
@@ -212,18 +218,22 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             <Loading></Loading>
           </View>
         )}
+
         {!subscriptionStore?.hasActiveSubscription() ? (
           <View style={$container}>
+            <SubscriptionFeaturesList></SubscriptionFeaturesList>
+            <CustomText preset="title3" style={{ marginBottom: spacing.size40 }}>
+              Select plan below
+            </CustomText>
             <CustomText style={{ marginBottom: spacing.size160 }}>
               Cancel anytime, no fees, simple and hassle free
             </CustomText>
-            <SubscriptionFeaturesList></SubscriptionFeaturesList>
             <Card
               disabled={loading}
               onPress={() => initializeSubscriptionPaymentSheet()}
               style={{
                 marginBottom: spacing.size160,
-                elevation: 4,
+                elevation: 0,
                 minHeight: 0,
                 paddingHorizontal: spacing.size200,
                 paddingVertical: spacing.size120,
@@ -241,7 +251,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
               onPress={() => initializePaymentSheet("6")}
               style={{
                 marginBottom: spacing.size160,
-                elevation: 4,
+                elevation: 0,
                 minHeight: 0,
                 paddingHorizontal: spacing.size200,
                 paddingVertical: spacing.size120,
@@ -283,7 +293,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
               style={{
                 marginBottom: spacing.size160,
                 paddingVertical: spacing.size120,
-                elevation: 4,
+                elevation: 0,
                 minHeight: 0,
                 paddingHorizontal: spacing.size200,
               }}

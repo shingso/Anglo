@@ -395,7 +395,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
         }
       </BottomSheet>
       <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
-        <ModalHeader title={"Set custom prompts for fields"}></ModalHeader>
+        <ModalHeader title={"Set custom prompts for AI Generation fields"}></ModalHeader>
         <PromptSettings deck={selectedDeck}></PromptSettings>
       </BottomSheet>
     </Screen>

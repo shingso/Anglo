@@ -196,14 +196,11 @@ const HomeScreens = () => {
         headerShown: false,
         //TODO fix on IOS we still need a better solution
         animation: "slide_from_right",
-        headerTitleAlign: "center",
-        headerTitleStyle: { fontSize: 18, fontFamily: typography.primary.bold },
+
         header: (props) => {
           return (
             <Header
-              title={(props.options.headerTitle as string) ?? (props.route.name as string)}
-              leftIcon="caret_left"
-              onLeftPress={() => props.navigation.goBack()}
+              title={(props.options.title as string) ?? (props.route.name as string)}
             ></Header>
           )
         },
@@ -213,13 +210,7 @@ const HomeScreens = () => {
       <Stack.Screen name={AppRoutes.SETTINGS} component={SettingsScreen} />
 
       <Stack.Screen name={AppRoutes.MUTLI_ADD_AI} component={MultiAddAiScreen} />
-      <Stack.Screen
-        options={{
-          headerShown: true,
-        }}
-        name={AppRoutes.FREE_STUDY}
-        component={FreeStudyScreen}
-      />
+      <Stack.Screen name={AppRoutes.FREE_STUDY} component={FreeStudyScreen} />
       <Stack.Screen name={AppRoutes.FLASHCARD_LIST} component={FlashcardListScreen} />
 
       <Stack.Screen name={AppRoutes.DECK_SETTINGS} component={DeckSettingsScreen} />
@@ -247,6 +238,7 @@ const HomeScreens = () => {
         name={AppRoutes.PURCHASE_DECK}
         options={{
           headerShown: true,
+          title: "Get Deck",
         }}
         component={PurchaseDeckScreen}
       />

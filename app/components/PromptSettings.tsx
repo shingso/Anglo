@@ -58,6 +58,7 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
           testID="subheader_input"
           value={subheaderPrompt}
           onChangeText={setSubheaderPrompt}
+          placeholder="Subheader is shown with the front."
           onSubmitEditing={() => submitSubheaderPrompt()}
         ></TextField>
         <TextField
@@ -65,13 +66,15 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
           testID="extra_input"
           value={extraPrompt}
           onChangeText={setExtraPrompt}
+          placeholder="Extra field is used for any additional text."
           onSubmitEditing={() => submitExtraPrompt()}
         ></TextField>
         <TextField
-          label="Extra Array"
+          label="Extra Labels"
           testID="extra_array_input"
           value={extraArrayPrompt}
           onChangeText={setExtraArrayPrompt}
+          placeholder="Extra labels is used to return lists."
           onSubmitEditing={() => submitExtraArrayPrompt()}
         ></TextField>
       </View>

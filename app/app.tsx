@@ -90,7 +90,7 @@ function App(props: AppProps) {
   })
 
   const [areFontsLoaded] = useFonts(customFontsToLoad)
-  const { subscriptionStore, deckStore, settingsStore } = useStores()
+  const { deckStore, settingsStore } = useStores()
   const { rehydrated } = useInitialRootStore(() => {
     // This runs after the root store has been initialized and rehydrated.
 

@@ -54,6 +54,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
 
     const getPaidGlobalFlashcards = async () => {
       importPaidGlobalCards(globalDeckId, deckStore.selectedDeck)
+      setImportPurchasedDeckVisible(false)
     }
 
     return (

@@ -92,9 +92,9 @@ export const DeckModel = types
         return prev + (!!card?.next_shown ? 1 : 0)
       }, 0)
     },
-    get cardProgressCount() {
+    get passedTodaysCardProgress() {
       return self.flashcards.reduce((prev, card) => {
-        return prev + card.passedTodaysCardProgress
+        return prev + card.passedTodaysCardProgress.length
       }, 0)
     },
 

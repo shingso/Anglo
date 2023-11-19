@@ -210,15 +210,15 @@ export function Header(props: HeaderProps) {
             ]}
             pointerEvents="none"
           >
-            {/*    <CustomText
-              preset="body2Strong"
+            <CustomText
+              preset="body1Strong"
               text={titleContent}
               style={[$title, $titleStyleOverride]}
-            /> */}
+            />
           </View>
         )}
         {!!customHeader && customHeader}
-        {rightIcon && (
+        {rightIcon ? (
           <HeaderAction
             tx={rightTx}
             text={rightText}
@@ -229,6 +229,8 @@ export function Header(props: HeaderProps) {
             backgroundColor={backgroundColor}
             ActionComponent={RightActionComponent}
           />
+        ) : (
+          <View style={{ width: !!customHeader ? 0 : 40 }}></View>
         )}
       </View>
     </View>
@@ -269,7 +271,7 @@ function HeaderAction(props: HeaderActionProps) {
         }}
       > */
       <Icon
-        size={20}
+        size={24}
         icon={icon}
         color={iconColor}
         onPress={onPress}
@@ -297,6 +299,7 @@ const $container: ViewStyle = {
 
 const $title: TextStyle = {
   textAlign: "center",
+  alignSelf: "center",
 }
 
 const $actionTextContainer: ViewStyle = {
@@ -329,10 +332,8 @@ const $actionFillerContainer: ViewStyle = {
 const $titleWrapperCenter: ViewStyle = {
   alignItems: "center",
   justifyContent: "center",
-  height: "100%",
-  width: "100%",
-  position: "absolute",
-  paddingHorizontal: spacing.size480,
+
+  paddingHorizontal: spacing.size160,
   zIndex: 1,
 }
 

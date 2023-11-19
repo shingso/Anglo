@@ -20,6 +20,7 @@ import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript
 import { showErrorToast } from "app/utils/errorUtils"
 import { LineWord } from "./LineWord"
 import { AddDeckModal } from "./AddDeckModal"
+import { CustomSwitch } from "./CustomSwitch"
 
 export interface CustomDrawerProps {
   /**
@@ -35,6 +36,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   const { navigation } = props
   const { deckStore, authStore, settingsStore } = useStores()
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
+  const [toggleIsOn, setToggle] = useState(settingsStore?.isDarkMode)
 
   const theme = useTheme()
   const selectDeck = (deck) => {
@@ -195,16 +197,44 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
         })}
       </View>
       <View>
+        {/*      <View
+          style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+        >
+          <View style={{ flexDirection: "row", gap: spacing.size120 }}>
+            <Icon icon="moon" size={22}></Icon>
+            <CustomText preset="body1Strong">Dark mode</CustomText>
+          </View>
+          <CustomSwitch
+            isOn={toggleIsOn}
+            onToggle={() => {
+              settingsStore.toggleTheme()
+              setToggle(!toggleIsOn)
+            }}
+          ></CustomSwitch>
+        </View> */}
         <DrawerItem
           icon="fluent_lightbulb"
           onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
-          text="Smarter"
+          text="Subscribe"
         ></DrawerItem>
-        <DrawerItem
+        {settingsStore?.isDarkMode ? (
+          <DrawerItem
+            icon="sun"
+            onPress={() => settingsStore.toggleTheme()}
+            text="Light mode"
+          ></DrawerItem>
+        ) : (
+          <DrawerItem
+            icon="moon"
+            onPress={() => settingsStore.toggleTheme()}
+            text="Dark mode"
+          ></DrawerItem>
+        )}
+        {/*   <DrawerItem
           icon="settings"
           onPress={() => navigation.navigate(AppRoutes.SETTINGS)}
           text="Settings"
-        ></DrawerItem>
+        ></DrawerItem> */}
         <DrawerItem
           icon="fluent_question_book"
           onPress={() => navigation.navigate(AppRoutes.ABOUT_STACK)}

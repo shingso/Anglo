@@ -268,12 +268,12 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     title={"Spanish"}
                     caption={"Basic and common Spanish words"}
                   ></DeckItem>
-                  <DeckItem
+                  {/*  <DeckItem
                     source={require("../../assets/icons/china.png")}
                     onPress={() => importStarterDeckById(starterMandarinDeckId)}
                     title={"Chinese (Mandarin)"}
                     caption={"Basic and common Chinese words"}
-                  ></DeckItem>
+                  ></DeckItem> */}
                   <DeckItem
                     source={require("../../assets/icons/germany.png")}
                     onPress={() => importStarterDeckById(starterGermanDeckId)}
@@ -292,13 +292,13 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     title={"Italian"}
                     caption={"Basic and common Italian words"}
                   ></DeckItem>
-
+                  {/* 
                   <DeckItem
                     source={require("../../assets/icons/japan.png")}
                     onPress={() => importStarterDeckById(starterJapaneseDeckId)}
                     title={"Japanese"}
                     caption={"Basic and common Japanese words"}
-                  ></DeckItem>
+                  ></DeckItem> */}
                 </View>
 
                 <LineWord text={"or"}></LineWord>

@@ -542,7 +542,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
         </BottomSheet>
 
         <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
-          <ModalHeader title={"Set custom prompts for fields"}></ModalHeader>
+          <ModalHeader title={"Set custom prompts for AI generation fields"}></ModalHeader>
           <PromptSettings deck={selectedDeck}></PromptSettings>
         </BottomSheet>
 
