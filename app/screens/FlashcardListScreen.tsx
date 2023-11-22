@@ -154,56 +154,37 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       <Screen style={$root}>
         <View style={$container}>
           <Header
-            style={{ paddingHorizontal: -spacing.size120 }}
-            leftIcon="caret_left"
-            onLeftPress={() => navigation.goBack()}
             title={deckStore.selectedDeck?.title}
-            customHeader={
-              <View style={{ flexDirection: "row", gap: spacing.size120 }}>
-                {/*         <Icon
-                  icon="fluent_add_circle"
-                  color={theme.colors.foreground1}
-                  onPress={() => openAddNewFlashcard()}
-                  size={22}
-                ></Icon> */}
-                <Button
-                  /*       LeftAccessory={() => (
-                    <Icon
-                      icon="fluent_add_circle"
-                      color={"white"}
-                      style={{ marginRight: spacing.size80 }}
-                      onPress={() => openAddNewFlashcard()}
-                      size={16}
-                    ></Icon>
-                  )} */
-                  onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
-                  preset="custom_outline_small"
-                >
-                  AI
-                </Button>
-                <Button
-                  /*       LeftAccessory={() => (
-                    <Icon
-                      icon="fluent_add_circle"
-                      color={"white"}
-                      style={{ marginRight: spacing.size80 }}
-                      onPress={() => openAddNewFlashcard()}
-                      size={16}
-                    ></Icon>
-                  )} */
-                  onPress={() => openAddNewFlashcard()}
-                  preset="custom_default_small"
-                >
-                  Add new
-                </Button>
-                {/*       <Icon
-                  color={theme.colors.foreground1}
-                  icon="fluent_globe_search"
-                  onPress={() => goToGlobalFlashcards()}
-                  size={22}
-                ></Icon> */}
-              </View>
-            }
+            // customHeader={
+            //   <View>
+            //            <Icon
+            //       icon="fluent_add_circle"
+            //       color={theme.colors.foreground1}
+            //       onPress={() => openAddNewFlashcard()}
+            //       size={22}
+            //     ></Icon>
+            //       <Button
+
+            //       onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
+            //       preset="custom_outline_small"
+            //     >
+            //       AI
+            //     </Button>
+            //     <Button
+
+            //       onPress={() => openAddNewFlashcard()}
+            //       preset="custom_default_small"
+            //     >
+            //       Add new
+            //     </Button>
+            //            <Icon
+            //       color={theme.colors.foreground1}
+            //       icon="fluent_globe_search"
+            //       onPress={() => goToGlobalFlashcards()}
+            //       size={22}
+            //     ></Icon>
+            //   </View>
+            // }
           ></Header>
 
           <TextField

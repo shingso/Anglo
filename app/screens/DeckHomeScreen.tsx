@@ -17,7 +17,7 @@ import {
 } from "app/components"
 import { Deck, useStores } from "app/models"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import { AppRoutes } from "app/utils/consts"
+import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { getPaidFlashcardsCountByDeckId } from "app/utils/subscriptionUtils"
 import { showSuccessToast } from "app/utils/errorUtils"
@@ -27,6 +27,8 @@ import { addCardsToShow } from "app/utils/deckUtils"
 import { LinearGradient } from "expo-linear-gradient"
 import { ScrollView } from "react-native-gesture-handler"
 import { type } from "@testing-library/react-native/build/user-event/type"
+import { StackNavigationProp } from "@react-navigation/stack"
+import CircularProgress from "react-native-circular-progress-indicator"
 
 interface DeckHomeScreenProps extends AppStackScreenProps<"DeckHome"> {}
 
@@ -35,7 +37,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
   const [paidCardsCount, setPaidCardsCount] = useState<Number>(0)
   const selectedDeck = deckStore?.selectedDeck
   const selectedFlashcardModalRef = useRef<BottomSheetModal>()
-  const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
   const cardsPerDayModelRef = useRef<BottomSheetModal>()
   const [newPerDay, setNewPerDay] = useState(1)
 
@@ -67,10 +69,12 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
     }
   }
 
-  const totalProgress =
-    (selectedDeck?.todaysCards?.length || 0) + (selectedDeck?.cardProgressCount || 0)
+  const totalTodaysCards =
+    (selectedDeck?.todaysCards?.length || 0) + (selectedDeck?.passedTodaysCardProgress || 0)
   const todaysProgress =
-    totalProgress !== 0 ? Math.trunc((selectedDeck?.cardProgressCount / totalProgress) * 100) : 0
+    totalTodaysCards !== 0
+      ? Math.trunc((selectedDeck?.passedTodaysCardProgress / totalTodaysCards) * 100)
+      : 0
 
   const startCards = () => {
     addCardsToShow(selectedDeck, newPerDay, settingsStore.isOffline)
@@ -86,7 +90,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
         title={selectedDeck?.title}
       ></Header>
       <View style={{ flex: 1 }}>
-        <View style={{ marginHorizontal: spacing.size160, marginTop: spacing.size60 }}>
+        <View style={{ marginHorizontal: spacing.size200, marginTop: spacing.size60 }}>
           {/*  <CustomText
             style={{ marginBottom: spacing.size240, fontFamily: typography.primary.light }}
             preset="title1"
@@ -99,9 +103,12 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
             style={{
               elevation: 0,
               marginBottom: spacing.size80,
+              paddingVertical: 16,
+              paddingHorizontal: 16,
+              height: 300,
             }}
             ContentComponent={
-              <View
+              /*  <View
                 style={{
                   paddingHorizontal: spacing.size100,
                   paddingTop: spacing.size40,
@@ -109,7 +116,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   justifyContent: "space-between",
                 }}
               >
-                {totalProgress !== 0 ? (
+                {totalTodaysCards !== 0 ? (
                   <View>
                     <View
                       style={{
@@ -122,7 +129,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       <CustomText style={{ fontSize: 52 }}>
                         {selectedDeck?.todaysCards?.length}
                       </CustomText>
-                      <CustomText>passed {selectedDeck?.cardProgressCount}</CustomText>
+                
                       <View
                         style={{
                           width: 44,
@@ -193,10 +200,66 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     )}
                   </View>
                 )}
+              </View> */
+              <View style={{ justifyContent: "space-between", height: "100%" }}>
+                {selectedDeck?.passedTodaysCardProgress !== totalTodaysCards ? (
+                  <View style={{ flexDirection: "row", gap: 12, justifyContent: "space-between" }}>
+                    <View
+                      style={{
+                        padding: 16,
+                        borderRadius: 8,
+                      }}
+                    >
+                      <CustomText preset="title1" style={{ fontFamily: typography.primary.medium }}>
+                        {/* {selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards} */}
+                        {selectedDeck?.todaysCards?.length}
+                      </CustomText>
+                      <CustomText preset="caption1">In Progress</CustomText>
+                    </View>
+                    {/*          <View
+                      style={{
+                        width: 120,
+                        padding: 16,
+                        borderRadius: 8,
+                      }}
+                    >
+                      <CustomText preset="title1" style={{ fontFamily: typography.primary.medium }}>
+                        {selectedDeck?.passedTodaysCardProgress}
+                      </CustomText>
+                      <CustomText preset="caption1">Completed</CustomText>
+                    </View> */}
+                    <CircularProgress
+                      inActiveStrokeOpacity={0.2}
+                      valueSuffix={"%"}
+                      radius={50}
+                      value={todaysProgress}
+                      title={selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards}
+                      titleStyle={{ color: "black", fontFamily: typography.primary.semiBold }}
+                    />
+                  </View>
+                ) : (
+                  <CustomText preset="title1" style={{ fontFamily: typography.primary.light }}>
+                    Completed
+                  </CustomText>
+                )}
+                <View style={{ flexDirection: "row", gap: 8, alignSelf: "flex-end" }}>
+                  <Button
+                    preset="custom_secondary_small"
+                    onPress={() => cardsPerDayModelRef?.current.present()}
+                  >
+                    Start more cards
+                  </Button>
+                  <Button
+                    onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
+                    preset="custom_secondary_small"
+                  >
+                    Free study
+                  </Button>
+                </View>
               </View>
             }
           ></Card>
-          <View style={{ flexDirection: "row", gap: spacing.size80 }}>
+          {/*       <View style={{ flexDirection: "row", gap: spacing.size80 }}>
             <Card
               onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
               preset="action"
@@ -207,7 +270,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     alignItems: "center",
                   }}
                 >
-                  {/*   <Icon icon="repeat_arrow" style={{ marginRight: spacing.size120 }} size={22}></Icon> */}
                   <Image
                     style={{ height: 36, width: 36, marginRight: spacing.size120 }}
                     source={require("../../assets/icons/coding.png")}
@@ -238,8 +300,8 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                 </View>
               }
             ></Card>
-          </View>
-          <View
+          </View> */}
+          {/*    <View
             style={{
               flexDirection: "row",
               marginTop: spacing.size200,
@@ -249,18 +311,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               marginBottom: spacing.size120,
             }}
           >
-            <CustomText
-              preset="title1"
-              style={{ fontFamily: typography.primary.light }}
-              //presetColors={"secondary"}
-            >
+            <CustomText preset="title2" style={{ fontFamily: typography.primary.light }}>
               Flashcards
             </CustomText>
-            {/*     <CustomText style={{ color: custom_colors.brandForeground1 }} preset="caption1Strong">
-            View all
-          </CustomText> */}
-          </View>
-          <Card
+          </View> */}
+          {/* <Card
             onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
             style={{
               marginBottom: spacing.size80,
@@ -278,7 +333,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                 }}
               >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  {/*     <Icon icon="flashcards" style={{ marginRight: spacing.size120 }} size={24}></Icon> */}
                   <View>
                     <CustomText preset="title2" style={{ fontFamily: typography.primary.medium }}>
                       {selectedDeck?.flashcards.length + " cards"}
@@ -291,7 +345,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                 </View>
               </View>
             }
-          ></Card>
+          ></Card> */}
 
           {!!paidCardsCount && !selectedDeck?.paid_imported ? (
             <Card
@@ -385,80 +439,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               </View>
             }
           ></Card>
-          {/* 
-          <Card
-            onPress={() => navigation.navigate(AppRoutes.RESTART_OVERDUE)}
-            style={{
-              minHeight: 0,
-              elevation: 0,
-              marginBottom: spacing.size80,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  paddingHorizontal: spacing.size120,
-                  paddingVertical: spacing.size40,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Image
-                  style={{ height: 36, width: 36, marginRight: spacing.size120 }}
-                  source={require("../../assets/icons/coding.png")}
-                />
-                <View>
-                  <CustomText preset="body1">{`Reset overdue`}</CustomText>
-                  <CustomText
-                    presetColors={"secondary"}
-                    preset="caption2"
-                  >{`Reset overdue cards`}</CustomText>
-                </View>
-              </View>
-            }
-          ></Card> */}
-
-          {/*     <Card
-          onPress={() => navigation.navigate(AppRoutes.DECK_SETTINGS)}
-          style={{
-            minHeight: 0,
-            elevation: 0,
-            flex: 1,
-            marginBottom: 2,
-          }}
-          ContentComponent={
-            <View
-              style={{
-                paddingVertical: spacing.size80,
-                paddingHorizontal: spacing.size120,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginBottom: spacing.size100,
-                }}
-              >
-                <Icon
-                  style={{ marginRight: spacing.size120 }}
-                  icon="settings"
-                  size={22}
-                ></Icon>
-                <CustomText preset="body2Strong">Settings</CustomText>
-              </View>
-              <View style={{ flexDirection: "row", gap: spacing.size60 }}>
-                <StatusLabel
-                  text={deckStore?.selectedDeck?.new_per_day + " cards per day"}
-                ></StatusLabel>
-              </View>
-            </View>
-          }
-        ></Card> */}
         </View>
       </View>
       <BottomSheet ref={selectedFlashcardModalRef} customSnap={["85"]}>
         <EditFlashcard
-          flashcard={selectedDeck.selectedFlashcard}
+          flashcard={selectedDeck?.selectedFlashcard}
           deck={selectedDeck}
         ></EditFlashcard>
       </BottomSheet>

@@ -1,6 +1,15 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, Dimensions, FlatList, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import {
+  Alert,
+  Animated,
+  Dimensions,
+  FlatList,
+  ImageStyle,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
@@ -14,6 +23,7 @@ import {
   EditFlashcard,
   Header,
   Icon,
+  ModalHeader,
   Screen,
   SwipeCards,
   Text,
@@ -57,6 +67,8 @@ import { addDays, addMinutes, differenceInMinutes, subMinutes } from "date-fns"
 import { borderRadius } from "app/theme/borderRadius"
 import { v4 as uuidv4 } from "uuid"
 import { AppStackScreenProps } from "app/navigators"
+import { ExpandingDot } from "react-native-animated-pagination-dots"
+import { ScrollView } from "react-native-gesture-handler"
 
 export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>> = observer(
   function SessionScreen() {
@@ -83,17 +95,62 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       [currentFlashcard],
     )
     const [sessionProgressLog, setSessionProgressLog] = useState<CardProgressSnapshotIn[]>([])
+    const slides = [
+      {
+        key: "one",
+        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "Smart cards",
+        text: "When using these flashcards, cards will automatically be placed in a pile for review based on your response.",
+        backgroundColor: "#22bcb5",
+      },
+      {
+        key: "two",
+        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "The card",
+        text: "Tap the card to reveal the back",
+        backgroundColor: "#22bcb5",
+      },
+      {
+        key: "two",
+        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "You know it!",
+        text: "If you know the definition of the card confidently, swipe the card left",
+        backgroundColor: "#22bcb5",
+      },
+      {
+        key: "three",
+        //  image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "You know it, but weren't confident about it",
+        text: "If you got the definition correct, were unsure and took some time recalling, swipe the card up.",
+        backgroundColor: "#22bcb5",
+      },
+      {
+        key: "four",
+        //  image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "Forgot card",
+        text: "If you don't know the defintition, swipe left",
+      },
+      {
+        key: "five",
+        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        title: "Review cards at intervals",
+        text: "As your memory of the card gets better, the memeory interval will continue to grow.",
+        backgroundColor: "#22bcb5",
+      },
+    ]
 
     useEffect(() => {
       reloadDefaultSettings()
       const loadSettings = async () => {
         const settings = await loadOrInitalizeSettings()
-        if (settings?.showSessionTutorial != null && settings.showSessionTutorial) {
+        /*  if (settings?.showSessionTutorial != null && settings.showSessionTutorial) {
           tutorialModalRef?.current.present()
-        }
+        } */
+        tutorialModalRef?.current.present()
       }
       //this is to make the tutorial modal pop up
-      //loadSettings()
+
+      loadSettings()
     }, [])
 
     const navigateHome = () => {
@@ -103,7 +160,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const editFlashcard = () => {
       selectedFlashcardModalRef?.current.present()
     }
-
+    const scrollX = useRef(new Animated.Value(0)).current
     const applySessionResponse = async (
       flashcard: Flashcard,
       retrievalLevel: number,
@@ -265,6 +322,28 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         pronouceCurrentWord()
       }
     }
+    const { width, height } = Dimensions.get("screen")
+
+    const ScrollViewComponent = (props) => {
+      const { title, body } = props
+      return (
+        <View
+          style={{
+            width: width - 32,
+            height: "100%",
+            padding: spacing.size160,
+          }}
+        >
+          <CustomText
+            preset="title1"
+            style={{ fontFamily: typography.primary.light, marginBottom: spacing.size160 }}
+          >
+            {title}
+          </CustomText>
+          <CustomText preset="body1">{body}</CustomText>
+        </View>
+      )
+    }
 
     const addProgressToLog = (progressId: CardProgressSnapshotIn) => {
       setSessionProgressLog((prev) => {
@@ -276,7 +355,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     return (
       <Screen style={$root}>
         <Header
-          title={deck.title}
+          //title={deck.title}
           customHeader={
             <View style={$count_container}>
               <CustomText
@@ -394,6 +473,43 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                 : null
             }
           ></EditFlashcard>
+        </BottomSheet>
+        <BottomSheet ref={tutorialModalRef} customSnap={["85"]}>
+          <ModalHeader title={"How to get the most out of this application"}></ModalHeader>
+          <ScrollView
+            horizontal={true}
+            scrollEventThrottle={16}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+              useNativeDriver: false,
+            })}
+          >
+            {slides.map((slide) => {
+              return (
+                <ScrollViewComponent
+                  key={slide.title}
+                  title={slide.title}
+                  body={slide.text}
+                ></ScrollViewComponent>
+              )
+            })}
+          </ScrollView>
+
+          <ExpandingDot
+            data={slides}
+            expandingDotWidth={30}
+            scrollX={scrollX}
+            inActiveDotOpacity={0.6}
+            dotStyle={{
+              width: 10,
+              height: 10,
+              backgroundColor: custom_palette.primary150,
+              borderRadius: 5,
+              marginHorizontal: 5,
+            }}
+            containerStyle={{ left: 36, bottom: 120 }}
+          />
         </BottomSheet>
       </Screen>
     )

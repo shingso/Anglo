@@ -120,8 +120,8 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
             paddingBottom: spacing.size80,
           }}
         >
-          <CustomText preset="body1">Decks</CustomText>
-          <View style={{ gap: 16, flexDirection: "row" }}>
+          {/* <CustomText preset="body1">Decks</CustomText> */}
+          {/*  <View style={{ gap: 16, flexDirection: "row" }}>
             <Icon
               size={24}
               onPress={() =>
@@ -140,9 +140,26 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               }
               icon="fluent_globe_search"
             ></Icon>
-          </View>
+          </View> */}
         </View>
-
+        <DrawerItem
+          icon="fluent_add_circle"
+          onPress={() =>
+            settingsStore?.isOffline
+              ? showErrorToast("Currently offline", "Go online to add a new deck")
+              : setNewDeckModalVisible(true)
+          }
+          text="New deck"
+        ></DrawerItem>
+        <DrawerItem
+          icon="fluent_globe_search"
+          onPress={() =>
+            settingsStore?.isOffline
+              ? showErrorToast("Currently offline", "Go online to view global decks")
+              : navigation.navigate(AppRoutes.GLOBAL_DECKS)
+          }
+          text="Search decks"
+        ></DrawerItem>
         {deckStore?.decks?.length === 0 && (
           <View>
             <Icon
@@ -167,7 +184,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           </View>
         )}
 
-        {deckStore.decks.map((deck) => {
+        {/*     {deckStore.decks.map((deck) => {
           return (
             <TouchableOpacity onPress={() => selectDeck(deck)} key={deck.id}>
               <View
@@ -178,14 +195,8 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               >
                 <View
                   style={{
-                    // padding: 2,
-                    // paddingHorizontal: spacing.size20,
-                    // borderRadius: 4,
-                    // borderWidth: 1.8,
                     marginRight: spacing.size280,
                     minWidth: 16,
-                    //    justifyContent: "center",
-                    //   alignItems: "center",
                   }}
                 >
                   <CustomText preset="caption1Strong">{deck?.todaysCards?.length}</CustomText>
@@ -194,7 +205,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
               </View>
             </TouchableOpacity>
           )
-        })}
+        })} */}
       </View>
       <View>
         {/*      <View

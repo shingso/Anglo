@@ -117,12 +117,22 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {/*    <Card
+        <Card
           style={{ minWidth: 80, elevation: 0, margin: 2 }}
           ContentComponent={
-            <View>
-              <CustomText preset="body2">Today</CustomText>
-              <CustomText preset="title3" style={{ fontFamily: typography.primary.medium }}>
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <CustomText preset="caption1">{format(new Date(), "eee")}</CustomText>
+                <CustomText preset="caption1Strong">{"Today"}</CustomText>
+              </View>
+              <CustomText
+                preset="title3"
+                style={{ fontFamily: typography.primary.light, marginTop: spacing.size40 }}
+              >
                 {deckStore.decks
                   .reduce((prev, deck) => {
                     return prev + deck?.todaysCards?.length
@@ -131,7 +141,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
               </CustomText>
             </View>
           }
-        ></Card> */}
+        ></Card>
         {getDates(addDays(new Date(), 2), addDays(new Date(), 7)).map((date) => {
           return (
             <Card

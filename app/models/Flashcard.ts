@@ -59,10 +59,15 @@ export const FlashcardModel = types
     get passedTodaysCardProgress() {
       const date = new Date() //now(600000)
       // console.log("passed todays cards ran", date)
-      return this.todaysCardProgresses.reduce((prev, progress) => {
-        //if it got moved pass the end of today it shouild be moved...a card can only be passed once per day anyways
-        return prev + (isAfter(progress.next_shown, endOfDay(date)) ? 1 : 0)
-      }, 0)
+      //TODO ISSUE -> this doesnt reset when a new date is passed and only changes when a new card progress is added...
+
+      return this.todaysCardProgresses.filter((progress) => {
+        return progress?.next_shown && isAfter(new Date(progress?.next_shown), endOfDay(date))
+      })
+      // return this.todaysCardProgresses.reduce((prev, progress) => {
+      //   //if it got moved pass the end of today it shouild be moved...a card can only be passed once per day anyways
+      //   return prev + (isAfter(new Date(progress?.next_shown), endOfDay(date)) ? 1 : 0)
+      // }, 0)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
