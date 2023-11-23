@@ -2,24 +2,17 @@ import * as React from "react"
 import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle, Text, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
-
 import { Card } from "./Card"
 import { ScrollView } from "react-native-gesture-handler"
 import { CustomText } from "./CustomText"
 import { useStores } from "../models/helpers/useStores"
-import MaskedView from "@react-native-masked-view/masked-view"
-import { LinearGradient } from "expo-linear-gradient"
 import { Icon } from "./Icon"
 import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { addDays, format } from "date-fns"
-import { Button } from "./Button"
 import { useNavigation } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
-import { custom } from "mobx-state-tree/dist/internal"
-import { borderRadius } from "app/theme/borderRadius"
 import { Deck, Flashcard } from "app/models"
 import { useEffect, useState } from "react"
-import { StatusLabel } from "./StatusLabel"
 
 export interface HomeForecastProps {
   /**
@@ -99,18 +92,6 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
 
   return (
     <View style={$container}>
-      {/*    <CustomText
-        style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
-        preset="display"
-        presetColors="secondary"
-      >
-        {deckStore.decks
-          .reduce((prev, deck) => {
-            return prev + deck?.todaysCards?.length
-          }, 0)
-          .toString()}
-      </CustomText> */}
-
       <ScrollView
         style={{ marginBottom: spacing.size160 }}
         contentContainerStyle={{ gap: spacing.size40 }}
@@ -161,7 +142,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     preset="title3"
                     style={{ fontFamily: typography.primary.light, marginTop: spacing.size40 }}
                   >
-                    {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString()}
+                    {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString() ||
+                      "-"}
                   </CustomText>
                 </View>
               }
@@ -186,14 +168,12 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 <View
                   style={{
                     justifyContent: "space-between",
-
                     flex: 1,
                   }}
                 >
                   <View
                     style={{
                       flexDirection: "row",
-
                       marginBottom: spacing.size240,
                       justifyContent: "space-between",
                     }}
