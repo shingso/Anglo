@@ -80,34 +80,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
       <Header title={"Free study"}></Header>
       <View style={$container}>
         <View style={{ flexDirection: "row", gap: spacing.size100, flexWrap: "wrap" }}>
-          {/*       <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => clearUnselectedFlashcards()}
-            preset="custom_default_small"
-          >
-            All
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setActiveFlashcards()}
-            preset="custom_secondary_small"
-          >
-            Active
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setDifficultCards()}
-            preset="custom_secondary_small"
-          >
-            Difficult
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setInactiveFlashcards()}
-            preset="custom_secondary_small"
-          >
-            Inactive
-          </Button> */}
           <Button
             style={{ marginBottom: spacing.size120 }}
             onPress={() => quickSelectModalRef.current.present()}
@@ -168,12 +140,11 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
             )}
           renderItem={({ item, index }) => (
             <FlashcardListItem
-              // onPress={() =>
-              //   !unselectedFlashcards.includes(item.id)
-              //     ? addToUnselectedFlashcards(item.id)
-              //     : removeFromUnselectedFlashcards(item.id)
-              // }
-              onPress={() => console.log(item)}
+              onPress={() =>
+                !unselectedFlashcards.includes(item.id)
+                  ? addToUnselectedFlashcards(item.id)
+                  : removeFromUnselectedFlashcards(item.id)
+              }
               LeftComponent={
                 !unselectedFlashcards.includes(item.id) ? (
                   <Icon

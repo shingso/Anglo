@@ -163,14 +163,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
     return (
       <Screen safeAreaEdges={["bottom", "top"]} style={$root} preset="scroll">
         <View style={$container}>
-          {/*   <Header
-            onLeftPress={() => navigation.openDrawer()}
-            title={"Home"}
-            leftIcon="menu"
-            // rightIcon={deckStore?.selectedDeck ? "home" : null}
-            // onRightPress={() => (deckStore?.selectedDeck ? deckStore.removeSelectedDeck() : null)}
-          ></Header> */}
-
           <View
             style={{
               paddingHorizontal: spacing.size200,
