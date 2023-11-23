@@ -1,21 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import {
-  ActivityIndicator,
-  Alert,
-  Dimensions,
-  TextStyle,
-  View,
-  ViewStyle,
-  Image,
-  TextInput,
-} from "react-native"
+import { View, ViewStyle, Image } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import {
   AddDeckModal,
-  BottomModal,
-  BottomSheet,
-  Button,
   Card,
   CustomModal,
   CustomText,
@@ -25,37 +13,17 @@ import {
   LineWord,
   Loading,
   Screen,
-  Text,
-  TextField,
 } from "../components"
-import {
-  Deck_Fields,
-  addCardsToShow,
-  addDeck,
-  getRandomFlashcards,
-  updateDeckLastAdded,
-} from "../utils/deckUtils"
-import { supabase, supabseStorageUrl } from "../services/supabase/supabase"
-import {
-  Deck,
-  DeckSnapshotIn,
-  Flashcard,
-  FlashcardSnapshotIn,
-  QueryFunctions,
-  useStores,
-} from "../models"
-import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { Deck_Fields, addCardsToShow, updateDeckLastAdded } from "../utils/deckUtils"
+import { Deck, useStores } from "../models"
+import { custom_palette, spacing, typography } from "../theme"
+import { useNavigation } from "@react-navigation/native"
 import {
   getConfirmedRemoteId,
   getPendingRemoteFunctions,
   returnRemoteAndLocalConflicts,
   returnRemoteAndLocalMostRecent,
 } from "../utils/remote_sync/remoteSyncUtils"
-import format from "date-fns/format"
-import isEqual from "lodash/isEqual"
-import { wordsApi } from "../services/dictionaryApi/wordsApi"
-import { vocabulary_words } from "../../assets/words"
 import {
   AppRoutes,
   AppStackParamList,
@@ -69,12 +37,7 @@ import {
   starterSpanishDeckId,
 } from "../utils/consts"
 import { AppStackScreenProps } from "app/navigators"
-import { getTutorialSeen, saveTutorialSeen } from "app/utils/storage/tutorialUtils"
 import { isSameDay } from "date-fns"
-import { Flashcard_Fields, upsertMultipleFlashcards } from "app/utils/flashcardUtils"
-import { v4 as uuidv4 } from "uuid"
-import { importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
-import { showSuccessToast } from "app/utils/errorUtils"
 
 export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = observer(
   function HomeScreen() {
