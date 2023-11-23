@@ -109,29 +109,14 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
         <View style={$container}>
           <View
             style={{
-              paddingHorizontal: spacing.size200,
+              paddingHorizontal: spacing.size240,
               marginVertical: spacing.size160,
+              marginBottom: spacing.size320,
               flexDirection: "row",
               alignItems: "center",
             }}
           >
-            <View
-              style={{
-                width: 44,
-                height: 44,
-                backgroundColor: custom_palette.grey74,
-                borderRadius: 50,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Icon
-                onPress={() => navigation.openDrawer()}
-                icon="menu"
-                color={custom_palette.white}
-                size={22}
-              ></Icon>
-            </View>
+            <Icon onPress={() => navigation.openDrawer()} icon="menu" size={22}></Icon>
           </View>
 
           {deckStore?.decks?.length > 0 ? (

@@ -1,49 +1,32 @@
 import * as React from "react"
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle, Image } from "react-native"
+import { View, ViewStyle, Image, TextStyle } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
-import { Text } from "app/components/Text"
 import { useStores } from "app/models"
 import { supabase } from "app/services/supabase/supabase"
-import { addDeck } from "app/utils/deckUtils"
 import { getPendingRemoteFunctions } from "app/utils/remote_sync/remoteSyncUtils"
 import { CustomText } from "./CustomText"
 import { Icon } from "./Icon"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import { AppRoutes, AppStackParamList } from "app/utils/consts"
-import { CustomModal } from "./CustomModal"
-import { TextField } from "./TextField"
-import { StackNavigationProp } from "@react-navigation/stack"
+import { AppRoutes } from "app/utils/consts"
+
 import { useState } from "react"
 import { DrawerContentScrollView } from "@react-navigation/drawer"
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types"
 import { showErrorToast } from "app/utils/errorUtils"
-import { LineWord } from "./LineWord"
+
 import { AddDeckModal } from "./AddDeckModal"
-import { CustomSwitch } from "./CustomSwitch"
 
 export interface CustomDrawerProps {
-  /**
-   * An optional style override useful for padding & margin.
-   */
   navigation: DrawerNavigationHelpers
 }
 
-/**
- * Describe your component here
- */
 export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerProps) {
   const { navigation } = props
-  const { deckStore, authStore, settingsStore } = useStores()
+  const { authStore, settingsStore } = useStores()
   const [newDeckModalVisbile, setNewDeckModalVisible] = useState(false)
-  const [toggleIsOn, setToggle] = useState(settingsStore?.isDarkMode)
 
   const theme = useTheme()
-  const selectDeck = (deck) => {
-    deckStore.selectDeck(deck)
-    navigation.navigate(AppRoutes.DECK_HOME)
-    navigation.closeDrawer()
-  }
 
   const closeModal = () => {
     setNewDeckModalVisible(false)
@@ -66,11 +49,11 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   const DrawerItem = ({ icon, text, onPress }) => {
     return (
       <View style={$action_item_container}>
-        <Icon icon={icon} style={{ marginRight: spacing.size200 }} size={22}></Icon>
+        <Icon icon={icon} style={{ marginRight: spacing.size200 }} size={24}></Icon>
         <CustomText
           onPress={() => (onPress ? onPress() : null)}
           style={$drawer_action}
-          preset="body2Strong"
+          preset="body2"
         >
           {text}
         </CustomText>
@@ -104,10 +87,10 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           }}
         >
           <Image
-            style={{ height: 60, width: 60, marginLeft: -12 }}
+            style={{ height: 48, width: 48, marginLeft: -12 }}
             source={require("../../ignite/templates/splash-screen/logo.png")}
           ></Image>
-          <CustomText preset="title3">Spaced Memo</CustomText>
+          <CustomText preset="body1Strong">Spaced Memo</CustomText>
         </View>
         <DrawerItem
           icon="fluent_add_circle"
@@ -158,20 +141,9 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
   )
 })
 
-const $container: ViewStyle = {
-  justifyContent: "center",
-}
-
-const $deck_item: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
+const $drawer_action: TextStyle = {
   paddingVertical: spacing.size120,
-}
-
-const $deck_selected_item: ViewStyle = {}
-
-const $drawer_action: ViewStyle = {
-  paddingVertical: spacing.size120,
+  fontFamily: typography.primary.medium,
 }
 
 const $action_item_container: ViewStyle = {
