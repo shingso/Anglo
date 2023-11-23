@@ -259,49 +259,8 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               </View>
             }
           ></Card>
-          {/*       <View style={{ flexDirection: "row", gap: spacing.size80 }}>
-            <Card
-              onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
-              preset="action"
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
-                    source={require("../../assets/icons/coding.png")}
-                  />
-                  <View>
-                    <CustomText preset="body1">{"Free study"}</CustomText>
-                  </View>
-                </View>
-              }
-            ></Card>
-            <Card
-              onPress={() => cardsPerDayModelRef?.current.present()}
-              preset="action"
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
-                    source={require("../../assets/icons/coding.png")}
-                  />
-                  <View>
-                    <CustomText preset="body1">{`Start cards`}</CustomText>
-                  </View>
-                </View>
-              }
-            ></Card>
-          </View> */}
-          {/*    <View
+
+          <View
             style={{
               flexDirection: "row",
               marginTop: spacing.size200,
@@ -314,8 +273,8 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
             <CustomText preset="title2" style={{ fontFamily: typography.primary.light }}>
               Flashcards
             </CustomText>
-          </View> */}
-          {/* <Card
+          </View>
+          {/*    <Card
             onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
             style={{
               marginBottom: spacing.size80,
@@ -323,30 +282,37 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               elevation: 0,
             }}
             ContentComponent={
-              <View
-                style={{
-                  paddingHorizontal: spacing.size120,
-                  paddingVertical: spacing.size80,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <View>
-                    <CustomText preset="title2" style={{ fontFamily: typography.primary.medium }}>
-                      {selectedDeck?.flashcards.length + " cards"}
-                    </CustomText>
-                    <CustomText preset="caption2" style={{ fontFamily: typography.primary.medium }}>
-                      {selectedDeck?.flashcards.filter((card) => !!card?.next_shown).length +
-                        " cards started"}
-                    </CustomText>
-                  </View>
-                </View>
-              </View>
+              
             }
-          ></Card> */}
-
+          ></Card>
+ */}
+          <View
+            style={{
+              paddingHorizontal: spacing.size120,
+              paddingVertical: spacing.size80,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View>
+                <CustomText preset="title2" style={{ fontFamily: typography.primary.medium }}>
+                  {selectedDeck?.flashcards.length + " cards"}
+                </CustomText>
+                <CustomText preset="caption2" style={{ fontFamily: typography.primary.medium }}>
+                  {selectedDeck?.flashcards.filter((card) => !!card?.next_shown).length +
+                    " cards started"}
+                </CustomText>
+              </View>
+            </View>
+            <Button
+              preset="custom_outline_small"
+              onPress={() => navigation.navigate(AppRoutes.FLASHCARD_LIST)}
+            >
+              View all
+            </Button>
+          </View>
           {!!paidCardsCount && !selectedDeck?.paid_imported ? (
             <Card
               onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}

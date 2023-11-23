@@ -140,17 +140,10 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     ]
 
     useEffect(() => {
-      reloadDefaultSettings()
-      const loadSettings = async () => {
-        const settings = await loadOrInitalizeSettings()
-        /*  if (settings?.showSessionTutorial != null && settings.showSessionTutorial) {
-          tutorialModalRef?.current.present()
-        } */
+      if (settingsStore?.showSessionTutorial) {
         tutorialModalRef?.current.present()
+        settingsStore.setShowSessionTutorial(false)
       }
-      //this is to make the tutorial modal pop up
-
-      loadSettings()
     }, [])
 
     const navigateHome = () => {

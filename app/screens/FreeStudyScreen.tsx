@@ -185,7 +185,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
                   <Icon size={20} color={custom_palette.grey50} icon="circle"></Icon>
                 )
               }
-              RightComponent={<CustomText>{item.easeFactor}</CustomText>}
               key={item.id}
               flashcard={item}
             ></FlashcardListItem>

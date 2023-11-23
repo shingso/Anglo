@@ -9,6 +9,7 @@ export enum SortType {
   DATE_ADDDED = "date_added",
   ACTIVE = "active",
   ALPHABETICAL = "alphabetical",
+  DIFFICULTY = "difficulty",
 }
 
 export type AppStackParamList = {
@@ -81,12 +82,14 @@ export const SortTypeLabels = {
   [SortType.DATE_ADDDED]: "Date Added",
   [SortType.ACTIVE]: "Active",
   [SortType.ALPHABETICAL]: "Alphabetical",
+  [SortType.DIFFICULTY]: "Difficulty",
 }
 
 export const SortTypeIcon: { [key: string]: IconTypes } = {
   [SortType.DATE_ADDDED]: "fluent_calendar",
   [SortType.ACTIVE]: "fluent_play_outline",
   [SortType.ALPHABETICAL]: "fluent_alpha_sort",
+  [SortType.DIFFICULTY]: "difficulty",
 }
 
 export enum SoundOptions {

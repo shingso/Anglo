@@ -116,22 +116,20 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
         }
         return data
       }
-      const redirectUrl = makeRedirectUri({
-        //path: "Sign_Up",
-        //useProxy: false,
-      })
-      console.log(redirectUrl, redirectUrl)
+      const redirectUrl = makeRedirectUri()
       const oAuthResult = await supabase.auth.signInWithOAuth({
         provider: provider,
         options: {
           redirectTo: redirectUrl,
         },
       })
+
       if (!oAuthResult) return
       const signInResult = await WebBrowser.openAuthSessionAsync(
         oAuthResult?.data?.url,
         redirectUrl,
       )
+
       if (signInResult?.type === "success") {
         const data = extractParamsFromUrl(signInResult.url)
         supabase.auth.setSession({

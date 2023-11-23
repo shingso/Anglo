@@ -5,25 +5,18 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import {
   BottomSheet,
-  Button,
-  Card,
   CustomModal,
   CustomText,
-  Dot,
   EditFlashcard,
   FlashcardListItem,
   Header,
   Icon,
-  IconTypes,
-  LineWord,
   Screen,
   StatusLabel,
-  Text,
   TextField,
 } from "app/components"
 import { Deck, Flashcard, FlashcardModel, QueryFunctions, useStores } from "app/models"
 import { spacing, custom_colors, custom_palette } from "app/theme"
-import { format } from "date-fns"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
 import {
   AppRoutes,
@@ -51,11 +44,17 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
       : []
     const [searchTerm, setSearchTerm] = useState("")
     const [sortOption, setSortOption] = useState(SortType.ACTIVE)
-    const sortOptions = [SortType.DATE_ADDDED, SortType.ACTIVE, SortType.ALPHABETICAL]
+    const sortOptions = [
+      SortType.DATE_ADDDED,
+      SortType.ACTIVE,
+      SortType.ALPHABETICAL,
+      SortType.DIFFICULTY,
+    ]
     const SortOptionLabels = {
       [SortType.DATE_ADDDED]: "Date added",
       [SortType.ACTIVE]: "Active",
       [SortType.ALPHABETICAL]: "Alphabetical",
+      [SortType.DIFFICULTY]: "Difficulty",
     }
 
     const sortingFunction = (sortType) => {
@@ -85,9 +84,14 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             }
             return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
           }
-
+        case SortType.DIFFICULTY:
+          return (a, b) => {
+            return a.easeFactor - b.easeFactor
+          }
         default:
-          return () => {}
+          return (a: Flashcard, b: Flashcard) => {
+            return a?.front.localeCompare(b?.front)
+          }
       }
     }
     const sortModalRef = useRef<BottomSheetModal>()
@@ -153,40 +157,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
     return (
       <Screen style={$root}>
         <View style={$container}>
-          <Header
-            title={deckStore.selectedDeck?.title}
-            // customHeader={
-            //   <View>
-            //            <Icon
-            //       icon="fluent_add_circle"
-            //       color={theme.colors.foreground1}
-            //       onPress={() => openAddNewFlashcard()}
-            //       size={22}
-            //     ></Icon>
-            //       <Button
-
-            //       onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
-            //       preset="custom_outline_small"
-            //     >
-            //       AI
-            //     </Button>
-            //     <Button
-
-            //       onPress={() => openAddNewFlashcard()}
-            //       preset="custom_default_small"
-            //     >
-            //       Add new
-            //     </Button>
-            //            <Icon
-            //       color={theme.colors.foreground1}
-            //       icon="fluent_globe_search"
-            //       onPress={() => goToGlobalFlashcards()}
-            //       size={22}
-            //     ></Icon>
-            //   </View>
-            // }
-          ></Header>
-
+          <Header title={deckStore.selectedDeck?.title}></Header>
           <TextField
             value={searchTerm}
             autoCorrect={false}
@@ -215,7 +186,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             )}
             onChangeText={setSearchTerm}
           ></TextField>
-
           {flashcards?.length > 0 ? (
             <View
               style={{
@@ -242,7 +212,10 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
               keyExtractor={(item) => item.id}
               contentContainerStyle={{ paddingBottom: spacing.size200 }}
               showsVerticalScrollIndicator={false}
-              data={searchSnapshotFlashcards}
+              data={flashcards
+                .slice()
+                .sort(sortingFunction(sortOption))
+                .filter((card) => card?.front && card.front?.toLowerCase().includes(searchTerm))}
               renderItem={({ item, index }) => (
                 <FlashcardListItem
                   key={item.id}
@@ -250,7 +223,8 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                   RightComponent={
                     item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
                   }
-                  onPress={() => selectFlashcard(FlashcardModel.create(item))}
+                  // RightComponent={<CustomText>{item.easeFactor.toString()}</CustomText>}
+                  onPress={() => selectFlashcard(item)}
                 ></FlashcardListItem>
               )}
             ></FlatList>
@@ -281,7 +255,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             </View>
           )}
         </View>
-
         <BottomSheet ref={sortModalRef} customSnap={["60%"]}>
           <View>
             <View
@@ -337,14 +310,6 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             flashcard={selectedFlashcard}
             deck={deckStore.selectedDeck}
           ></EditFlashcard>
-
-          {/*    <CustomText>Ease: {flashcardStatistics.easinessFactor}</CustomText>
-          <CustomText>Rep: {flashcardStatistics.currentRepetition}</CustomText>
-          <CustomText>Max Time: {flashcardStatistics.timeElapsed}</CustomText>
-          <CustomText>Left: {flashcardStatistics.correctSwipes}</CustomText>
-          <CustomText>Middle: {flashcardStatistics.middleSwipe}</CustomText>
-          <CustomText>Right: {flashcardStatistics.failedSwipe}</CustomText>
-          <CustomText>Total Swipes: {flashcardStatistics.total}</CustomText> */}
         </BottomSheet>
         <CustomModal
           mainAction={() => removeFlashcard(selectedFlashcard, deckStore.selectedDeck)}

@@ -9,6 +9,7 @@ export const SettingsStoreModel = types
   .props({
     isOffline: types.optional(types.boolean, false),
     isDarkMode: types.optional(types.boolean, false),
+    showSessionTutorial: types.optional(types.boolean, true),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -18,6 +19,9 @@ export const SettingsStoreModel = types
     },
     toggleTheme() {
       self.isDarkMode = !self.isDarkMode
+    },
+    setShowSessionTutorial(state: boolean) {
+      self.showSessionTutorial = state
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

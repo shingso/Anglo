@@ -497,6 +497,8 @@ PODS:
   - RNScreens (3.20.0):
     - React-Core
     - React-RCTImage
+  - RNSVG (14.0.0):
+    - React-Core
   - SocketRocket (0.6.0)
   - Stripe (23.12.0):
     - StripeApplePay (= 23.12.0)
@@ -622,6 +624,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -768,6 +771,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   stripe-react-native:
     :path: "../node_modules/@stripe/stripe-react-native"
   Yoga:
@@ -845,6 +850,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
+  RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Stripe: 15fad81ffb8d553d77ff504a6d50d47b9028bed0
   stripe-react-native: a944368b2694b3046661883df7d40951292e662c
@@ -858,6 +864,6 @@ SPEC CHECKSUMS:
   Yoga: d56980c8914db0b51692f55533409e844b66133c
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: cbdaf22e0aff29e6c0d015d123818f5da7973c50
+PODFILE CHECKSUM: 98578506e9b15ef55b0cf5622b142e9e6c506ca3
 
 COCOAPODS: 1.11.3
