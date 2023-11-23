@@ -1,23 +1,10 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import {
-  Alert,
-  Animated,
-  Dimensions,
-  FlatList,
-  ImageStyle,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native"
+import { Alert, Animated, Dimensions, FlatList, Image, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
-  BottomModal,
   BottomSheet,
-  Button,
-  Card,
-  CustomModal,
   CustomSwipeCards,
   CustomText,
   EditFlashcard,
@@ -29,13 +16,7 @@ import {
   Text,
   TextField,
 } from "../components"
-import {
-  CardProgress,
-  CardProgressSnapshotIn,
-  Flashcard,
-  QueryFunctions,
-  useStores,
-} from "../models"
+import { CardProgressSnapshotIn, Flashcard, QueryFunctions, useStores } from "../models"
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { useNavigation, useTheme } from "@react-navigation/native"
 import { loadOrInitalizeSettings, reloadDefaultSettings } from "../utils/settingsUtil"
@@ -98,43 +79,43 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const slides = [
       {
         key: "one",
-        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "Smart cards",
         text: "When using these flashcards, cards will automatically be placed in a pile for review based on your response.",
         backgroundColor: "#22bcb5",
       },
       {
         key: "two",
-        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "The card",
         text: "Tap the card to reveal the back",
         backgroundColor: "#22bcb5",
       },
       {
         key: "two",
-        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "You know it!",
-        text: "If you know the definition of the card confidently, swipe the card left",
+        text: "If you know the back of the card easily, swipe the card left",
         backgroundColor: "#22bcb5",
       },
       {
         key: "three",
-        //  image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "You know it, but weren't confident about it",
-        text: "If you got the definition correct, were unsure and took some time recalling, swipe the card up.",
+        text: "If you got the back correct, but was unsure or took some time recalling, swipe the card up.",
         backgroundColor: "#22bcb5",
       },
       {
         key: "four",
-        //  image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "Forgot card",
-        text: "If you don't know the defintition, swipe left",
+        text: "If you don't know the back, swipe left",
       },
       {
         key: "five",
-        // image: require("../../assets/images/girl_looking_at_phone.png"),
+        image: require("../../assets/images/girl_looking_at_phone.png"),
         title: "Review cards at intervals",
-        text: "As your memory of the card gets better, the memeory interval will continue to grow.",
+        text: "As your recall of the card gets better, the card will be scheduled for longer.",
         backgroundColor: "#22bcb5",
       },
     ]
@@ -318,7 +299,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     const { width, height } = Dimensions.get("screen")
 
     const ScrollViewComponent = (props) => {
-      const { title, body } = props
+      const { title, body, image } = props
       return (
         <View
           style={{
@@ -333,6 +314,11 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           >
             {title}
           </CustomText>
+          {/* <Image
+            resizeMethod="resize"
+            style={{ width: "100%", height: 200, marginVertical: spacing.size240 }}
+            source={image}
+          ></Image> */}
           <CustomText preset="body1">{body}</CustomText>
         </View>
       )
@@ -348,7 +334,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
     return (
       <Screen style={$root}>
         <Header
-          //title={deck.title}
           customHeader={
             <View style={$count_container}>
               <CustomText
@@ -357,6 +342,11 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                 text={deck?.sessionCards?.length.toString()}
               ></CustomText>
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
+                <Icon
+                  onPress={() => tutorialModalRef?.current?.present()}
+                  icon="fluent_error_circle"
+                  size={24}
+                />
                 <Icon
                   onPress={() => undo()}
                   disabled={sessionProgressLog.length === 0}
@@ -484,6 +474,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                   key={slide.title}
                   title={slide.title}
                   body={slide.text}
+                  image={slide.image}
                 ></ScrollViewComponent>
               )
             })}

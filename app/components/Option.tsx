@@ -34,14 +34,16 @@ export const Option = observer(function Option(props: OptionProps) {
           alignItems: "center",
         }}
       >
-        <Icon
-          icon={option === currentSelected ? "circle_check_filled" : "circle"}
-          size={22}
-          color={
-            option === currentSelected ? theme.colors.brandBackground1 : theme.colors.foreground2
-          }
-          style={{ marginRight: spacing.size160 }}
-        ></Icon>
+        {currentSelected && (
+          <Icon
+            icon={option === currentSelected ? "circle_check_filled" : "circle"}
+            size={22}
+            color={
+              option === currentSelected ? theme.colors.brandBackground1 : theme.colors.foreground2
+            }
+            style={{ marginRight: spacing.size160 }}
+          ></Icon>
+        )}
         <View
           style={{
             borderBottomColor: theme.colors.foreground3,

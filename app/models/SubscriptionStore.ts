@@ -32,7 +32,6 @@ export const SubscriptionStoreModel = types
       const result: SubscriptionSnapshotIn[] = yield getSubscription()
       const subscriptionModel: Subscription = SubscriptionModel.create(result)
       self.subscription = subscriptionModel
-      console.log("we are currently getting the subscription")
       return result
     }),
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

@@ -169,34 +169,10 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           contentContainerStyle={{ paddingBottom: 240 }}
           showsVerticalScrollIndicator={false}
         >
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => clearUnselectedFlashcards()}
-            preset="custom_default_small"
-          >
-            All
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setActiveFlashcards()}
-            preset="custom_secondary_small"
-          >
-            Active
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setDifficultCards()}
-            preset="custom_secondary_small"
-          >
-            Difficult
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => setInactiveFlashcards()}
-            preset="custom_secondary_small"
-          >
-            Inactive
-          </Button>
+          <Option onPress={() => clearUnselectedFlashcards()} title={"All"}></Option>
+          <Option onPress={() => setActiveFlashcards()} title={"Active"}></Option>
+          <Option onPress={() => setInactiveFlashcards()} title={"Inactive"}></Option>
+          <Option onPress={() => setDifficultCards()} title={"Difficult"}></Option>
         </ScrollView>
       </BottomSheet>
     </Screen>

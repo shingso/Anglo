@@ -19,12 +19,6 @@ import { Deck, useStores } from "../models"
 import { custom_palette, spacing, typography } from "../theme"
 import { useNavigation } from "@react-navigation/native"
 import {
-  getConfirmedRemoteId,
-  getPendingRemoteFunctions,
-  returnRemoteAndLocalConflicts,
-  returnRemoteAndLocalMostRecent,
-} from "../utils/remote_sync/remoteSyncUtils"
-import {
   AppRoutes,
   AppStackParamList,
   SortType,
@@ -63,56 +57,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
         }
       })
     }, [])
-
-    useEffect(() => {
-      //check for remote state against local state
-      const checkRemoteForConflict = async () => {
-        const { remoteId, localId } = await returnRemoteAndLocalMostRecent()
-        if ((!remoteId && !localId) || remoteId === localId) {
-          return
-        }
-        const confirmedRemoteId = await getConfirmedRemoteId() // this represents what is confirmed in the most recent remote
-        const saveRemoteFunctions = await getPendingRemoteFunctions()
-
-        //If we have something in remote functions theres a local conflict, possibly better way to represent this
-        const hasLocalConflict = !!saveRemoteFunctions && saveRemoteFunctions?.length > 0
-        //Assuming a response is given and confirmedRemoteId is accurate
-        const hasRemoteConflict = confirmedRemoteId !== remoteId
-
-        if (hasRemoteConflict && !hasLocalConflict) {
-          //have remote conflict but no local - means that remote is ahead - simple fetch the remote state
-          //deckStore.getDecks()
-        }
-
-        if (!hasRemoteConflict && hasLocalConflict) {
-          //we have local conflict but no remote conflict - local is ahead - apply functions
-          //applyRemoteSync(saveRemoteFunctions)
-          console.log("we have a remove function", saveRemoteFunctions.toString())
-        }
-
-        if (hasRemoteConflict && hasLocalConflict) {
-          //go to the resolutions page// or maybe we should check for the real conflicts
-          const { conflictedProgresses, nonConflictProgresses } =
-            await returnRemoteAndLocalConflicts()
-        }
-
-        //after we have reconclided we can retreieve the decks again
-
-        /* 
-        if (remoteId && !localId) {
-          resetStateUsingRemote()
-          updateMostRecentLocalId(remoteId)
-        } */
-      }
-
-      checkRemoteForConflict()
-    }, [])
-
-    const getGlobalDeckConflicts = () => {
-      deckStore.decks.forEach((deck) => {
-        deck.getConflicts()
-      })
-    }
 
     const importStarterDeckById = async (id: string) => {
       navigation.navigate(AppRoutes.DECK_ADD, {
