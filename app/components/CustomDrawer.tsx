@@ -1,5 +1,5 @@
 import * as React from "react"
-import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle, Image } from "react-native"
 import { observer } from "mobx-react-lite"
 import { colors, custom_colors, custom_palette, spacing, typography } from "app/theme"
 import { Text } from "app/components/Text"
@@ -83,7 +83,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
       contentContainerStyle={{ justifyContent: "space-between", flex: 1 }}
       style={{
         padding: spacing.size160,
-        paddingVertical: spacing.size320,
+        paddingBottom: spacing.size560,
         backgroundColor: theme.colors.background2,
       }}
       {...props}
@@ -96,51 +96,18 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
         ></AddDeckModal>
         <View
           style={{
+            flexDirection: "row",
+            alignItems: "center",
             borderBottomWidth: 0.5,
             borderBottomColor: custom_palette.grey74,
             marginBottom: spacing.size240,
           }}
         >
-          <CustomText
-            preset="title2"
-            style={{
-              marginBottom: spacing.size160,
-            }}
-          >
-            Spaced Memo
-          </CustomText>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            //borderBottomWidth: 0.5,
-            //borderBottomColor: custom_palette.grey74,
-            //marginBottom: spacing.size80,
-            paddingBottom: spacing.size80,
-          }}
-        >
-          {/* <CustomText preset="body1">Decks</CustomText> */}
-          {/*  <View style={{ gap: 16, flexDirection: "row" }}>
-            <Icon
-              size={24}
-              onPress={() =>
-                settingsStore?.isOffline
-                  ? showErrorToast("Currently offline", "Go online to add a new deck")
-                  : setNewDeckModalVisible(true)
-              }
-              icon="fluent_add_circle"
-            ></Icon>
-            <Icon
-              size={24}
-              onPress={() =>
-                settingsStore?.isOffline
-                  ? showErrorToast("Currently offline", "Go online to view global decks")
-                  : navigation.navigate(AppRoutes.GLOBAL_DECKS)
-              }
-              icon="fluent_globe_search"
-            ></Icon>
-          </View> */}
+          <Image
+            style={{ height: 60, width: 60, marginLeft: -12 }}
+            source={require("../../ignite/templates/splash-screen/logo.png")}
+          ></Image>
+          <CustomText preset="title3">Spaced Memo</CustomText>
         </View>
         <DrawerItem
           icon="fluent_add_circle"
@@ -160,69 +127,6 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           }
           text="Search decks"
         ></DrawerItem>
-        {deckStore?.decks?.length === 0 && (
-          <View>
-            <Icon
-              size={24}
-              onPress={() =>
-                settingsStore?.isOffline
-                  ? showErrorToast("Currently offline", "Go online to view global decks")
-                  : navigation.navigate(AppRoutes.GLOBAL_DECKS)
-              }
-              icon="fluent_globe_search"
-            ></Icon>
-            <LineWord text={"or"}></LineWord>
-            <Icon
-              size={24}
-              onPress={() =>
-                settingsStore?.isOffline
-                  ? showErrorToast("Currently offline", "Go online to add a new deck")
-                  : setNewDeckModalVisible(true)
-              }
-              icon="fluent_add_circle"
-            ></Icon>
-          </View>
-        )}
-
-        {/*     {deckStore.decks.map((deck) => {
-          return (
-            <TouchableOpacity onPress={() => selectDeck(deck)} key={deck.id}>
-              <View
-                style={[
-                  $deck_item,
-                  deckStore?.selectedDeck?.id === deck.id ? $deck_selected_item : {},
-                ]}
-              >
-                <View
-                  style={{
-                    marginRight: spacing.size280,
-                    minWidth: 16,
-                  }}
-                >
-                  <CustomText preset="caption1Strong">{deck?.todaysCards?.length}</CustomText>
-                </View>
-                <CustomText preset="body2Strong">{deck?.title}</CustomText>
-              </View>
-            </TouchableOpacity>
-          )
-        })} */}
-      </View>
-      <View>
-        {/*      <View
-          style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-        >
-          <View style={{ flexDirection: "row", gap: spacing.size120 }}>
-            <Icon icon="moon" size={22}></Icon>
-            <CustomText preset="body1Strong">Dark mode</CustomText>
-          </View>
-          <CustomSwitch
-            isOn={toggleIsOn}
-            onToggle={() => {
-              settingsStore.toggleTheme()
-              setToggle(!toggleIsOn)
-            }}
-          ></CustomSwitch>
-        </View> */}
         <DrawerItem
           icon="fluent_lightbulb"
           onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
@@ -241,16 +145,13 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
             text="Dark mode"
           ></DrawerItem>
         )}
-        {/*   <DrawerItem
-          icon="settings"
-          onPress={() => navigation.navigate(AppRoutes.SETTINGS)}
-          text="Settings"
-        ></DrawerItem> */}
         <DrawerItem
           icon="fluent_question_book"
           onPress={() => navigation.navigate(AppRoutes.ABOUT_STACK)}
           text="About"
         ></DrawerItem>
+      </View>
+      <View>
         <DrawerItem icon="fluent_sign_out" onPress={() => signOut()} text="Sign out"></DrawerItem>
       </View>
     </DrawerContentScrollView>
