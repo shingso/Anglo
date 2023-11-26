@@ -72,6 +72,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
     const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
+    const [flipFlashcard, setFlipFlashcard] = useState(selectedDeck?.flipFlashcard)
 
     const theme = useTheme()
 
@@ -117,6 +118,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const setSoundOption = (option: SoundOptions) => {
       setSoundSettings(option)
       selectedDeck.setSoundOption(option)
+    }
+
+    const toggleFlipFlashcard = (flip: boolean) => {
+      setFlipFlashcard(flip)
+      selectedDeck.setFlipFlashcard(flip)
     }
 
     const setPlayLanguageSetting = (language: SoundLanguage) => {
@@ -192,6 +198,36 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       selectedDeck.toggleAddNewCardsPerDay()
                       setAddNewCardsPerDay(!addNewCardsPerDay)
                     }}
+                  ></CustomSwitch>
+                </View>
+              }
+            ></Card>
+
+            <Card
+              testID="flip_flashcard"
+              style={{
+                paddingHorizontal: spacing.size160,
+                paddingVertical: spacing.size120,
+                minHeight: 0,
+                elevation: 0,
+                marginTop: spacing.size80,
+                marginBottom: spacing.size80,
+                borderRadius: 16,
+              }}
+              ContentComponent={
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <CustomText preset="body1" presetColors={flipFlashcard ? "brand" : "secondary"}>
+                    Flip flashcard
+                  </CustomText>
+                  <CustomSwitch
+                    isOn={flipFlashcard}
+                    onToggle={() => toggleFlipFlashcard(!flipFlashcard)}
                   ></CustomSwitch>
                 </View>
               }

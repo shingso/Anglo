@@ -285,6 +285,5 @@ export const applyConflictResolution = async (mostRecentId: string, progresses: 
 }
 
 const syncLocalMostRecentWithRemote = () => {
-  updateConfirmedRemoteId("test")
   //clear all of the pending functions
 }

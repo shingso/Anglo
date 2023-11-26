@@ -167,7 +167,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
   return (
     <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="scroll">
-      <Header></Header>
+      <Header title="Quick AI Generate"></Header>
       <View style={{ height: "100%" }}>
         {loading && (
           <View
@@ -186,9 +186,9 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
         <View style={$container}>
           {!selectedDeck?.aiGeneratedResponse.hasResponse ? (
             <View>
-              <CustomText preset="body1" style={{ marginBottom: spacing.size160 }}>
+              {/* <CustomText preset="body1" style={{ marginBottom: spacing.size160 }}>
                 Generate multiple with AI
-              </CustomText>
+              </CustomText> */}
               {limitRemaining !== null && (
                 <CustomText style={{ marginBottom: spacing.size120 }}>
                   Remaining rate: {limitRemaining}

@@ -164,6 +164,7 @@ export const upsertMultipleFlashcards = async (flashcards: any[]) => {
       .from("flashcards")
       .upsert([...mappedFlashcards])
       .select()
+    console.log(data, error, "upsert")
     return data.map((card) => mapReponseToFlashcard(card))
   } catch (error) {
     return null
@@ -287,4 +288,12 @@ export const calculateFlashcardProgress = (flashcard: Flashcard) => {
     })
   }
   return flashcardStatistics
+}
+
+export const flipFrontAndBackFlashcard = (flashcard: Flashcard): Flashcard => {
+  return {
+    ...flashcard,
+    [Flashcard_Fields.FRONT]: flashcard.back,
+    [Flashcard_Fields.BACK]: flashcard.front,
+  }
 }

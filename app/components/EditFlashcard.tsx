@@ -494,9 +494,10 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       <CustomModal
         mainAction={() => setErrorModalVisible(false)}
         //secondaryAction={() => setErrorModalVisible(false)}
+        //TODO fix this error
         mainActionLabel={"Close"}
         visible={errorModalVisible}
-        header={"Rate limit reached"}
+        header={"Error generating flashcard"}
         body={
           "You've reached the free limit of 50 AI generated cards per month. Subscribe to increase rate limit to 1000 per month."
         }

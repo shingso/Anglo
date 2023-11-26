@@ -24,6 +24,7 @@ import { pronouceFlashcardWithDeckSettings } from "../utils/soundUtils"
 import {
   Flashcard_Fields,
   addToFlashcardProgress,
+  flipFrontAndBackFlashcard,
   insertNote,
   removeNote,
   updateFlashcard,
@@ -75,6 +76,10 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       () => (!!currentFlashcard && !!currentFlashcard?.notes ? currentFlashcard.notes : null),
       [currentFlashcard],
     )
+
+    const cards = deck?.flipFlashcard
+      ? deck.sessionCards.map((card) => flipFrontAndBackFlashcard(card))
+      : deck.sessionCards
     const [sessionProgressLog, setSessionProgressLog] = useState<CardProgressSnapshotIn[]>([])
     const slides = [
       {
@@ -266,6 +271,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
         const updatedFlashcard = {
           [Flashcard_Fields.ID]: undoFlashcard.id,
           [Flashcard_Fields.NEXT_SHOWN]: undoTimeShown,
+          [Flashcard_Fields.DECK_ID]: deckStore.selectedDeck.id,
         }
         const flashcardResponse = await updateFlashcard(updatedFlashcard)
       }
@@ -371,7 +377,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             swipeRight={() => rightSwipe()}
             swipeLeft={() => leftSwipe()}
             swipeUp={() => upSwipe()}
-            cards={deck.sessionCards}
+            cards={cards}
             showBackCallback={() => showBackCallBack()}
           ></SwipeCards>
         ) : (
@@ -409,9 +415,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             autoCorrect={false}
             autoComplete="off"
             placeholder="Add note"
-            /*         LeftAccessory={(props) => (
-              <Icon containerStyle={props.style} size={20} icon="edit_filled"></Icon>
-            )} */
             RightAccessory={(props) => (
               <Icon
                 onPress={() => clearNote()}
