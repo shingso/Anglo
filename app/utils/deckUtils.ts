@@ -176,7 +176,11 @@ export const addCardsToShow = async (
   const newCardsToShow = getCardsForDeckOption(deck, amount)
   newCardsToShow.forEach((card) => card.updateFlashcard({ [Flashcard_Fields.NEXT_SHOWN]: date }))
   const mappedFlashcards = newCardsToShow.map((card) => {
-    return { [Flashcard_Fields.NEXT_SHOWN]: date, [Flashcard_Fields.ID]: card.id }
+    return {
+      [Flashcard_Fields.NEXT_SHOWN]: date,
+      [Flashcard_Fields.ID]: card.id,
+      [Flashcard_Fields.DECK_ID]: deck.id,
+    }
   })
 
   if (isOffline) {

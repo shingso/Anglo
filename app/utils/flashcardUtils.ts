@@ -103,6 +103,7 @@ export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) =
   if (!flashcard || !flashcard?.id) {
     return null
   }
+  console.log("updating flashcard data", flashcard)
   try {
     const { data, error } = await supabase
       .from("flashcards")
@@ -113,7 +114,7 @@ export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) =
       showErrorToast(error.message)
     }
     if (data && data.length > 0) {
-      console.log("data", data)
+      console.log("response update flashcard", data)
       return mapReponseToFlashcard(data[0])
     }
     return null
@@ -145,6 +146,7 @@ export const updateFlashcardByGlobalFlashcard = async (
 }
 
 export const upsertMultipleFlashcards = async (flashcards: any[]) => {
+  //Make sure deck id is passed in or else the row  level security will fail
   const mappedFlashcards = flashcards.map((card) => {
     const flashcard: FlashcardSnapshotIn = {
       [Flashcard_Fields.ID]: card?.id,

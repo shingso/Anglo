@@ -7,11 +7,7 @@ import { Button, Header, Screen, Text } from "app/components"
 import { useNavigation } from "@react-navigation/native"
 
 import { spacing } from "app/theme/spacing"
-import {
-  Flashcard_Fields,
-  updateFlashcardByGlobalFlashcard,
-  upsertMultipleFlashcards,
-} from "app/utils/flashcardUtils"
+import { Flashcard_Fields, updateFlashcardByGlobalFlashcard } from "app/utils/flashcardUtils"
 import { IStateTreeNode, getSnapshot } from "mobx-state-tree"
 import { Global_Flashcard_Fields } from "../utils/globalFlashcardsUtils"
 import { updateDeck } from "app/utils/deckUtils"
@@ -53,7 +49,7 @@ export const GlobalConflictScreen: FC<GlobalConflictScreenProps> = observer(
       }
 
       if (insertConflicts.length > 0) {
-        upsertMultipleFlashcards(insertConflicts)
+        //     upsertMultipleFlashcards(insertConflicts)
       }
       const updatedDeckGlobalSync = {
         last_global_sync: new Date(),
