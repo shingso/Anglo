@@ -133,7 +133,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       const { paymentIntent, error } = await confirmPlatformPayPayment(paymentInput, {
         googlePay: {
           testEnv: true,
-          merchantName: "Anglo",
+          merchantName: "SpacedMemo",
           merchantCountryCode: "US",
           currencyCode: "USD",
           billingAddressConfig: {
@@ -163,7 +163,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       const { paymentIntent, error } = await confirmPlatformPayPayment(paymentIntentInput, {
         googlePay: {
           testEnv: true,
-          merchantName: "Anglo",
+          merchantName: "SpacedMemo",
           merchantCountryCode: "US",
           currencyCode: "USD",
           billingAddressConfig: {

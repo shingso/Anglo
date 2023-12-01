@@ -60,9 +60,6 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 const prefix = Linking.createURL("/")
 const config = {
   screens: {
-    Forgot_Password: {
-      path: "reset",
-    },
     Sign_Up: "Sign_Up",
     Password_Reset: {
       path: "password_reset",

@@ -388,7 +388,6 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
       >
         {
           <EditFlashcard
-            //onDelete={() => setDeleteFlashcardModalVisible(true)}
             flashcard={selectedFlashcard}
             deck={deckStore.selectedDeck}
           ></EditFlashcard>

@@ -73,7 +73,7 @@ export const generateMockFlashcards = (number: number, deckId?: string): Flashca
   for (var i = 0; i < number; i++) {
     const flashcard: FlashcardSnapshotIn = {
       id: uuidv4(),
-      front: mockFrontValues[Math.floor(Math.random() * mockBackValues.length)],
+      front: uuidv4(), //mockFrontValues[Math.floor(Math.random() * mockBackValues.length)],
       back: mockBackValues[Math.floor(Math.random() * mockBackValues.length)],
       extra: mockExtraValues[Math.floor(Math.random() * mockExtraValues.length)],
       extra_array: [],

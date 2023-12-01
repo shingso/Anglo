@@ -57,7 +57,7 @@ test("right swipe works", async () => {
   expect(screen.getAllByText(sessionCardCount.toString())).toBeTruthy()
   expect(screen.getAllByText(firstSessionCard.front)[0]).toBeTruthy()
   //this works below somtimes when there is two of the flashcard fronts
-  screen.debug()
+  //screen.debug()
   act(() => {
     fireEvent(screen.getAllByText(firstSessionCard.front)[0], "swipeRight")
   })

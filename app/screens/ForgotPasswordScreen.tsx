@@ -23,20 +23,10 @@ import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 // @ts-ignore
 export const ForgotPasswordScreen: FC<StackScreenProps<AppStackScreenProps, "ForgotPassword">> =
   observer(function ForgotPasswordScreen() {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
-
-    // Pull in navigation via hook
-    // const navigation = useNavigation()
-
     const [email, setEmail] = useState("")
-
     const recoverEmail = async (email: string) => {
-      const redirectUrl = makeRedirectUri({
-        path: "reset",
-      })
-
       let { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        //TODO make sure the reset password works
         redirectTo: "http://localhost:3000/auth/callback",
       })
 
@@ -48,15 +38,6 @@ export const ForgotPasswordScreen: FC<StackScreenProps<AppStackScreenProps, "For
       } else {
         showErrorToast("Error", "Password reset email could not be sent")
       }
-
-      // we need to make them go to the redirect when they click on email
-    }
-
-    const updatePasswordRecovery = async (email: string, password: string) => {
-      const { data, error } = await supabase.auth.updateUser({
-        email: email,
-        password: password,
-      })
     }
 
     return (

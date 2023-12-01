@@ -101,6 +101,7 @@ test("can be delete flashcard", async () => {
   await act(() => {
     fireEvent.press(deleteButton)
   })
+
   expect(selectedDeck.flashcards.length).toEqual(initialDeckFlashcardLength - 1)
 })
 
@@ -167,6 +168,7 @@ test("can add new flashcard", async () => {
       extra_array: flashcardModel.extra_array,
     }
   })
+
   const screen = render(
     <EditFlashcard flashcard={{ ...flashcardModel, id: undefined }} deck={selectedDeck} />,
   )
@@ -187,4 +189,77 @@ test("can add new flashcard", async () => {
   expect(lastQueryVariables.sub_header).toEqual(flashcardModel.sub_header)
   expect(lastQuery.function).toEqual(QueryFunctions.INSERT_FLASHCARD)
   expect(deckStore.selectedDeck.flashcards.length).toEqual(initialDeckFlashcardLength + 1)
+})
+
+test("can be start flashcard", async () => {
+  const { deckStore } = useStores()
+  const selectedDeck = deckStore.decks[0]
+  deckStore.selectDeck(selectedDeck)
+  const flashcards = selectedDeck.flashcards
+  const randomFlashcard = flashcards[Math.floor(Math.random() * flashcards.length)]
+  const initialNumberOfQueries = selectedDeck.queuedQueries.length
+  await act(() => {
+    randomFlashcard.updateFlashcard({
+      [flashcardUtils.Flashcard_Fields.NEXT_SHOWN]: undefined,
+    })
+    selectedDeck.selectFlashcard(randomFlashcard)
+  })
+  expect(randomFlashcard.next_shown).toBeFalsy()
+  const screen = render(<EditFlashcard flashcard={randomFlashcard} deck={selectedDeck} />)
+  const startFlashcardButton = screen.getByTestId("fluent_play_outline")
+  expect(startFlashcardButton).toBeTruthy()
+  await act(async () => {
+    await fireEvent.press(startFlashcardButton)
+  })
+  expect(randomFlashcard.next_shown).toBeTruthy()
+  expect(isToday(randomFlashcard.next_shown)).toBeTruthy()
+
+  //offline mode checks
+  const lastQuery =
+    deckStore.selectedDeck.queuedQueries[deckStore.selectedDeck.queuedQueries.length - 1]
+  const lastQueryVariables = JSON.parse(lastQuery.variables)
+  expect(lastQuery.variables).toBeTruthy()
+  expect(lastQueryVariables.id).toBeTruthy()
+  expect(lastQueryVariables.next_shown).toBeTruthy()
+  expect(lastQuery.function).toEqual(QueryFunctions.UPDATE_FLASHCARD)
+  expect(deckStore.selectedDeck.queuedQueries.length).toEqual(initialNumberOfQueries + 1)
+})
+
+test("duplicate flashcard modal shows", async () => {
+  const { deckStore } = useStores()
+  const selectedDeck = deckStore.decks[0]
+  deckStore.selectDeck(selectedDeck)
+  const flashcards = selectedDeck.flashcards
+  const initialDeckFlashcardLength = flashcards.length
+  const randomFlashcard = generateMockFlashcards(1)[0]
+  randomFlashcard.front = flashcards[0].front
+  const flashcardModel = FlashcardModel.create(randomFlashcard)
+  const mockAddFlashcard = jest.spyOn(flashcardUtils, "addFlashcard")
+  const mockMapResponse = jest.spyOn(flashcardUtils, "mapReponseToFlashcard")
+
+  mockAddFlashcard.mockImplementation(() =>
+    Promise.resolve({
+      ...flashcardModel,
+    } as any),
+  )
+
+  mockMapResponse.mockImplementation(() => {
+    return {
+      id: uuidv4(),
+      front: flashcardModel.front,
+      back: flashcardModel.back,
+      extra: flashcardModel.extra,
+      sub_header: flashcardModel.sub_header,
+      extra_array: flashcardModel.extra_array,
+    }
+  })
+  const screen = render(
+    <EditFlashcard flashcard={{ ...flashcardModel, id: undefined }} deck={selectedDeck} />,
+  )
+  const saveFlashcardButton = screen.getByTestId("fluent_save")
+  await act(async () => {
+    await fireEvent.press(saveFlashcardButton)
+  })
+  expect(screen.getAllByText("Duplicate flashcard")).toBeTruthy()
+  expect(deckStore.selectedDeck.flashcards.length).toEqual(initialDeckFlashcardLength)
 })
