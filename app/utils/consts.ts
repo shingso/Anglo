@@ -32,7 +32,6 @@ export type AppStackParamList = {
   Subscribe: undefined
   About_Stack: undefined
   User_Setup: undefined
-  Global_Conflict: undefined
   Progress_Conflict: undefined
   Purchase_Deck: undefined
   User_Global_Decks: undefined
@@ -65,7 +64,6 @@ export enum AppRoutes {
   SUBSCRIBE = "Subscribe",
   ABOUT_STACK = "About_Stack",
   USER_SETUP = "User_Setup",
-  GLOBAL_CONFLICT = "Global_Conflict",
   PROGRESS_CONFLICT = "Progress_Conflict",
   PURCHASE_DECK = "Purchase_Deck",
   USER_GLOBAL_DECKS = "User_Global_Decks",

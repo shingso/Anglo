@@ -19,7 +19,6 @@ import {
   DeckSettingsScreen,
   FlashcardListScreen,
   ForgotPasswordScreen,
-  GlobalConflictScreen,
   HomeScreen,
   LoginScreen,
   OpenSourceScreen,
@@ -242,7 +241,6 @@ const HomeScreens = () => {
         }}
         component={PurchaseDeckScreen}
       />
-      <Stack.Screen name={AppRoutes.GLOBAL_CONFLICT} component={GlobalConflictScreen} />
       <Stack.Screen name={AppRoutes.PROGRESS_CONFLICT} component={ProgressConflictScreen} />
       <Stack.Screen name={AppRoutes.SESSION} component={SessionScreen} />
       <Stack.Screen name={AppRoutes.FREE_STUDY_SESSION} component={FreeStudySessionScreen} />
