@@ -6,7 +6,6 @@ import { Text } from "./Text"
 import { Card } from "./Card"
 import { CustomText } from "./CustomText"
 import { useEffect, useState } from "react"
-import * as Speech from "expo-speech"
 import { borderRadius } from "../theme/borderRadius"
 import { CustomTag } from "./CustomTag"
 

@@ -58,7 +58,7 @@ export const DeckModel = types
     selectedFlashcard: types.maybe(types.safeReference(FlashcardModel)),
     sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
     customPrompts: types.optional(CustomPromptModel, {}),
-    globalConflicts: types.optional(types.array(GlobalFlashcardModel), []),
+    //customPromptLanguages: types.optional(CustomPromptLanguageModel, {}),
     soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),
     playSoundAutomatically: types.optional(types.boolean, false),
     addNewCardsPerDay: types.optional(types.boolean, false),
@@ -174,37 +174,6 @@ export const DeckModel = types
     toggleAddNewCardsPerDay() {
       self.addNewCardsPerDay = !self.addNewCardsPerDay
     },
-    getConflicts: flow(function* () {
-      if (!self.global_deck_id) {
-        return
-      }
-      const originalGlobalDeck = yield getGlobalDeckById(self.global_deck_id)
-      const globalFlashcards = originalGlobalDeck.private_global_flashcards
-      const conflicts: GlobalFlashcardSnapshotIn[] = []
-      globalFlashcards.forEach((card) => {
-        if (
-          card?.created_at &&
-          isAfter(new Date(card.created_at), new Date(self.last_global_sync))
-        ) {
-          const insertCard = card
-          insertCard.conflictType = ConflictTypes.INSERT
-          conflicts.push(insertCard)
-        } else if (
-          card?.last_updated &&
-          isAfter(new Date(card.last_updated), new Date(self.last_global_sync))
-        ) {
-          const updateCard = card
-          updateCard.conflictType = ConflictTypes.UPDATE
-          conflicts.push(updateCard)
-        }
-      })
-
-      const conflictModels: GlobalFlashcard[] = conflicts.map((c) =>
-        GlobalFlashcardModel.create(mapReponseToGlobalFlashcard(c)),
-      )
-      self.globalConflicts.replace(conflictModels)
-    }),
-
     addFlashcard: (flashcard: FlashcardSnapshotIn) => {
       if (!flashcard) {
         return null

@@ -55,6 +55,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     const getPaidGlobalFlashcards = async () => {
       importPaidGlobalCards(globalDeckId, deckStore.selectedDeck)
       setImportPurchasedDeckVisible(false)
+      navigation.navigate(AppRoutes.DECK_HOME)
     }
 
     return (
@@ -66,9 +67,11 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
           >
             Get even more premium cards
           </CustomText>
-          <CustomText style={{ marginBottom: spacing.size120 }} preset="caption1">
-            Subscribe to get access to these cards.
-          </CustomText>
+          {!subscriptionStore.hasActiveSubscription() && (
+            <CustomText style={{ marginBottom: spacing.size120 }} preset="caption1">
+              Subscribe to get access to these cards.
+            </CustomText>
+          )}
           <CustomText style={{ marginBottom: spacing.size40 }} preset="body1">
             {paidCardsCount.toString()} more cards available!
           </CustomText>

@@ -83,7 +83,7 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
               </CustomText>
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity onPress={() => mainAction()}>
+          <TouchableOpacity disabled={mainActionDisabled} onPress={() => mainAction()}>
             <CustomText
               presetColors={"brand"}
               style={{ fontFamily: typography.primary.medium }}

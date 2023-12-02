@@ -124,6 +124,14 @@ export enum TranslateLanguage {
   ITALIAN = "ITALIAN",
 }
 
+export interface CustomPromptLanguageModel {
+  frontLanguage: TranslateLanguage
+  back_language: TranslateLanguage
+  extra_language: TranslateLanguage
+  extraArray_language: TranslateLanguage
+  subheader_language: TranslateLanguage
+}
+
 export const soundOptionArray = [
   SoundOptions.FRONT,
   SoundOptions.BACK,
@@ -224,3 +232,18 @@ export const startOptionLabels = {
 }
 
 export const freeLimitDeck = 2
+
+export const defaultBackPrompt =
+  "the part of the speech for the word, followed by a short and consise defintion"
+export const defaultSubheaderPrompt = "the english pronounciation"
+export const defaultExtraPrompt = "An example sentence."
+export const defaultExtraArrayPrompt = "Three related words"
+
+export const defaultLanguageBackPrompt = (language: TranslateLanguage) =>
+  "The meaning of the word in English in a short and concise response"
+export const defaultLanguageExtraPrompt = (language: TranslateLanguage) =>
+  `An example sentence for the word in ${language}, followed by a English translation in parenthesis`
+export const defaultLanguageSubheaderPrompt = (language: TranslateLanguage) =>
+  "The part of speech for the word in English in lowercase followed by a period, followed by an '(m)' if the word is masculine or '(f)' if feminine"
+export const defaultLanguageExtraArrayPrompt = (language: TranslateLanguage) =>
+  `If there are any synonyms or related words, give them in ${language} followed by a English translation in parenthesis. Up to three.`

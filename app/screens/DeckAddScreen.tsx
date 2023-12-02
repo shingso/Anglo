@@ -88,6 +88,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
             preset="custom_default_small"
             text="Get deck"
             onPress={() => importDeck()}
+            disabled={loading}
           ></Button>
         </View>
         <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
