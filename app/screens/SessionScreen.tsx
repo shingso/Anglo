@@ -5,6 +5,7 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
   BottomSheet,
+  CustomModal,
   CustomSwipeCards,
   CustomText,
   EditFlashcard,
@@ -16,7 +17,7 @@ import {
   Text,
   TextField,
 } from "../components"
-import { CardProgressSnapshotIn, Flashcard, QueryFunctions, useStores } from "../models"
+import { CardProgressSnapshotIn, Deck, Flashcard, QueryFunctions, useStores } from "../models"
 import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
 import { useNavigation, useTheme } from "@react-navigation/native"
 import { loadOrInitalizeSettings, reloadDefaultSettings } from "../utils/settingsUtil"
@@ -24,6 +25,7 @@ import { pronouceFlashcardWithDeckSettings } from "../utils/soundUtils"
 import {
   Flashcard_Fields,
   addToFlashcardProgress,
+  deleteFlashcard,
   flipFrontAndBackFlashcard,
   insertNote,
   removeNote,
@@ -66,6 +68,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       longestElapsed: 0,
       //how many have moved onto the next level? because just right might be failed + success
     })
+    const [deleteFlashcardModalVisible, setDeleteFlashcardModalVisible] = useState(false)
     const currentFlashcards = deck?.sessionCards
     const currentFlashcard = currentFlashcards?.length > 0 ? currentFlashcards[0] : null
     const [newNote, setNewNote] = useState("")
@@ -76,6 +79,24 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       () => (!!currentFlashcard && !!currentFlashcard?.notes ? currentFlashcard.notes : null),
       [currentFlashcard],
     )
+
+    const removeFlashcard = async (flashcard: Flashcard, deck: Deck) => {
+      deck.removeFirstSessionCard()
+      if (settingsStore.isOffline) {
+        const deleteQuery = {
+          id: uuidv4(),
+          variables: JSON.stringify(flashcard),
+          function: QueryFunctions.DELETE_FLASHCARD,
+        }
+        deck.addToQueuedQueries(deleteQuery)
+      } else {
+        const isCardDeleted = await deleteFlashcard(flashcard)
+      }
+
+      deck.deleteFlashcard(flashcard)
+      selectedFlashcardModalRef.current.close()
+      setDeleteFlashcardModalVisible(false)
+    }
 
     const cards = deck?.flipFlashcard
       ? deck.sessionCards.map((card) => flipFrontAndBackFlashcard(card))
@@ -364,9 +385,13 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                   }
                   size={24}
                 />
-                <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
-                <Icon onPress={() => showNotes()} icon="notes" size={24} />
-                <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
+                {currentFlashcard ? (
+                  <View style={{ flexDirection: "row", gap: spacing.size280 }}>
+                    <Icon onPress={() => editFlashcard()} icon="fluent_edit_outline" size={24} />
+                    <Icon onPress={() => showNotes()} icon="notes" size={24} />
+                    <Icon icon="play_sound" onPress={() => pronouceCurrentWord()} size={25} />
+                  </View>
+                ) : null}
               </View>
             </View>
           }
@@ -452,6 +477,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           customSnap={["85"]}
         >
           <EditFlashcard
+            onDelete={() => setDeleteFlashcardModalVisible(true)}
             deck={deckStore.selectedDeck}
             flashcard={
               deckStore.selectedDeck.sessionCards?.length > 0
@@ -498,6 +524,14 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             containerStyle={{ left: 36, bottom: 120 }}
           />
         </BottomSheet>
+        <CustomModal
+          mainAction={() => removeFlashcard(currentFlashcard, deckStore.selectedDeck)}
+          mainActionLabel={"Delete"}
+          secondaryAction={() => setDeleteFlashcardModalVisible(false)}
+          visible={deleteFlashcardModalVisible}
+          header={"Delete flashcard"}
+          body={"Are you sure you want to delete this flashcard? This action cannot be undone"}
+        ></CustomModal>
       </Screen>
     )
   },
