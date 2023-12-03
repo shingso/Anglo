@@ -54,11 +54,11 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
       selectedFlashcardModalRef?.current.present()
     }
 
-    const rightSwipe = async () => {
+    const leftSwipe = async () => {
       deckStore.selectedDeck.reshuffleFirstCard()
     }
 
-    const leftSwipe = async () => {
+    const rightSwipe = async () => {
       deckStore.selectedDeck.removeFirstSessionCard()
     }
 

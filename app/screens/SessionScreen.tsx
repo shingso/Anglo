@@ -92,7 +92,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       } else {
         const isCardDeleted = await deleteFlashcard(flashcard)
       }
-
       deck.deleteFlashcard(flashcard)
       selectedFlashcardModalRef.current.close()
       setDeleteFlashcardModalVisible(false)
@@ -193,7 +192,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       return progress
     }
 
-    const rightSwipe = async () => {
+    const leftSwipe = async () => {
       deckStore.selectedDeck.reshuffleFirstCard()
       const progress = await applySessionResponse(currentFlashcard, 0, currentFlashcard?.next_shown)
       addProgressToLog(progress)
@@ -204,7 +203,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       }))
     }
 
-    const leftSwipe = async () => {
+    const rightSwipe = async () => {
       deckStore.selectedDeck.removeFirstSessionCard()
       const nextInterval = calculateNextInterval(currentFlashcard, 2)
       const nextShown = addDays(new Date(), nextInterval)

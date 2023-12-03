@@ -56,7 +56,7 @@ export const DeckModel = types
     [Deck_Fields.GLOBAL_DECK_ID]: types.maybe(types.string), //id of the global deck that this deck is cloned from
     [Deck_Fields.LAST_GLOBAL_SYNC]: types.maybe(types.Date), //this is used for global deck syncing
     selectedFlashcard: types.maybe(types.safeReference(FlashcardModel)),
-    sessionCards: types.maybe(types.array(types.reference(FlashcardModel))),
+    sessionCards: types.maybe(types.array(types.safeReference(FlashcardModel))),
     customPrompts: types.optional(CustomPromptModel, {}),
     //customPromptLanguages: types.optional(CustomPromptLanguageModel, {}),
     soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),

@@ -91,7 +91,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
               ...$animationProps,
             }).start(async () => {
               //this is swiping left - left means could not recall
-              swipeRight()
+              swipeLeft()
               showNextCard()
             })
           } else if (gestureState.dx > 70) {
@@ -100,7 +100,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
               toValue: { x: SCREEN_WIDTH + 160, y: gestureState.dy },
               ...$animationProps,
             }).start(async () => {
-              swipeLeft()
+              swipeRight()
               showNextCard()
             })
           } else if (gestureState.dy < -80) {
