@@ -9,6 +9,7 @@ import {
   CustomModal,
   CustomText,
   FlashcardListItem,
+  Header,
   Loading,
   Screen,
   Text,
@@ -19,6 +20,7 @@ import { useNavigation } from "@react-navigation/native"
 import { colors, custom_colors, typography } from "../theme"
 import { AppRoutes, AppStackParamList, freeLimitDeck } from "../utils/consts"
 import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
+import { showErrorToast } from "app/utils/errorUtils"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -70,12 +72,15 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
         setDeckLimitModalVisible(true)
         return
       }
-
+      setLoading(true)
       const newDeck = await importFreeGlobalDeckById(selectedDeck.id, selectedDeck.title, newPerDay)
       if (newDeck && newDeck?.id) {
         deckStore.addDeckFromRemote(newDeck?.id)
+        navigation.navigate(AppRoutes.DECKS)
+        return
       }
-      navigation.navigate(AppRoutes.DECKS)
+      showErrorToast("Error importing deck")
+      setLoading(false)
     }
 
     const [startingValue, setStartingValue] = useState(10)
@@ -83,42 +88,45 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 
     return (
       <Screen style={$root}>
-        <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
-          <Button
-            preset="custom_default_small"
-            text="Get deck"
-            onPress={() => importDeck()}
-            disabled={loading}
-          ></Button>
-        </View>
-        <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
-          {selectedDeck.title}
-        </CustomText>
-
-        {selectedDeck?.description ? (
-          <CustomText
-            style={{ marginBottom: spacing.size200 }}
-            preset="caption1"
-            presetColors={"secondary"}
-          >
-            {selectedDeck.description}
+        <Header title={deck?.title}></Header>
+        <View style={$container}>
+          <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
+            <Button
+              preset="custom_default_small"
+              text="Get deck"
+              onPress={() => importDeck()}
+              disabled={loading}
+            ></Button>
+          </View>
+          <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
+            {selectedDeck.title}
           </CustomText>
-        ) : null}
-        <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
-          {flashcards?.length} cards
-        </CustomText>
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 200 }}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator={false}
-          data={flashcards}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              key={item.id}
-              children={<FlashcardListItem flashcard={item}></FlashcardListItem>}
-            ></TouchableOpacity>
-          )}
-        ></FlatList>
+
+          {selectedDeck?.description ? (
+            <CustomText
+              style={{ marginBottom: spacing.size200 }}
+              preset="caption1"
+              presetColors={"secondary"}
+            >
+              {selectedDeck.description}
+            </CustomText>
+          ) : null}
+          <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
+            {flashcards?.length} cards
+          </CustomText>
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 200 }}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            data={flashcards}
+            renderItem={({ item, index }) => (
+              <TouchableOpacity
+                key={item.id}
+                children={<FlashcardListItem flashcard={item}></FlashcardListItem>}
+              ></TouchableOpacity>
+            )}
+          ></FlatList>
+        </View>
         <CustomModal
           header={"Deck limit reached"}
           body={"Subscribe to add more decks"}
@@ -134,5 +142,8 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 
 const $root: ViewStyle = {
   flex: 1,
+}
+
+const $container: ViewStyle = {
   padding: spacing.size200,
 }

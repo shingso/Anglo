@@ -142,7 +142,7 @@ export const TextField = forwardRef(function TextField(props: TextFieldProps, re
   const $inputWrapperStyles = [
     $inputWrapperStyle,
     status === "error" && { borderColor: colors.error },
-    TextInputProps.multiline && { minHeight: 112 },
+    TextInputProps.multiline && { minHeight: 36, height: "auto" },
     LeftAccessory && { paddingStart: 0 },
     RightAccessory && { paddingEnd: 0 },
     $inputWrapperStyleOverride,

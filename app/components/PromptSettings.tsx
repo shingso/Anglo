@@ -6,6 +6,14 @@ import { Text } from "app/components/Text"
 import { useState } from "react"
 import { TextField } from "./TextField"
 import { Deck } from "app/models"
+import {
+  defaultBackPrompt,
+  defaultExtraArrayPrompt,
+  defaultExtraPrompt,
+  defaultSubheaderPrompt,
+} from "app/utils/consts"
+import { CustomText } from "./CustomText"
+import { Button } from "./Button"
 
 export interface PromptSettingsProps {
   /**
@@ -46,35 +54,58 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
   return (
     <View style={$styles}>
       <View style={{ gap: spacing.size160 }}>
+        <View>
+          <CustomText
+            style={{ marginBottom: spacing.size20 }}
+            preset="caption1"
+            presetColors="secondary"
+          >
+            Select default prompts or set your own custom prompts for flashcard AI generation.
+          </CustomText>
+          <CustomText
+            style={{ marginBottom: spacing.size120 }}
+            preset="caption1"
+            presetColors="secondary"
+          >
+            For best results, be precise as possible with instructions and how you want it
+            formatted.
+          </CustomText>
+          {/*  <View style={{ gap: spacing.size80, flexDirection: "row" }}>
+            <Button preset="custom_default_small">Definition</Button>
+            <Button preset="custom_default_small">Language</Button>
+            <Button preset="custom_outline_small">Custom</Button>
+          </View> */}
+        </View>
         <TextField
-          label="Back"
+          label="Back prompt"
           testID="back_input"
           value={backPrompt}
+          placeholder={defaultBackPrompt}
           onChangeText={setBackPrompt}
           onSubmitEditing={() => submitBackPrompt()}
         ></TextField>
         <TextField
-          label="Subheader"
+          label="Subheader prompt"
           testID="subheader_input"
           value={subheaderPrompt}
           onChangeText={setSubheaderPrompt}
-          placeholder="Subheader is shown with the front."
+          placeholder={defaultSubheaderPrompt}
           onSubmitEditing={() => submitSubheaderPrompt()}
         ></TextField>
         <TextField
-          label="Extra"
+          label="Extra prompt"
           testID="extra_input"
           value={extraPrompt}
           onChangeText={setExtraPrompt}
-          placeholder="Extra field is used for any additional text."
+          placeholder={defaultExtraPrompt}
           onSubmitEditing={() => submitExtraPrompt()}
         ></TextField>
         <TextField
-          label="Extra Labels"
+          label="Extra label prompt"
           testID="extra_array_input"
           value={extraArrayPrompt}
           onChangeText={setExtraArrayPrompt}
-          placeholder="Extra labels is used to return lists."
+          placeholder={defaultExtraArrayPrompt}
           onSubmitEditing={() => submitExtraArrayPrompt()}
         ></TextField>
       </View>

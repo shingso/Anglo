@@ -31,7 +31,6 @@ import {
   AppStackParamList,
   AppRoutes,
   SoundOptions,
-  aiLanguageOptions,
   soundLanguageOptions,
   languageLabels,
   SoundLanguage,
@@ -63,15 +62,12 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const [confirmDelete, setConfirmDelete] = useState("")
     const [confirmDeleteModalVisible, setCofirmDeleteModalVisible] = useState(false)
     const cardsPerDayModelRef = useRef<BottomSheetModal>()
-    const aiLanguageModelRef = useRef<BottomSheetModal>()
-    const customPromptModelRef = useRef<BottomSheetModal>()
     const soundLanguageModelRef = useRef<BottomSheetModal>()
     const soundFieldModelRef = useRef<BottomSheetModal>()
     const startModeModelRef = useRef<BottomSheetModal>()
     const [startMode, setStartMode] = useState(selectedDeck?.startMode)
     const [soundSettings, setSoundSettings] = useState(selectedDeck?.soundOption)
     const [languageSettings, setLanguageSettings] = useState(selectedDeck?.playSoundLanguage)
-    const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
     const [flipFlashcard, setFlipFlashcard] = useState(selectedDeck?.flipFlashcard)
 
     const theme = useTheme()
@@ -128,11 +124,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     const setPlayLanguageSetting = (language: SoundLanguage) => {
       setLanguageSettings(language)
       selectedDeck.setPlaySoundLanguage(language)
-    }
-
-    const setAILanguageSettings = (language: TranslateLanguage) => {
-      setAILanguage(language)
-      selectedDeck.setTranslateLanguage(language)
     }
 
     const updateSelectedDeck = async (deck: DeckSnapshotIn) => {
@@ -202,36 +193,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 </View>
               }
             ></Card>
-
-            <Card
-              testID="flip_flashcard"
-              style={{
-                paddingHorizontal: spacing.size160,
-                paddingVertical: spacing.size120,
-                minHeight: 0,
-                elevation: 0,
-                marginTop: spacing.size80,
-                marginBottom: spacing.size80,
-                borderRadius: 16,
-              }}
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <CustomText preset="body1" presetColors={flipFlashcard ? "brand" : "secondary"}>
-                    Flip flashcard
-                  </CustomText>
-                  <CustomSwitch
-                    isOn={flipFlashcard}
-                    onToggle={() => toggleFlipFlashcard(!flipFlashcard)}
-                  ></CustomSwitch>
-                </View>
-              }
-            ></Card>
             <Card
               testID="start_mode"
               style={{
@@ -284,7 +245,35 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               added if study days are skipped
             </CustomText>
           </View>
-
+          <Card
+            testID="flip_flashcard"
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size120,
+              minHeight: 0,
+              elevation: 0,
+              marginTop: spacing.size80,
+              marginBottom: spacing.size80,
+              borderRadius: 16,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <CustomText preset="body1" presetColors={flipFlashcard ? "brand" : "secondary"}>
+                  Flip flashcard
+                </CustomText>
+                <CustomSwitch
+                  isOn={flipFlashcard}
+                  onToggle={() => toggleFlipFlashcard(!flipFlashcard)}
+                ></CustomSwitch>
+              </View>
+            }
+          ></Card>
           <Card
             style={{
               paddingHorizontal: spacing.size160,
@@ -393,7 +382,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }
           ></Card>
 
-          <Card
+          {/*     <Card
             disabled={true}
             style={{
               paddingHorizontal: spacing.size160,
@@ -432,7 +421,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 </TouchableOpacity>
               </View>
             }
-          ></Card>
+          ></Card> */}
 
           {!selectedDeck.paid_imported && (
             <Card
@@ -474,52 +463,12 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               }
             ></Card>
           )}
-
-          <Card
-            disabled={true}
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size160,
-              minHeight: 0,
-              elevation: 0,
-              marginTop: spacing.size80,
-              marginBottom: spacing.size80,
-              borderRadius: 16,
-            }}
-            ContentComponent={
-              <View>
-                <TouchableOpacity onPress={() => customPromptModelRef?.current?.present()}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <View>
-                      <CustomText preset="body1">Set custom prompts</CustomText>
-                    </View>
-                    <Icon
-                      icon="caret_right"
-                      color="#242424"
-                      style={{ marginLeft: spacing.size80 }}
-                      size={16}
-                    ></Icon>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            }
-          ></Card>
-
           <Card
             onPress={() => setCofirmDeleteModalVisible(true)}
             style={{
               marginTop: spacing.size80,
               minHeight: 0,
               elevation: 0,
-              //backgroundColor: theme.colors.dangerBackground1,
-              //borderColor: theme.colors.dangerBackground2,
-              // borderWidth: 1,
             }}
             ContentComponent={
               <View
@@ -561,27 +510,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             ))}
           </ScrollView>
         </BottomSheet>
-
-        <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
-          <ModalHeader title={"Use selected language for AI generated flashcards"}></ModalHeader>
-          {aiLanguageOptions.map((option) => {
-            return (
-              <Option
-                key={option}
-                title={option}
-                onPress={setAILanguageSettings}
-                option={option}
-                currentSelected={aiLanguage}
-              ></Option>
-            )
-          })}
-        </BottomSheet>
-
-        <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
-          <ModalHeader title={"Set custom prompts for AI generation fields"}></ModalHeader>
-          <PromptSettings deck={selectedDeck}></PromptSettings>
-        </BottomSheet>
-
         <BottomSheet ref={soundLanguageModelRef} customSnap={["85%"]}>
           <ModalHeader title={"Sound will play in the selected language"}></ModalHeader>
           <View>

@@ -1,12 +1,9 @@
 import * as React from "react"
 import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, custom_palette, spacing, typography } from "../theme"
-import { Text } from "./Text"
+import { spacing, typography } from "../theme"
 import Modal from "react-native-modal"
-import { Button } from "./Button"
 import { CustomText } from "./CustomText"
-import { borderRadius } from "../theme/borderRadius"
 import { useTheme } from "@react-navigation/native"
 
 export interface CustomModalProps {
@@ -42,8 +39,6 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
     header,
     body,
     children,
-    mainPreset,
-    secondaryPreset,
   } = props
   const $styles = [$container, style]
   const theme = useTheme()
@@ -52,7 +47,6 @@ export const CustomModal = observer(function CustomModal(props: CustomModalProps
       <View
         style={{
           backgroundColor: theme.colors.background3,
-          //minHeight: 160,
           borderRadius: 20, //borderRadius.corner120,
           padding: spacing.size200,
           paddingHorizontal: spacing.size240,

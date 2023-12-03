@@ -3,7 +3,15 @@ import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps, navigate } from "app/navigators"
-import { Button, CustomModal, CustomText, FlashcardListItem, Screen, Text } from "app/components"
+import {
+  Button,
+  CustomModal,
+  CustomText,
+  FlashcardListItem,
+  Loading,
+  Screen,
+  Text,
+} from "app/components"
 import { custom_colors, custom_palette, spacing, typography } from "app/theme"
 
 import { getGlobalDeckById } from "app/utils/globalDecksUtils"
@@ -42,10 +50,12 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
 
     useEffect(() => {
       const setPurchasabeDeck = async () => {
+        setLoading(true)
         const paidCount = await getPaidFlashcardsCountByDeckId(globalDeckId)
         setPaidCardsCount(paidCount)
         const previewRes = await getPaidFlashcardsPreview(globalDeckId)
         setPaidCardsPreview(previewRes)
+        setLoading(false)
       }
       if (globalDeckId) {
         setPurchasabeDeck()
@@ -61,6 +71,20 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     return (
       <Screen style={$root}>
         <View style={$container}>
+          {loading && (
+            <View
+              style={{
+                zIndex: 1,
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                right: -spacing.size160,
+                left: -spacing.size160,
+              }}
+            >
+              <Loading></Loading>
+            </View>
+          )}
           <CustomText
             preset="title1"
             style={{ marginBottom: spacing.size40, fontFamily: typography.primary.light }}

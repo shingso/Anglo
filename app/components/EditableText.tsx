@@ -14,6 +14,7 @@ import { Text } from "./Text"
 import { useEffect, useRef, useState } from "react"
 import { $presets, CustomText } from "./CustomText"
 import { useTheme } from "@react-navigation/native"
+import { Icon } from "./Icon"
 
 export interface EditableTextProps {
   /**
@@ -101,13 +102,3 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
     />
   )
 })
-
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
-}
-
-const $placeholderStyle: TextStyle = {
-  color: custom_colors.foreground2,
-}

@@ -50,14 +50,13 @@ test("can update and save flashcard", async () => {
     await act(() => {
       inputEdit.props.onBlur()
     })
-    // console.log("field value", randomFlashcard?.[field])
-    // expect(randomFlashcard?.[field]).toEqual(field + "_newValue")
   }
 
   updateField("front")
   updateField("back")
   updateField("extra")
-  updateField("sub_header")
+  updateField("subheader")
+
   //we should test clearing the extra array -- this test is for extra aray
   fireEvent.press(screen.getByTestId("extra_array_edit"))
   const inputEditExtra = screen.getByTestId("extra_array_edit")
@@ -67,17 +66,32 @@ test("can update and save flashcard", async () => {
     inputEditExtra.props.onSubmitEditing()
   })
 
+  const newFrontValue = "front_newValue"
+  const newBackValue = "back_newValue"
+  const newExtraValue = "extra_newValue"
+  const newSubheaderValue = "subheader_newValue"
+
   const saveIconButton = screen.getByTestId("fluent_save")
   expect(saveIconButton).toBeTruthy()
   await act(async () => {
     fireEvent.press(saveIconButton)
   })
-  expect(randomFlashcard?.front).toEqual("front_newValue")
-  expect(randomFlashcard?.back).toEqual("back_newValue")
-  expect(randomFlashcard?.extra).toEqual("extra_newValue")
-  expect(randomFlashcard?.sub_header).toEqual("sub_header_newValue")
+  expect(randomFlashcard?.front).toEqual(newFrontValue)
+  expect(randomFlashcard?.back).toEqual(newBackValue)
+  expect(randomFlashcard?.extra).toEqual(newExtraValue)
+  expect(randomFlashcard?.sub_header).toEqual(newSubheaderValue)
   //await waitFor(() => expect(flashcardUtils.updateFlashcard).toHaveBeenCalledTimes(1))
-  // expect(randomFlashcard?.["extra_array"]).toEqual(["test"])
+  expect(randomFlashcard?.["extra_array"]).toEqual(["test"])
+  const lastQuery =
+    deckStore.selectedDeck.queuedQueries[deckStore.selectedDeck.queuedQueries.length - 1]
+  const lastQueryVariables = JSON.parse(lastQuery.variables)
+  expect(lastQuery.variables).toBeTruthy()
+  expect(lastQueryVariables.id).toBeTruthy()
+  expect(lastQueryVariables.front).toEqual(newFrontValue)
+  expect(lastQueryVariables.back).toEqual(newBackValue)
+  expect(lastQueryVariables.extra).toEqual(newExtraValue)
+  expect(lastQueryVariables.sub_header).toEqual(newSubheaderValue)
+  expect(lastQuery.function).toEqual(QueryFunctions.UPDATE_FLASHCARD)
 })
 
 test("can be delete flashcard", async () => {

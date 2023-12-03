@@ -7,6 +7,7 @@ import { withSetPropAction } from "./helpers/withSetPropAction"
 export const CustomPromptModel = types
   .model("CustomPrompt")
   .props({
+    defaultPromptType: types.maybeNull(types.string),
     backPrompt: types.maybeNull(types.string),
     extraPrompt: types.maybeNull(types.string),
     subheaderPrompt: types.maybeNull(types.string),
@@ -15,6 +16,9 @@ export const CustomPromptModel = types
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
+    setDefaultPromptType(prompt: string) {
+      self.defaultPromptType = prompt
+    },
     setBackPrompt(prompt: string) {
       self.backPrompt = prompt
     },

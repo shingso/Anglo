@@ -42,6 +42,7 @@ export type AppStackParamList = {
   Deck_Home: undefined
   Multi_Add_AI: undefined
   Restart_Overdue: undefined
+  Custom_Prompts: undefined
 }
 
 export enum AppRoutes {
@@ -74,6 +75,7 @@ export enum AppRoutes {
   DECK_HOME = "Deck_Home",
   MUTLI_ADD_AI = "Multi_Add_AI",
   RESTART_OVERDUE = "Restart_Overdue",
+  CUSTOM_PROMPTS = "Custom_Prompts",
 }
 
 export const SortTypeLabels = {
@@ -121,7 +123,8 @@ export enum TranslateLanguage {
   MANDARIN = "mandarin",
   JAPANESE = "japanese",
   THAI = "thai",
-  ITALIAN = "ITALIAN",
+  ITALIAN = "italian",
+  DEFINITION = "definition",
 }
 
 export interface CustomPromptLanguageModel {
@@ -167,6 +170,19 @@ export const playSoundLanguageArray = [
 ]
 export const aiLanguageOptions = [
   TranslateLanguage.ENGLISH,
+  TranslateLanguage.SPANISH,
+  TranslateLanguage.MANDARIN,
+  TranslateLanguage.GERMAN,
+  TranslateLanguage.JAPANESE,
+  TranslateLanguage.FRENCH,
+  TranslateLanguage.KOREAN,
+  TranslateLanguage.DUTCH,
+  TranslateLanguage.THAI,
+  TranslateLanguage.ITALIAN,
+]
+
+export const defaultPromptOptions = [
+  TranslateLanguage.DEFINITION,
   TranslateLanguage.SPANISH,
   TranslateLanguage.MANDARIN,
   TranslateLanguage.GERMAN,
@@ -234,7 +250,7 @@ export const startOptionLabels = {
 export const freeLimitDeck = 2
 
 export const defaultBackPrompt =
-  "the part of the speech for the word, followed by a short and consise defintion"
+  "the part of the speech for the word, followed by a short and consise definition"
 export const defaultSubheaderPrompt = "the english pronounciation"
 export const defaultExtraPrompt = "An example sentence."
 export const defaultExtraArrayPrompt = "Three related words"
@@ -246,4 +262,4 @@ export const defaultLanguageExtraPrompt = (language: TranslateLanguage) =>
 export const defaultLanguageSubheaderPrompt = (language: TranslateLanguage) =>
   "The part of speech for the word in English in lowercase followed by a period, followed by an '(m)' if the word is masculine or '(f)' if feminine"
 export const defaultLanguageExtraArrayPrompt = (language: TranslateLanguage) =>
-  `If there are any synonyms or related words, give them in ${language} followed by a English translation in parenthesis. Up to three.`
+  `If there are any synonyms or related words, give them in ${language} followed by an English translation in parenthesis. Up to three.`

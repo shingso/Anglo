@@ -37,6 +37,7 @@ import {
   GlobalDecksScreen,
   MultiAddAiScreen,
   RestartOverdueScreen,
+  CustomPromptsScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
@@ -214,24 +215,18 @@ const HomeScreens = () => {
 
       <Stack.Screen name={AppRoutes.DECK_SETTINGS} component={DeckSettingsScreen} />
       <Stack.Screen name={AppRoutes.GLOBAL_DECKS} component={GlobalDecksScreen} />
-      <Stack.Screen
-        name={AppRoutes.DECK_ADD}
-        options={{
-          headerShown: true,
-        }}
-        component={DeckAddScreen}
-      />
+      <Stack.Screen name={AppRoutes.DECK_ADD} component={DeckAddScreen} />
       <Stack.Screen name={AppRoutes.ABOUT_STACK} component={AboutStackScreens} />
       <Stack.Screen name={AppRoutes.DECK_HOME} component={DeckHomeScreen} />
       <Stack.Screen
         name={AppRoutes.SUBSCRIBE}
         options={{
           headerShown: true,
-          headerTitle: "Smarter",
+          headerTitle: "Subscribe",
         }}
         component={SubscribeScreen}
       />
-
+      <Stack.Screen name={AppRoutes.CUSTOM_PROMPTS} component={CustomPromptsScreen} />
       <Stack.Screen name={AppRoutes.RESTART_OVERDUE} component={RestartOverdueScreen} />
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
