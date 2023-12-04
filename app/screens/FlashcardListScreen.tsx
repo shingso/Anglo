@@ -156,8 +156,8 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
 
     return (
       <Screen style={$root}>
+        <Header title={deckStore.selectedDeck?.title}></Header>
         <View style={$container}>
-          <Header title={deckStore.selectedDeck?.title}></Header>
           <TextField
             value={searchTerm}
             autoCorrect={false}

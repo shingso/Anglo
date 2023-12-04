@@ -228,6 +228,14 @@ export const soundSettingOptions = [
   SoundOptions.SUB_HEADER,
 ]
 
+export const soundSettingOptionsLabels = {
+  [SoundOptions.FRONT]: "Front",
+  [SoundOptions.BACK]: "Back",
+  [SoundOptions.EXTRA]: "Extra",
+  [SoundOptions.EXTRA_ARRAY]: "Tags",
+  [SoundOptions.SUB_HEADER]: "Subheader",
+}
+
 export const starterSpanishDeckId = "89813480-0dd2-432b-ae7e-2dc601f9a680"
 export const starterSATVocabularyDeckId = "340a0dc1-3767-455d-a8f6-cad938ea9827"
 export const starterGermanDeckId = "0c4947d2-6b76-4967-93e7-b444ffee30bb"

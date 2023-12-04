@@ -71,7 +71,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
     return (
       <Screen style={$root}>
         <View style={$container}>
-          {loading && (
+          {loading ? (
             <View
               style={{
                 zIndex: 1,
@@ -84,65 +84,69 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
             >
               <Loading></Loading>
             </View>
-          )}
-          <CustomText
-            preset="title1"
-            style={{ marginBottom: spacing.size40, fontFamily: typography.primary.light }}
-          >
-            Get even more premium cards
-          </CustomText>
-          {!subscriptionStore.hasActiveSubscription() && (
-            <CustomText style={{ marginBottom: spacing.size120 }} preset="caption1">
-              Subscribe to get access to these cards.
-            </CustomText>
-          )}
-          <CustomText style={{ marginBottom: spacing.size40 }} preset="body1">
-            {paidCardsCount.toString()} more cards available!
-          </CustomText>
-          <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
-            Heres a look at some of the words you'll get
-          </CustomText>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={paidCardsPreview}
-            keyExtractor={(item) => item.id}
-            ListFooterComponent={
-              <View style={{ paddingVertical: spacing.size120 }}>
-                <CustomText preset="body1Strong">
-                  and {(paidCardsCount - paidCardsPreview?.length).toString()} more...
-                </CustomText>
-              </View>
-            }
-            renderItem={({ item }) => {
-              return (
-                <View key={item.id}>
-                  <FlashcardListItem flashcard={item}></FlashcardListItem>
-                </View>
-              )
-            }}
-          ></FlatList>
-
-          <CustomModal
-            header={"Import deck"}
-            body={"Import the cards into the current deck?"}
-            secondaryAction={() => setImportPurchasedDeckVisible(false)}
-            mainAction={() => getPaidGlobalFlashcards()}
-            visible={importPurchasedDeckVisible}
-          ></CustomModal>
-
-          {!subscriptionStore.hasActiveSubscription() ? (
-            <Button
-              preset="custom_default"
-              onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
-            >
-              Go to subscription
-            </Button>
           ) : (
-            <Button onPress={() => setImportPurchasedDeckVisible(true)} preset="custom_default">
-              Import
-            </Button>
+            <View style={{ height: "100%" }}>
+              <CustomText
+                preset="title1"
+                style={{ marginBottom: spacing.size40, fontFamily: typography.primary.light }}
+              >
+                Get even more premium cards
+              </CustomText>
+
+              {!subscriptionStore.hasActiveSubscription() && (
+                <CustomText style={{ marginBottom: spacing.size120 }} preset="caption1">
+                  Subscribe to get access to these cards.
+                </CustomText>
+              )}
+              <CustomText style={{ marginBottom: spacing.size40 }} preset="body1">
+                {paidCardsCount.toString()} more cards available!
+              </CustomText>
+              <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
+                Heres a look at some of the words you'll get
+              </CustomText>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={paidCardsPreview}
+                keyExtractor={(item) => item.id}
+                ListFooterComponent={
+                  <View style={{ paddingVertical: spacing.size120 }}>
+                    <CustomText preset="body1Strong">
+                      and {(paidCardsCount - paidCardsPreview?.length).toString()} more...
+                    </CustomText>
+                  </View>
+                }
+                renderItem={({ item }) => {
+                  return (
+                    <View key={item.id}>
+                      <FlashcardListItem flashcard={item}></FlashcardListItem>
+                    </View>
+                  )
+                }}
+              ></FlatList>
+
+              {!subscriptionStore.hasActiveSubscription() ? (
+                <Button
+                  preset="custom_default"
+                  onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
+                >
+                  Go to subscription
+                </Button>
+              ) : (
+                <Button onPress={() => setImportPurchasedDeckVisible(true)} preset="custom_default">
+                  Import
+                </Button>
+              )}
+            </View>
           )}
         </View>
+
+        <CustomModal
+          header={"Import deck"}
+          body={"Import the cards into the current deck?"}
+          secondaryAction={() => setImportPurchasedDeckVisible(false)}
+          mainAction={() => getPaidGlobalFlashcards()}
+          visible={importPurchasedDeckVisible}
+        ></CustomModal>
       </Screen>
     )
   },
