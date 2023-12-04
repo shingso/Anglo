@@ -94,7 +94,6 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
     return (
       <Screen style={$root}>
         <Header
-          title={deck.title}
           customHeader={
             <View style={$count_container}>
               <CustomText
@@ -201,6 +200,7 @@ const $count_container: ViewStyle = {
   alignContent: "center",
   justifyContent: "space-between",
   alignItems: "center",
+  flex: 1,
 }
 
 const $sessions_statistics: ViewStyle = {

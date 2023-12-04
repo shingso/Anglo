@@ -3,8 +3,17 @@ import { observer } from "mobx-react-lite"
 import { Linking, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps } from "../navigators"
-import { Button, Card, Icon, LineWord, Loading, Screen, Text } from "../components"
-import { custom_colors, spacing } from "app/theme"
+import {
+  BottomMainAction,
+  Button,
+  Card,
+  Icon,
+  LineWord,
+  Loading,
+  Screen,
+  Text,
+} from "../components"
+import { custom_colors, spacing, typography } from "app/theme"
 import { CustomText } from "app/components/CustomText"
 import {
   CardField,
@@ -333,10 +342,12 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           </View>
         ) : (
           <View style={$container}>
-            <CustomText preset="title2" style={{ marginBottom: spacing.size200 }}>
+            <CustomText
+              preset="title1"
+              style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
+            >
               {HAS_SUBSCRIPTION_TITLE}
             </CustomText>
-
             {subscriptionStore.subscription.cancel_at_end && (
               <CustomText preset="body1" style={{ marginBottom: spacing.size200 }}>
                 You subscription has been canceled, you will continue to have subscription benefits
@@ -356,39 +367,26 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             )}
             <SubscriptionFeaturesList></SubscriptionFeaturesList>
             {subscriptionStore.isSubscribed && (
-              <View>
-                {!subscriptionStore.subscription.cancel_at_end ? (
-                  <Card
-                    onPress={() => endSubscription()}
-                    style={{
-                      marginBottom: spacing.size160,
-                      elevation: 0,
-                      minHeight: 0,
-                      paddingHorizontal: spacing.size200,
-                      paddingVertical: spacing.size120,
-                    }}
-                    ContentComponent={
-                      <View>
-                        <CustomText preset="body2Strong">Cancel Subscription</CustomText>
-                        <CustomText preset="caption1">End your subscription</CustomText>
-                      </View>
-                    }
-                  ></Card>
-                ) : (
-                  <Card
-                    onPress={() => reactivateSubscription()}
-                    style={{
-                      marginBottom: spacing.size160,
-                      elevation: 4,
-                      minHeight: 0,
-                      paddingHorizontal: spacing.size200,
-                      paddingVertical: spacing.size120,
-                    }}
-                    ContentComponent={
-                      <CustomText preset="body2Strong">Reactive subscription</CustomText>
-                    }
-                  ></Card>
-                )}
+              <View
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                }}
+              >
+                <BottomMainAction
+                  onPress={
+                    subscriptionStore?.subscription?.cancel_at_end
+                      ? () => reactivateSubscription()
+                      : () => endSubscription()
+                  }
+                  label={
+                    subscriptionStore?.subscription?.cancel_at_end
+                      ? "Reactivate subscription"
+                      : "End subscription"
+                  }
+                ></BottomMainAction>
               </View>
             )}
           </View>
@@ -404,4 +402,5 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   padding: spacing.size200,
+  flex: 1,
 }

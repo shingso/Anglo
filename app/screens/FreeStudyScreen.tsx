@@ -15,6 +15,7 @@ import {
   Option,
   TextField,
   Header,
+  BottomMainAction,
 } from "app/components"
 import { FlashcardModel, useStores } from "app/models"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
@@ -28,8 +29,6 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet"
 interface FreeStudyScreenProps extends NativeStackScreenProps<AppStackScreenProps<"FreeStudy">> {}
 
 export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeStudyScreen() {
-  // Pull in one of our MST stores
-
   const { deckStore } = useStores()
   const flashcards = deckStore?.selectedDeck?.flashcards ? deckStore?.selectedDeck?.flashcards : []
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
@@ -76,7 +75,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
   }
 
   return (
-    <Screen style={$root} preset="fixed">
+    <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="fixed">
       <Header title={"Free study"}></Header>
       <View style={$container}>
         <View style={{ flexDirection: "row", gap: spacing.size100, flexWrap: "wrap" }}>
@@ -86,13 +85,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
             preset="custom_default_small"
           >
             Select
-          </Button>
-          <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => goToFreeStudySession()}
-            preset="custom_secondary_small"
-          >
-            Start
           </Button>
         </View>
         <TextField
@@ -163,7 +155,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
         ></FlatList>
       </View>
 
-      <BottomSheet ref={quickSelectModalRef} customSnap={["85"]}>
+      <BottomSheet style={{ zIndex: 10 }} ref={quickSelectModalRef} customSnap={["85"]}>
         <ModalHeader title={"Select cards for free study based on"}></ModalHeader>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 240 }}
@@ -175,6 +167,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           <Option onPress={() => setDifficultCards()} title={"Difficult"}></Option>
         </ScrollView>
       </BottomSheet>
+      <BottomMainAction label="Start" onPress={() => goToFreeStudySession()}></BottomMainAction>
     </Screen>
   )
 })
@@ -185,4 +178,5 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   padding: spacing.size200,
+  flex: 1,
 }

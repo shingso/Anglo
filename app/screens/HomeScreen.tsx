@@ -111,7 +111,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
             style={{
               paddingHorizontal: spacing.size240,
               marginVertical: spacing.size160,
-              marginBottom: spacing.size320,
+              marginBottom: spacing.size200,
               flexDirection: "row",
               alignItems: "center",
             }}

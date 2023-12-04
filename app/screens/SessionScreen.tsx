@@ -545,7 +545,6 @@ const $count_container: ViewStyle = {
   alignContent: "center",
   justifyContent: "space-between",
   alignItems: "center",
-
   flex: 1,
 }
 

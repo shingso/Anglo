@@ -137,15 +137,17 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
           mainAction={() => getPaidGlobalFlashcards()}
           visible={importPurchasedDeckVisible}
         ></CustomModal>
-        <BottomMainAction
-          label={subscriptionStore.hasActiveSubscription() ? "Import" : "Go to subscription"}
-          disabled={false}
-          onPress={
-            subscriptionStore.hasActiveSubscription()
-              ? () => setImportPurchasedDeckVisible(true)
-              : () => navigation.navigate(AppRoutes.SUBSCRIBE)
-          }
-        ></BottomMainAction>
+        {!loading && (
+          <BottomMainAction
+            label={subscriptionStore.hasActiveSubscription() ? "Import" : "Go to subscription"}
+            disabled={false}
+            onPress={
+              subscriptionStore.hasActiveSubscription()
+                ? () => setImportPurchasedDeckVisible(true)
+                : () => navigation.navigate(AppRoutes.SUBSCRIBE)
+            }
+          ></BottomMainAction>
+        )}
       </Screen>
     )
   },

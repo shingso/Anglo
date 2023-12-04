@@ -14,6 +14,8 @@ import {
   BottomSheet,
   ModalHeader,
   Button,
+  BottomMainAction,
+  BOTTOM_ACTION_HEIGHT,
 } from "app/components"
 import { Deck, useStores } from "app/models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -331,15 +333,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   }}
                 >
                   <Image
-                    style={{ height: 36, width: 36, marginRight: spacing.size120 }}
+                    style={{ height: 28, width: 28, marginRight: spacing.size120 }}
                     source={require("../../assets/icons/diamond.png")}
                   />
                   <View>
                     <CustomText preset="body1">{`Get ${paidCardsCount} more premium cards`}</CustomText>
-                    <CustomText
-                      presetColors={"secondary"}
-                      preset="caption2"
-                    >{`Get more of these cards`}</CustomText>
                   </View>
                 </View>
               }
@@ -415,11 +413,8 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
       </BottomSheet>
       <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
         <ModalHeader title={"Number of cards to start"}></ModalHeader>
-        <Button preset="custom_default_small" onPress={() => startCards()}>
-          Start
-        </Button>
         <ScrollView
-          contentContainerStyle={{ paddingBottom: 240 }}
+          contentContainerStyle={{ paddingBottom: BOTTOM_ACTION_HEIGHT + spacing.size160 }}
           showsVerticalScrollIndicator={false}
         >
           {numberOfCards.map((num) => (
@@ -432,6 +427,9 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
             ></Option>
           ))}
         </ScrollView>
+        <View style={{ marginHorizontal: -16 }}>
+          <BottomMainAction label={"Start"} onPress={() => startCards()}></BottomMainAction>
+        </View>
       </BottomSheet>
     </Screen>
   )

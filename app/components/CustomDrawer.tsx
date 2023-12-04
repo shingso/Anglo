@@ -66,7 +66,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
       contentContainerStyle={{ justifyContent: "space-between", flex: 1 }}
       style={{
         padding: spacing.size160,
-        paddingBottom: spacing.size560,
+        paddingBottom: spacing.size320,
         backgroundColor: theme.colors.background2,
       }}
       {...props}
