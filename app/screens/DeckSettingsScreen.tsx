@@ -294,16 +294,14 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   alignItems: "center",
                 }}
               >
-                <TouchableOpacity onPress={() => openCardsPerDay()}>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <View>
-                      <CustomText preset="body1">Play sound automatically</CustomText>
-                      <CustomText preset="caption2" presetColors={"secondary"}>
-                        Sound will play when back is shown.
-                      </CustomText>
-                    </View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View>
+                    <CustomText preset="body1">Play sound automatically</CustomText>
+                    <CustomText preset="caption2" presetColors={"secondary"}>
+                      Sound will play when back is shown.
+                    </CustomText>
                   </View>
-                </TouchableOpacity>
+                </View>
                 <CustomSwitch
                   testID="playSoundAutoToggle"
                   isOn={playSoundAuto}

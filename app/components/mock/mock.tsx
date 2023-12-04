@@ -103,8 +103,6 @@ export const mockDeckModel: DeckSnapshotIn = {
   new_per_day: Math.floor(Math.random() * 20),
   last_global_sync: new Date(),
   global_deck_id: "41b3a893-b270-4595-bf0c-6518d38e6c6",
-
-  //soundOption: SoundOptions.FRONT,
 }
 
 export const mockDeckModelCreate = DeckModel.create(mockDeckModel)

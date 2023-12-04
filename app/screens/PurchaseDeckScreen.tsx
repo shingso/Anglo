@@ -4,6 +4,8 @@ import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps, navigate } from "app/navigators"
 import {
+  BOTTOM_ACTION_HEIGHT,
+  BottomMainAction,
   Button,
   CustomModal,
   CustomText,
@@ -107,6 +109,7 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
               <FlatList
                 showsVerticalScrollIndicator={false}
                 data={paidCardsPreview}
+                contentContainerStyle={{ paddingBottom: BOTTOM_ACTION_HEIGHT }}
                 keyExtractor={(item) => item.id}
                 ListFooterComponent={
                   <View style={{ paddingVertical: spacing.size120 }}>
@@ -123,19 +126,6 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
                   )
                 }}
               ></FlatList>
-
-              {!subscriptionStore.hasActiveSubscription() ? (
-                <Button
-                  preset="custom_default"
-                  onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
-                >
-                  Go to subscription
-                </Button>
-              ) : (
-                <Button onPress={() => setImportPurchasedDeckVisible(true)} preset="custom_default">
-                  Import
-                </Button>
-              )}
             </View>
           )}
         </View>
@@ -147,6 +137,15 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
           mainAction={() => getPaidGlobalFlashcards()}
           visible={importPurchasedDeckVisible}
         ></CustomModal>
+        <BottomMainAction
+          label={subscriptionStore.hasActiveSubscription() ? "Import" : "Go to subscription"}
+          disabled={false}
+          onPress={
+            subscriptionStore.hasActiveSubscription()
+              ? () => setImportPurchasedDeckVisible(true)
+              : () => navigation.navigate(AppRoutes.SUBSCRIBE)
+          }
+        ></BottomMainAction>
       </Screen>
     )
   },

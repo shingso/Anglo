@@ -232,7 +232,7 @@ const HomeScreens = () => {
         name={AppRoutes.PURCHASE_DECK}
         options={{
           headerShown: true,
-          title: "Get Deck",
+          title: "More cards",
         }}
         component={PurchaseDeckScreen}
       />

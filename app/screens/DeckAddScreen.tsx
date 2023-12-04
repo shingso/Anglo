@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
+  BottomMainAction,
   Button,
   Card,
   CustomModal,
@@ -21,6 +22,8 @@ import { colors, custom_colors, typography } from "../theme"
 import { AppRoutes, AppStackParamList, freeLimitDeck } from "../utils/consts"
 import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDecksUtils"
 import { showErrorToast } from "app/utils/errorUtils"
+import BottomSheet from "@gorhom/bottom-sheet"
+import { borderRadius } from "app/theme/borderRadius"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -87,10 +90,10 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     const [newPerDay, setNewPerDay] = useState(3)
 
     return (
-      <Screen style={$root}>
+      <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root}>
         <Header title={deck?.title}></Header>
         <View style={$container}>
-          <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
+          {/*    <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
             <Button
               preset="custom_default_small"
               text="Get deck"
@@ -101,7 +104,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
             {selectedDeck.title}
           </CustomText>
-
+ */}
           {selectedDeck?.description ? (
             <CustomText
               style={{ marginBottom: spacing.size200 }}
@@ -115,7 +118,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
             {flashcards?.length} cards
           </CustomText>
           <FlatList
-            contentContainerStyle={{ paddingBottom: 200 }}
+            contentContainerStyle={{ paddingBottom: 120 }}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             data={flashcards}
@@ -135,6 +138,11 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           mainAction={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
           visible={deckLimitModalVisible}
         />
+        <BottomMainAction
+          label="Get deck"
+          onPress={() => importDeck()}
+          disabled={loading}
+        ></BottomMainAction>
       </Screen>
     )
   },
@@ -146,4 +154,5 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   padding: spacing.size200,
+  flex: 1,
 }
