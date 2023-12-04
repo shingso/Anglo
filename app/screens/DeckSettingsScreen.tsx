@@ -39,6 +39,7 @@ import {
   SCREEN_HEIGHT,
   startOptions,
   startOptionLabels,
+  soundSettingOptionsLabels,
 } from "../utils/consts"
 import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { FlatList, ScrollView } from "react-native-gesture-handler"
@@ -268,6 +269,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   Flip flashcard
                 </CustomText>
                 <CustomSwitch
+                  testID="flipFlashcardToggle"
                   isOn={flipFlashcard}
                   onToggle={() => toggleFlipFlashcard(!flipFlashcard)}
                 ></CustomSwitch>
@@ -303,6 +305,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   </View>
                 </TouchableOpacity>
                 <CustomSwitch
+                  testID="playSoundAutoToggle"
                   isOn={playSoundAuto}
                   onToggle={() => {
                     selectedDeck.togglePlaySoundAutomatically()
@@ -423,9 +426,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }
           ></Card> */}
 
-          {!selectedDeck.paid_imported && (
+          {/* {!selectedDeck.paid_imported && (
             <Card
-              disabled={true}
               style={{
                 paddingHorizontal: spacing.size160,
                 paddingVertical: spacing.size160,
@@ -462,7 +464,46 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 </View>
               }
             ></Card>
-          )}
+          )} */}
+
+          <Card
+            testID="start_mode"
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size120,
+              minHeight: 0,
+              elevation: 0,
+              marginBottom: spacing.size80,
+              borderRadius: 16,
+            }}
+            ContentComponent={
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity onPress={() => navigation.navigate(AppRoutes.CUSTOM_PROMPTS)}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <CustomText preset="body1">Set AI custom prompts</CustomText>
+                    <Icon
+                      icon="caret_right"
+                      color="#242424"
+                      style={{ marginLeft: spacing.size80 }}
+                      size={16}
+                    ></Icon>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            }
+          ></Card>
           <Card
             onPress={() => setCofirmDeleteModalVisible(true)}
             style={{
@@ -494,7 +535,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           ></Card>
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
-          <ModalHeader title={"Number of cards to be automatically each day"}></ModalHeader>
+          <ModalHeader title={"Number of cards to be automatically added each day"}></ModalHeader>
           <ScrollView
             contentContainerStyle={{ paddingBottom: 240 }}
             showsVerticalScrollIndicator={false}
@@ -534,7 +575,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               return (
                 <Option
                   key={option}
-                  title={option}
+                  title={soundSettingOptionsLabels[option]}
                   onPress={setSoundOption}
                   option={option}
                   currentSelected={soundSettings}

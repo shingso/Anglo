@@ -26,6 +26,7 @@ export interface CustomSwitchProps {
   onToggle?: any
   labelStyle?: StyleProp<TextStyle>
   label?: string
+  testID?: string
 }
 
 /**
@@ -41,6 +42,7 @@ export const CustomSwitch = observer(function CustomSwitch(props: CustomSwitchPr
     onToggle = () => {},
     labelStyle,
     label = "",
+    testID,
   } = props
 
   const animatedValue = new Animated.Value(0)
@@ -66,7 +68,7 @@ export const CustomSwitch = observer(function CustomSwitch(props: CustomSwitchPr
     <View style={$container}>
       {!!label && <Text style={[$label, labelStyle]}>{label}</Text>}
 
-      <TouchableOpacity onPress={typeof onToggle === "function" && onToggle}>
+      <TouchableOpacity testID={testID} onPress={typeof onToggle === "function" && onToggle}>
         <View style={[$toggleContainer, style, { backgroundColor: color }]}>
           <Animated.View
             style={[
