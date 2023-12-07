@@ -1,32 +1,27 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { ListRenderItemInfo, Switch, TextStyle, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
   BottomSheet,
-  Button,
   Card,
   CustomModal,
-  CustomRadioButton,
   CustomSwitch,
   CustomText,
   HEADER_HEIGHT,
   Header,
   Icon,
-  LineWord,
   ModalHeader,
-  PromptSettings,
   Screen,
-  Text,
   Option,
   TextField,
   EditableText,
 } from "../components"
 import { Deck, DeckSnapshotIn, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import { Deck_Fields, deleteDeck, newPerDayList, updateDeck } from "../utils/deckUtils"
-import { colors, custom_colors, custom_palette, spacing, typography } from "../theme"
+import { Deck_Fields, deleteDeck, updateDeck } from "../utils/deckUtils"
+import { custom_palette, spacing } from "../theme"
 import {
   AppStackParamList,
   AppRoutes,
@@ -34,15 +29,14 @@ import {
   soundLanguageOptions,
   languageLabels,
   SoundLanguage,
-  TranslateLanguage,
   soundSettingOptions,
   SCREEN_HEIGHT,
   startOptions,
   startOptionLabels,
   soundSettingOptionsLabels,
 } from "../utils/consts"
-import { BottomSheetFlatList, BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
-import { FlatList, ScrollView } from "react-native-gesture-handler"
+import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
+import { ScrollView } from "react-native-gesture-handler"
 
 // STOP! READ ME FIRST!
 // To fix the TS error below, you'll need to add the following things in your navigation config:
@@ -80,13 +74,16 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     }
 
     const [addNewCardsPerDay, setAddNewCardsPerDay] = useState(
+      deckStore.selectedDeck.addNewCardsPerDay,
+    )
+    const [playSoundAuto, setPlaySoundAuto] = useState(
       deckStore.selectedDeck.playSoundAutomatically,
     )
-    const [playSoundAuto, setPlaySoundAuto] = useState(deckStore.selectedDeck.addNewCardsPerDay)
 
     useEffect(() => {
       setPlaySoundAuto(deckStore.selectedDeck.playSoundAutomatically)
       setAddNewCardsPerDay(deckStore.selectedDeck.addNewCardsPerDay)
+      setFlipFlashcard(deckStore.selectedDeck.flipFlashcard)
     }, [])
 
     const numberOfCards = useMemo(
@@ -117,9 +114,9 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       selectedDeck.setSoundOption(option)
     }
 
-    const toggleFlipFlashcard = (flip: boolean) => {
-      setFlipFlashcard(flip)
-      selectedDeck.setFlipFlashcard(flip)
+    const toggleFlipFlashcard = () => {
+      selectedDeck.toggleFlipFlashcard()
+      setFlipFlashcard(!flipFlashcard)
     }
 
     const setPlayLanguageSetting = (language: SoundLanguage) => {
@@ -136,6 +133,18 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       deckStore.selectedDeck.updateDeck(updatedDeck)
     }
 
+    const Divider = () => {
+      return (
+        <View
+          style={{
+            borderBottomColor: "#242424",
+            borderBottomWidth: 0.3,
+            marginBottom: spacing.size200,
+          }}
+        />
+      )
+    }
+
     return (
       <Screen style={$root} preset="scroll">
         <Header title={"Settings"}></Header>
@@ -150,30 +159,59 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           ></EditableText>
           <View style={{ marginBottom: spacing.size200 }}>
             <Card
-              testID="cards_per_day"
+              disabled={true}
               style={{
                 paddingHorizontal: spacing.size160,
-                paddingVertical: spacing.size120,
+                paddingVertical: spacing.size200,
                 minHeight: 0,
                 elevation: 0,
                 marginTop: spacing.size80,
-                marginBottom: spacing.size80,
                 borderRadius: 16,
               }}
               ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <TouchableOpacity onPress={() => openCardsPerDay()}>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      <CustomText
-                        preset="body1"
-                        presetColors={addNewCardsPerDay ? "brand" : "secondary"}
+                <View>
+                  <View style={{ marginBottom: spacing.size160 }}>
+                    <View
+                      style={{
+                        marginBottom: spacing.size100,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
                       >
+                        <Icon icon="new" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                        <CustomText preset="body2Strong">New cards per day</CustomText>
+                      </View>
+                      <CustomSwitch
+                        isOn={addNewCardsPerDay}
+                        onToggle={() => {
+                          selectedDeck.toggleAddNewCardsPerDay()
+                          setAddNewCardsPerDay(!addNewCardsPerDay)
+                        }}
+                      ></CustomSwitch>
+                    </View>
+                    <CustomText preset="caption2" presetColors={"secondary"}>
+                      If toggled on {selectedDeck?.new_per_day} cards will be added in{" "}
+                      {startOptionLabels[startMode]} the cards were added.
+                    </CustomText>
+                  </View>
+
+                  <TouchableOpacity onPress={() => openCardsPerDay()}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: spacing.size200,
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <CustomText preset="body1">
                         {deckStore?.selectedDeck?.new_per_day} cards per day
                       </CustomText>
                       <Icon
@@ -184,48 +222,17 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       ></Icon>
                     </View>
                   </TouchableOpacity>
-                  <CustomSwitch
-                    isOn={addNewCardsPerDay}
-                    onToggle={() => {
-                      selectedDeck.toggleAddNewCardsPerDay()
-                      setAddNewCardsPerDay(!addNewCardsPerDay)
-                    }}
-                  ></CustomSwitch>
-                </View>
-              }
-            ></Card>
-            <Card
-              testID="start_mode"
-              style={{
-                paddingHorizontal: spacing.size160,
-                paddingVertical: spacing.size120,
-                minHeight: 0,
-                elevation: 0,
-                marginBottom: spacing.size80,
-                borderRadius: 16,
-              }}
-              ContentComponent={
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+
+                  <Divider />
                   <TouchableOpacity onPress={() => startModeModelRef?.current?.present()}>
                     <View
                       style={{
                         flexDirection: "row",
-                        alignItems: "center",
                         justifyContent: "space-between",
+                        alignItems: "center",
                       }}
                     >
-                      <CustomText
-                        preset="body1"
-                        presetColors={addNewCardsPerDay ? "brand" : "secondary"}
-                      >
-                        {startOptionLabels[startMode]}
-                      </CustomText>
+                      <CustomText preset="body2">{startOptionLabels[startMode]}</CustomText>
                       <Icon
                         icon="caret_right"
                         color="#242424"
@@ -237,110 +244,61 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                 </View>
               }
             ></Card>
-            <CustomText
-              style={{ paddingHorizontal: spacing.size120 }}
-              preset="caption1"
-              presetColors={"secondary"}
-            >
-              If toggled on, random cards will automatically be added every day. Cards will not be
-              added if study days are skipped
-            </CustomText>
           </View>
-          <Card
-            testID="flip_flashcard"
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size120,
-              minHeight: 0,
-              elevation: 0,
-              marginTop: spacing.size80,
-              marginBottom: spacing.size80,
-              borderRadius: 16,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <CustomText preset="body1" presetColors={flipFlashcard ? "brand" : "secondary"}>
-                  Flip flashcard
-                </CustomText>
-                <CustomSwitch
-                  testID="flipFlashcardToggle"
-                  isOn={flipFlashcard}
-                  onToggle={() => toggleFlipFlashcard(!flipFlashcard)}
-                ></CustomSwitch>
-              </View>
-            }
-          ></Card>
-          <Card
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size120,
-              minHeight: 0,
-              elevation: 0,
-              marginTop: spacing.size80,
-              marginBottom: spacing.size80,
-              borderRadius: 16,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <View>
-                    <CustomText preset="body1">Play sound automatically</CustomText>
-                    <CustomText preset="caption2" presetColors={"secondary"}>
-                      Sound will play when back is shown.
-                    </CustomText>
-                  </View>
-                </View>
-                <CustomSwitch
-                  testID="playSoundAutoToggle"
-                  isOn={playSoundAuto}
-                  onToggle={() => {
-                    selectedDeck.togglePlaySoundAutomatically()
-                    setPlaySoundAuto(!playSoundAuto)
-                  }}
-                ></CustomSwitch>
-              </View>
-            }
-          ></Card>
-
           <Card
             disabled={true}
             style={{
               paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size120,
+              paddingVertical: spacing.size200,
               minHeight: 0,
               elevation: 0,
-              marginTop: spacing.size80,
+
               marginBottom: spacing.size80,
               borderRadius: 16,
             }}
             ContentComponent={
               <View>
+                <View
+                  style={{
+                    marginBottom: spacing.size160,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Icon icon="play_sound" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                  <CustomText preset="body2Strong">Sound</CustomText>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: spacing.size160,
+                  }}
+                >
+                  <CustomText preset="body2">Play sound automatically</CustomText>
+                  <CustomSwitch
+                    testID="playSoundAutoToggle"
+                    isOn={playSoundAuto}
+                    onToggle={() => {
+                      selectedDeck.togglePlaySoundAutomatically()
+                      setPlaySoundAuto(!playSoundAuto)
+                    }}
+                  ></CustomSwitch>
+                </View>
+                <Divider />
                 <TouchableOpacity onPress={() => soundLanguageModelRef?.current?.present()}>
                   <View
                     style={{
-                      marginBottom: spacing.size160,
+                      marginBottom: spacing.size200,
+
                       flexDirection: "row",
                       justifyContent: "space-between",
                       alignItems: "center",
                     }}
                   >
                     <View>
-                      <CustomText preset="body1">{languageLabels[languageSettings]}</CustomText>
-                      <CustomText preset="caption2" presetColors={"secondary"}>
-                        Language sound will be played in.
-                      </CustomText>
+                      <CustomText preset="body2">{languageLabels[languageSettings]}</CustomText>
                     </View>
                     <Icon
                       icon="caret_right"
@@ -350,13 +308,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     ></Icon>
                   </View>
                 </TouchableOpacity>
-                <View
-                  style={{
-                    borderBottomColor: "#242424",
-                    borderBottomWidth: 0.3,
-                    marginBottom: spacing.size120,
-                  }}
-                />
+                <Divider />
                 <TouchableOpacity onPress={() => soundFieldModelRef?.current?.present()}>
                   <View
                     style={{
@@ -366,9 +318,8 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     }}
                   >
                     <View>
-                      <CustomText preset="body1">Front</CustomText>
-                      <CustomText preset="caption2" presetColors={"secondary"}>
-                        Field of the card that will be read.
+                      <CustomText preset="body2">
+                        {soundSettingOptionsLabels[soundSettings]}
                       </CustomText>
                     </View>
                     <Icon
@@ -383,11 +334,11 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }
           ></Card>
 
-          {/*     <Card
-            disabled={true}
+          <Card
+            testID="flip_flashcard"
             style={{
               paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size160,
+              paddingVertical: spacing.size200,
               minHeight: 0,
               elevation: 0,
               marginTop: spacing.size80,
@@ -396,33 +347,130 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
             }}
             ContentComponent={
               <View>
-                <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
+                <View
+                  style={{
+                    marginBottom: spacing.size100,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
-                      justifyContent: "space-between",
                       alignItems: "center",
                     }}
                   >
-                    <View>
-                      <CustomText preset="body1" style={{ marginBottom: spacing.size20 }}>
-                        {aiLanguage?.charAt(0)?.toUpperCase() + aiLanguage?.slice(1)}
-                      </CustomText>
-                      <CustomText preset="caption2" presetColors={"secondary"}>
-                        AI will create the response in selected language.
-                      </CustomText>
-                    </View>
-                    <Icon
-                      icon="caret_right"
-                      color="#242424"
-                      style={{ marginLeft: spacing.size80 }}
-                      size={16}
-                    ></Icon>
+                    <Icon icon="sync" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                    <CustomText preset="body2Strong">Flip flashcard</CustomText>
                   </View>
-                </TouchableOpacity>
+                  <CustomSwitch
+                    testID="flipFlashcardToggle"
+                    isOn={flipFlashcard}
+                    onToggle={() => toggleFlipFlashcard()}
+                  ></CustomSwitch>
+                </View>
+                <CustomText preset="caption2" presetColors={"secondary"}>
+                  Front and back for the flashcard will be flipped during the session.
+                </CustomText>
               </View>
             }
-          ></Card> */}
+          ></Card>
+
+          <Card
+            onPress={() => navigation.navigate(AppRoutes.CUSTOM_PROMPTS)}
+            testID="customPromptsCard"
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size200,
+              minHeight: 0,
+              elevation: 0,
+              marginTop: spacing.size80,
+              marginBottom: spacing.size80,
+              borderRadius: 16,
+            }}
+            ContentComponent={
+              <View>
+                <View
+                  style={{
+                    marginBottom: spacing.size100,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      icon="fluent_lightbulb"
+                      size={20}
+                      style={{ marginRight: spacing.size60 }}
+                    ></Icon>
+                    <CustomText preset="body2Strong">Set custom AI flashcards</CustomText>
+                  </View>
+                  <Icon
+                    icon="caret_right"
+                    color={custom_palette.grey50}
+                    style={{ marginLeft: spacing.size80 }}
+                    size={16}
+                  ></Icon>
+                </View>
+                <CustomText preset="caption2" presetColors={"secondary"}>
+                  Set custom prompts for AI flashcard generation.
+                </CustomText>
+              </View>
+            }
+          ></Card>
+
+          <Card
+            onPress={() => setCofirmDeleteModalVisible(true)}
+            testID="deleteDeckCard"
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size200,
+              minHeight: 0,
+              elevation: 0,
+              marginTop: spacing.size80,
+              marginBottom: spacing.size80,
+              borderRadius: 16,
+            }}
+            ContentComponent={
+              <View>
+                <View
+                  style={{
+                    marginBottom: spacing.size100,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      icon="fluent_delete"
+                      size={20}
+                      color={theme.colors.dangerForeground2}
+                      style={{ marginRight: spacing.size60 }}
+                    ></Icon>
+                    <CustomText presetColors={"danger"} preset="body2Strong">
+                      Delete deck
+                    </CustomText>
+                  </View>
+                </View>
+                <CustomText preset="caption2" presetColors={"secondary"}>
+                  Delete this deck and all flashcards. This action cannot be undone.
+                </CustomText>
+              </View>
+            }
+          ></Card>
 
           {/* {!selectedDeck.paid_imported && (
             <Card
@@ -463,74 +511,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               }
             ></Card>
           )} */}
-
-          <Card
-            testID="start_mode"
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size120,
-              minHeight: 0,
-              elevation: 0,
-              marginBottom: spacing.size80,
-              borderRadius: 16,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity onPress={() => navigation.navigate(AppRoutes.CUSTOM_PROMPTS)}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <CustomText preset="body1">Set AI custom prompts</CustomText>
-                    <Icon
-                      icon="caret_right"
-                      color="#242424"
-                      style={{ marginLeft: spacing.size80 }}
-                      size={16}
-                    ></Icon>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            }
-          ></Card>
-          <Card
-            onPress={() => setCofirmDeleteModalVisible(true)}
-            style={{
-              marginTop: spacing.size80,
-              minHeight: 0,
-              elevation: 0,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  paddingHorizontal: spacing.size80,
-                  paddingVertical: spacing.size40,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <View>
-                  <CustomText style={{ color: theme.colors.dangerForeground1 }} preset="body1">
-                    {"Delete deck"}
-                  </CustomText>
-                  <CustomText style={{ color: theme.colors.dangerForeground1 }} preset="caption2">
-                    {"Warning this action cannot be undone."}
-                  </CustomText>
-                </View>
-                {/*     <Icon icon="fluent_delete" size={22} color={theme.colors.dangerForeground1}></Icon> */}
-              </View>
-            }
-          ></Card>
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
           <ModalHeader title={"Number of cards to be automatically added each day"}></ModalHeader>
@@ -610,7 +590,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
           body={"Are you sure you want to delete this deck? This action cannot be undone."}
           children={
             <View>
-              <CustomText preset="caption1" style={{ marginBottom: spacing.size40 }}>
+              <CustomText preset="caption1" style={{ marginBottom: spacing.size80 }}>
                 Enter "Delete" to confirm
               </CustomText>
               <TextField
