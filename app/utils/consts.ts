@@ -252,7 +252,7 @@ export enum StartOption {
 export const startOptions = [StartOption.RANDOM, StartOption.DATE_ADDED]
 export const startOptionLabels = {
   [StartOption.RANDOM]: "Random",
-  [StartOption.DATE_ADDED]: "Added order",
+  [StartOption.DATE_ADDED]: "Created",
 }
 
 export const freeLimitDeck = 2
