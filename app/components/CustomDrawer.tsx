@@ -111,7 +111,7 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
           text="Search decks"
         ></DrawerItem>
         <DrawerItem
-          icon="fluent_lightbulb"
+          icon="fluent_diamond"
           onPress={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
           text="Subscribe"
         ></DrawerItem>

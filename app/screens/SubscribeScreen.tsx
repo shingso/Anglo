@@ -188,34 +188,47 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       setLoading(false)
     }
 
+    const FeatureListItem = (props) => {
+      const { title, description, icon } = props
+      return (
+        <View style={{ marginBottom: spacing.size200 }}>
+          <View
+            style={{ flexDirection: "row", alignItems: "center", marginBottom: spacing.size40 }}
+          >
+            <Icon icon={icon} size={20} style={{ marginRight: spacing.size80 }}></Icon>
+            <CustomText preset="body2Strong">{title}</CustomText>
+          </View>
+          <CustomText preset="body2">{description}</CustomText>
+        </View>
+      )
+    }
+
     const SubscriptionFeaturesList = () => {
       return (
         <View>
-          <View style={{ marginBottom: spacing.size200 }}>
-            {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
-              Unlimited deck size
-            </CustomText>
-            <CustomText preset="body1">
-              Keep track of as many topics as want with unlimited deck space.
-            </CustomText>
-          </View>
+          <FeatureListItem
+            icon="fluent_lightbulb"
+            title={"More decks"}
+            description={
+              "Key track of more topics by increasing the number of decks you have up to 25."
+            }
+          ></FeatureListItem>
 
-          <View style={{ marginBottom: spacing.size200 }}>
-            {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
-              Premium decks
-            </CustomText>
-            <CustomText preset="body1">Access all premium decks</CustomText>
-          </View>
+          <FeatureListItem
+            icon="fluent_diamond"
+            title={"Many more cards"}
+            description={
+              "Get access to all the premade flashcards. An additional 1400 need to know SAT words and 700 most frequent words for language learners."
+            }
+          ></FeatureListItem>
 
-          <View style={{ marginBottom: spacing.size200 }}>
-            {/*          <Icon icon="fluent_redo" size={24} style={{ marginRight: spacing.size80 }}></Icon> */}
-            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size20 }}>
-              AI Flashcards
-            </CustomText>
-            <CustomText preset="body1">Increase rate limit to 1000 flashcards per month</CustomText>
-          </View>
+          <FeatureListItem
+            icon="robot"
+            title={"More AI flashcards"}
+            description={
+              "Increase the limit for creating flashcards using AI from 50 per month to 1000 per month. Quickly make custom decks using AI."
+            }
+          ></FeatureListItem>
         </View>
       )
     }
@@ -342,16 +355,20 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
           </View>
         ) : (
           <View style={$container}>
-            <CustomText
-              preset="title1"
-              style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
-            >
-              {HAS_SUBSCRIPTION_TITLE}
-            </CustomText>
-            {subscriptionStore.subscription.cancel_at_end && (
-              <CustomText preset="body1" style={{ marginBottom: spacing.size200 }}>
-                You subscription has been canceled, you will continue to have subscription benefits
-                till the end of the current period.
+            {!subscriptionStore?.subscription.cancel_at_end ? (
+              <CustomText
+                preset="title1"
+                style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
+              >
+                {HAS_SUBSCRIPTION_TITLE}
+              </CustomText>
+            ) : (
+              <CustomText
+                preset="title1"
+                style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
+              >
+                You subscription has been canceled and will end on{" "}
+                {subscriptionStore.subscription.end_date.toDateString()}.
               </CustomText>
             )}
 

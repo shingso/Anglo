@@ -211,7 +211,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                         justifyContent: "space-between",
                       }}
                     >
-                      <CustomText preset="body1">
+                      <CustomText preset="body2">
                         {deckStore?.selectedDeck?.new_per_day} cards per day
                       </CustomText>
                       <Icon
@@ -405,11 +405,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       alignItems: "center",
                     }}
                   >
-                    <Icon
-                      icon="fluent_lightbulb"
-                      size={20}
-                      style={{ marginRight: spacing.size60 }}
-                    ></Icon>
+                    <Icon icon="robot" size={20} style={{ marginRight: spacing.size60 }}></Icon>
                     <CustomText preset="body2Strong">Set custom AI flashcards</CustomText>
                   </View>
                   <Icon

@@ -61,7 +61,7 @@ export const DeckModel = types
     //customPromptLanguages: types.optional(CustomPromptLanguageModel, {}),
     soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),
     playSoundAutomatically: types.optional(types.boolean, false),
-    addNewCardsPerDay: types.optional(types.boolean, false),
+    addNewCardsPerDay: types.optional(types.boolean, true),
     startMode: types.optional(types.enumeration(startOptions), StartOption.DATE_ADDED),
     flipFlashcard: types.optional(types.boolean, false),
     aiGeneratedResponse: types.optional(AiGenerationResponseModel, {
@@ -165,8 +165,8 @@ export const DeckModel = types
     setPlaySoundLanguage(language: SoundLanguage) {
       self.playSoundLanguage = language
     },
-    setFlipFlashcard(flip: boolean) {
-      self.flipFlashcard = flip
+    toggleFlipFlashcard() {
+      self.flipFlashcard = !self.flipFlashcard
     },
     togglePlaySoundAutomatically() {
       self.playSoundAutomatically = !self.playSoundAutomatically
