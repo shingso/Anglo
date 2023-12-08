@@ -186,6 +186,7 @@ export const iconRegistry = {
   fluent_edit_outline: require("../../assets/icons/fluent_edit_outline.png"),
   fluent_add_cards: require("../../assets/icons/fluent_add_cards.png"),
 
+  fluent_diamond: require("../../assets/icons/fluent_diamond.png"),
   home: require("../../assets/icons/home.png"),
   play_sound: require("../../assets/icons/play_sound.png"),
   notes: require("../../assets/icons/notes.png"),
@@ -203,6 +204,9 @@ export const iconRegistry = {
   difficulty: require("../../assets/icons/difficulty.png"),
   mexico: require("../../assets/icons/mexico.png"),
   sun: require("../../assets/icons/sun.png"),
+  sync: require("../../assets/icons/sync.png"),
+  new: require("../../assets/icons/new.png"),
+  robot: require("../../assets/icons/robot.png"),
 }
 
 const $imageStyle: ImageStyle = {
