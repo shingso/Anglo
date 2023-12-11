@@ -47,7 +47,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
     )
 
     const setDeckPromptType = (type: TranslateLanguage) => {
-      deck.customPrompts.setDefaultPromptType(type)
+      deck?.customPrompts?.setDefaultPromptType(type)
       if (type === TranslateLanguage.DEFINITION) {
         setDeckBackPrompt(defaultBackPrompt)
         setDeckExtraPrompt(defaultExtraPrompt)
@@ -122,7 +122,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
             }}
             ContentComponent={
               <View>
-                <CustomText>Default prompts</CustomText>
+                <CustomText preset="body2Strong">Default prompts</CustomText>
                 <CustomText preset="caption1">
                   See preset prompts for defintions and languages
                 </CustomText>

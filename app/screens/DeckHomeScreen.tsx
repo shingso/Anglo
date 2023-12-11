@@ -330,7 +330,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     marginBottom: spacing.size160,
                   }}
                 >
-                  <Icon icon="new" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                  <Icon icon="flashcards" size={20} style={{ marginRight: spacing.size60 }}></Icon>
                   <CustomText preset="body2Strong">Flashcards</CustomText>
                 </View>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
