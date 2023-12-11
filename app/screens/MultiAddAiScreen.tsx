@@ -86,20 +86,22 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
   const submitInput = () => {
     const wordsLength = words.length
-    if (wordsLength >= wordsLimit) {
-      showErrorToast("Too many words", `Maximum ${wordsLimit} words at a time`)
+    const overallWordsLimit = Math.min(wordsLimit, limitRemaining)
+    if (wordsLength >= overallWordsLimit) {
+      showErrorToast("Too many words", `Maximum ${overallWordsLimit} words at a time`)
       return
     }
     if (input) {
       const parsedInput = input?.split(",")
       const addLength = parsedInput?.length
       let wordsToAdd = parsedInput
-      if (wordsLength + addLength > wordsLimit) {
-        const remaining = wordsLimit - wordsLength
-        wordsToAdd = wordsToAdd.slice(0, remaining)
+      const totalWords = wordsLength + addLength
+      if (totalWords > overallWordsLimit) {
+        const remainingLimit = overallWordsLimit - wordsLength
+        wordsToAdd = wordsToAdd.slice(0, remainingLimit)
         showErrorToast(
           "Too many words",
-          `Maximum ${wordsLimit} words at a time, some words have been removed`,
+          `Maximum ${overallWordsLimit} words at a time, some words have been removed`,
         )
       }
       wordsToAdd.forEach((word) => {
