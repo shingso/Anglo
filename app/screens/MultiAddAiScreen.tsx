@@ -69,11 +69,13 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
   useEffect(() => {
     const getRemainingLimit = async () => {
+      setLoading(true)
       const data = await getRemainingRateLimit()
-      console.log(data, "response from limit")
+
       if (data && data?.remaining) {
         setLimitRemaining(data?.remaining)
       }
+      setLoading(false)
     }
     getRemainingLimit()
   }, [])

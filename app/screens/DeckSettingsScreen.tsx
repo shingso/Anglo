@@ -137,7 +137,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       return (
         <View
           style={{
-            borderBottomColor: "#242424",
+            borderBottomColor: theme.colors.foreground3,
             borderBottomWidth: 0.3,
             marginBottom: spacing.size200,
           }}
@@ -189,6 +189,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                         <CustomText preset="body2Strong">New cards per day</CustomText>
                       </View>
                       <CustomSwitch
+                        testID="newCardsToggle"
                         isOn={addNewCardsPerDay}
                         onToggle={() => {
                           selectedDeck.toggleAddNewCardsPerDay()
@@ -287,7 +288,10 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   ></CustomSwitch>
                 </View>
                 <Divider />
-                <TouchableOpacity onPress={() => soundLanguageModelRef?.current?.present()}>
+                <TouchableOpacity
+                  testID="soundLanguageButton"
+                  onPress={() => soundLanguageModelRef?.current?.present()}
+                >
                   <View
                     style={{
                       marginBottom: spacing.size200,
@@ -371,7 +375,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   ></CustomSwitch>
                 </View>
                 <CustomText preset="caption2" presetColors={"secondary"}>
-                  Front and back for the flashcard will be flipped during the session.
+                  During study session, front and back of the flashcard will be flipped.
                 </CustomText>
               </View>
             }

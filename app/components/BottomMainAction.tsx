@@ -37,6 +37,7 @@ export const BottomMainAction = observer(function BottomMainAction(props: Bottom
 const $container: ViewStyle = {
   justifyContent: "center",
   padding: spacing.size160,
+  paddingHorizontal: spacing.size240,
   width: "100%",
   height: BOTTOM_ACTION_HEIGHT,
   elevation: 6,
@@ -45,6 +46,6 @@ const $container: ViewStyle = {
   left: 0,
   right: 0,
   zIndex: 2,
-  borderTopLeftRadius: borderRadius.corner120,
-  borderTopRightRadius: borderRadius.corner120,
+  //borderTopLeftRadius: borderRadius.corner120,
+  //borderTopRightRadius: borderRadius.corner120,
 }

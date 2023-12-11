@@ -14,10 +14,7 @@ jest.mock("../../models/helpers/useStores", () => ({
 test("subscribe screen works", async () => {
   const navigation = useNavigation()
   const { subscriptionStore } = useStores()
-  console.log(subscriptionStore.hasActiveSubscription(), "current has subscriotion")
   const screen = render(<MockedNavigator component={SubscribeScreen} />)
-  //check if the correct subscribe buttons are on the screen
-  //after a success we need to show the other screen
 
   expect(screen.getByText(HAS_SUBSCRIPTION_TITLE)).toBeTruthy()
 

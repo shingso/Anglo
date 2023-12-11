@@ -152,12 +152,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     title={"Spanish"}
                     caption={"Basic and common Spanish words"}
                   ></DeckItem>
-                  {/*  <DeckItem
-                    source={require("../../assets/icons/china.png")}
-                    onPress={() => importStarterDeckById(starterMandarinDeckId)}
-                    title={"Chinese (Mandarin)"}
-                    caption={"Basic and common Chinese words"}
-                  ></DeckItem> */}
                   <DeckItem
                     source={require("../../assets/icons/germany.png")}
                     onPress={() => importStarterDeckById(starterGermanDeckId)}
@@ -176,13 +170,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     title={"Italian"}
                     caption={"Basic and common Italian words"}
                   ></DeckItem>
-                  {/* 
-                  <DeckItem
-                    source={require("../../assets/icons/japan.png")}
-                    onPress={() => importStarterDeckById(starterJapaneseDeckId)}
-                    title={"Japanese"}
-                    caption={"Basic and common Japanese words"}
-                  ></DeckItem> */}
                 </View>
 
                 <LineWord text={"or"}></LineWord>
@@ -205,8 +192,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                   title={"Get the most out of studying"}
                   caption={"Learn more about spaced memorization"}
                 ></DeckItem>
-                {/*      <CustomText preset="body1">See how you can memorize better</CustomText>
-              <CustomText preset="caption1">Learn new learning techniques</CustomText> */}
               </View>
             </View>
           )}

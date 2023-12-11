@@ -211,13 +211,3 @@ const $success_toast: ViewStyle = {
   borderRadius: borderRadius.corner120,
   backgroundColor: custom_colors.brandBackground2,
 }
-
-const $dot: ViewStyle = {
-  width: 10,
-  height: 10,
-  borderRadius: 16,
-  position: "absolute",
-  top: 12,
-  left: 12,
-  backgroundColor: colors.success,
-}
