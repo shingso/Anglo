@@ -45,7 +45,6 @@ const $container: ViewStyle = {
   bottom: 0,
   left: 0,
   right: 0,
-  zIndex: 2,
   //borderTopLeftRadius: borderRadius.corner120,
   //borderTopRightRadius: borderRadius.corner120,
 }
