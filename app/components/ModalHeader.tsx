@@ -32,9 +32,7 @@ export const ModalHeader = observer(function ModalHeader(props: ModalHeaderProps
           paddingTop: spacing.size80,
         }}
       >
-        <CustomText preset="caption1" presetColors="secondary">
-          {title}
-        </CustomText>
+        <CustomText preset="body2">{title}</CustomText>
       </View>
       <View
         style={{

@@ -16,6 +16,7 @@ import {
   Button,
   BottomMainAction,
   BOTTOM_ACTION_HEIGHT,
+  StatusLabel,
 } from "app/components"
 import { Deck, useStores } from "app/models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -111,110 +112,25 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               height: 240,
             }}
             ContentComponent={
-              /*  <View
-                style={{
-                  paddingHorizontal: spacing.size100,
-                  paddingTop: spacing.size40,
-                  paddingBottom: spacing.size160,
-                  justifyContent: "space-between",
-                }}
-              >
-                {totalTodaysCards !== 0 ? (
-                  <View>
-                    <View
-                      style={{
-                        marginBottom: spacing.size100,
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <CustomText style={{ fontSize: 52 }}>
-                        {selectedDeck?.todaysCards?.length}
-                      </CustomText>
-                
-                      <View
-                        style={{
-                          width: 44,
-                          height: 44,
-                          backgroundColor: custom_palette.primary80,
-                          borderRadius: 50,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          alignSelf: "flex-end",
-                          marginBottom: spacing.size280,
-                        }}
-                      >
-                        <Icon
-                          icon="fluent_play_outline"
-                          color={custom_palette.white}
-                          size={22}
-                        ></Icon>
-                      </View>
-                    </View>
-                    <View style={{ marginBottom: spacing.size160 }}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          marginBottom: spacing.size40,
-                        }}
-                      >
-                        <CustomText
-                          style={{ color: custom_palette.primary60 }}
-                          preset="caption1Strong"
-                        >
-                          Progress: {todaysProgress}%
-                        </CustomText>
-                      </View>
-
-                      <View
-                        style={{
-                          backgroundColor: custom_palette.grey94,
-                          width: "100%",
-                          height: 14,
-                          borderRadius: borderRadius.corner80,
-                        }}
-                      >
-                        <LinearGradient
-                          style={{
-                            borderRadius: borderRadius.corner80,
-                            width: `${todaysProgress}%`,
-                          }}
-                          colors={[custom_palette.primary140, custom_palette.primary100]}
-                          start={{ x: 0, y: 0.1 }}
-                        >
-                          <View
-                            style={{
-                              height: 14,
-                              borderRadius: borderRadius.corner80,
-                            }}
-                          ></View>
-                        </LinearGradient>
-                      </View>
-                    </View>
-                  </View>
-                ) : (
-                  <View>
-                    {selectedDeck?.flashcards?.length > 0 ? (
-                      <CustomText>No cards due today</CustomText>
-                    ) : (
-                      <CustomText>Add some flashcards to get started</CustomText>
-                    )}
-                  </View>
-                )}
-              </View> */
-
               <View>
                 <View
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "space-between",
                     marginBottom: spacing.size160,
                   }}
                 >
-                  <Icon icon="new" size={20} style={{ marginRight: spacing.size60 }}></Icon>
-                  <CustomText preset="body2Strong">Study</CustomText>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon icon="thinking" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                    <CustomText preset="body2Strong">Study</CustomText>
+                  </View>
+                  <StatusLabel text={todaysProgress + "%"}></StatusLabel>
                 </View>
                 {selectedDeck?.passedTodaysCardProgress !== totalTodaysCards ? (
                   <View style={{ flexDirection: "row", gap: 12, justifyContent: "space-between" }}>
@@ -225,7 +141,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                         alignItems: "center",
                       }}
                     >
-                      <View>
+                      <View style={{ minWidth: 70 }}>
                         <CustomText
                           preset="title1"
                           style={{ fontFamily: typography.primary.normal }}
@@ -240,9 +156,9 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       <View
                         style={{
                           height: "80%",
-                          width: 0.7,
+                          width: 0.8,
                           backgroundColor: theme.colors.foreground3,
-                          marginHorizontal: spacing.size400,
+                          marginHorizontal: spacing.size320,
                         }}
                       ></View>
                       <View>
@@ -330,11 +246,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     marginBottom: spacing.size160,
                   }}
                 >
-                  <Icon icon="flashcards" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                  <Icon icon="flashcards" size={20} style={{ marginRight: spacing.size80 }}></Icon>
                   <CustomText preset="body2Strong">Flashcards</CustomText>
                 </View>
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <View>
+                  <View style={{ minWidth: 60 }}>
                     <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
                       {selectedDeck?.flashcards.length}
                     </CustomText>
@@ -347,7 +263,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       height: "80%",
                       width: 0.7,
                       backgroundColor: theme.colors.foreground3,
-                      marginHorizontal: spacing.size400,
+                      marginHorizontal: spacing.size320,
                     }}
                   ></View>
                   <View>

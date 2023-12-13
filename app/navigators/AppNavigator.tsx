@@ -194,6 +194,7 @@ const HomeScreens = () => {
       initialRouteName={AppRoutes.HOME}
       screenOptions={{
         headerShown: false,
+
         //TODO fix on IOS we still need a better solution
         animation: "slide_from_right",
 
@@ -326,22 +327,3 @@ export const AppNavigator = observer(function AppNavigator(props: NavigationProp
     </NavigationContainer>
   )
 })
-
-const $deck_item: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-  paddingVertical: spacing.size120,
-}
-
-const $deck_selected_item: ViewStyle = {
-  //backgroundColor: custom_colors.background6,
-}
-
-const $drawer_action: ViewStyle = {
-  paddingVertical: spacing.size120,
-}
-
-const $action_item_container: ViewStyle = {
-  flexDirection: "row",
-  alignItems: "center",
-}

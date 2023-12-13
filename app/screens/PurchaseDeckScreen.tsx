@@ -15,24 +15,16 @@ import {
   Text,
 } from "app/components"
 import { custom_colors, custom_palette, spacing, typography } from "app/theme"
+import { FlashList } from "@shopify/flash-list"
 
-import { getGlobalDeckById } from "app/utils/globalDecksUtils"
-import { FlatList } from "react-native-gesture-handler"
 import { importPaidGlobalCards } from "app/utils/globalDecksUtils"
 import { useStores } from "../models/helpers/useStores"
-import { supabase } from "app/services/supabase/supabase"
-import {
-  PlatformPay,
-  PlatformPayButton,
-  confirmPlatformPayPayment,
-} from "@stripe/stripe-react-native"
+
 import {
   getPaidFlashcardsCountByDeckId,
   getPaidFlashcardsPreview,
-  processProductPayment,
 } from "app/utils/subscriptionUtils"
-import { Deck, DeckSnapshotIn, Flashcard, FlashcardSnapshotIn } from "app/models"
-import { updateDeck } from "app/utils/deckUtils"
+
 import { useNavigation } from "@react-navigation/native"
 import { AppRoutes } from "app/utils/consts"
 
@@ -106,9 +98,10 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
               <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
                 Heres a look at some of the words you'll get
               </CustomText>
-              <FlatList
+              <FlashList
                 showsVerticalScrollIndicator={false}
                 data={paidCardsPreview}
+                estimatedItemSize={47}
                 contentContainerStyle={{ paddingBottom: BOTTOM_ACTION_HEIGHT }}
                 keyExtractor={(item) => item.id}
                 ListFooterComponent={
@@ -119,13 +112,9 @@ export const PurchaseDeckScreen: FC<PurchaseDeckScreenProps> = observer(
                   </View>
                 }
                 renderItem={({ item }) => {
-                  return (
-                    <View key={item.id}>
-                      <FlashcardListItem flashcard={item}></FlashcardListItem>
-                    </View>
-                  )
+                  return <FlashcardListItem flashcard={item}></FlashcardListItem>
                 }}
-              ></FlatList>
+              ></FlashList>
             </View>
           )}
         </View>

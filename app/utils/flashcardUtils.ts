@@ -166,7 +166,7 @@ export const upsertMultipleFlashcards = async (flashcards: any[]) => {
       .from("flashcards")
       .upsert([...mappedFlashcards])
       .select()
-    console.log(data, error, "upsert")
+
     return data.map((card) => mapReponseToFlashcard(card))
   } catch (error) {
     return null

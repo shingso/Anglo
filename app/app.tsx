@@ -38,6 +38,9 @@ import { View, ViewStyle } from "react-native"
 import { borderRadius } from "./theme/borderRadius"
 import { CustomText, Icon } from "./components"
 import { StripeProvider } from "@stripe/stripe-react-native"
+import * as NavigationBar from "expo-navigation-bar"
+
+NavigationBar.setPositionAsync("absolute")
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron

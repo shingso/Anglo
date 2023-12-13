@@ -22,9 +22,7 @@ export const AiGenerationResponseModel = types
     },
     get hasResponse(): boolean {
       return (
-        (self?.errors && self?.errors?.length > 0) ||
-        (this.uncompleted && this.uncompleted?.length > 0) ||
-        (self?.success && self?.success?.length > 0)
+        (self?.errors && self?.errors?.length > 0) || (self?.success && self?.success?.length > 0)
       )
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

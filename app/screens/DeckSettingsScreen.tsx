@@ -17,6 +17,7 @@ import {
   Option,
   TextField,
   EditableText,
+  Toggle,
 } from "../components"
 import { Deck, DeckSnapshotIn, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -217,7 +218,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       </CustomText>
                       <Icon
                         icon="caret_right"
-                        color="#242424"
+                        color={theme.colors.foreground2}
                         style={{ marginLeft: spacing.size80 }}
                         size={16}
                       ></Icon>
@@ -236,7 +237,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       <CustomText preset="body2">{startOptionLabels[startMode]}</CustomText>
                       <Icon
                         icon="caret_right"
-                        color="#242424"
+                        color={theme.colors.foreground2}
                         style={{ marginLeft: spacing.size80 }}
                         size={16}
                       ></Icon>
@@ -278,14 +279,16 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   }}
                 >
                   <CustomText preset="body2">Play sound automatically</CustomText>
-                  <CustomSwitch
-                    testID="playSoundAutoToggle"
-                    isOn={playSoundAuto}
-                    onToggle={() => {
+                  <Toggle
+                    variant="switch"
+                    value={playSoundAuto}
+                    onValueChange={() => {
                       selectedDeck.togglePlaySoundAutomatically()
                       setPlaySoundAuto(!playSoundAuto)
                     }}
-                  ></CustomSwitch>
+                    inputOuterStyle={{ backgroundColor: theme.colors.background6 }}
+                    inputInnerStyle={{ backgroundColor: theme.colors.brandBackground2 }}
+                  />
                 </View>
                 <Divider />
                 <TouchableOpacity
@@ -306,7 +309,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     </View>
                     <Icon
                       icon="caret_right"
-                      color="#242424"
+                      color={theme.colors.foreground2}
                       style={{ marginLeft: spacing.size80 }}
                       size={16}
                     ></Icon>
@@ -328,7 +331,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     </View>
                     <Icon
                       icon="caret_right"
-                      color="#242424"
+                      color={theme.colors.foreground2}
                       style={{ marginLeft: spacing.size80 }}
                       size={16}
                     ></Icon>
@@ -414,7 +417,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                   </View>
                   <Icon
                     icon="caret_right"
-                    color={custom_palette.grey50}
+                    color={theme.colors.foreground2}
                     style={{ marginLeft: spacing.size80 }}
                     size={16}
                   ></Icon>
@@ -471,46 +474,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               </View>
             }
           ></Card>
-
-          {/* {!selectedDeck.paid_imported && (
-            <Card
-              style={{
-                paddingHorizontal: spacing.size160,
-                paddingVertical: spacing.size160,
-                minHeight: 0,
-                elevation: 0,
-                marginTop: spacing.size80,
-                marginBottom: spacing.size80,
-                borderRadius: 16,
-              }}
-              ContentComponent={
-                <View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <View>
-                      <CustomText preset="body1" presetColors={"secondary"}>
-                        Import premium cards
-                      </CustomText>
-                      <CustomText preset="caption2" presetColors={"secondary"}>
-                        There are cards you haven't imported yet
-                      </CustomText>
-                    </View>
-                    <Icon
-                      icon="caret_right"
-                      color="#242424"
-                      style={{ marginLeft: spacing.size80 }}
-                      size={16}
-                    ></Icon>
-                  </View>
-                </View>
-              }
-            ></Card>
-          )} */}
         </View>
         <BottomSheet ref={cardsPerDayModelRef} customSnap={["85"]}>
           <ModalHeader title={"Number of cards to be automatically added each day"}></ModalHeader>

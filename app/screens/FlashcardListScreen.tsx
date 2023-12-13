@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, TouchableOpacity, View, ViewStyle } from "react-native"
+import { TouchableOpacity, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import {
@@ -15,6 +15,7 @@ import {
   StatusLabel,
   TextField,
 } from "app/components"
+import { FlashList, FlashListProps } from "@shopify/flash-list"
 import { Deck, Flashcard, FlashcardModel, QueryFunctions, useStores } from "app/models"
 import { spacing, custom_colors, custom_palette } from "app/theme"
 import { getSnapshot, IStateTreeNode } from "mobx-state-tree"
@@ -208,26 +209,24 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
             </View>
           ) : null}
           {!!flashcards && flashcards?.length !== 0 ? (
-            <FlatList
-              keyExtractor={(item) => item.id}
-              contentContainerStyle={{ paddingBottom: spacing.size200 }}
-              showsVerticalScrollIndicator={false}
+            <FlashList
+              renderItem={({ item }) => {
+                return (
+                  <FlashcardListItem
+                    onPress={() => selectFlashcard(item)}
+                    RightComponent={
+                      item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
+                    }
+                    flashcard={item}
+                  />
+                )
+              }}
+              estimatedItemSize={40}
               data={flashcards
                 .slice()
                 .sort(sortingFunction(sortOption))
                 .filter((card) => card?.front && card.front?.toLowerCase().includes(searchTerm))}
-              renderItem={({ item, index }) => (
-                <FlashcardListItem
-                  key={item.id}
-                  flashcard={item}
-                  RightComponent={
-                    item?.next_shown ? <StatusLabel text={"Active"}></StatusLabel> : null
-                  }
-                  // RightComponent={<CustomText>{item.easeFactor.toString()}</CustomText>}
-                  onPress={() => selectFlashcard(item)}
-                ></FlashcardListItem>
-              )}
-            ></FlatList>
+            />
           ) : (
             <View
               style={{

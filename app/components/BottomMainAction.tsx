@@ -16,7 +16,7 @@ export interface BottomMainActionProps {
   onPress?: Function
   disabled?: boolean
 }
-export const BOTTOM_ACTION_HEIGHT = 70
+export const BOTTOM_ACTION_HEIGHT = 88
 export const BottomMainAction = observer(function BottomMainAction(props: BottomMainActionProps) {
   const { style, onPress, label, disabled } = props
   const $styles = [$container, style]
@@ -35,7 +35,6 @@ export const BottomMainAction = observer(function BottomMainAction(props: Bottom
 })
 
 const $container: ViewStyle = {
-  justifyContent: "center",
   padding: spacing.size160,
   paddingHorizontal: spacing.size240,
   width: "100%",
@@ -45,6 +44,4 @@ const $container: ViewStyle = {
   bottom: 0,
   left: 0,
   right: 0,
-  //borderTopLeftRadius: borderRadius.corner120,
-  //borderTopRightRadius: borderRadius.corner120,
 }

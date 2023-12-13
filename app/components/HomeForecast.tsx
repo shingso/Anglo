@@ -9,7 +9,7 @@ import { useStores } from "../models/helpers/useStores"
 import { Icon } from "./Icon"
 import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { addDays, format } from "date-fns"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { Deck, Flashcard } from "app/models"
 import { useEffect, useState } from "react"
@@ -28,6 +28,7 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
   const dateFormat = "yyyy-MM-dd"
   const [weeklyForecast, setWeeklyForecast] = useState({})
+  const theme = useTheme()
 
   useEffect(() => {
     const forecaset = getWeeklyForecast()
@@ -111,8 +112,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 <CustomText preset="caption1Strong">{"Today"}</CustomText>
               </View>
               <CustomText
-                preset="title3"
-                style={{ fontFamily: typography.primary.light, marginTop: spacing.size40 }}
+                preset="body1Strong"
+                style={{ fontFamily: typography.primary.medium, marginTop: spacing.size60 }}
               >
                 {deckStore.decks
                   .reduce((prev, deck) => {
@@ -139,8 +140,8 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     <CustomText preset="caption1Strong">{format(new Date(date), "do")}</CustomText>
                   </View>
                   <CustomText
-                    preset="title3"
-                    style={{ fontFamily: typography.primary.light, marginTop: spacing.size40 }}
+                    preset="body1Strong"
+                    style={{ fontFamily: typography.primary.light, marginTop: spacing.size60 }}
                   >
                     {weeklyForecast?.[format(new Date(date), dateFormat)]?.length?.toString() ||
                       "-"}
@@ -161,86 +162,46 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                 elevation: 0,
                 marginBottom: spacing.size100,
                 paddingHorizontal: spacing.size200,
-                paddingVertical: spacing.size160,
-                minHeight: 150,
+                paddingVertical: spacing.size200,
               }}
               ContentComponent={
-                <View
-                  style={{
-                    justifyContent: "space-between",
-                    flex: 1,
-                  }}
-                >
+                <View>
                   <View
                     style={{
                       flexDirection: "row",
-                      marginBottom: spacing.size240,
+                      marginBottom: spacing.size160,
                       justifyContent: "space-between",
                     }}
                   >
-                    <CustomText preset="body1" style={{ fontFamily: typography.primary.medium }}>
-                      {deck?.title}
-                    </CustomText>
-                    {!!deck?.picture_url && (
-                      <Image
-                        style={{ height: 44, width: 44 }}
-                        source={{
-                          uri: deck.picture_url,
-                        }}
-                      />
-                    )}
+                    <CustomText preset="body2Strong">{deck?.title}</CustomText>
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      gap: spacing.size120,
-                      alignItems: "center",
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        // borderWidth: 1,
-                        //  paddingHorizontal: 12,
-                        borderRadius: 12,
-                        paddingVertical: 4,
-                        borderColor: custom_palette.grey50,
-                      }}
-                    >
-                      <Icon
-                        icon="fluent_play_outline"
-                        size={20}
-                        style={{ marginRight: spacing.size80 }}
-                      ></Icon>
-                      <CustomText preset="body1">
+
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View style={{ minWidth: 60 }}>
+                      <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
                         {deck?.todaysCards?.length?.toString()}
+                      </CustomText>
+                      <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
+                        due
                       </CustomText>
                     </View>
                     <View
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        //   borderWidth: 1,
-                        paddingHorizontal: 12,
-                        borderRadius: 12,
-                        paddingVertical: 4,
-                        borderColor: custom_palette.grey50,
+                        height: "80%",
+                        width: 0.7,
+                        backgroundColor: theme.colors.foreground3,
+                        marginHorizontal: spacing.size320,
                       }}
-                    >
-                      <Icon
-                        icon="flashcards"
-                        size={20}
-                        style={{ marginRight: spacing.size80 }}
-                      ></Icon>
-                      <CustomText preset="body1">{deck?.flashcards?.length?.toString()}</CustomText>
-                    </View>
+                    ></View>
+                    <View>
+                      <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
+                        {deck?.flashcards?.length?.toString()}
+                      </CustomText>
 
-                    {/*   <CustomText presetColors={"secondary"} preset="body2">
-                      {deck?.flashcards?.length?.toString() + " cards"}
-                    </CustomText> */}
+                      <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
+                        cards
+                      </CustomText>
+                    </View>
                   </View>
                 </View>
               }

@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 
 import {
@@ -24,6 +24,7 @@ import { getGlobalDeckById, importFreeGlobalDeckById } from "app/utils/globalDec
 import { showErrorToast } from "app/utils/errorUtils"
 import BottomSheet from "@gorhom/bottom-sheet"
 import { borderRadius } from "app/theme/borderRadius"
+import { FlashList, FlashListProps } from "@shopify/flash-list"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -117,18 +118,13 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
             {flashcards?.length} cards
           </CustomText>
-          <FlatList
+          <FlashList
             contentContainerStyle={{ paddingBottom: 120 }}
-            keyExtractor={(item) => item.id}
+            estimatedItemSize={44}
             showsVerticalScrollIndicator={false}
             data={flashcards}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                key={item.id}
-                children={<FlashcardListItem flashcard={item}></FlashcardListItem>}
-              ></TouchableOpacity>
-            )}
-          ></FlatList>
+            renderItem={({ item }) => <FlashcardListItem flashcard={item}></FlashcardListItem>}
+          ></FlashList>
         </View>
         <CustomModal
           header={"Deck limit reached"}

@@ -1,8 +1,9 @@
 import React, { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
+import { FlashList, FlashListProps } from "@shopify/flash-list"
 import {
   BottomSheet,
   Button,
@@ -118,9 +119,9 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
         <CustomText style={{ marginBottom: spacing.size80 }}>
           Selected flashcards: {flashcards.length - unselectedFlashcards.length}
         </CustomText>
-        <FlatList
-          keyExtractor={(item) => item.id}
+        <FlashList
           showsVerticalScrollIndicator={false}
+          estimatedItemSize={47}
           data={getSnapshot(flashcards as IStateTreeNode)
             .filter((card) => card?.front && card.front?.toLowerCase().includes(searchTerm))
             .sort((a, b) =>
@@ -130,7 +131,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
                 ? 1
                 : -1,
             )}
-          renderItem={({ item, index }) => (
+          renderItem={({ item }) => (
             <FlashcardListItem
               onPress={() =>
                 !unselectedFlashcards.includes(item.id)
@@ -148,14 +149,13 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
                   <Icon size={20} color={custom_palette.grey50} icon="circle"></Icon>
                 )
               }
-              key={item.id}
               flashcard={item}
             ></FlashcardListItem>
           )}
-        ></FlatList>
+        ></FlashList>
       </View>
-
-      <BottomSheet style={{ zIndex: 10 }} ref={quickSelectModalRef} customSnap={["85"]}>
+      <BottomMainAction label="Start" onPress={() => goToFreeStudySession()}></BottomMainAction>
+      <BottomSheet ref={quickSelectModalRef} customSnap={["85"]}>
         <ModalHeader title={"Select cards for free study based on"}></ModalHeader>
         <ScrollView
           contentContainerStyle={{ paddingBottom: 240 }}
@@ -167,7 +167,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
           <Option onPress={() => setDifficultCards()} title={"Difficult"}></Option>
         </ScrollView>
       </BottomSheet>
-      <BottomMainAction label="Start" onPress={() => goToFreeStudySession()}></BottomMainAction>
     </Screen>
   )
 })

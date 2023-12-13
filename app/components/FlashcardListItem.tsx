@@ -76,9 +76,3 @@ export const FlashcardListItem = observer(function FlashcardListItem(
 const $container: ViewStyle = {
   justifyContent: "center",
 }
-
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
-}

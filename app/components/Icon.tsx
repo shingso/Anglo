@@ -207,6 +207,8 @@ export const iconRegistry = {
   sync: require("../../assets/icons/sync.png"),
   new: require("../../assets/icons/new.png"),
   robot: require("../../assets/icons/robot.png"),
+  thinking: require("../../assets/icons/thinking.png"),
+  brain: require("../../assets/icons/brain.png"),
 }
 
 const $imageStyle: ImageStyle = {
