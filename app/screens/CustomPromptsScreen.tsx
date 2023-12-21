@@ -11,6 +11,7 @@ import {
   Screen,
   TextField,
   Option,
+  EditableText,
 } from "app/components"
 import { spacing } from "app/theme"
 import { useStores } from "app/models"
@@ -25,6 +26,7 @@ import {
   defaultLanguageExtraPrompt,
   defaultLanguageSubheaderPrompt,
   defaultLanguageExtraArrayPrompt,
+  aiLanguageOptions,
 } from "app/utils/consts"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { capitalizeFirstLetter } from "app/utils/helperUtls"
@@ -45,6 +47,8 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
     const [defaultPromptType, setDefaultPromptType] = useState(
       deck?.customPrompts?.defaultPromptType,
     )
+    const aiLanguageModelRef = useRef<BottomSheetModal>()
+    const [aiLanguage, setAILanguage] = useState(deck?.translateLanguage)
 
     const setDeckPromptType = (type: TranslateLanguage) => {
       deck?.customPrompts?.setDefaultPromptType(type)
@@ -109,6 +113,59 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
           >
             Select default prompts or set your own custom prompts for flashcard AI generation.
           </CustomText>
+          {/* 
+          <CustomText
+            style={{ marginBottom: spacing.size120 }}
+            preset="caption1"
+            presetColors="secondary"
+          >
+            For best results, be precise as possible with instructions and how you want it
+            formatted.
+          </CustomText> */}
+          <View style={{ gap: spacing.size160 }}>
+            <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
+              <CustomText>Front</CustomText>
+            </TouchableOpacity>
+            <CustomText>Back</CustomText>
+            <EditableText
+              preset="body2"
+              testID="back"
+              style={{ marginBottom: spacing.size120 }}
+              onSubmit={(value) => deck.customPrompts.setBackPrompt(value)}
+              multiline={true}
+              initialValue={deck?.customPrompts?.backPrompt || defaultBackPrompt}
+            ></EditableText>
+
+            <CustomText>Subheader</CustomText>
+            <EditableText
+              preset="body2"
+              testID="back"
+              style={{ marginBottom: spacing.size120 }}
+              onSubmit={(value) => deck.customPrompts.setSubheaderPrompt(value)}
+              multiline={true}
+              initialValue={deck?.customPrompts?.subheaderPrompt || defaultSubheaderPrompt}
+            ></EditableText>
+
+            <CustomText>Extra</CustomText>
+            <EditableText
+              preset="body2"
+              testID="back"
+              style={{ marginBottom: spacing.size120 }}
+              onSubmit={(value) => deck.customPrompts.setExtraPrompt(value)}
+              multiline={true}
+              initialValue={deck?.customPrompts?.extraPrompt || defaultExtraPrompt}
+            ></EditableText>
+
+            <CustomText>Extra labels</CustomText>
+            <EditableText
+              preset="body2"
+              testID="back"
+              style={{ marginBottom: spacing.size120 }}
+              onSubmit={(value) => deck.customPrompts.setExtraArrayPrompt(value)}
+              multiline={true}
+              initialValue={deck?.customPrompts?.extraArrayPrompt || defaultExtraArrayPrompt}
+            ></EditableText>
+          </View>
           <Card
             onPress={() => customPromptModelRef?.current?.present()}
             style={{
@@ -116,7 +173,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
               paddingVertical: spacing.size160,
               minHeight: 0,
               elevation: 0,
-              marginTop: spacing.size80,
+              marginTop: spacing.size160,
               marginBottom: spacing.size80,
               borderRadius: borderRadius.corner120,
             }}
@@ -129,57 +186,8 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
               </View>
             }
           ></Card>
-          <CustomText
-            style={{ marginBottom: spacing.size120 }}
-            preset="caption1"
-            presetColors="secondary"
-          >
-            For best results, be precise as possible with instructions and how you want it
-            formatted.
-          </CustomText>
-          <View style={{ gap: spacing.size160 }}>
-            <TextField
-              multiline={true}
-              blurOnSubmit={true}
-              label="Back prompt"
-              testID="back_input"
-              value={backPrompt}
-              placeholder={defaultBackPrompt}
-              onChangeText={setBackPrompt}
-              onSubmitEditing={() => submitBackPrompt()}
-            ></TextField>
-            <TextField
-              multiline={true}
-              blurOnSubmit={true}
-              label="Subheader prompt"
-              testID="subheader_input"
-              value={subheaderPrompt}
-              onChangeText={setSubheaderPrompt}
-              placeholder={defaultSubheaderPrompt}
-              onSubmitEditing={() => submitSubheaderPrompt()}
-            ></TextField>
-            <TextField
-              multiline={true}
-              blurOnSubmit={true}
-              label="Extra prompt"
-              testID="extra_input"
-              value={extraPrompt}
-              onChangeText={setExtraPrompt}
-              placeholder={defaultExtraPrompt}
-              onSubmitEditing={() => submitExtraPrompt()}
-            ></TextField>
-            <TextField
-              multiline={true}
-              blurOnSubmit={true}
-              label="Extra label prompt"
-              testID="extra_array_input"
-              value={extraArrayPrompt}
-              onChangeText={setExtraArrayPrompt}
-              placeholder={defaultExtraArrayPrompt}
-              onSubmitEditing={() => submitExtraArrayPrompt()}
-            ></TextField>
-          </View>
         </View>
+
         <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
           <ModalHeader title={"Set custom prompts for AI generation fields"}></ModalHeader>
           {defaultPromptOptions.map((option) => {
@@ -190,6 +198,25 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
                 onPress={() => setDeckPromptType(option)}
                 option={option}
                 currentSelected={defaultPromptType}
+              ></Option>
+            )
+          })}
+        </BottomSheet>
+        <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
+          <ModalHeader title={"The passed in word is in language"}></ModalHeader>
+          {aiLanguageOptions.map((option) => {
+            return (
+              <Option
+                key={option}
+                title={capitalizeFirstLetter(option)}
+                onPress={(language) => {
+                  {
+                    setAILanguage(language)
+                    deck.setTranslateLanguage(language)
+                  }
+                }}
+                option={option}
+                currentSelected={aiLanguage}
               ></Option>
             )
           })}
