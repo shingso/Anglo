@@ -13,6 +13,8 @@ import { useNavigation, useTheme } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { Deck, Flashcard } from "app/models"
 import { useEffect, useState } from "react"
+import { showSuccessToast } from "app/utils/errorUtils"
+import { Divider } from "./Divider"
 
 export interface HomeForecastProps {
   /**
@@ -89,6 +91,16 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
   const selectDeck = (deck: Deck) => {
     deckStore.selectDeck(deck)
     navigation.navigate(AppRoutes.DECK_HOME)
+  }
+
+  const startSession = (deck: Deck) => {
+    if (deck?.todaysCards && deck?.todaysCards.length > 0) {
+      deckStore.selectDeck(deck)
+      deck.setSessionCards()
+      navigation.navigate(AppRoutes.SESSION)
+    } else {
+      showSuccessToast("There are no cards due for this deck")
+    }
   }
 
   return (
@@ -173,10 +185,16 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                       justifyContent: "space-between",
                     }}
                   >
-                    <CustomText preset="body2Strong">{deck?.title}</CustomText>
+                    <CustomText preset="body1Strong">{deck?.title}</CustomText>
                   </View>
 
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: spacing.size200,
+                    }}
+                  >
                     <View style={{ minWidth: 60 }}>
                       <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
                         {deck?.todaysCards?.length?.toString()}
@@ -197,21 +215,34 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                       <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
                         {deck?.flashcards?.length?.toString()}
                       </CustomText>
-
                       <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
                         cards
                       </CustomText>
                     </View>
                   </View>
+
+                  <TouchableOpacity onPress={() => startSession(deck)}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+
+                        alignItems: "center",
+                      }}
+                    >
+                      <Icon
+                        icon="thinking"
+                        size={20}
+                        style={{ marginRight: spacing.size80 }}
+                      ></Icon>
+                      <CustomText preset="body2">{"Study"}</CustomText>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               }
             ></Card>
           )
         })}
       </View>
-      {/*    <Button preset="custom_default" onPress={() => deckStore.getDecks()}>
-        Refresh decks
-      </Button> */}
     </View>
   )
 })
