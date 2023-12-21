@@ -85,7 +85,7 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
           onSubmitEditing={() => submitBackPrompt()}
         ></TextField>
         <TextField
-          label="Subheader prompt"
+          label="Subheader"
           testID="subheader_input"
           value={subheaderPrompt}
           onChangeText={setSubheaderPrompt}
@@ -93,7 +93,7 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
           onSubmitEditing={() => submitSubheaderPrompt()}
         ></TextField>
         <TextField
-          label="Extra prompt"
+          label="Extra"
           testID="extra_input"
           value={extraPrompt}
           onChangeText={setExtraPrompt}
@@ -101,7 +101,7 @@ export const PromptSettings = observer(function PromptSettings(props: PromptSett
           onSubmitEditing={() => submitExtraPrompt()}
         ></TextField>
         <TextField
-          label="Extra label prompt"
+          label="Extra label"
           testID="extra_array_input"
           value={extraArrayPrompt}
           onChangeText={setExtraArrayPrompt}

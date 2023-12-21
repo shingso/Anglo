@@ -19,13 +19,15 @@ export const DeckStoreModel = types
       const deckModels: Deck[] = deckSnapshot.map((c) => DeckModel.create(c))
       self.decks.replace(deckModels)
     },
-    addDeck: (deck: any) => {
+    addDeck: (deck: any): Deck => {
       //TODO do a check if the deck already exists if it does maybe we should replace
       if (self.decks.filter((decks) => decks.id === deck.id).length > 0) {
         console.log("You are trying to add a deck that already exists in store")
-        return
+        return null
       }
-      self.decks.push(DeckModel.create(deck))
+      const deckModel = DeckModel.create(deck)
+      self.decks.push(deckModel)
+      return deckModel
     },
   }))
   .actions((self) => ({
@@ -44,10 +46,10 @@ export const DeckStoreModel = types
     addDeckFromRemote: flow(function* (deckId: string) {
       const result: DeckSnapshotIn[] = yield getDeck(deckId)
       if (result) {
-        self.addDeck(result)
+        return self.addDeck(result)
         //we still need to start the cards if the arent started
       }
-      return result
+      return null
     }),
     deleteDeck: (deck: Deck) => {
       destroy(deck)

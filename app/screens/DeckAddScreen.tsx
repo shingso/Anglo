@@ -25,6 +25,8 @@ import { showErrorToast } from "app/utils/errorUtils"
 import BottomSheet from "@gorhom/bottom-sheet"
 import { borderRadius } from "app/theme/borderRadius"
 import { FlashList, FlashListProps } from "@shopify/flash-list"
+import { addCardsToShow, updateDeckLastAdded } from "app/utils/deckUtils"
+import { isSameDay } from "date-fns"
 
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
@@ -41,7 +43,7 @@ import { FlashList, FlashListProps } from "@shopify/flash-list"
 export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">> = observer(
   function DeckAddScreen({ route }) {
     const { deck } = route.params
-    const { deckStore, subscriptionStore } = useStores()
+    const { deckStore, subscriptionStore, settingsStore } = useStores()
     const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
     const [selectedDeck, setSelectedDeck] = useState(deck)
     const flashcards = selectedDeck?.private_global_flashcards || []
@@ -71,6 +73,14 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
       }
     }, [])
 
+    const startNewDailyCardsForDeck = async (deck: Deck) => {
+      if (deck?.last_added && isSameDay(deck.last_added, new Date())) {
+        return
+      }
+      addCardsToShow(deck, deck.new_per_day, settingsStore?.isOffline)
+      const response = await updateDeckLastAdded(deck)
+    }
+
     const importDeck = async () => {
       if (!canMakeDeckPastFreeLimit()) {
         setDeckLimitModalVisible(true)
@@ -79,7 +89,13 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
       setLoading(true)
       const newDeck = await importFreeGlobalDeckById(selectedDeck.id, selectedDeck.title, newPerDay)
       if (newDeck && newDeck?.id) {
-        deckStore.addDeckFromRemote(newDeck?.id)
+        const deck = await deckStore.addDeckFromRemote(newDeck?.id)
+        if (!deck) {
+          navigation.navigate(AppRoutes.DECKS)
+          showErrorToast("Error adding deck from remote, sign in and out to refresh decks")
+          return
+        }
+        startNewDailyCardsForDeck(deck)
         navigation.navigate(AppRoutes.DECKS)
         return
       }

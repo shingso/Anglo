@@ -38,10 +38,7 @@ export const CustomTag = observer(function CustomTag(props: CustomTagProps) {
         {onPress && (
           <View
             style={{
-              //backgroundColor: custom_palette.grey84,
               marginLeft: spacing.size80,
-              //borderRadius: 20,
-              // padding: 2,
             }}
           >
             <Icon icon="x" color={custom_palette.grey50} size={15}></Icon>

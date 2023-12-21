@@ -149,13 +149,13 @@ export const getCardsForDeckOption = (deck: Deck, amount: number): Flashcard[] =
       return filteredCards
         .sort((a, b) => {
           if (!a?.created_at) {
-            return 1
-          }
-          if (!b?.created_at) {
             return -1
           }
+          if (!b?.created_at) {
+            return 1
+          }
 
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         })
         .slice(0, amount)
     default:

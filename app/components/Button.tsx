@@ -211,12 +211,12 @@ const $clear: ViewStyle = {
 }
 
 const $circle_icon: ViewStyle = {
-  backgroundColor: colors.palette.primary300,
+  backgroundColor: custom_palette.white,
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
-  width: 36,
-  height: 36,
+  width: 32,
+  height: 32,
   borderRadius: 60,
 }
 
@@ -254,7 +254,10 @@ const $viewPresets = {
 
   clear: [$baseViewStyle, $clear, { backgroundColor: colors.transparent }] as StyleProp<ViewStyle>,
 
-  circle_icon: [$circle_icon] as StyleProp<ViewStyle>,
+  circle_icon: [
+    $circle_icon,
+    { borderColor: custom_palette.grey50, borderWidth: 0.7 },
+  ] as StyleProp<ViewStyle>,
 
   custom_default: [
     $customBase,
@@ -262,6 +265,11 @@ const $viewPresets = {
   ] as StyleProp<ViewStyle>,
 
   custom_clear: [$customBase, { backgroundColor: colors.transparent }] as StyleProp<ViewStyle>,
+
+  custom_clear_small: [
+    $customBaseSmall,
+    { backgroundColor: colors.transparent },
+  ] as StyleProp<ViewStyle>,
 
   custom_default_small: [
     $customBaseSmall,
@@ -311,6 +319,7 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
     },
   ],
   circle_icon: [$baseTextStyle],
+  custom_clear_small: [$customBaseText, $customSmallText, { color: custom_colors.background1 }],
   custom_default: [$customBaseText, { color: custom_colors.background1 }],
   custom_default_small: [$customBaseText, $customSmallText, { color: custom_colors.background1 }],
   custom_outline_small: [
@@ -331,11 +340,12 @@ const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
   custom_filled: { backgroundColor: custom_colors.brandBackground1Pressed },
   custom_outline: { opacity: 0.4 },
   clear: { backgroundColor: "transparent" },
-  circle_icon: { backgroundColor: colors.palette.primary400 },
+  circle_icon: { opacity: 0.4 },
   custom_default: { backgroundColor: custom_colors.brandBackground1Pressed },
   custom_default_small: { backgroundColor: custom_colors.brandBackground1Pressed },
   custom_outline_small: { backgroundColor: colors.palette.neutral300 },
   custom_clear: { backgroundColor: "transparent" },
+  custom_clear_small: { backgroundColor: "transparent" },
   custom_secondary_small: { backgroundColor: custom_palette.grey82 },
 }
 
@@ -352,5 +362,6 @@ const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   custom_default_small: { opacity: 1 },
   custom_outline_small: { opacity: 1 },
   custom_clear: { opacity: 0.5 },
+  custom_clear_small: { opacity: 0.5 },
   custom_secondary_small: { opacity: 0.8 },
 }

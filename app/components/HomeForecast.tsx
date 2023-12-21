@@ -186,57 +186,89 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     }}
                   >
                     <CustomText preset="body1Strong">{deck?.title}</CustomText>
+                    <Icon icon="more" size={18}></Icon>
                   </View>
 
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginBottom: spacing.size200,
-                    }}
-                  >
-                    <View style={{ minWidth: 60 }}>
-                      <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
-                        {deck?.todaysCards?.length?.toString()}
-                      </CustomText>
-                      <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
-                        due
-                      </CustomText>
-                    </View>
-                    <View
-                      style={{
-                        height: "80%",
-                        width: 0.7,
-                        backgroundColor: theme.colors.foreground3,
-                        marginHorizontal: spacing.size320,
-                      }}
-                    ></View>
+                  {deck?.flashcards?.length <= 0 && (
                     <View>
-                      <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
-                        {deck?.flashcards?.length?.toString()}
-                      </CustomText>
-                      <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
-                        cards
-                      </CustomText>
-                    </View>
-                  </View>
+                      <TouchableOpacity onPress={() => selectDeck(deck)}>
+                        <View
+                          style={{
+                            flexDirection: "row",
 
-                  <TouchableOpacity onPress={() => startSession(deck)}>
+                            alignItems: "center",
+                          }}
+                        >
+                          <Icon
+                            icon="fluent_play_outline"
+                            size={20}
+                            style={{ marginRight: spacing.size80 }}
+                          ></Icon>
+                          <CustomText preset="body2">{"Manage your new deck"}</CustomText>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+
+                  {deck?.flashcards?.length > 0 && (
                     <View
                       style={{
                         flexDirection: "row",
-
                         alignItems: "center",
+                        marginBottom: spacing.size200,
                       }}
                     >
-                      <Icon
-                        icon="thinking"
-                        size={20}
-                        style={{ marginRight: spacing.size80 }}
-                      ></Icon>
-                      <CustomText preset="body2">{"Study"}</CustomText>
+                      <View style={{ minWidth: 60 }}>
+                        <CustomText
+                          preset="title1"
+                          style={{ fontFamily: typography.primary.normal }}
+                        >
+                          {deck?.todaysCards?.length?.toString()}
+                        </CustomText>
+                        <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
+                          due
+                        </CustomText>
+                      </View>
+                      <View
+                        style={{
+                          height: "80%",
+                          width: 0.7,
+                          backgroundColor: theme.colors.foreground3,
+                          marginHorizontal: spacing.size320,
+                        }}
+                      ></View>
+                      <View>
+                        <CustomText
+                          preset="title1"
+                          style={{ fontFamily: typography.primary.normal }}
+                        >
+                          {deck?.flashcards?.length?.toString()}
+                        </CustomText>
+                        <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
+                          cards
+                        </CustomText>
+                      </View>
                     </View>
-                  </TouchableOpacity>
+                  )}
+
+                  {deck?.flashcards?.length > 0 && (
+                    <TouchableOpacity onPress={() => startSession(deck)}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+
+                          alignItems: "center",
+                        }}
+                      >
+                        <Icon
+                          icon="fluent_play_outline"
+                          size={20}
+                          style={{ marginRight: spacing.size80 }}
+                        ></Icon>
+                        <CustomText preset="body2">{"Study"}</CustomText>
+                      </View>
+                    </TouchableOpacity>
+                  )}
                 </View>
               }
             ></Card>
@@ -249,10 +281,4 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
 
 const $container: ViewStyle = {
   paddingHorizontal: spacing.size200,
-}
-
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
 }

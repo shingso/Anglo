@@ -209,6 +209,8 @@ export const iconRegistry = {
   robot: require("../../assets/icons/robot.png"),
   thinking: require("../../assets/icons/thinking.png"),
   brain: require("../../assets/icons/brain.png"),
+  free_study: require("../../assets/icons/free_study.png"),
+  arrow_up: require("../../assets/icons/arrow_up.png"),
 }
 
 const $imageStyle: ImageStyle = {

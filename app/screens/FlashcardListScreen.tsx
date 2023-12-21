@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import {
   BottomSheet,
+  Card,
   CustomModal,
   CustomText,
   EditFlashcard,
@@ -78,12 +79,12 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
         case SortType.DATE_ADDDED:
           return (a, b) => {
             if (!a?.created_at) {
-              return 1
-            }
-            if (!b?.created_at) {
               return -1
             }
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            if (!b?.created_at) {
+              return 1
+            }
+            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
           }
         case SortType.DIFFICULTY:
           return (a, b) => {
@@ -210,6 +211,8 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           ) : null}
           {!!flashcards && flashcards?.length !== 0 ? (
             <FlashList
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 260 }}
               renderItem={({ item }) => {
                 return (
                   <FlashcardListItem
@@ -221,7 +224,7 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
                   />
                 )
               }}
-              estimatedItemSize={40}
+              estimatedItemSize={47}
               data={flashcards
                 .slice()
                 .sort(sortingFunction(sortOption))
@@ -230,27 +233,65 @@ export const FlashcardListScreen: FC<FlashcardListScreenProps> = observer(
           ) : (
             <View
               style={{
-                flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              <CustomText style={{ marginBottom: spacing.size120 }} preset="title3">
-                Add some cards
+              <CustomText
+                style={{ marginBottom: spacing.size120, marginTop: spacing.size200 }}
+                preset="title3"
+              >
+                You dont have any flashcards yet
               </CustomText>
               <CustomText style={{ marginBottom: spacing.size200 }} preset="body2">
-                Get started by adding some flashcards
+                Get started by adding some
               </CustomText>
-              <Icon
-                icon="fluent_add_circle"
-                color={theme.colors.foreground1}
+              <Card
                 onPress={() => openAddNewFlashcard()}
-                style={{ marginBottom: spacing.size40 }}
-                size={22}
-              ></Icon>
-              <CustomText style={{ marginBottom: spacing.size200 }} preset="caption1">
-                Add new flashcard
-              </CustomText>
+                style={{
+                  minHeight: 0,
+                  elevation: 0,
+                  marginBottom: spacing.size80,
+                }}
+                ContentComponent={
+                  <View
+                    style={{
+                      paddingHorizontal: spacing.size120,
+                      paddingVertical: spacing.size40,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      icon="fluent_lightbulb"
+                      size={20}
+                      style={{ marginRight: spacing.size80 }}
+                    ></Icon>
+                    <CustomText preset="body2Strong">{`New flashcard`}</CustomText>
+                  </View>
+                }
+              ></Card>
+              <Card
+                onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
+                style={{
+                  minHeight: 0,
+                  elevation: 0,
+                  marginBottom: spacing.size80,
+                }}
+                ContentComponent={
+                  <View
+                    style={{
+                      paddingHorizontal: spacing.size120,
+                      paddingVertical: spacing.size40,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon icon="robot" size={20} style={{ marginRight: spacing.size80 }}></Icon>
+                    <CustomText preset="body2Strong">{`Generate cards with AI`}</CustomText>
+                  </View>
+                }
+              ></Card>
             </View>
           )}
         </View>

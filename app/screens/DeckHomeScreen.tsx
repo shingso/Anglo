@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Alert, View, ViewStyle, Image } from "react-native"
+import { Alert, View, ViewStyle, Image, TouchableOpacity } from "react-native"
 import { AppStackScreenProps } from "app/navigators"
 import {
   Card,
@@ -17,21 +17,18 @@ import {
   BottomMainAction,
   BOTTOM_ACTION_HEIGHT,
   StatusLabel,
+  Divider,
 } from "app/components"
 import { Deck, useStores } from "app/models"
 import { useNavigation, useTheme } from "@react-navigation/native"
-import { AppRoutes, AppStackParamList } from "app/utils/consts"
+import { AppRoutes, AppStackParamList, startOptionLabels } from "app/utils/consts"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { getPaidFlashcardsCountByDeckId } from "app/utils/subscriptionUtils"
 import { showSuccessToast } from "app/utils/errorUtils"
-import { spacing, custom_palette, typography, colors } from "app/theme"
-import { borderRadius } from "app/theme/borderRadius"
+import { spacing, custom_palette, typography, colors, custom_colors } from "app/theme"
 import { addCardsToShow } from "app/utils/deckUtils"
-import { LinearGradient } from "expo-linear-gradient"
 import { ScrollView } from "react-native-gesture-handler"
-import { type } from "@testing-library/react-native/build/user-event/type"
 import { StackNavigationProp } from "@react-navigation/stack"
-import CircularProgress from "react-native-circular-progress-indicator"
 
 interface DeckHomeScreenProps extends AppStackScreenProps<"DeckHome"> {}
 
@@ -95,13 +92,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
       ></Header>
       <View style={{ flex: 1 }}>
         <View style={{ marginHorizontal: spacing.size200, marginTop: spacing.size60 }}>
-          {/*  <CustomText
-            style={{ marginBottom: spacing.size240, fontFamily: typography.primary.light }}
-            preset="title1"
-          >
-            {selectedDeck?.title}
-          </CustomText> */}
-
           <Card
             onPress={() => startSession(selectedDeck)}
             style={{
@@ -109,14 +99,13 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
               marginBottom: spacing.size80,
               paddingVertical: 16,
               paddingHorizontal: 16,
-              height: 240,
             }}
             ContentComponent={
               <View>
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     justifyContent: "space-between",
                     marginBottom: spacing.size160,
                   }}
@@ -127,12 +116,19 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       alignItems: "center",
                     }}
                   >
-                    <Icon icon="thinking" size={20} style={{ marginRight: spacing.size60 }}></Icon>
-                    <CustomText preset="body2Strong">Study</CustomText>
+                    <Icon icon="thinking" size={24} style={{ marginRight: spacing.size60 }}></Icon>
+                    <CustomText preset="body1Strong">Study</CustomText>
                   </View>
-                  <StatusLabel text={todaysProgress + "%"}></StatusLabel>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon icon="play" size={18}></Icon>
+                  </View>
                 </View>
-                {selectedDeck?.passedTodaysCardProgress !== totalTodaysCards ? (
+                {totalTodaysCards > 0 ? (
                   <View style={{ flexDirection: "row", gap: 12, justifyContent: "space-between" }}>
                     <View
                       style={{
@@ -162,13 +158,25 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                         }}
                       ></View>
                       <View>
-                        <CustomText
-                          preset="title1"
-                          style={{ fontFamily: typography.primary.normal }}
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-end",
+                            gap: spacing.size80,
+                          }}
                         >
-                          {/* {selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards} */}
-                          {selectedDeck?.passedTodaysCardProgress}
-                        </CustomText>
+                          <CustomText
+                            preset="title1"
+                            style={{ fontFamily: typography.primary.normal }}
+                          >
+                            {/* {selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards} */}
+                            {selectedDeck?.passedTodaysCardProgress}
+                          </CustomText>
+                          <StatusLabel
+                            style={{ marginRight: spacing.size120 }}
+                            text={todaysProgress + "%"}
+                          ></StatusLabel>
+                        </View>
                         <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
                           completed
                         </CustomText>
@@ -186,43 +194,49 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       </CustomText>
                       <CustomText preset="caption1">Completed</CustomText>
                     </View> */}
-                    {/*   <CircularProgress
-                      inActiveStrokeOpacity={0.2}
-                      valueSuffix={"%"}
-                      radius={50}
-                      value={todaysProgress}
-                      title={selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards}
-                      titleStyle={{ color: "black", fontFamily: typography.primary.semiBold }}
-                    /> */}
                   </View>
                 ) : (
                   <View
                     style={{
-                      width: 120,
-                      padding: 16,
+                      marginBottom: spacing.size320,
                       borderRadius: 8,
                     }}
                   >
-                    <CustomText preset="title1" style={{ fontFamily: typography.primary.medium }}>
+                    {/*   <CustomText preset="title1" style={{ fontFamily: typography.primary.medium }}>
                       {selectedDeck?.passedTodaysCardProgress}
-                    </CustomText>
-                    <CustomText preset="caption1">Completed</CustomText>
+                    </CustomText> */}
+                    <CustomText preset="body1Strong">You have no cards due today</CustomText>
                   </View>
                 )}
-                <View style={{ flexDirection: "row", gap: 8, alignSelf: "flex-end" }}>
-                  <Button
-                    preset="custom_secondary_small"
-                    onPress={() => cardsPerDayModelRef?.current.present()}
+
+                <TouchableOpacity onPress={() => cardsPerDayModelRef?.current.present()}>
+                  <View
+                    style={{
+                      marginBottom: spacing.size200,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
-                    Start cards
-                  </Button>
-                  <Button
-                    onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}
-                    preset="custom_secondary_small"
+                    <Icon icon="arrow_up" size={20} style={{ marginRight: spacing.size80 }}></Icon>
+                    <CustomText preset="body2">{"Start more cards"}</CustomText>
+                  </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate(AppRoutes.FREE_STUDY)}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
                   >
-                    Free study
-                  </Button>
-                </View>
+                    <Icon
+                      icon="free_study"
+                      size={20}
+                      style={{ marginRight: spacing.size80 }}
+                    ></Icon>
+                    <CustomText preset="body2">{"Free study"}</CustomText>
+                  </View>
+                </TouchableOpacity>
               </View>
             }
           ></Card>
@@ -242,14 +256,33 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                 <View
                   style={{
                     flexDirection: "row",
-                    alignItems: "center",
+                    alignItems: "flex-start",
                     marginBottom: spacing.size160,
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Icon icon="flashcards" size={20} style={{ marginRight: spacing.size80 }}></Icon>
-                  <CustomText preset="body2Strong">Flashcards</CustomText>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon
+                      icon="flashcards"
+                      size={24}
+                      style={{ marginRight: spacing.size80 }}
+                    ></Icon>
+                    <CustomText preset="body1Strong">Flashcards</CustomText>
+                  </View>
+                  <Icon icon="more" size={18}></Icon>
                 </View>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size320,
+                  }}
+                >
                   <View style={{ minWidth: 60 }}>
                     <CustomText preset="title1" style={{ fontFamily: typography.primary.normal }}>
                       {selectedDeck?.flashcards.length}
@@ -275,80 +308,52 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     </CustomText>
                   </View>
                 </View>
-              </View>
-            }
-          ></Card>
 
-          {!!paidCardsCount && !selectedDeck?.paid_imported ? (
-            <Card
-              onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}
-              style={{
-                minHeight: 0,
-                elevation: 0,
-                marginBottom: spacing.size80,
-              }}
-              ContentComponent={
-                <View
-                  style={{
-                    paddingHorizontal: spacing.size120,
-                    paddingVertical: spacing.size80,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Icon
-                    icon="fluent_diamond"
-                    size={20}
-                    style={{ marginRight: spacing.size80 }}
-                  ></Icon>
-                  <CustomText preset="body2Strong">{`Get ${paidCardsCount} more cards`}</CustomText>
-                </View>
-              }
-            ></Card>
-          ) : null}
-          <Card
-            onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}
-            style={{
-              minHeight: 0,
-              elevation: 0,
-              marginBottom: spacing.size80,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  paddingHorizontal: spacing.size120,
-                  paddingVertical: spacing.size40,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Icon icon="robot" size={20} style={{ marginRight: spacing.size80 }}></Icon>
-                <CustomText preset="body2Strong">{`Generate cards with AI`}</CustomText>
-              </View>
-            }
-          ></Card>
-          <Card
-            onPress={() => selectedFlashcardModalRef?.current?.present()}
-            style={{
-              minHeight: 0,
-              elevation: 0,
-              marginBottom: spacing.size80,
-            }}
-            ContentComponent={
-              <View
-                style={{
-                  paddingHorizontal: spacing.size120,
-                  paddingVertical: spacing.size40,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Icon
-                  icon="fluent_lightbulb"
-                  size={20}
-                  style={{ marginRight: spacing.size80 }}
-                ></Icon>
-                <CustomText preset="body2Strong">{`New flashcard`}</CustomText>
+                {/*     <Divider style={{ marginBottom: spacing.size200 }}></Divider> */}
+                <TouchableOpacity onPress={() => selectedFlashcardModalRef?.current?.present()}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: spacing.size200,
+                    }}
+                  >
+                    <Icon icon="new" size={20} style={{ marginRight: spacing.size80 }}></Icon>
+                    <CustomText preset="body2">{`New flashcard`}</CustomText>
+                  </View>
+                </TouchableOpacity>
+
+                {/*   <Divider style={{ marginBottom: spacing.size200 }}></Divider> */}
+                <TouchableOpacity onPress={() => navigation.navigate(AppRoutes.MUTLI_ADD_AI)}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Icon icon="robot" size={20} style={{ marginRight: spacing.size80 }}></Icon>
+                    <CustomText preset="body2">{`Generate cards with AI`}</CustomText>
+                  </View>
+                </TouchableOpacity>
+
+                {!!paidCardsCount && !selectedDeck?.paid_imported && (
+                  <TouchableOpacity onPress={() => navigation.navigate(AppRoutes.PURCHASE_DECK)}>
+                    <View
+                      style={{
+                        marginTop: spacing.size200,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Icon
+                        icon="fluent_diamond"
+                        size={20}
+                        style={{ marginRight: spacing.size80 }}
+                      ></Icon>
+                      <CustomText preset="body2">{`Get ${paidCardsCount} more cards`}</CustomText>
+                    </View>
+                  </TouchableOpacity>
+                )}
               </View>
             }
           ></Card>

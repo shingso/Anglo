@@ -57,6 +57,12 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
       showErrorToast("Currently offline", "Go online to add a new deck")
       return
     }
+
+    if (!title) {
+      showErrorToast("Enter a title for your new deck")
+      return
+    }
+
     if (canMakeDeckPastFreeLimit()) {
       addNewDeck(title)
     }
@@ -112,10 +118,4 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
 
 const $container: ViewStyle = {
   justifyContent: "center",
-}
-
-const $text: TextStyle = {
-  fontFamily: typography.primary.normal,
-  fontSize: 14,
-  color: colors.palette.primary500,
 }
