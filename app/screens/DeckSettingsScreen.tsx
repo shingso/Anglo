@@ -18,6 +18,7 @@ import {
   TextField,
   EditableText,
   Toggle,
+  Divider,
 } from "../components"
 import { Deck, DeckSnapshotIn, useStores } from "../models"
 import { useNavigation, useTheme } from "@react-navigation/native"
@@ -134,18 +135,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
       deckStore.selectedDeck.updateDeck(updatedDeck)
     }
 
-    const Divider = () => {
-      return (
-        <View
-          style={{
-            borderBottomColor: theme.colors.foreground3,
-            borderBottomWidth: 0.3,
-            marginBottom: spacing.size200,
-          }}
-        />
-      )
-    }
-
     return (
       <Screen style={$root} preset="scroll">
         <Header title={"Settings"}></Header>
@@ -189,18 +178,25 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                         <Icon icon="new" size={20} style={{ marginRight: spacing.size60 }}></Icon>
                         <CustomText preset="body2Strong">New cards per day</CustomText>
                       </View>
-                      <CustomSwitch
+                      <Toggle
+                        variant="switch"
                         testID="newCardsToggle"
-                        isOn={addNewCardsPerDay}
-                        onToggle={() => {
+                        value={addNewCardsPerDay}
+                        onValueChange={() => {
                           selectedDeck.toggleAddNewCardsPerDay()
                           setAddNewCardsPerDay(!addNewCardsPerDay)
                         }}
-                      ></CustomSwitch>
+                        inputOuterStyle={{
+                          backgroundColor: theme?.dark
+                            ? theme.colors.background4
+                            : theme.colors.background6,
+                        }}
+                        inputInnerStyle={{ backgroundColor: theme.colors.brandBackground2 }}
+                      />
                     </View>
                     <CustomText preset="caption2" presetColors={"secondary"}>
                       If toggled on {selectedDeck?.new_per_day} cards will be added in{" "}
-                      {startOptionLabels[startMode]} the cards were added.
+                      {startOptionLabels[startMode]?.toLowerCase()} order.
                     </CustomText>
                   </View>
 
@@ -225,7 +221,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     </View>
                   </TouchableOpacity>
 
-                  <Divider />
+                  <Divider style={{ marginBottom: spacing.size200 }} />
                   <TouchableOpacity onPress={() => startModeModelRef?.current?.present()}>
                     <View
                       style={{
@@ -254,7 +250,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               paddingVertical: spacing.size200,
               minHeight: 0,
               elevation: 0,
-
               marginBottom: spacing.size80,
               borderRadius: 16,
             }}
@@ -286,11 +281,15 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                       selectedDeck.togglePlaySoundAutomatically()
                       setPlaySoundAuto(!playSoundAuto)
                     }}
-                    inputOuterStyle={{ backgroundColor: theme.colors.background6 }}
+                    inputOuterStyle={{
+                      backgroundColor: theme?.dark
+                        ? theme.colors.background4
+                        : theme.colors.background6,
+                    }}
                     inputInnerStyle={{ backgroundColor: theme.colors.brandBackground2 }}
                   />
                 </View>
-                <Divider />
+                <Divider style={{ marginBottom: spacing.size200 }} />
                 <TouchableOpacity
                   testID="soundLanguageButton"
                   onPress={() => soundLanguageModelRef?.current?.present()}
@@ -315,7 +314,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     ></Icon>
                   </View>
                 </TouchableOpacity>
-                <Divider />
+                <Divider style={{ marginBottom: spacing.size200 }} />
                 <TouchableOpacity onPress={() => soundFieldModelRef?.current?.present()}>
                   <View
                     style={{
@@ -371,11 +370,20 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     <Icon icon="sync" size={20} style={{ marginRight: spacing.size60 }}></Icon>
                     <CustomText preset="body2Strong">Flip flashcard</CustomText>
                   </View>
-                  <CustomSwitch
+                  <Toggle
+                    variant="switch"
                     testID="flipFlashcardToggle"
-                    isOn={flipFlashcard}
-                    onToggle={() => toggleFlipFlashcard()}
-                  ></CustomSwitch>
+                    value={flipFlashcard}
+                    onValueChange={() => {
+                      toggleFlipFlashcard()
+                    }}
+                    inputOuterStyle={{
+                      backgroundColor: theme?.dark
+                        ? theme.colors.background4
+                        : theme.colors.background6,
+                    }}
+                    inputInnerStyle={{ backgroundColor: theme.colors.brandBackground2 }}
+                  />
                 </View>
                 <CustomText preset="caption2" presetColors={"secondary"}>
                   During study session, front and back of the flashcard will be flipped.
