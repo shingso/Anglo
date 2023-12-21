@@ -7,11 +7,13 @@ import {
   BottomMainAction,
   Button,
   Card,
+  CustomModal,
   Icon,
   LineWord,
   Loading,
   Screen,
   Text,
+  TextField,
 } from "../components"
 import { custom_colors, spacing, typography } from "app/theme"
 import { CustomText } from "app/components/CustomText"
@@ -52,15 +54,14 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     const { subscriptionStore, settingsStore } = useStores()
     const { isPlatformPaySupported, confirmPlatformPayPayment } = usePlatformPay()
     const [loading, setLoading] = useState(false)
+    const [endModalVisible, setEndModalVisible] = useState(false)
+    const [restartModalVisible, setRestartModalVisible] = useState(false)
 
     useEffect(() => {
       const getGooglePaySupport = async () => {
-        const res = await getProducts()
         if (!(await isPlatformPaySupported())) {
-          showErrorToast("Google pay error")
+          showErrorToast("Payment error occurred")
           return
-        } else {
-          //showSuccessToast("Google pay supported")
         }
       }
       getGooglePaySupport()
@@ -98,6 +99,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const endSubscription = async () => {
+      console.log("we are ending the subscription")
       if (settingsStore?.isOffline) {
         showErrorToast("Currently offline", "Go online to cancel your subscription")
         return
@@ -343,15 +345,6 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 </View>
               }
             ></Card>
-
-            {/*    <PlatformPayButtonc
-            type={PlatformPay.ButtonType.Pay}
-            onPress={() => initializePaymentSheet()}
-            style={{
-              width: "100%",
-              height: 50,
-            }}
-          /> */}
           </View>
         ) : (
           <View style={$container}>
@@ -395,8 +388,8 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 <BottomMainAction
                   onPress={
                     subscriptionStore?.subscription?.cancel_at_end
-                      ? () => reactivateSubscription()
-                      : () => endSubscription()
+                      ? () => setRestartModalVisible(true)
+                      : () => setEndModalVisible(true)
                   }
                   label={
                     subscriptionStore?.subscription?.cancel_at_end
@@ -406,6 +399,30 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 ></BottomMainAction>
               </View>
             )}
+            <CustomModal
+              header={"End subscription"}
+              body={`End your current subscription? You subscription will end on ${subscriptionStore?.subscription?.end_date?.toDateString()}`}
+              secondaryAction={() => setEndModalVisible(false)}
+              mainAction={() => {
+                endSubscription()
+                setEndModalVisible(false)
+              }}
+              mainActionLabel={"End subscription"}
+              visible={endModalVisible}
+            />
+            <CustomModal
+              header={"Restart subscription"}
+              body={
+                "Would you like to restart your subscription? You will subscription will continue and you will be rebilled at the end of the current subscription period."
+              }
+              secondaryAction={() => setRestartModalVisible(false)}
+              mainAction={() => {
+                reactivateSubscription()
+                setRestartModalVisible(false)
+              }}
+              mainActionLabel={"Restart"}
+              visible={restartModalVisible}
+            />
           </View>
         )}
       </Screen>
