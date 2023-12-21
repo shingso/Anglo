@@ -461,8 +461,8 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               renderItem={(i) => {
                 return (
                   <View style={$notes_container}>
-                    <Text>{i.item}</Text>
-                    <Icon onPress={() => deleteNote(i.item)} size={24} icon="delete"></Icon>
+                    <CustomText preset="body2">{i.item}</CustomText>
+                    <Icon onPress={() => deleteNote(i.item)} size={22} icon="delete"></Icon>
                   </View>
                 )
               }}
@@ -486,7 +486,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
           ></EditFlashcard>
         </BottomSheet>
         <BottomSheet ref={tutorialModalRef} customSnap={["85"]}>
-          <ModalHeader title={"How to get the most out of this application"}></ModalHeader>
+          <ModalHeader title={"How to memorize better"}></ModalHeader>
           <ScrollView
             horizontal={true}
             scrollEventThrottle={16}
@@ -496,19 +496,95 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               useNativeDriver: false,
             })}
           >
-            {slides.map((slide) => {
-              return (
-                <ScrollViewComponent
-                  key={slide.title}
-                  title={slide.title}
-                  body={slide.text}
-                  image={slide.image}
-                ></ScrollViewComponent>
-              )
-            })}
+            <View
+              style={{
+                width: width - 32,
+                height: "100%",
+                padding: spacing.size160,
+                gap: spacing.size200,
+              }}
+            >
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size40,
+                  }}
+                >
+                  <Icon icon="thinking" size={23} style={{ marginRight: spacing.size80 }}></Icon>
+                  <CustomText preset="body1Strong">Think about the word</CustomText>
+                </View>
+                <CustomText preset="body2">
+                  Take a few seconds and recall all you can about the word. The more context you can
+                  relate to a word, the better it will stick.
+                </CustomText>
+              </View>
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size40,
+                  }}
+                >
+                  <Icon icon="tap" size={23} style={{ marginRight: spacing.size80 }}></Icon>
+                  <CustomText preset="body1Strong">Tap on flashcard</CustomText>
+                </View>
+                <CustomText preset="body2">
+                  To show the back. Turn on sound to hear the pronouncation.
+                </CustomText>
+              </View>
+              <CustomText preset="title3" style={{ fontFamily: typography.primary.light }}>
+                then
+              </CustomText>
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size40,
+                  }}
+                >
+                  <Icon icon="swipe_right" size={23} style={{ marginRight: spacing.size80 }}></Icon>
+                  <CustomText preset="body1Strong">Swipe right</CustomText>
+                </View>
+                <CustomText preset="body2">
+                  If you know the card perfectly and recalled it instantly
+                </CustomText>
+              </View>
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size40,
+                  }}
+                >
+                  <Icon icon="swipe_up" size={23} style={{ marginRight: spacing.size80 }}></Icon>
+                  <CustomText preset="body1Strong">Swipe up</CustomText>
+                </View>
+                <CustomText preset="body2">
+                  If you got the back correctly, but took some time to recall.
+                </CustomText>
+              </View>
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: spacing.size40,
+                  }}
+                >
+                  <Icon icon="swipe_left" size={23} style={{ marginRight: spacing.size80 }}></Icon>
+                  <CustomText preset="body1Strong">Swipe left</CustomText>
+                </View>
+                <CustomText preset="body2">If you could not recall the card</CustomText>
+              </View>
+            </View>
           </ScrollView>
 
-          <ExpandingDot
+          {/*    <ExpandingDot
             data={slides}
             expandingDotWidth={30}
             scrollX={scrollX}
@@ -521,7 +597,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               marginHorizontal: 5,
             }}
             containerStyle={{ left: 36, bottom: 120 }}
-          />
+          /> */}
         </BottomSheet>
         <CustomModal
           mainAction={() => removeFlashcard(currentFlashcard, deckStore.selectedDeck)}
