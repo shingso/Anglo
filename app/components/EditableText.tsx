@@ -28,6 +28,7 @@ export interface EditableTextProps {
   preset?: any
   testID?: string
   focus?: boolean
+  customRef?: any
 }
 
 /**
@@ -43,34 +44,35 @@ export const EditableText = observer(function EditableText(props: EditableTextPr
     preset,
     testID,
     focus,
+    customRef,
   } = props
   const $styles = [$styleOverride]
 
   const [text, setText] = useState(initialValue)
   const theme = useTheme()
-  const textInputRef = useRef<TextInput>(null)
+  const textInputRef = customRef || useRef<TextInput>(null)
 
   useEffect(() => {
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+    /*     const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
       textInputRef?.current?.blur()
     })
 
     // Clean up the listener when the component unmounts
     return () => {
       keyboardDidHideListener.remove()
-    }
+    } */
   }, [])
 
   useEffect(() => {
     setText(initialValue)
   }, [initialValue])
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (focus) {
       textInputRef?.current?.focus()
     }
   }, [focus])
-
+ */
   const handleTextChange = (value) => {
     setText(value)
   }

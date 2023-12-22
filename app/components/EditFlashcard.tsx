@@ -35,7 +35,6 @@ import { showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { Deck } from "../models/Deck"
 import { QueryFunctions } from "app/models"
 import { Dot } from "./Dot"
-import { CustomText } from "./CustomText"
 import { StatusLabel } from "./StatusLabel"
 import { useTheme } from "@react-navigation/native"
 import { getAIDefintionWithDeckPrompts } from "app/utils/openAiUtils"
@@ -77,23 +76,25 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
   const [errorModalVisible, setErrorModalVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const [duplicateModalVisible, setDuplicateModalVisibleModalVisible] = useState(false)
   const [selectedFlashcardReference, setSelectedFlashcard] = useState(
     mapToEditableFlashcard(flashcard),
   )
-  const deckCustomPrompts = deck?.customPrompts
+
   useEffect(() => {
     setSelectedFlashcard(mapToEditableFlashcard(flashcard))
   }, [flashcard])
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
       extraArrayRef?.current?.blur()
     })
     return () => {
       keyboardDidHideListener.remove()
     }
-  }, [])
+  }, []) */
+  //we want to go to tthe next input, but we dont want
 
   const [inputValue, setInputValue] = useState("")
 
@@ -138,11 +139,17 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
 
     if (selectedFlashcardReference?.front) {
       setLoading(true)
-      const { data, remaining } = await getAIDefintionWithDeckPrompts(
+      const { data, error } = await getAIDefintionWithDeckPrompts(
         deck,
         selectedFlashcardReference?.front,
       )
-      if (!data) {
+      console.log(data, error, data?.error, data?.error?.message, data.remaining, "generation")
+      if (!data || !!data?.error) {
+        setErrorMessage(
+          data.remaining === 0
+            ? "AI generation limit reached for the month. Subscribe to raise limit to 1000."
+            : "Error occured while generating AI flashcard.",
+        )
         setErrorModalVisible(true)
         setLoading(false)
         return
@@ -245,7 +252,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       // if there isnt a front or a back throw an error
       if (!flashcardReference?.front || !flashcardReference?.back) {
         showErrorToast(
-          `Missing ${!flashcardReference?.front && "front"} ${
+          `Missing ${!flashcardReference?.front ?? "front"} ${
             !flashcardReference?.front && !flashcardReference?.back && "and"
           } ${!flashcardReference?.back && "back"}`,
         )
@@ -271,8 +278,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       }
       const addedFlashcard = await addFlashcard(flashcardReference)
     } else {
-      console.log("updating the flashcard here")
-      //this is a null flashcard in our case because its a new flashcard...we need to mmake sure the flasghcard refnerec exists s
       flashcard?.updateFlashcard(flashcardReference)
       setSelectedFlashcard({ ...flashcardReference })
       if (settingsStore.isOffline) {
@@ -292,29 +297,33 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   const [focusCaption, setFocusCaption] = useState(false)
   const [focusExtra, setFocusExtra] = useState(false)
   const extraArrayRef = useRef<TextInput>()
+  const backRef = useRef<TextInput>()
+  const subheaderRef = useRef<TextInput>()
+  const extraRef = useRef<TextInput>()
   const onSubmitFront = (value: string) => {
     updateSelectedFlashcard("front", value)
-    /*  if (!flashcard) {
-      setFocusBack(true)
-    } */
+    if (!flashcard && !selectedFlashcardReference?.back) {
+      //setFocusBack(true)
+      backRef?.current?.focus()
+    }
   }
   const onSubmitBack = (value: string) => {
     updateSelectedFlashcard("back", value)
-    /*  if (!flashcard) {
-      setFocusCaption(true)
-    } */
+    if (!flashcard && !selectedFlashcardReference?.sub_header) {
+      subheaderRef?.current?.focus()
+    }
   }
   const onSubmitCaption = (value: string) => {
     updateSelectedFlashcard("sub_header", value)
-    /*   if (!flashcard) {
-      setFocusExtra(true)
-    } */
+    if (!flashcard && !selectedFlashcardReference?.extra) {
+      extraRef?.current?.focus()
+    }
   }
   const onSubmitExtra = (value: string) => {
     updateSelectedFlashcard("extra", value)
-    /*  if (!flashcard) {
+    if (!flashcard && selectedFlashcardReference?.extra_array?.length <= 0) {
       extraArrayRef.current.focus()
-    } */
+    }
   }
 
   const confirmSaveDuplicate = () => {
@@ -341,7 +350,17 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       {flashcard?.next_shown ? (
         <View style={{ position: "absolute", top: 0, left: 0 }}>
           <TouchableOpacity onPress={() => resetFlashcard(flashcard, deck)}>
-            <StatusLabel text={"Active"}></StatusLabel>
+            <StatusLabel
+              RightComponent={
+                <Icon
+                  icon="x"
+                  color={custom_colors.successForeground1}
+                  style={{ marginLeft: spacing.size40 }}
+                  size={15}
+                ></Icon>
+              }
+              text={"Active"}
+            ></StatusLabel>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -367,7 +386,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
               icon="fluent_play_outline"
             ></Icon>
           ) : null}
-          <Icon size={28} onPress={() => useAIDefinition()} icon="fluent_lightbulb"></Icon>
+          <Icon size={28} onPress={() => useAIDefinition()} icon="robot"></Icon>
           <View>
             {!isFlashcardSame && (
               <View style={$saveBadge}>
@@ -387,16 +406,10 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           </View>
         </View>
       </View>
-      {/* {!flashcard && deck?.doesDeckAlreadyContainFlashcard(selectedFlashcardReference?.front) ? (
-        <CustomText preset="caption1" presetColors={"danger"}>
-          Duplicate front
-        </CustomText>
-      ) : null} */}
-
       <EditableText
         style={{ marginBottom: spacing.size120 }}
         preset="title1"
-        placeholder="Front (tap to edit)"
+        placeholder="Front"
         testID="front"
         onSubmit={(value) => onSubmitFront(value)}
         initialValue={selectedFlashcardReference?.front}
@@ -405,20 +418,22 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
       <EditableText
         preset="body2"
         testID="back"
+        customRef={backRef}
         focus={focusBack}
         style={{ marginBottom: spacing.size120 }}
         onSubmit={(value) => onSubmitBack(value)}
         multiline={true}
-        placeholder="back (tap to edit)"
+        placeholder="back"
         initialValue={selectedFlashcardReference?.back}
       ></EditableText>
 
       <EditableText
         style={{ marginBottom: spacing.size120 }}
         preset="caption1"
-        testID="sub_header"
+        customRef={subheaderRef}
+        testID="subheader"
         focus={focusCaption}
-        placeholder="caption (tap to edit)"
+        placeholder="caption"
         onSubmit={(value) => onSubmitCaption(value)}
         initialValue={selectedFlashcardReference?.sub_header}
       ></EditableText>
@@ -427,8 +442,9 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         style={{ marginBottom: spacing.size120 }}
         preset="caption2"
         testID="extra"
+        customRef={extraRef}
         focus={focusExtra}
-        placeholder="Extra (tap to edit)"
+        placeholder="Extra"
         onSubmit={(value) => onSubmitExtra(value)}
         initialValue={selectedFlashcardReference?.extra}
       ></EditableText>
@@ -458,7 +474,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
           testID="extra_array_edit"
           value={inputValue}
           onChangeText={(text) => setInputValue(text)}
-          placeholder="Tags (tap to edit)"
+          placeholder="Tags"
           onSubmitEditing={handleAddTag}
           blurOnSubmit={inputValue === "" ? true : false}
         />
@@ -498,9 +514,7 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         mainActionLabel={"Close"}
         visible={errorModalVisible}
         header={"Error generating flashcard"}
-        body={
-          "You've reached the free limit of 50 AI generated cards per month. Subscribe to increase rate limit to 1000 per month."
-        }
+        body={errorMessage}
       ></CustomModal>
       <CustomModal
         mainAction={() => confirmSaveDuplicate()}
