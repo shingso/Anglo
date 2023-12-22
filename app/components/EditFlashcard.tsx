@@ -321,7 +321,11 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
   }
   const onSubmitExtra = (value: string) => {
     updateSelectedFlashcard("extra", value)
-    if (!flashcard && selectedFlashcardReference?.extra_array?.length <= 0) {
+    if (
+      !flashcard &&
+      selectedFlashcardReference?.extra_array &&
+      selectedFlashcardReference?.extra_array?.length <= 0
+    ) {
       extraArrayRef.current.focus()
     }
   }
