@@ -101,7 +101,7 @@ export const addFunctionToRemoteSync = (type: FunctionTypes, data: any) => {
     data: data,
     createdAt: createdAtTimeStamp,
   }
-  showErrorToast(id, data.toString())
+
   addToRemoteSync(newRemoteFunction)
 }
 
