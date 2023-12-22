@@ -9,9 +9,10 @@ import { SubscriptionStore, useStores } from "app/models"
 import { showErrorToast } from "app/utils/errorUtils"
 import { useState } from "react"
 import { addDeck } from "app/utils/deckUtils"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 import { AppRoutes, AppStackParamList, freeLimitDeck } from "app/utils/consts"
 import { StackNavigationProp } from "@react-navigation/stack"
+import { CustomText } from "./CustomText"
 
 export interface AddDeckModalProps {
   /**
@@ -31,8 +32,9 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
   const { deckStore, subscriptionStore, settingsStore } = useStores()
   const $styles = [$container, style]
   const [deckTitle, setDeckTitle] = useState("")
+  const [error, setError] = useState(null)
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
-
+  const theme = useTheme()
   const canMakeDeckPastFreeLimit = (): boolean => {
     if (subscriptionStore.hasActiveSubscription()) {
       return true
@@ -53,13 +55,15 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
   }
 
   const confirmAddNewDeck = (title) => {
+    setError(null)
+
     if (settingsStore.isOffline) {
-      showErrorToast("Currently offline", "Go online to add a new deck")
+      setError("Go online to add a new deck")
       return
     }
 
     if (!title) {
-      showErrorToast("Enter a title for your new deck")
+      setError("Enter a title for your new deck")
       return
     }
 
@@ -75,6 +79,7 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
     if (closeCallback) {
       closeCallback()
     }
+    setError(null)
     setDeckTitle("")
   }
 
@@ -94,11 +99,21 @@ export const AddDeckModal = observer(function AddDeckModal(props: AddDeckModalPr
           secondaryAction={() => closeModal()}
           mainAction={() => confirmAddNewDeck(deckTitle)}
           children={
-            <TextField
-              placeholder="Title"
-              value={deckTitle}
-              onChangeText={setDeckTitle}
-            ></TextField>
+            <View>
+              {error ? (
+                <CustomText
+                  preset="caption1Strong"
+                  style={{ color: theme.colors.dangerForeground1 }}
+                >
+                  {error}
+                </CustomText>
+              ) : null}
+              <TextField
+                placeholder="Title"
+                value={deckTitle}
+                onChangeText={setDeckTitle}
+              ></TextField>
+            </View>
           }
           visible={visible}
         />
