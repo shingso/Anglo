@@ -13,7 +13,7 @@ import {
   ViewStyle,
 } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { colors, spacing } from "../theme"
+import { colors, custom_colors, custom_palette, spacing } from "../theme"
 import { iconRegistry, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 
@@ -401,17 +401,15 @@ function Switch(props: ToggleInputProps) {
   const knobBackgroundColor = (function () {
     if (on) {
       return [
-        $detailStyleOverride?.backgroundColor,
         status === "error" && colors.error,
         disabled && colors.palette.neutral600,
-        colors.palette.neutral100,
+        custom_palette.white,
       ].filter(Boolean)[0]
     } else {
       return [
-        $innerStyleOverride?.backgroundColor,
         disabled && colors.palette.neutral600,
         status === "error" && colors.error,
-        colors.palette.neutral200,
+        custom_palette.white,
       ].filter(Boolean)[0]
     }
   })()
