@@ -25,13 +25,13 @@ export const AboutScreen: FC<StackScreenProps<AppStackScreenProps, "About">> = o
     return (
       <Screen style={$root} preset="scroll">
         <View style={$container}>
-          <CustomText
+          {/*  <CustomText
             style={$item}
             preset="body2Strong"
             onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
           >
             How to study better
-          </CustomText>
+          </CustomText> */}
           <CustomText
             style={$item}
             preset="body2Strong"

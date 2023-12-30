@@ -15,6 +15,7 @@ import { Deck, Flashcard } from "app/models"
 import { useEffect, useState } from "react"
 import { showSuccessToast } from "app/utils/errorUtils"
 import { Divider } from "./Divider"
+import { StatusLabel } from "./StatusLabel"
 
 export interface HomeForecastProps {
   /**
@@ -186,7 +187,22 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                     }}
                   >
                     <CustomText preset="body1Strong">{deck?.title}</CustomText>
-                    <Icon icon="more" size={18}></Icon>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                      {!!(deck?.todaysCards?.length || deck?.passedTodaysCardProgress) && (
+                        <StatusLabel
+                          style={{ marginRight: spacing.size120 }}
+                          text={
+                            Math.trunc(
+                              (deck?.passedTodaysCardProgress /
+                                ((deck?.todaysCards?.length || 0) +
+                                  (deck?.passedTodaysCardProgress || 0))) *
+                                100,
+                            ) + "%"
+                          }
+                        ></StatusLabel>
+                      )}
+                      <Icon icon="more" size={18}></Icon>
+                    </View>
                   </View>
 
                   {deck?.flashcards?.length <= 0 && (
@@ -218,17 +234,57 @@ export const HomeForecast = observer(function HomeForecast(props: HomeForecastPr
                         marginBottom: spacing.size200,
                       }}
                     >
-                      <View style={{ minWidth: 60 }}>
-                        <CustomText
-                          preset="title1"
-                          style={{ fontFamily: typography.primary.normal }}
-                        >
-                          {deck?.todaysCards?.length?.toString()}
-                        </CustomText>
-                        <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
-                          due
-                        </CustomText>
-                      </View>
+                      {deck?.todaysCards?.length != 0 ? (
+                        <View style={{ minWidth: 60 }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "flex-end",
+                              gap: spacing.size80,
+                            }}
+                          >
+                            <CustomText
+                              preset="title1"
+                              style={{ fontFamily: typography.primary.normal }}
+                            >
+                              {deck?.todaysCards?.length?.toString()}
+                            </CustomText>
+                          </View>
+                          <CustomText
+                            preset="body2"
+                            style={{ fontFamily: typography.primary.light }}
+                          >
+                            due
+                          </CustomText>
+                        </View>
+                      ) : (
+                        <View style={{ minWidth: 60 }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "flex-end",
+                              gap: spacing.size80,
+                            }}
+                          >
+                            <CustomText
+                              preset="title1"
+                              style={{ fontFamily: typography.primary.normal }}
+                            >
+                              {deck?.passedTodaysCardProgress.toString()}
+                            </CustomText>
+                            <StatusLabel
+                              style={{ marginRight: spacing.size120 }}
+                              text={"100%"}
+                            ></StatusLabel>
+                          </View>
+                          <CustomText
+                            preset="body2"
+                            style={{ fontFamily: typography.primary.light }}
+                          >
+                            completed
+                          </CustomText>
+                        </View>
+                      )}
                       <View
                         style={{
                           height: "80%",

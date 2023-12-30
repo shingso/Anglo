@@ -26,6 +26,15 @@ import { AppRoutes, AppStackParamList } from "app/utils/consts"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { ScrollView } from "react-native-gesture-handler"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import { showDefaultToast } from "app/utils/errorUtils"
+
+enum SelectType {
+  ACTIVE = "Active",
+  ALL = "All",
+  INACTIVE = "Inactive",
+  DIFFICULT = "Difficult",
+  NONE = "NONE",
+}
 
 interface FreeStudyScreenProps extends NativeStackScreenProps<AppStackScreenProps<"FreeStudy">> {}
 
@@ -35,6 +44,7 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
   const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
   const [unselectedFlashcards, setUnselectedFlashcards] = useState([])
   const [searchTerm, setSearchTerm] = useState<string>("")
+  const [selectType, setSelectType] = useState<string>(SelectType.ALL)
   const quickSelectModalRef = useRef<BottomSheetModal>()
   const addToUnselectedFlashcards = (flashcardId: string) => {
     setUnselectedFlashcards((prev) => {
@@ -50,11 +60,13 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
 
   const clearUnselectedFlashcards = () => {
     setUnselectedFlashcards([])
+    setSelectType(SelectType.ALL)
   }
 
   const setActiveFlashcards = () => {
     const activeFlashcards = flashcards.filter((card) => !card?.next_shown).map((card) => card.id)
     setUnselectedFlashcards(activeFlashcards)
+    setSelectType(SelectType.ACTIVE)
   }
 
   const setInactiveFlashcards = () => {
@@ -62,32 +74,88 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
       .filter((card) => !!card?.next_shown)
       .map((card) => card.id)
     setUnselectedFlashcards(inactiveFlashcards)
+    setSelectType(SelectType.INACTIVE)
+  }
+
+  const removeAllFlashcards = () => {
+    const allCards = flashcards.map((card) => card.id)
+    setUnselectedFlashcards(allCards)
+    setSelectType(SelectType.NONE)
   }
 
   const goToFreeStudySession = () => {
     const selectedFlashcards = flashcards.filter((card) => !unselectedFlashcards.includes(card.id))
+    if (selectedFlashcards?.length <= 0) {
+      showDefaultToast("No cards selected")
+      return
+    }
     deckStore.selectedDeck.setCustomSessioncards(selectedFlashcards)
     navigation.navigate(AppRoutes.FREE_STUDY_SESSION)
   }
 
   const setDifficultCards = () => {
     const easyFlashcards = flashcards.filter((card) => card.easeFactor > 2).map((card) => card.id)
+    console.log(easyFlashcards.length)
+    if (easyFlashcards?.length === flashcards?.length) {
+      showDefaultToast("No difficult cards")
+    }
     setUnselectedFlashcards(easyFlashcards)
+    setSelectType(SelectType.DIFFICULT)
   }
 
   return (
     <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="fixed">
       <Header title={"Free study"}></Header>
       <View style={$container}>
-        <View style={{ flexDirection: "row", gap: spacing.size100, flexWrap: "wrap" }}>
+        <ScrollView
+          style={{ flexGrow: 0, marginBottom: spacing.size160 }}
+          contentContainerStyle={{ gap: spacing.size80 }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
           <Button
-            style={{ marginBottom: spacing.size120 }}
-            onPress={() => quickSelectModalRef.current.present()}
-            preset="custom_default_small"
+            onPress={() => clearUnselectedFlashcards()}
+            preset={
+              selectType === SelectType.ALL ? "custom_default_small" : "custom_secondary_small"
+            }
           >
-            Select
+            All
           </Button>
-        </View>
+          <Button
+            onPress={() => setActiveFlashcards()}
+            preset={
+              selectType === SelectType.ACTIVE ? "custom_default_small" : "custom_secondary_small"
+            }
+          >
+            Active
+          </Button>
+          <Button
+            onPress={() => setInactiveFlashcards()}
+            preset={
+              selectType === SelectType.INACTIVE ? "custom_default_small" : "custom_secondary_small"
+            }
+          >
+            Inactive
+          </Button>
+          <Button
+            onPress={() => setDifficultCards()}
+            preset={
+              selectType === SelectType.DIFFICULT
+                ? "custom_default_small"
+                : "custom_secondary_small"
+            }
+          >
+            Difficult
+          </Button>
+          <Button
+            onPress={() => removeAllFlashcards()}
+            preset={
+              selectType === SelectType.NONE ? "custom_default_small" : "custom_secondary_small"
+            }
+          >
+            None
+          </Button>
+        </ScrollView>
         <TextField
           value={searchTerm}
           autoCorrect={false}
@@ -155,18 +223,6 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
         ></FlashList>
       </View>
       <BottomMainAction label="Start" onPress={() => goToFreeStudySession()}></BottomMainAction>
-      <BottomSheet ref={quickSelectModalRef} customSnap={["85"]}>
-        <ModalHeader title={"Select cards for free study based on"}></ModalHeader>
-        <ScrollView
-          contentContainerStyle={{ paddingBottom: 240 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <Option onPress={() => clearUnselectedFlashcards()} title={"All"}></Option>
-          <Option onPress={() => setActiveFlashcards()} title={"Active"}></Option>
-          <Option onPress={() => setInactiveFlashcards()} title={"Inactive"}></Option>
-          <Option onPress={() => setDifficultCards()} title={"Difficult"}></Option>
-        </ScrollView>
-      </BottomSheet>
     </Screen>
   )
 })
@@ -177,5 +233,6 @@ const $root: ViewStyle = {
 
 const $container: ViewStyle = {
   padding: spacing.size200,
+  paddingTop: 0,
   flex: 1,
 }

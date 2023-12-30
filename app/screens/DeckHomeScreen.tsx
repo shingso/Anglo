@@ -125,6 +125,10 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       alignItems: "center",
                     }}
                   >
+                    <StatusLabel
+                      style={{ marginRight: spacing.size120 }}
+                      text={todaysProgress + "%"}
+                    ></StatusLabel>
                     <Icon icon="play" size={18}></Icon>
                   </View>
                 </View>
@@ -172,10 +176,6 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                             {/* {selectedDeck?.passedTodaysCardProgress + "/" + totalTodaysCards} */}
                             {selectedDeck?.passedTodaysCardProgress}
                           </CustomText>
-                          <StatusLabel
-                            style={{ marginRight: spacing.size120 }}
-                            text={todaysProgress + "%"}
-                          ></StatusLabel>
                         </View>
                         <CustomText preset="body2" style={{ fontFamily: typography.primary.light }}>
                           completed
@@ -274,7 +274,9 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     ></Icon>
                     <CustomText preset="body1Strong">Flashcards</CustomText>
                   </View>
-                  <Icon icon="more" size={18}></Icon>
+                  <View>
+                    <Icon icon="more" size={18}></Icon>
+                  </View>
                 </View>
                 <View
                   style={{

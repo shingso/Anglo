@@ -124,7 +124,7 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
             children={
               <View style={$sessions_statistics}>
                 <CustomText style={{ marginBottom: spacing.size200 }} preset="title2">
-                  Horray! You have just learned more words
+                  You have just learned more words.
                 </CustomText>
                 <CustomText style={{ marginTop: "auto" }} preset="caption1Strong">
                   Swipe to go back home

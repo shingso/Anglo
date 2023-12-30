@@ -23,7 +23,6 @@ import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet
 import { TextField } from "./TextField"
 import { BottomSheet } from "./BottomSheet"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../utils/consts"
-import { updateMostRecentLocalId } from "../utils/remote_sync/remoteSyncUtils"
 import { borderRadius } from "../theme/borderRadius"
 import { CustomText } from "./CustomText"
 import { HEADER_HEIGHT } from "./Header"
@@ -256,7 +255,7 @@ export const SwipeCards = observer(function SwipeCards(props: SwipeCardsProps) {
             ...$responseIcon,
           }}
         >
-          <CustomText preset="title2">Kinda knew</CustomText>
+          <CustomText preset="title2">Knew</CustomText>
         </Animated.View>
         {renderCards().length > 0 && renderCards()}
         {renderCards().length === 0 && emptyComponent && <>{emptyComponent}</>}

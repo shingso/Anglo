@@ -108,7 +108,7 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
     }
 
     const openCardsPerDay = () => {
-      cardsPerDayModelRef?.current.present()
+      cardsPerDayModelRef?.current?.present()
     }
 
     const setSoundOption = (option: SoundOptions) => {

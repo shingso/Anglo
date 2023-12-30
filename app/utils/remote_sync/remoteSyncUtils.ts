@@ -7,7 +7,6 @@ import {
 } from "../cardProgressUtils"
 import { load, save } from "../storage"
 import { v4 as uuidv4 } from "uuid"
-import { showErrorToast } from "../errorUtils"
 import { CardProgress } from "../../models/CardProgress"
 export const pendingRemoteFunctionKey = "_pendingRemoteFunctionKey"
 export const mostRecentLocalIdKey = "_mostRecentLocalIdKey"

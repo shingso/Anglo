@@ -34,7 +34,7 @@ export const Option = observer(function Option(props: OptionProps) {
           alignItems: "center",
         }}
       >
-        {currentSelected && (
+        {currentSelected !== null && (
           <Icon
             icon={option === currentSelected ? "circle_check_filled" : "circle"}
             size={22}

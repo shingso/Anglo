@@ -86,7 +86,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
               {source && <Image style={{ height: 36, width: 36 }} source={source} />}
               <View>
                 <CustomText preset="body1">{title}</CustomText>
-                <CustomText preset="caption2" presetColors={"secondary"}>
+                <CustomText style={{ flexShrink: 1 }} preset="caption2" presetColors={"secondary"}>
                   {caption}
                 </CustomText>
               </View>
@@ -126,7 +126,10 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
               <View style={{ marginBottom: spacing.size400 }}>
                 <CustomText
                   preset="title1"
-                  style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
+                  style={{
+                    fontFamily: typography.primary.light,
+                    marginBottom: spacing.size200,
+                  }}
                 >
                   Get started by adding a deck
                 </CustomText>
@@ -136,7 +139,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                   preset="caption1Strong"
                   style={{ marginBottom: spacing.size80 }}
                 >
-                  Recommended decks
+                  Recommended quick start decks
                 </CustomText>
 
                 <View style={{ gap: 8 }}>
@@ -164,23 +167,23 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     title={"French"}
                     caption={"Basic and common French words"}
                   ></DeckItem>
-                  <DeckItem
+                  {/*    <DeckItem
                     source={require("../../assets/icons/italy.png")}
                     onPress={() => importStarterDeckById(starterItalianDeckId)}
                     title={"Italian"}
                     caption={"Basic and common Italian words"}
-                  ></DeckItem>
+                  ></DeckItem> */}
                 </View>
 
                 <LineWord text={"or"}></LineWord>
                 <DeckItem
                   source={require("../../assets/icons/custom_deck_icon.png")}
                   onPress={() => setAddDeckModalVisible(true)}
-                  title={"Add your own custom deck"}
-                  caption={"Quickly build a custom deck using AI"}
+                  title={"Create your own deck"}
+                  caption={"Use AI to quickly build a deck."}
                 ></DeckItem>
               </View>
-              <View style={{ marginBottom: spacing.size320 }}>
+              {/*   <View style={{ marginBottom: spacing.size320 }}>
                 <CustomText
                   preset="title1"
                   style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
@@ -192,7 +195,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                   title={"Get the most out of studying"}
                   caption={"Learn more about spaced memorization"}
                 ></DeckItem>
-              </View>
+              </View> */}
             </View>
           )}
           <AddDeckModal

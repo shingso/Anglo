@@ -87,14 +87,6 @@ export const TermsOfServiceScreen: FC<StackScreenProps<AppStackScreenProps, "Ter
             ]}
           ></Section>
           <Section
-            title={"Products or services"}
-            body={[
-              "Certain products or Services may be available exclusively online through the website. These products or Services may have limited quantities and are subject to return or exchange only according to our Return Policy. To view our Return Policy, please visit [LINK TO RETURN POLICY]",
-              "We reserve the right, but are not obligated, to limit the sales of our products or Services to any person, geographic region or jurisdiction. We may exercise this right on a case-by-case basis. We reserve the right to limit the quantities of any products or Services that we offer. All descriptions of products or product pricing are subject to change at anytime without notice, at the sole discretion of us. We reserve the right to discontinue any product at any time. Any offer for any product or service made on this site is void where prohibited.",
-              "We do not warrant that the quality of any products, Services, information, or other material purchased or obtained by you will meet your expectations, or that any errors in the Service will be corrected.",
-            ]}
-          ></Section>
-          <Section
             title={"Accuracy of billing and account information"}
             body={[
               "We reserve the right to refuse any order you place with us. We may, in our sole discretion, limit or cancel quantities purchased per person, per household or per order. These restrictions may include orders placed by or under the same customer account, the same credit card, and/or orders that use the same billing and/or shipping address. In the event that we make a change to or cancel an order, we may attempt to notify you by contacting the e-mail and/or billing address/phone number provided at the time the order was made. We reserve the right to limit or prohibit orders that, in our sole judgment, appear to be placed by dealers, resellers or distributors.",
@@ -209,7 +201,9 @@ export const TermsOfServiceScreen: FC<StackScreenProps<AppStackScreenProps, "Ter
           ></Section>
           <Section
             title={"Contact information"}
-            body={["Questions about the Terms of Service should be sent to us at test@gmail.com."]}
+            body={[
+              "Questions about the Terms of Service should be sent to us at support@spacedmemo.com.",
+            ]}
           ></Section>
         </View>
       </Screen>

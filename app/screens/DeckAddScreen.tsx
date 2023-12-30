@@ -63,10 +63,12 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     useEffect(() => {
       navigation.setOptions({ headerTitle: deck?.title })
       const getGlobalDeck = async (id: string) => {
+        setLoading(true)
         const globalDeck = await getGlobalDeckById(id)
         if (globalDeck) {
           setSelectedDeck(globalDeck)
         }
+        setLoading(false)
       }
       if (!deck?.private_global_flashcards && deck?.id) {
         getGlobalDeck(deck.id)
@@ -109,19 +111,27 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
     return (
       <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root}>
         <Header title={deck?.title}></Header>
+
         <View style={$container}>
-          {/*    <View style={{ flexDirection: "row", marginBottom: spacing.size160 }}>
-            <Button
-              preset="custom_default_small"
-              text="Get deck"
-              onPress={() => importDeck()}
-              disabled={loading}
-            ></Button>
-          </View>
-          <CustomText style={{ marginBottom: spacing.size80 }} preset="title2">
-            {selectedDeck.title}
-          </CustomText>
- */}
+          {loading && (
+            <View
+              style={{
+                zIndex: 1,
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                right: -spacing.size160,
+                left: -spacing.size160,
+              }}
+            >
+              <Loading></Loading>
+            </View>
+          )}
+          {selectedDeck?.title ? (
+            <CustomText style={{ marginBottom: spacing.size80 }} preset="title3">
+              {selectedDeck.title}
+            </CustomText>
+          ) : null}
           {selectedDeck?.description ? (
             <CustomText
               style={{ marginBottom: spacing.size200 }}
@@ -131,9 +141,11 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
               {selectedDeck.description}
             </CustomText>
           ) : null}
-          <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
-            {flashcards?.length} cards
-          </CustomText>
+          {!!flashcards?.length && flashcards?.length > 0 ? (
+            <CustomText preset="body1Strong" style={{ marginBottom: spacing.size80 }}>
+              {flashcards?.length} cards
+            </CustomText>
+          ) : null}
           <FlashList
             contentContainerStyle={{ paddingBottom: 120 }}
             estimatedItemSize={44}
@@ -150,11 +162,13 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
           mainAction={() => navigation.navigate(AppRoutes.SUBSCRIBE)}
           visible={deckLimitModalVisible}
         />
-        <BottomMainAction
-          label="Get deck"
-          onPress={() => importDeck()}
-          disabled={loading}
-        ></BottomMainAction>
+        {!loading && (
+          <BottomMainAction
+            label="Get deck"
+            onPress={() => importDeck()}
+            disabled={loading}
+          ></BottomMainAction>
+        )}
       </Screen>
     )
   },

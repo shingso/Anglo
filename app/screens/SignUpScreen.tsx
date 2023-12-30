@@ -177,5 +177,5 @@ const $container: ViewStyle = {
 }
 
 const $inputContainer: ViewStyle = {
-  marginBottom: spacing.size160,
+  marginBottom: spacing.size200,
 }

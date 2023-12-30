@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleProp, TextStyle, View, ViewStyle } from "react-
 import { observer } from "mobx-react-lite"
 import { colors, spacing, typography } from "app/theme"
 import { borderRadius } from "app/theme/borderRadius"
-import { CustomText } from "."
+import { CustomText } from "./CustomText"
 
 export interface LoadingProps {
   /**
