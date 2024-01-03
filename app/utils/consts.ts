@@ -258,8 +258,8 @@ export const startOptionLabels = {
 export const freeLimitDeck = 2
 
 export const defaultBackPrompt =
-  "the part of the speech for the word, followed by a short and consise definition"
-export const defaultSubheaderPrompt = "the english pronounciation"
+  "The part of the speech for the word, followed by a short and consise definition"
+export const defaultSubheaderPrompt = "The English pronounciation"
 export const defaultExtraPrompt = "An example sentence."
 export const defaultExtraArrayPrompt = "Three related words"
 

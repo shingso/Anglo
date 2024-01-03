@@ -1,5 +1,11 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
+import {
+  defaultBackPrompt,
+  defaultExtraArrayPrompt,
+  defaultExtraPrompt,
+  defaultSubheaderPrompt,
+} from "app/utils/consts"
 
 /**
  * Model description here for TypeScript hints.
@@ -8,10 +14,10 @@ export const CustomPromptModel = types
   .model("CustomPrompt")
   .props({
     defaultPromptType: types.maybeNull(types.string),
-    backPrompt: types.maybeNull(types.string),
-    extraPrompt: types.maybeNull(types.string),
-    subheaderPrompt: types.maybeNull(types.string),
-    extraArrayPrompt: types.maybeNull(types.string),
+    backPrompt: types.optional(types.string, defaultBackPrompt),
+    extraPrompt: types.optional(types.string, defaultExtraPrompt),
+    subheaderPrompt: types.optional(types.string, defaultSubheaderPrompt),
+    extraArrayPrompt: types.optional(types.string, defaultExtraArrayPrompt),
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

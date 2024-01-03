@@ -360,7 +360,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 preset="title1"
                 style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
               >
-                You subscription has been canceled and will end on{" "}
+                Your subscription has been canceled and will end on{" "}
                 {subscriptionStore.subscription.end_date.toDateString()}.
               </CustomText>
             )}
@@ -413,7 +413,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             <CustomModal
               header={"Restart subscription"}
               body={
-                "Would you like to restart your subscription? You will subscription will continue and you will be rebilled at the end of the current subscription period."
+                "Would you like to restart your subscription? Your subscription will continue and you will be rebilled at the end of the current subscription period."
               }
               secondaryAction={() => setRestartModalVisible(false)}
               mainAction={() => {

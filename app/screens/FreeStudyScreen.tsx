@@ -33,7 +33,7 @@ enum SelectType {
   ALL = "All",
   INACTIVE = "Inactive",
   DIFFICULT = "Difficult",
-  NONE = "NONE",
+  NONE = "None",
 }
 
 interface FreeStudyScreenProps extends NativeStackScreenProps<AppStackScreenProps<"FreeStudy">> {}

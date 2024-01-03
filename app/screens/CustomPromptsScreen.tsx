@@ -104,14 +104,11 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
 
     return (
       <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="scroll">
-        <Header title="Custom prompts"></Header>
+        <Header title="AI Settings"></Header>
         <View style={$container}>
-          <CustomText
-            style={{ marginBottom: spacing.size20 }}
-            preset="caption1"
-            presetColors="secondary"
-          >
-            Select default prompts or set your own custom prompts for flashcard AI generation.
+          <CustomText style={{ marginBottom: spacing.size320 }} preset="body2">
+            Set custom prompts for AI flashcard generation. Change input language if the words are
+            not in English.
           </CustomText>
           {/* 
           <CustomText
@@ -122,51 +119,91 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
             For best results, be precise as possible with instructions and how you want it
             formatted.
           </CustomText> */}
-          <View style={{ gap: spacing.size160 }}>
+          <View>
             <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
-              <CustomText>Front</CustomText>
+              <View style={{ marginBottom: spacing.size160 }}>
+                <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
+                  Language input
+                </CustomText>
+                <CustomText
+                  presetColors={"secondary"}
+                  preset="caption2"
+                  style={{ marginBottom: spacing.size80 }}
+                >
+                  Change to get better results if the words you are inputting for the front is of a
+                  different language.
+                </CustomText>
+
+                <CustomText preset="body2">
+                  {capitalizeFirstLetter(deck?.translateLanguage)}
+                </CustomText>
+              </View>
             </TouchableOpacity>
-            <CustomText>Back</CustomText>
+            <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
+              Back prompt
+            </CustomText>
             <EditableText
               preset="body2"
               testID="back"
-              style={{ marginBottom: spacing.size120 }}
+              style={{ marginBottom: spacing.size160 }}
               onSubmit={(value) => deck.customPrompts.setBackPrompt(value)}
               multiline={true}
-              initialValue={deck?.customPrompts?.backPrompt || defaultBackPrompt}
+              initialValue={
+                deck?.customPrompts?.backPrompt !== null
+                  ? deck?.customPrompts?.backPrompt
+                  : defaultBackPrompt
+              }
             ></EditableText>
 
-            <CustomText>Subheader</CustomText>
+            <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
+              Subheader prompt
+            </CustomText>
             <EditableText
               preset="body2"
               testID="back"
-              style={{ marginBottom: spacing.size120 }}
+              style={{ marginBottom: spacing.size160 }}
               onSubmit={(value) => deck.customPrompts.setSubheaderPrompt(value)}
               multiline={true}
-              initialValue={deck?.customPrompts?.subheaderPrompt || defaultSubheaderPrompt}
+              initialValue={
+                deck?.customPrompts?.subheaderPrompt !== null
+                  ? deck?.customPrompts?.subheaderPrompt
+                  : defaultSubheaderPrompt
+              }
             ></EditableText>
 
-            <CustomText>Extra</CustomText>
+            <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
+              Extra
+            </CustomText>
             <EditableText
               preset="body2"
               testID="back"
-              style={{ marginBottom: spacing.size120 }}
+              style={{ marginBottom: spacing.size160 }}
               onSubmit={(value) => deck.customPrompts.setExtraPrompt(value)}
               multiline={true}
-              initialValue={deck?.customPrompts?.extraPrompt || defaultExtraPrompt}
+              initialValue={
+                deck?.customPrompts?.extraPrompt !== null
+                  ? deck?.customPrompts?.extraPrompt
+                  : defaultExtraPrompt
+              }
             ></EditableText>
 
-            <CustomText>Extra labels</CustomText>
+            <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
+              Extra labels
+            </CustomText>
             <EditableText
               preset="body2"
               testID="back"
               style={{ marginBottom: spacing.size120 }}
               onSubmit={(value) => deck.customPrompts.setExtraArrayPrompt(value)}
               multiline={true}
-              initialValue={deck?.customPrompts?.extraArrayPrompt || defaultExtraArrayPrompt}
+              initialValue={
+                deck?.customPrompts?.extraArrayPrompt !== null
+                  ? deck?.customPrompts?.extraArrayPrompt
+                  : defaultExtraArrayPrompt
+              }
             ></EditableText>
           </View>
-          <Card
+          {/*  <Card
             onPress={() => customPromptModelRef?.current?.present()}
             style={{
               paddingHorizontal: spacing.size160,
@@ -185,7 +222,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
                 </CustomText>
               </View>
             }
-          ></Card>
+          ></Card> */}
         </View>
 
         <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
