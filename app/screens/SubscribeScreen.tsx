@@ -99,11 +99,11 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
     }
 
     const endSubscription = async () => {
-      console.log("we are ending the subscription")
       if (settingsStore?.isOffline) {
         showErrorToast("Currently offline", "Go online to cancel your subscription")
         return
       }
+      setLoading(true)
       if (subscriptionStore?.subscription?.subscription_id) {
         const res = await subscriptionStore.subscription.cancelSubscription()
         if (!res) {
@@ -111,8 +111,9 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         }
         //TODO add a response for the cancel subscription ->  it can only be the main subscrition cancel
       } else {
-        console.log("could not end because no id")
+        showErrorToast("Error occured when trying to cancel subscription")
       }
+      setLoading(false)
     }
 
     const reactivateSubscription = async () => {
@@ -120,6 +121,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
         showErrorToast("Currently offline", "Go online to reactivate your subscription")
         return
       }
+      setLoading(true)
       if (subscriptionStore?.subscription?.subscription_id) {
         const res = await subscriptionStore.subscription.resumeSubscription()
         if (!res) {
@@ -128,6 +130,7 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       } else {
         console.log("could not resume because no id")
       }
+      setLoading(false)
     }
 
     const initializeSubscriptionPaymentSheet = async () => {
