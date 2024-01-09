@@ -62,6 +62,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
         setDeckExtraPrompt(defaultLanguageExtraPrompt(type))
         setDeckExtraArrayPrompt(defaultLanguageExtraArrayPrompt(type))
         setDeckSubheaderPrompt(defaultLanguageSubheaderPrompt(type))
+        deck.setTranslateLanguage(type)
       }
       setDefaultPromptType(type)
     }
@@ -86,30 +87,37 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
       deck.customPrompts.setSubheaderPrompt(prompt)
     }
 
-    const submitBackPrompt = () => {
-      deck.customPrompts.setBackPrompt(backPrompt)
-    }
-
-    const submitExtraPrompt = () => {
-      deck.customPrompts.setExtraPrompt(extraPrompt)
-    }
-
-    const submitExtraArrayPrompt = () => {
-      deck.customPrompts.setExtraArrayPrompt(extraArrayPrompt)
-    }
-
-    const submitSubheaderPrompt = () => {
-      deck.customPrompts.setSubheaderPrompt(subheaderPrompt)
-    }
-
     return (
       <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="scroll">
-        <Header title="AI Settings"></Header>
+        <Header
+          title="AI Settings"
+          onRightPress={() => customPromptModelRef?.current?.present()}
+          rightIcon="language"
+        ></Header>
         <View style={$container}>
-          <CustomText style={{ marginBottom: spacing.size320 }} preset="body2">
+          <CustomText style={{ marginBottom: spacing.size160 }} preset="body2">
             Set custom prompts for AI flashcard generation. Change input language if the words are
             not in English.
           </CustomText>
+          {/* <Card
+            onPress={() => customPromptModelRef?.current?.present()}
+            style={{
+              paddingHorizontal: spacing.size160,
+              paddingVertical: spacing.size160,
+              minHeight: 0,
+              elevation: 0,
+
+              marginBottom: spacing.size320,
+              borderRadius: borderRadius.corner120,
+            }}
+            ContentComponent={
+              <View>
+                <CustomText preset="caption1Strong">
+                  Set preset prompts for defintions and languages
+                </CustomText>
+              </View>
+            }
+          ></Card> */}
           {/* 
           <CustomText
             style={{ marginBottom: spacing.size120 }}
@@ -119,6 +127,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
             For best results, be precise as possible with instructions and how you want it
             formatted.
           </CustomText> */}
+
           <View>
             <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
               <View style={{ marginBottom: spacing.size160 }}>
@@ -203,30 +212,14 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
               }
             ></EditableText>
           </View>
-          {/*  <Card
-            onPress={() => customPromptModelRef?.current?.present()}
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size160,
-              minHeight: 0,
-              elevation: 0,
-              marginTop: spacing.size160,
-              marginBottom: spacing.size80,
-              borderRadius: borderRadius.corner120,
-            }}
-            ContentComponent={
-              <View>
-                <CustomText preset="body2Strong">Default prompts</CustomText>
-                <CustomText preset="caption1">
-                  See preset prompts for defintions and languages
-                </CustomText>
-              </View>
-            }
-          ></Card> */}
         </View>
 
         <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
-          <ModalHeader title={"Set custom prompts for AI generation fields"}></ModalHeader>
+          <ModalHeader title={"Set default prompts for AI generation fields"}></ModalHeader>
+          <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size60 }}>
+            Select to set a default prompt below. Language prompts assume that inputted words are of
+            that lanaguage.
+          </CustomText>
           {defaultPromptOptions.map((option) => {
             return (
               <Option
@@ -241,6 +234,7 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
         </BottomSheet>
         <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
           <ModalHeader title={"The passed in word is in language"}></ModalHeader>
+
           {aiLanguageOptions.map((option) => {
             return (
               <Option

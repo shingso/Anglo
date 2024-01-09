@@ -364,7 +364,12 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
                 style={{ marginBottom: spacing.size200, fontFamily: typography.primary.light }}
               >
                 Your subscription has been canceled and will end on{" "}
-                {subscriptionStore.subscription.end_date.toDateString()}.
+                {subscriptionStore.subscription.end_date
+                  .toDateString()
+                  .split(" ")
+                  .slice(1)
+                  .join(" ")}
+                .
               </CustomText>
             )}
 
@@ -404,7 +409,11 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
             )}
             <CustomModal
               header={"End subscription"}
-              body={`End your current subscription? You subscription will end on ${subscriptionStore?.subscription?.end_date?.toDateString()}`}
+              body={`End your current subscription? You subscription will end on ${subscriptionStore?.subscription?.end_date
+                ?.toDateString()
+                .split(" ")
+                .slice(1)
+                .join(" ")}`}
               secondaryAction={() => setEndModalVisible(false)}
               mainAction={() => {
                 endSubscription()

@@ -110,7 +110,7 @@ export const DeckAddScreen: FC<StackScreenProps<AppStackScreenProps, "DeckAdd">>
 
     return (
       <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root}>
-        <Header title={deck?.title}></Header>
+        <Header title={deck?.title || "Get deck"}></Header>
 
         <View style={$container}>
           {loading && (

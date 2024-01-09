@@ -408,7 +408,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
               <View>
                 <View
                   style={{
-                    marginBottom: spacing.size100,
                     flexDirection: "row",
                     justifyContent: "space-between",
                     alignItems: "center",
@@ -430,9 +429,6 @@ export const DeckSettingsScreen: FC<StackScreenProps<AppStackScreenProps, "DeckS
                     size={16}
                   ></Icon>
                 </View>
-                <CustomText preset="caption2" presetColors={"secondary"}>
-                  Set custom prompts for AI flashcard generation.
-                </CustomText>
               </View>
             }
           ></Card>

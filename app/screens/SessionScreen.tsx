@@ -11,6 +11,7 @@ import {
   EditFlashcard,
   Header,
   Icon,
+  LineWord,
   ModalHeader,
   Screen,
   SwipeCards,
@@ -36,12 +37,11 @@ import { getSnapshot } from "mobx-state-tree"
 //import * as Speech from "expo-speech"
 
 import { millisecondsToTime } from "../utils/helperUtls"
-import Modal from "react-native-modal"
+
 import { AppRoutes, AppStackParamList, SCREEN_WIDTH } from "../utils/consts"
 import { Card_Progress_Fields, deleteCardProgress } from "../utils/cardProgressUtils"
 import {
   getRemoteRecentUpdate,
-  returnRemoteAndLocalMostRecent,
   updateConfirmedRemoteId,
   updateMostRecentLocalId,
 } from "app/utils/remote_sync/remoteSyncUtils"
@@ -101,49 +101,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       ? deck.sessionCards.map((card) => flipFrontAndBackFlashcard(card))
       : deck.sessionCards
     const [sessionProgressLog, setSessionProgressLog] = useState<CardProgressSnapshotIn[]>([])
-    const slides = [
-      {
-        key: "one",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "Smart cards",
-        text: "When using these flashcards, cards will automatically be placed in a pile for review based on your response.",
-        backgroundColor: "#22bcb5",
-      },
-      {
-        key: "two",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "The card",
-        text: "Tap the card to reveal the back",
-        backgroundColor: "#22bcb5",
-      },
-      {
-        key: "two",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "You know it!",
-        text: "If you know the back of the card easily, swipe the card left",
-        backgroundColor: "#22bcb5",
-      },
-      {
-        key: "three",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "You know it, but weren't confident about it",
-        text: "If you got the back correct, but was unsure or took some time recalling, swipe the card up.",
-        backgroundColor: "#22bcb5",
-      },
-      {
-        key: "four",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "Forgot card",
-        text: "If you don't know the back, swipe left",
-      },
-      {
-        key: "five",
-        image: require("../../assets/images/girl_looking_at_phone.png"),
-        title: "Review cards at intervals",
-        text: "As your recall of the card gets better, the card will be scheduled for longer.",
-        backgroundColor: "#22bcb5",
-      },
-    ]
 
     useEffect(() => {
       if (settingsStore?.showSessionTutorial) {
@@ -323,32 +280,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
       }
     }
     const { width, height } = Dimensions.get("screen")
-
-    const ScrollViewComponent = (props) => {
-      const { title, body, image } = props
-      return (
-        <View
-          style={{
-            width: width - 32,
-            height: "100%",
-            padding: spacing.size160,
-          }}
-        >
-          <CustomText
-            preset="title1"
-            style={{ fontFamily: typography.primary.light, marginBottom: spacing.size160 }}
-          >
-            {title}
-          </CustomText>
-          {/* <Image
-            resizeMethod="resize"
-            style={{ width: "100%", height: 200, marginVertical: spacing.size240 }}
-            source={image}
-          ></Image> */}
-          <CustomText preset="body1">{body}</CustomText>
-        </View>
-      )
-    }
 
     const addProgressToLog = (progressId: CardProgressSnapshotIn) => {
       setSessionProgressLog((prev) => {
@@ -535,9 +466,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                   To show the back. Turn on sound to hear the pronouncation.
                 </CustomText>
               </View>
-              <CustomText preset="title3" style={{ fontFamily: typography.primary.light }}>
-                then
-              </CustomText>
+              <LineWord text="then"></LineWord>
               <View>
                 <View
                   style={{

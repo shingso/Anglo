@@ -107,7 +107,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     flexDirection: "row",
                     alignItems: "flex-start",
                     justifyContent: "space-between",
-                    marginBottom: spacing.size160,
+                    marginBottom: spacing.size320,
                   }}
                 >
                   <View
@@ -116,7 +116,11 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       alignItems: "center",
                     }}
                   >
-                    <Icon icon="thinking" size={24} style={{ marginRight: spacing.size60 }}></Icon>
+                    <Icon
+                      icon="fluent_play_outline"
+                      size={24}
+                      style={{ marginRight: spacing.size60 }}
+                    ></Icon>
                     <CustomText preset="body1Strong">Study</CustomText>
                   </View>
                   <View
@@ -129,7 +133,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                       style={{ marginRight: spacing.size120 }}
                       text={todaysProgress + "%"}
                     ></StatusLabel>
-                    <Icon icon="play" size={18}></Icon>
+                    {/*    <Icon icon="play" size={18}></Icon> */}
                   </View>
                 </View>
                 {totalTodaysCards > 0 ? (
@@ -137,7 +141,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                     <View
                       style={{
                         flexDirection: "row",
-                        marginBottom: spacing.size320,
+                        marginBottom: spacing.size400,
                         alignItems: "center",
                       }}
                     >
@@ -257,7 +261,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   style={{
                     flexDirection: "row",
                     alignItems: "flex-start",
-                    marginBottom: spacing.size160,
+                    marginBottom: spacing.size320,
                     justifyContent: "space-between",
                   }}
                 >
@@ -282,7 +286,7 @@ export const DeckHomeScreen: FC<DeckHomeScreenProps> = observer(function DeckHom
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    marginBottom: spacing.size320,
+                    marginBottom: spacing.size400,
                   }}
                 >
                   <View style={{ minWidth: 60 }}>

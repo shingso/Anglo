@@ -94,7 +94,7 @@ export const addDeck = async (deck: any): Promise<DeckSnapshotIn> => {
       .insert([
         {
           [Deck_Fields.TITLE]: deck?.title,
-          [Deck_Fields.NEW_PER_DAY]: deck?.new_per_day ? deck.new_per_day : 0,
+          [Deck_Fields.NEW_PER_DAY]: deck?.new_per_day ? deck.new_per_day : 3,
         },
       ])
       .select()

@@ -164,13 +164,7 @@ const AboutStackScreens = () => {
         }}
         component={OpenSourceScreen}
       />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name={AppRoutes.TUTORIAL}
-        component={TutorialScreen}
-      />
+      <Stack.Screen name={AppRoutes.TUTORIAL} component={TutorialScreen} />
     </Stack.Navigator>
   )
 }
@@ -228,6 +222,13 @@ const HomeScreens = () => {
       />
       <Stack.Screen name={AppRoutes.CUSTOM_PROMPTS} component={CustomPromptsScreen} />
       <Stack.Screen name={AppRoutes.RESTART_OVERDUE} component={RestartOverdueScreen} />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+        }}
+        name={AppRoutes.TUTORIAL}
+        component={TutorialScreen}
+      />
       <Stack.Screen
         name={AppRoutes.PURCHASE_DECK}
         options={{

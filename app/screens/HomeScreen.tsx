@@ -131,13 +131,30 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     marginBottom: spacing.size200,
                   }}
                 >
-                  Get started by adding a deck
+                  Welcome!
                 </CustomText>
+
+                <View style={{ marginBottom: spacing.size280 }}>
+                  <CustomText
+                    presetColors={"secondary"}
+                    preset="body2Strong"
+                    style={{ marginBottom: spacing.size120 }}
+                  >
+                    Learn more about spaced memorization
+                  </CustomText>
+
+                  <DeckItem
+                    source={require("../../assets/icons/qanda.png")}
+                    title={"Get the most out of studying"}
+                    caption={"Learn more about spaced memorization"}
+                    onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
+                  ></DeckItem>
+                </View>
 
                 <CustomText
                   presetColors={"secondary"}
-                  preset="caption1Strong"
-                  style={{ marginBottom: spacing.size80 }}
+                  preset="body2Strong"
+                  style={{ marginBottom: spacing.size120 }}
                 >
                   Recommended quick start decks
                 </CustomText>
@@ -183,19 +200,6 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                   caption={"Use AI to quickly build a deck."}
                 ></DeckItem>
               </View>
-              {/*   <View style={{ marginBottom: spacing.size320 }}>
-                <CustomText
-                  preset="title1"
-                  style={{ fontFamily: typography.primary.light, marginBottom: spacing.size200 }}
-                >
-                  Learn more about learning
-                </CustomText>
-                <DeckItem
-                  source={require("../../assets/icons/qanda.png")}
-                  title={"Get the most out of studying"}
-                  caption={"Learn more about spaced memorization"}
-                ></DeckItem>
-              </View> */}
             </View>
           )}
           <AddDeckModal
