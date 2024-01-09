@@ -16,13 +16,13 @@ import {
   Icon,
   Loading,
   ModalHeader,
-  PromptSettings,
   Screen,
   Text,
   TextField,
   Option,
+  BottomMainAction,
 } from "app/components"
-import { spacing } from "app/theme"
+import { custom_palette, spacing, typography } from "app/theme"
 import { Deck, FlashcardSnapshotIn, useStores } from "app/models"
 import { showDefaultToast, showErrorToast, showSuccessToast } from "app/utils/errorUtils"
 import { Flashcard_Fields, addFlashcard } from "app/utils/flashcardUtils"
@@ -30,7 +30,15 @@ import { getAIDefintionWithDeckPrompts, getRemainingRateLimit } from "app/utils/
 import { v4 as uuidv4 } from "uuid"
 import { BottomSheetModal, SCREEN_HEIGHT } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
-import { TranslateLanguage, aiLanguageOptions } from "app/utils/consts"
+import {
+  AppRoutes,
+  TranslateLanguage,
+  aiLanguageOptions,
+  defaultBackPrompt,
+  defaultExtraArrayPrompt,
+  defaultExtraPrompt,
+  defaultSubheaderPrompt,
+} from "app/utils/consts"
 import { capitalizeFirstLetter } from "app/utils/helperUtls"
 
 interface MultiAddAiScreenProps extends AppStackScreenProps<"MultiAddAi"> {}
@@ -50,9 +58,10 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
   const deckCustomPrompts = selectedDeck?.customPrompts
   const selectedFlashcard = deckStore?.selectedDeck?.selectedFlashcard
   const selectedFlashcardModalRef = useRef<BottomSheetModal>()
+  const aiTutorialRef = useRef<BottomSheetModal>()
   const aiLanguageModelRef = useRef<BottomSheetModal>()
   const [aiLanguage, setAILanguage] = useState(selectedDeck?.translateLanguage)
-  const [limitRemaining, setLimitRemaining] = useState(null)
+  const [limitRemaining, setLimitRemaining] = useState(0)
   // if we leave in the middle we still want to see the response
   const wordsLimit = 20
   useEffect(() => {
@@ -138,7 +147,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
     const errors = []
     setLoading(true)
     for await (const word of words) {
-      const { data, remaining } = await getAIDefintionWithDeckPrompts(selectedDeck, word)
+      const { data } = await getAIDefintionWithDeckPrompts(selectedDeck, word)
       setProgress((prev) => prev + 1)
       if (data && data?.back) {
         //check if valid flashcard
@@ -153,13 +162,13 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
         }
         const addedFlashcard = await addFlashcard(flashcard)
         const deckCard = selectedDeck.addFlashcard(addedFlashcard)
-
         !!deckCard ? success.push(deckCard) : errors.push(word)
-        setLimitRemaining(remaining)
+        setLimitRemaining(data?.remaining)
       } else {
         errors.push(word)
       }
     }
+
     selectedDeck?.aiGeneratedResponse?.setWords(words)
     selectedDeck?.aiGeneratedResponse?.setErrors(errors)
     selectedDeck?.aiGeneratedResponse?.setSuccess(success)
@@ -171,7 +180,12 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
 
   return (
     <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="scroll">
-      <Header title="Quick AI Generate"></Header>
+      <Header
+        title="AI Generate"
+        onRightPress={() => aiTutorialRef?.current?.present()}
+        rightIcon="fluent_error_circle"
+      ></Header>
+
       <View style={{ height: "100%" }}>
         {loading && (
           <View
@@ -184,63 +198,25 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
               zIndex: 1,
             }}
           >
-            <Loading text={`${progress} / ${words.length}`}></Loading>
+            <Loading text={!!words?.length ? `${progress} / ${words.length}` : null}></Loading>
           </View>
         )}
         <View style={$container}>
           {!selectedDeck?.aiGeneratedResponse.hasResponse ? (
             <View>
-              {/* <CustomText preset="body1" style={{ marginBottom: spacing.size160 }}>
-                Generate multiple with AI
-              </CustomText> */}
               {limitRemaining !== null && (
                 <CustomText style={{ marginBottom: spacing.size120 }}>
-                  Remaining rate: {limitRemaining}
+                  Remaining rate: {limitRemaining <= 0 ? 0 : limitRemaining}
                 </CustomText>
               )}
-              <Card
+
+              {/*   <Card
                 disabled={true}
                 style={{
                   paddingHorizontal: spacing.size160,
                   paddingVertical: spacing.size160,
                   minHeight: 0,
                   elevation: 0,
-
-                  marginBottom: spacing.size160,
-                  borderRadius: 16,
-                }}
-                ContentComponent={
-                  <View>
-                    <TouchableOpacity onPress={() => customPromptModelRef?.current?.present()}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View>
-                          <CustomText preset="body1">Set custom prompts</CustomText>
-                        </View>
-                        <Icon
-                          icon="caret_right"
-                          color="#242424"
-                          style={{ marginLeft: spacing.size80 }}
-                          size={16}
-                        ></Icon>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                }
-              ></Card>
-              <Card
-                disabled={true}
-                style={{
-                  paddingHorizontal: spacing.size160,
-                  paddingVertical: spacing.size160,
-                  minHeight: 0,
-                  elevation: 0,
-
                   marginBottom: spacing.size120,
                   borderRadius: 16,
                 }}
@@ -269,22 +245,14 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
                     </TouchableOpacity>
                   </View>
                 }
-              ></Card>
+              ></Card> */}
+
               <CustomText
-                style={{ marginBottom: spacing.size320 }}
-                preset="caption1"
-                presetColors={"secondary"}
-              >
-                Add words below to use AI on all the below words. Seperate words with a comma.
-                Closing the application will interupt the process. Maximum 30 at a time. Try
-                generating serveral cards and checking their responses before making many.
-              </CustomText>
-              <CustomText
-                style={{ marginBottom: spacing.size80 }}
+                style={{ marginBottom: spacing.size40 }}
                 preset="caption1Strong"
                 presetColors={"secondary"}
               >
-                Words to add: {words.length}
+                Words to generate: {words.length}
               </CustomText>
 
               <View
@@ -310,20 +278,77 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
                 containerStyle={{ marginBottom: spacing.size400 }}
                 onSubmitEditing={submitInput}
               ></TextField>
+              <View style={{ paddingHorizontal: spacing.size40, marginBottom: spacing.size160 }}>
+                <CustomText preset="caption1Strong">Back</CustomText>
+                <CustomText style={{ marginBottom: spacing.size100 }} preset="caption1">
+                  {selectedDeck?.customPrompts?.backPrompt}
+                </CustomText>
+                <CustomText preset="caption1Strong">Subheader</CustomText>
+                <CustomText style={{ marginBottom: spacing.size100 }} preset="caption1">
+                  {selectedDeck?.customPrompts?.subheaderPrompt}
+                </CustomText>
+                <CustomText preset="caption1Strong">Extra </CustomText>
+                <CustomText style={{ marginBottom: spacing.size100 }} preset="caption1">
+                  {selectedDeck?.customPrompts?.extraPrompt}
+                </CustomText>
+                <CustomText preset="caption1Strong">Extra labels</CustomText>
+                <CustomText style={{ marginBottom: spacing.size100 }} preset="caption1">
+                  {selectedDeck?.customPrompts?.extraArrayPrompt}
+                </CustomText>
+              </View>
+              <Card
+                onPress={() => navigation.navigate(AppRoutes.CUSTOM_PROMPTS)}
+                testID="customPromptsCard"
+                style={{
+                  paddingHorizontal: spacing.size160,
+                  paddingVertical: spacing.size200,
+                  minHeight: 0,
+                  elevation: 0,
 
-              <Button onPress={() => generateCards()} preset="custom_default">
-                Generate cards
-              </Button>
+                  marginBottom: spacing.size200,
+                  borderRadius: 16,
+                }}
+                ContentComponent={
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Icon icon="robot" size={20} style={{ marginRight: spacing.size60 }}></Icon>
+                        <CustomText preset="body2Strong">Set custom AI flashcards</CustomText>
+                      </View>
+                      <Icon
+                        icon="caret_right"
+                        color={custom_palette.grey50}
+                        style={{ marginLeft: spacing.size80 }}
+                        size={16}
+                      ></Icon>
+                    </View>
+                  </View>
+                }
+              ></Card>
             </View>
           ) : (
             <View>
-              <CustomText preset="body1" style={{ marginBottom: spacing.size160 }}>
-                Generated Cards
+              <CustomText
+                preset="title2"
+                style={{ marginBottom: spacing.size160, fontFamily: typography.primary.light }}
+              >
+                AI results
               </CustomText>
-              <CustomText preset="body2" style={{ marginBottom: spacing.size20 }}>
+              <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
                 Success
               </CustomText>
-              <CustomText preset="caption1" style={{ marginBottom: spacing.size40 }}>
+              <CustomText preset="caption1" style={{ marginBottom: spacing.size100 }}>
                 Cards: {selectedDeck?.aiGeneratedResponse?.success?.length}
               </CustomText>
               {selectedDeck?.aiGeneratedResponse?.success &&
@@ -340,16 +365,16 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
                     })}
                   </View>
                 )}
-              <CustomText preset="body2" style={{ marginBottom: spacing.size20 }}>
-                Uncompleted
+              <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+                Error
               </CustomText>
               <CustomText preset="caption1" style={{ marginBottom: spacing.size40 }}>
-                Cards: {selectedDeck?.aiGeneratedResponse?.uncompleted?.length}
+                Cards: {selectedDeck?.aiGeneratedResponse?.errors?.length}
               </CustomText>
-              {selectedDeck?.aiGeneratedResponse?.uncompleted &&
-                selectedDeck?.aiGeneratedResponse?.uncompleted.length > 0 && (
+              {selectedDeck?.aiGeneratedResponse?.errors &&
+                selectedDeck?.aiGeneratedResponse?.errors.length > 0 && (
                   <View style={{ marginBottom: spacing.size200 }}>
-                    {selectedDeck?.aiGeneratedResponse?.uncompleted.map((word) => {
+                    {selectedDeck?.aiGeneratedResponse?.errors.map((word) => {
                       return (
                         <FlashcardListItem
                           key={word}
@@ -359,17 +384,44 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
                     })}
                   </View>
                 )}
-              <Button
-                onPress={() => selectedDeck.aiGeneratedResponse.clearAll()}
-                preset="custom_default"
-              >
-                Confirm
-              </Button>
+              {!!selectedDeck?.aiGeneratedResponse?.uncompleted &&
+                selectedDeck?.aiGeneratedResponse?.uncompleted.length > 0 && (
+                  <View>
+                    <CustomText preset="body2Strong" style={{ marginBottom: spacing.size20 }}>
+                      Not started
+                    </CustomText>
+                    <CustomText preset="caption1" style={{ marginBottom: spacing.size40 }}>
+                      Cards: {selectedDeck?.aiGeneratedResponse?.uncompleted}
+                    </CustomText>
+                    {selectedDeck?.aiGeneratedResponse?.uncompleted &&
+                      selectedDeck?.aiGeneratedResponse?.uncompleted.length > 0 && (
+                        <View style={{ marginBottom: spacing.size200 }}>
+                          {selectedDeck?.aiGeneratedResponse?.uncompleted.map((word) => {
+                            return (
+                              <FlashcardListItem
+                                key={word}
+                                flashcard={{ front: word }}
+                              ></FlashcardListItem>
+                            )
+                          })}
+                        </View>
+                      )}
+                  </View>
+                )}
             </View>
           )}
         </View>
       </View>
-
+      {!loading && (
+        <BottomMainAction
+          label={selectedDeck?.aiGeneratedResponse?.hasResponse ? "Confirm" : "Generate"}
+          onPress={
+            selectedDeck?.aiGeneratedResponse?.hasResponse
+              ? () => selectedDeck.aiGeneratedResponse.clearAll()
+              : () => generateCards()
+          }
+        ></BottomMainAction>
+      )}
       <BottomSheet ref={aiLanguageModelRef} customSnap={["85%"]}>
         <ModalHeader title={"Use selected language for AI generated flashcards"}></ModalHeader>
         {aiLanguageOptions.map((option) => {
@@ -397,9 +449,15 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
           ></EditFlashcard>
         }
       </BottomSheet>
-      <BottomSheet ref={customPromptModelRef} customSnap={["85%"]}>
-        <ModalHeader title={"Set custom prompts for AI Generation fields"}></ModalHeader>
-        <PromptSettings deck={selectedDeck}></PromptSettings>
+      <BottomSheet ref={aiTutorialRef} customSnap={["85%"]}>
+        <ModalHeader title={"AI flashcard generate tips"}></ModalHeader>
+        <CustomText
+          style={{ marginBottom: spacing.size320, paddingHorizontal: spacing.size40 }}
+          preset="body2"
+        >
+          Seperate words with a comma. Closing the application will interupt the process. Maximum 30
+          at a time. Try generating serveral cards and checking their responses before making many.
+        </CustomText>
       </BottomSheet>
     </Screen>
   )

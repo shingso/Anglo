@@ -3,8 +3,15 @@ import { Deck } from "app/models/Deck"
 import { supabase } from "app/services/supabase/supabase"
 
 export interface AIResponse {
-  data?: Partial<FlashcardSnapshotIn>
-  remaining?: number
+  data?: {
+    error?: { message?: string; remaining?: number }
+    back?: string
+    extra?: string
+    extra_array?: string[]
+    sub_header?: string
+    remaining?: number
+  }
+  error?: any
 }
 
 export const getAIDefinition = async (
@@ -25,8 +32,11 @@ export const getAIDefinition = async (
       subheaderPrompt,
     }),
   })
-  if (data) return data
-  return {}
+  if (data) {
+    return data
+  } else {
+    return { data, error }
+  }
 }
 
 export const getRemainingRateLimit = async () => {
@@ -39,17 +49,15 @@ export const getAIDefintionWithDeckPrompts = async (
   deck: Deck,
   word: string,
 ): Promise<AIResponse> => {
-  let language = null
-  if (deck?.translateLanguage && deck?.translateLanguage != "english") {
-    language = deck?.translateLanguage
-  }
   const deckCustomPrompts = deck?.customPrompts
-  return await getAIDefinition(
+  const { data, error } = await getAIDefinition(
     word,
-    language,
+    deck?.translateLanguage,
     deckCustomPrompts?.backPrompt,
     deckCustomPrompts?.extraPrompt,
     deckCustomPrompts?.extraArrayPrompt,
     deckCustomPrompts?.subheaderPrompt,
   )
+  console.log("result for ai", deckCustomPrompts.extraPrompt)
+  return { data, error }
 }

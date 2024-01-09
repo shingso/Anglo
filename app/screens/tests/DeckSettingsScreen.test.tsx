@@ -22,10 +22,7 @@ test("deck settings works", async () => {
   const screen = render(<MockedNavigator component={DeckSettingsScreen} />)
 
   expect(screen).toBeTruthy()
-  expect(screen.getByTestId("cards_per_day")).toBeTruthy()
-  act(() => {
-    fireEvent.press(screen.getByTestId("cards_per_day"))
-  })
+
   //expect(screen.getByText("Number of cards to be automatically each day")).toBeTruthy()
 })
 
@@ -33,13 +30,53 @@ test("deck settings works", async () => {
   const { deckStore } = useStores()
   deckStore.selectDeck(deckStore.decks[0])
   const screen = render(<MockedNavigator component={DeckSettingsScreen} />)
-
   expect(screen).toBeTruthy()
-  expect(screen.getByTestId("cards_per_day")).toBeTruthy()
+  const soundLanguageButton = screen.getByTestId("soundLanguageButton")
+  expect(soundLanguageButton).toBeTruthy()
+  // expect(screen.getByText("Added order")).toBeTruthy()
   act(() => {
-    fireEvent.press(screen.getByTestId("cards_per_day"))
+    //   fireEvent.press(soundLanguageButton)
   })
-  //expect(screen.getByText("Number of cards to be automatically each day")).toBeTruthy()
+
+  // expect(screen.getByText("Number of cards to be automatically added each day")).toBeTruthy()
+})
+
+test("play sound automatically toggle works", async () => {
+  const { deckStore } = useStores()
+  deckStore.selectDeck(deckStore.decks[0])
+  const screen = render(<MockedNavigator component={DeckSettingsScreen} />)
+  const playSoundAuto = deckStore.selectedDeck.playSoundAutomatically
+  expect(screen.getByTestId("playSoundAutoToggle")).toBeTruthy()
+
+  act(() => {
+    fireEvent.press(screen.getByTestId("playSoundAutoToggle"))
+  })
+
+  expect(deckStore.selectedDeck.playSoundAutomatically).toEqual(!playSoundAuto)
+})
+
+test("flip flashcard toggle works", async () => {
+  const { deckStore } = useStores()
+  deckStore.selectDeck(deckStore.decks[0])
+  const screen = render(<MockedNavigator component={DeckSettingsScreen} />)
+  const flipFlashcard = deckStore.selectedDeck.flipFlashcard
+  expect(screen.getByTestId("flipFlashcardToggle")).toBeTruthy()
+  act(() => {
+    fireEvent.press(screen.getByTestId("flipFlashcardToggle"))
+  })
+  expect(deckStore.selectedDeck.flipFlashcard).toEqual(!flipFlashcard)
+})
+
+test("new cards per day toggle works", async () => {
+  const { deckStore } = useStores()
+  deckStore.selectDeck(deckStore.decks[0])
+  const screen = render(<MockedNavigator component={DeckSettingsScreen} />)
+  const addCards = deckStore.selectedDeck.addNewCardsPerDay
+  expect(screen.getByTestId("newCardsToggle")).toBeTruthy()
+  act(() => {
+    fireEvent.press(screen.getByTestId("newCardsToggle"))
+  })
+  expect(deckStore.selectedDeck.addNewCardsPerDay).toEqual(!addCards)
 })
 
 //Write test for deck settings

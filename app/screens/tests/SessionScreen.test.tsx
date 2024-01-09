@@ -52,15 +52,23 @@ test("right swipe works", async () => {
   const navigation = useNavigation()
   const sessionCardCount = deckStore.selectedDeck.sessionCards.length
   const firstSessionCard = deckStore.selectedDeck.sessionCards[0]
+  const secondSessionCard = deckStore.selectedDeck.sessionCards[1]
+  const currentNextShown = firstSessionCard.next_shown.getTime()
   const screen = render(<SessionScreen navigation={navigation} route={undefined} />)
   expect(screen).toBeTruthy()
-  expect(screen.getAllByText(sessionCardCount.toString())).toBeTruthy()
-  expect(screen.getAllByText(firstSessionCard.front)[0]).toBeTruthy()
+  expect(screen.getByText(sessionCardCount.toString())).toBeTruthy()
+  expect(screen.getByText(firstSessionCard.front)).toBeTruthy()
+
   //this works below somtimes when there is two of the flashcard fronts
   //screen.debug()
   act(() => {
-    fireEvent(screen.getAllByText(firstSessionCard.front)[0], "swipeRight")
+    fireEvent(screen.getByText(firstSessionCard.front), "swipeRight")
   })
+
+  // expect(currentNextShown).toBeLessThan(firstSessionCard.next_shown.getTime())
+  // expect(screen.getByText(firstSessionCard.front)).toBeFalsy()
+  //we need to expect that the next card shows
+  //we need to expect that the card is updated with the time even in an offline mode
 })
 
 test("add note", async () => {
