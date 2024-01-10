@@ -55,14 +55,14 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       key: "four",
       image: require("../../assets/images/smartspacing.png"),
       title: "Smart spacing",
-      text: "Spaced memorization flashcards will automatically be spaced out for review at a later time before you forget the information.",
+      text: "Spaced memorization flashcards will automatically be spaced out for review at a later time.",
       backgroundColor: "#22bcb5",
     },
     {
       key: "nine",
       image: require("../../assets/images/tapcard.png"),
       title: "How to use flashcards",
-      text: "Tap to see the back of the flashcard. Swipe the card left, up, or right based on how well you recalled the card.",
+      text: "Tap to see the back of the flashcard. Then swipe the card left, up, or right based on how well you recalled the card.",
       backgroundColor: "#22bcb5",
     },
 
