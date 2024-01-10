@@ -97,7 +97,7 @@
 				BE406F552862D73000A81E39 /* BootSplash.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = "spacedmemo";
+			name = "SpacedMemo";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -124,7 +124,7 @@
 			children = (
 				951E59D51E504BC9C5F46169 /* ExpoModulesProvider.swift */,
 			);
-			name = "spacedmemo";
+			name = "SpacedMemo";
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -218,8 +218,8 @@
 			);
 			dependencies = (
 			);
-			name = "spacedmemo";
-			productName = "spacedmemo";
+			name = "SpacedMemo";
+			productName = "SpacedMemo";
 			productReference = 13B07F961A680F5B00A75B9A /* spacedmemo.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -525,7 +525,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "spacedmemo/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "spacedmemo";
+             INFOPLIST_KEY_CFBundleDisplayName = "SpacedMemo";
 				INFOPLIST_KEY_CFBundleDisplayName = spacedmemo;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -538,7 +538,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.spacedmemo";
-				PRODUCT_NAME = "spacedmemo";
+				PRODUCT_NAME = "SpacedMemo";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -553,7 +553,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = "spacedmemo/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "spacedmemo";
+             INFOPLIST_KEY_CFBundleDisplayName = "SpacedMemo";
 				INFOPLIST_KEY_CFBundleDisplayName = spacedmemo;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -566,7 +566,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.spacedmemo";
-				PRODUCT_NAME = "spacedmemo";
+				PRODUCT_NAME = "SpacedMemo";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
