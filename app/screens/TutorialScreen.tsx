@@ -31,13 +31,15 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
     {
       key: "one",
       title: "Studying is stressful",
-      text: "Studying is hard. How do we know if we're studing effectively? Will we know the information when we need it?",
+      text: "Studying is hard. How do we know if we're studying effectively? Will we know the information when we need it?",
       image: require("../../assets/images/stress2.png"),
     },
     {
       key: "two",
       title: "Our memory spans",
       text: "When we memorize something, our minds will slowly forget the information over a period of time.",
+      text2:
+        "It's a myth that goldfishes have short memories and have memories that last up to three months.",
       image: require("../../assets/images/goldfish_in_bowl.png"),
       backgroundColor: "#febe29",
     },
@@ -46,22 +48,21 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       title: "Spaced memorization",
       image: require("../../assets/images/remember.png"),
       text: "If we review the material before it's entirely forgotten, we can refresh and extend our memory retention.",
-      text1:
-        "Enhance your memory retention by reviewing learned material before it's entirely forgotten",
+
       backgroundColor: "#22bcb5",
     },
     {
       key: "four",
       image: require("../../assets/images/smartspacing.png"),
       title: "Smart spacing",
-      text: "Cards will automatically be spaced out and set for review at a later time based on your response when you see it.",
+      text: "Spaced memorization flashcards will automatically be spaced out for review at a later time before you forget the information.",
       backgroundColor: "#22bcb5",
     },
     {
       key: "nine",
       image: require("../../assets/images/tapcard.png"),
       title: "How to use flashcards",
-      text: "Tap to see the back flashcard. Then swipe the card left, up, or right based on how well you know the card.",
+      text: "Tap to see the back of the flashcard. Swipe the card left, up, or right based on how well you recalled the card.",
       backgroundColor: "#22bcb5",
     },
 
@@ -69,7 +70,7 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       key: "five1",
       image: require("../../assets/images/swiperightcard.png"),
       title: "You know it!",
-      text: "If you know the definition of the card confidently, swipe the card left",
+      text: "If you recalled the definition of the card with ease, swipe the card right.",
       backgroundColor: "#22bcb5",
     },
     {
@@ -83,13 +84,13 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       key: "seven1",
       image: require("../../assets/images/swipeleftcard.png"),
       title: "Forgot card",
-      text: "If you didnt't know the defintition, swipe the card left.",
+      text: "If you forgot the card, swipe the card left.",
     },
   ]
 
   const scrollX = useRef(new Animated.Value(0)).current
   const ScrollViewComponent = (props) => {
-    const { title, body, image } = props
+    const { title, body, image, text2 } = props
     return (
       <View
         style={{
@@ -102,23 +103,34 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
           alignContent: "center",
         }}
       >
-        <CustomText
-          preset="title1"
-          style={{
-            marginBottom: spacing.size320,
-            textAlign: "center",
-          }}
-        >
-          {title}
-        </CustomText>
-        <Image
-          style={{ width: 360, height: 360, marginBottom: spacing.size160 }}
-          resizeMode={"cover"}
-          source={image}
-        ></Image>
-        <CustomText style={{ textAlign: "center" }} preset="body1">
-          {body}
-        </CustomText>
+        <View style={{ height: "80%", alignContent: "center", alignItems: "center" }}>
+          <CustomText
+            preset="title1"
+            style={{
+              marginBottom: spacing.size320,
+              textAlign: "center",
+            }}
+          >
+            {title}
+          </CustomText>
+          <Image
+            style={{ width: 300, height: "50%", marginBottom: spacing.size320 }}
+            resizeMode={"cover"}
+            source={image}
+          ></Image>
+          <CustomText style={{ textAlign: "center" }} preset="body1">
+            {body}
+          </CustomText>
+          {text2 ? (
+            <CustomText
+              style={{ textAlign: "center", marginTop: spacing.size120 }}
+              presetColors={"secondary"}
+              preset="caption1"
+            >
+              {text2}
+            </CustomText>
+          ) : null}
+        </View>
       </View>
     )
   }
@@ -142,6 +154,7 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
               title={slide.title}
               body={slide.text}
               image={slide.image}
+              text2={slide.text2}
             ></ScrollViewComponent>
           )
         })}
