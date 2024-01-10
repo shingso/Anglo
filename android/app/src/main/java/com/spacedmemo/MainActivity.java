@@ -1,4 +1,4 @@
-package com.shing.anglo;
+package com.spacedmemo;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "SpacedMemo";
+    return "spacedmemo";
   }
 
   /**

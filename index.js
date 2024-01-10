@@ -11,5 +11,5 @@ function IgniteApp() {
   return <App hideSplashScreen={RNBootSplash.hide} />
 }
 
-AppRegistry.registerComponent("SpacedMemo", () => IgniteApp)
+AppRegistry.registerComponent("spacedmemo", () => IgniteApp)
 export default App

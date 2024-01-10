@@ -1,9 +1,9 @@
 {
-  "name": "SpacedMemo",
-  "displayName": "SpacedMemo",
+  "name": "spacedmemo",
+  "displayName": "spacedmemo",
   "expo": {
-    "name": "SpacedMemo",
-    "slug": "SpacedMemo",
+    "name": "spacedmemo",
+    "slug": "spacedmemo",
     "scheme": "spacedmemo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,7 @@
     ],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
-      "package": "undefined",
+      "package": "com.spacedmemo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
         "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
@@ -36,7 +36,7 @@
     "ios": {
       "icon": "./assets/images/app-icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "undefined",
+      "bundleIdentifier": "com.spacedmemo",
       "splash": {
         "image": "./assets/images/splash-logo-ios-mobile.png",
         "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
