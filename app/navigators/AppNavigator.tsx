@@ -143,7 +143,7 @@ const AboutStackScreens = () => {
         name={AppRoutes.ABOUT_FLASHCARD}
         options={{
           headerShown: true,
-          title: "Flashcards",
+          title: "Flashcard Fields",
         }}
         component={AboutFlashcardScreen}
       />
