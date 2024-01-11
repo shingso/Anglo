@@ -43,6 +43,7 @@ export type AppStackParamList = {
   Multi_Add_AI: undefined
   Restart_Overdue: undefined
   Custom_Prompts: undefined
+  About_Flashcard: undefined
 }
 
 export enum AppRoutes {
@@ -76,6 +77,7 @@ export enum AppRoutes {
   MUTLI_ADD_AI = "Multi_Add_AI",
   RESTART_OVERDUE = "Restart_Overdue",
   CUSTOM_PROMPTS = "Custom_Prompts",
+  ABOUT_FLASHCARD = "About_Flashcard",
 }
 
 export const SortTypeLabels = {

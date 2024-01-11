@@ -38,6 +38,7 @@ import {
   MultiAddAiScreen,
   RestartOverdueScreen,
   CustomPromptsScreen,
+  AboutFlashcardScreen,
 } from "../screens"
 import { supabase } from "../services/supabase/supabase"
 import { custom_colors, custom_palette, darkTheme, lightTheme, spacing, typography } from "../theme"
@@ -138,6 +139,14 @@ const AboutStackScreens = () => {
           title: "About",
         }}
         component={AboutScreen}
+      />
+      <Stack.Screen
+        name={AppRoutes.ABOUT_FLASHCARD}
+        options={{
+          headerShown: true,
+          title: "Flashcards",
+        }}
+        component={AboutFlashcardScreen}
       />
       <Stack.Screen
         name={AppRoutes.TERMS_OF_SERVICE}

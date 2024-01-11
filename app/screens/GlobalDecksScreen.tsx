@@ -22,6 +22,7 @@ import { supabase } from "../services/supabase/supabase"
 import { AppStackParamList, AppRoutes } from "../utils/consts"
 import { FlatList } from "react-native-gesture-handler"
 import { borderRadius } from "app/theme/borderRadius"
+import { showErrorToast } from "app/utils/errorUtils"
 // import { useStores } from "../models"
 
 // STOP! READ ME FIRST!
@@ -52,7 +53,7 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
       }
 
       getDecks(searchTerm).catch(() => {
-        console.log("something went wrong")
+        showErrorToast("Error finding decks.")
       })
     }, [searchTerm])
 

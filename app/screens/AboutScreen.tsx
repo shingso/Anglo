@@ -35,6 +35,13 @@ export const AboutScreen: FC<StackScreenProps<AppStackScreenProps, "About">> = o
           <CustomText
             style={$item}
             preset="body2Strong"
+            onPress={() => navigation.navigate(AppRoutes.ABOUT_FLASHCARD)}
+          >
+            Flashcard tips
+          </CustomText>
+          <CustomText
+            style={$item}
+            preset="body2Strong"
             onPress={() => navigation.navigate(AppRoutes.TERMS_OF_SERVICE)}
           >
             Term of Service

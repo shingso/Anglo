@@ -452,11 +452,36 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
       <BottomSheet ref={aiTutorialRef} customSnap={["85%"]}>
         <ModalHeader title={"AI flashcard generate tips"}></ModalHeader>
         <CustomText
-          style={{ marginBottom: spacing.size320, paddingHorizontal: spacing.size40 }}
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
           preset="body2"
         >
-          Seperate words with a comma. Closing the application will interupt the process. Maximum 30
-          at a time. Try generating serveral cards and checking their responses before making many.
+          - To add multiple words at a time, seperate them with a comma. Copy and paste a list to
+          quickly add words.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - Maximum 30 words at a time.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - Be as precise as possible with the format of how you want your responses.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - The extra tags fields can only be used for a list of items. If using your own custom
+          prompt ask for a number of things, such as 'two related words'.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - Try generating serveral cards and checking their responses before making many.
         </CustomText>
       </BottomSheet>
     </Screen>

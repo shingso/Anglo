@@ -13,7 +13,7 @@ import { AppRoutes } from "app/utils/consts"
 import { useState } from "react"
 import { DrawerContentScrollView } from "@react-navigation/drawer"
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types"
-import { showErrorToast } from "app/utils/errorUtils"
+import { showDefaultToast, showErrorToast } from "app/utils/errorUtils"
 
 import { AddDeckModal } from "./AddDeckModal"
 
@@ -35,12 +35,11 @@ export const CustomDrawer = observer(function CustomDrawer(props: CustomDrawerPr
 
   const signOut = async () => {
     if (settingsStore?.isOffline) {
-      showErrorToast("Currently offline", "Go online to sign out")
       return
     }
     const pendingRemoteFunctions = await getPendingRemoteFunctions()
     if (pendingRemoteFunctions && pendingRemoteFunctions.length > 0) {
-      console.log("there are pending actions before we leave")
+      showDefaultToast("Actions are still pending before logout.")
     }
     authStore.logout()
     supabase.auth.signOut()

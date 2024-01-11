@@ -41,7 +41,6 @@ export const getAIDefinition = async (
 
 export const getRemainingRateLimit = async () => {
   const { data, error } = await supabase.functions.invoke("getRateLimit")
-  console.log(data, error, "remaining response")
   return data
 }
 
@@ -58,6 +57,5 @@ export const getAIDefintionWithDeckPrompts = async (
     deckCustomPrompts?.extraArrayPrompt,
     deckCustomPrompts?.subheaderPrompt,
   )
-  console.log("result for ai", deckCustomPrompts.extraPrompt)
   return { data, error }
 }

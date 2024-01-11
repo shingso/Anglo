@@ -99,34 +99,6 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
             Set custom prompts for AI flashcard generation. Change input language if the words are
             not in English.
           </CustomText>
-          {/* <Card
-            onPress={() => customPromptModelRef?.current?.present()}
-            style={{
-              paddingHorizontal: spacing.size160,
-              paddingVertical: spacing.size160,
-              minHeight: 0,
-              elevation: 0,
-
-              marginBottom: spacing.size320,
-              borderRadius: borderRadius.corner120,
-            }}
-            ContentComponent={
-              <View>
-                <CustomText preset="caption1Strong">
-                  Set preset prompts for defintions and languages
-                </CustomText>
-              </View>
-            }
-          ></Card> */}
-          {/* 
-          <CustomText
-            style={{ marginBottom: spacing.size120 }}
-            preset="caption1"
-            presetColors="secondary"
-          >
-            For best results, be precise as possible with instructions and how you want it
-            formatted.
-          </CustomText> */}
 
           <View>
             <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
@@ -198,6 +170,14 @@ export const CustomPromptsScreen: FC<CustomPromptsScreenProps> = observer(
 
             <CustomText preset="caption1Strong" style={{ marginBottom: spacing.size80 }}>
               Extra labels
+            </CustomText>
+            <CustomText
+              style={{ marginBottom: spacing.size160 }}
+              preset="caption2"
+              presetColors={"secondary"}
+            >
+              Extra labels is used for a list of items. Ask for a number of items. Such as three
+              related words.
             </CustomText>
             <EditableText
               preset="body2"

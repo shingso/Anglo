@@ -103,7 +103,6 @@ export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) =
   if (!flashcard || !flashcard?.id) {
     return null
   }
-  console.log("updating flashcard data", flashcard)
   try {
     const { data, error } = await supabase
       .from("flashcards")
@@ -114,7 +113,6 @@ export const updateFlashcard = async (flashcard: Partial<FlashcardSnapshotIn>) =
       showErrorToast(error.message)
     }
     if (data && data.length > 0) {
-      console.log("response update flashcard", data)
       return mapReponseToFlashcard(data[0])
     }
     return null
@@ -176,7 +174,6 @@ export const upsertMultipleFlashcards = async (flashcards: any[]) => {
 export const deleteFlashcard = async (flashcard: Flashcard): Promise<boolean> => {
   try {
     const { status, error } = await supabase.from("flashcards").delete().eq("id", flashcard.id)
-    console.log(status, error)
     if (status === 204) {
       return true
     }
@@ -185,7 +182,6 @@ export const deleteFlashcard = async (flashcard: Flashcard): Promise<boolean> =>
     }
     return false
   } catch (error) {
-    console.log(error)
     return false
   }
 }
@@ -195,7 +191,6 @@ export const insertNote = async (id: string, new_element: string) => {
     id,
     new_element,
   })
-  console.log(data, error, "insert note")
   return data
 }
 
@@ -243,7 +238,6 @@ export const addToFlashcardProgress = async (
   cardProgress: CardProgressSnapshotIn,
 ): Promise<any> => {
   const insertedProgress = await insertCardProgress(cardProgress)
-  console.log("inserted progress", insertedProgress)
   if (insertedProgress) {
     updateMostRecentLocalId(insertedProgress.id)
     //updateConfirmedRemoteId(insertedProgress.id) TODO figure if this is needed
@@ -264,9 +258,6 @@ export const calculateFlashcardProgress = (flashcard: Flashcard) => {
   }
 
   if (flashcard?.card_progress && flashcard?.card_progress.length > 0) {
-    flashcard?.card_progress.forEach((progress) => {
-      console.log("progress", progress)
-    })
     flashcardStatistics.currentRepetition = calculateCurrentRepetition(flashcard.card_progress)
     flashcardStatistics.easinessFactor = calculateEasinessFactor(flashcard.card_progress)
     flashcard.card_progress.forEach((progress) => {
