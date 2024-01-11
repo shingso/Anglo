@@ -301,7 +301,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.size280 }}>
                 <Icon
                   onPress={() => tutorialModalRef?.current?.present()}
-                  icon="fluent_error_circle"
+                  icon="fluent_question_circle"
                   size={24}
                 />
                 <Icon
@@ -479,7 +479,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                   <CustomText preset="body1Strong">Swipe right</CustomText>
                 </View>
                 <CustomText preset="body2">
-                  If you know the card perfectly and recalled it instantly
+                  If you know the back perfectly and recalled it instantly.
                 </CustomText>
               </View>
               <View>
@@ -508,7 +508,7 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
                   <Icon icon="swipe_left" size={23} style={{ marginRight: spacing.size80 }}></Icon>
                   <CustomText preset="body1Strong">Swipe left</CustomText>
                 </View>
-                <CustomText preset="body2">If you could not recall the card</CustomText>
+                <CustomText preset="body2">If you could not recall the back.</CustomText>
               </View>
             </View>
           </ScrollView>
