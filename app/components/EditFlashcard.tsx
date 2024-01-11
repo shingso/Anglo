@@ -143,7 +143,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
         deck,
         selectedFlashcardReference?.front,
       )
-      console.log(data, error, data?.error, data?.error?.message, data.remaining, "generation")
       if (!data || !!data?.error) {
         setErrorMessage(
           data.remaining === 0
@@ -226,7 +225,6 @@ export const EditFlashcard = observer(function EditFlashcard(props: EditFlashcar
     if (result?.assets) {
       const res = await uploadPictureFile(createFormData(result.assets[0].uri))
       if (res) {
-        console.log(supabseStorageUrl + res + ".jpg", "uploaded url")
         updateSelectedFlashcard(Flashcard_Fields.PICTURE_URL, supabseStorageUrl + res + ".jpg")
         return supabseStorageUrl + res + ".jpg"
       }

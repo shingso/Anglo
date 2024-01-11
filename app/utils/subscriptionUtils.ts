@@ -46,7 +46,7 @@ export const processProductPayment = async (productId: string, userId: string): 
   const { data, error } = await supabase.functions.invoke("stripePayment", {
     body: JSON.stringify({ productId: productId, userId: userId }),
   })
-  console.log(data, error)
+
   return data
 }
 
@@ -54,7 +54,7 @@ export const processSubscriptionPayment = async (userId: string): Promise<any> =
   const { data, error } = await supabase.functions.invoke("stripeSubscription", {
     body: JSON.stringify({ userId: userId }),
   })
-  console.log(data, error)
+
   return data
 }
 
@@ -62,7 +62,7 @@ export const cancelSubscription = async (subscriptionId: string): Promise<any> =
   const { data, error } = await supabase.functions.invoke("cancelSubscription", {
     body: JSON.stringify({ subscriptionId: subscriptionId }),
   })
-  console.log(data, error)
+
   return data
 }
 
@@ -70,7 +70,7 @@ export const reactivateSubscription = async (subscriptionId: string): Promise<an
   const { data, error } = await supabase.functions.invoke("reactivateSubscription", {
     body: JSON.stringify({ subscriptionId: subscriptionId }),
   })
-  console.log(data, error)
+
   return data
 }
 

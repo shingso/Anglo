@@ -78,8 +78,7 @@ export const mapReponseToFlashcard = (flashcard: FlashcardSnapshotIn): Flashcard
 
 export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn> => {
   if (!flashcard?.deck_id || !flashcard?.front || !flashcard?.back) {
-    //throw some kinda of an ERROR
-    console.log("you messed up here which means something is wrong with the data/flow")
+    showErrorToast("Error adding flashcard")
   }
 
   try {
@@ -199,7 +198,6 @@ export const removeNote = async (id: string, new_element: string) => {
     id,
     new_element,
   })
-  console.log(data, error, "remove note")
   return data
 }
 
