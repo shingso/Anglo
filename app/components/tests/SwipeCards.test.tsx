@@ -21,7 +21,6 @@ test("can be created", async () => {
 
   deckStore.selectedDeck.setSessionCards()
   const firstSessionCard = deckStore.selectedDeck.sessionCards[0]
-  //console.log(deckStore.selectedDeck.sessionCards.length)
 
   const mockLeft = jest.fn()
   const mockRight = jest.fn()

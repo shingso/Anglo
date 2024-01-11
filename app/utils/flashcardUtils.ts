@@ -86,7 +86,6 @@ export const addFlashcard = async (flashcard: any): Promise<FlashcardSnapshotIn>
       .from("flashcards")
       .insert([mapFlashcardToInput(flashcard)])
       .select()
-    console.log("we are logging the response to this", data, error)
     if (data && data.length > 0) {
       return mapReponseToFlashcard(data[0])
     }

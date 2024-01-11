@@ -72,7 +72,7 @@ export const searchGlobalFlashcards = async (searchTerm: string) => {
     .select("*")
     .eq("front", searchTerm)
     .limit(2)
-  console.log(global_flashcards, "global search", "search term:", searchTerm, error)
+
   return global_flashcards
 }
 
@@ -91,7 +91,6 @@ export const addGlobalFlashcard = async (flashcard: GlobalFlashcard) => {
         [Global_Flashcard_Fields.DIFFICULTIY]: flashcard?.difficulty,
       },
     ])
-    console.log(data, error, "ADD RESPONSE")
   } catch (error) {
     console.log(error)
   }
@@ -103,7 +102,6 @@ export const updateGlobalFlashcard = async (flashcard: GlobalFlashcard) => {
       .from("global_flashcards")
       .update([flashcard])
       .eq("front", flashcard.front)
-    console.log("udpate global flash", data, error)
   } catch (error) {
     console.log(error)
   }
@@ -124,7 +122,6 @@ export const addToGlobalDeck = async (flashcard: GlobalFlashcard) => {
         [Global_Flashcard_Fields.DECK_ID]: flashcard?.deck_id,
       },
     ])
-    console.log(data, error, "ADD RESPONSE")
   } catch (error) {
     console.log(error)
   }

@@ -40,7 +40,6 @@ export const getCardProgress = async (id: String): Promise<CardProgress> => {
     }
     return null
   } catch (error) {
-    console.log(error)
     return null
   }
 }
@@ -78,7 +77,6 @@ export const getCardProgressesByField = async (id: string, value: any): Promise<
     }
     return null
   } catch (error) {
-    console.log(error)
     return null
   }
 }
@@ -94,7 +92,6 @@ export const getMostRecentCardProgress = async (): Promise<CardProgress> => {
     }
     return null
   } catch (error) {
-    console.log(error)
     return null
   }
 }
@@ -118,7 +115,6 @@ export const insertCardProgress = async (
     }
   } catch (error) {
     addFunctionToRemoteSync(FunctionTypes.INSERT_CARD_PROGRESS, progress)
-    console.log(error, "Failed to add to remote, adding to local remote sync")
   }
   return null
 }
@@ -131,7 +127,7 @@ export const deleteCardProgress = async (
       .from("card_progress")
       .delete()
       .eq("id", cardProgress.id)
-    console.log(status, error)
+
     if (status === 204) {
       return true
     }
@@ -140,7 +136,6 @@ export const deleteCardProgress = async (
     }
     return false
   } catch (error) {
-    console.log(error)
     return false
   }
 }

@@ -120,13 +120,11 @@ export const updateDeck = async (deck: Partial<DeckSnapshotIn>) => {
       .eq(Deck_Fields.ID, deck.id)
       .select()
     if (data && data.length > 0) {
-      console.log(data)
       return data[0]
     }
 
     return null
   } catch (error) {
-    console.log(error)
     return null
   }
 }

@@ -1,10 +1,4 @@
 import { supabase } from "../../services/supabase/supabase"
-import {
-  Card_Progress_Fields,
-  getCardProgress,
-  getCardProgressesByField,
-  insertCardProgress,
-} from "../cardProgressUtils"
 import { load, save } from "../storage"
 import { v4 as uuidv4 } from "uuid"
 import { CardProgress } from "../../models/CardProgress"
@@ -124,40 +118,40 @@ export const clearRemoteSync = async () => {
 }
 
 //it looks like right now we only handle inserts
-const remoteFunctionsMap: { [key: string]: Function } = {
-  [FunctionTypes.INSERT_CARD_PROGRESS]: insertCardProgress,
-}
+// const remoteFunctionsMap: { [key: string]: Function } = {
+//   [FunctionTypes.INSERT_CARD_PROGRESS]: insertCardProgress,
+// }
 
-export const applyRemoteSync = async (pendingFunctions: RemoteFunction[]) => {
-  const sortedPendingRemoteSync = pendingFunctions.sort(
-    (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
-  )
-  const appliedRemoteSyncs = []
-  const remainingRemoteSyncs = []
-  /*   const remoteFunction = remoteFunctionsMap[FunctionTypes.INSERT_CARD_PROGRESS]
-  const mockCardProgress: CardProgress = {
-    flashcard_id: "506e24d2-8722-4091-bbe2-0fbe098c247b",
-    time_elapsed: 2000,    
-    passed: true,
-  }
-  const remoteResponse = await remoteFunction(mockCardProgress)
-  console.log("remote response", remoteResponse)
- */
-  //appliedRemoteSyncs.push(func.id)
+// export const applyRemoteSync = async (pendingFunctions: RemoteFunction[]) => {
+//   const sortedPendingRemoteSync = pendingFunctions.sort(
+//     (a, b) => a.createdAt.getTime() - b.createdAt.getTime(),
+//   )
+//   const appliedRemoteSyncs = []
+//   const remainingRemoteSyncs = []
+//   /*   const remoteFunction = remoteFunctionsMap[FunctionTypes.INSERT_CARD_PROGRESS]
+//   const mockCardProgress: CardProgress = {
+//     flashcard_id: "506e24d2-8722-4091-bbe2-0fbe098c247b",
+//     time_elapsed: 2000,
+//     passed: true,
+//   }
+//   const remoteResponse = await remoteFunction(mockCardProgress)
+//   console.log("remote response", remoteResponse)
+//  */
+//   //appliedRemoteSyncs.push(func.id)
 
-  sortedPendingRemoteSync.forEach(async (func: RemoteFunction) => {
-    const functionType = func.type
-    if (!!remoteFunctionsMap?.[functionType]) {
-      const remoteFunction = remoteFunctionsMap[functionType]
-      const remoteResponse = await remoteFunction(func.data)
-      if (remoteResponse) {
-        appliedRemoteSyncs.push(func.id)
-      }
-    }
-    //replaceRemoteSync(remainingRemoteSyncs)
-  })
-  //remove all of the fuinctions that are applied.
-}
+//   sortedPendingRemoteSync.forEach(async (func: RemoteFunction) => {
+//     const functionType = func.type
+//     if (!!remoteFunctionsMap?.[functionType]) {
+//       const remoteFunction = remoteFunctionsMap[functionType]
+//       const remoteResponse = await remoteFunction(func.data)
+//       if (remoteResponse) {
+//         appliedRemoteSyncs.push(func.id)
+//       }
+//     }
+//     //replaceRemoteSync(remainingRemoteSyncs)
+//   })
+//   //remove all of the fuinctions that are applied.
+// }
 
 const determineConflictResolution = () => {}
 
@@ -170,7 +164,7 @@ export interface ProgressConflicts {
 export type ConflictedProgresses = {
   [key: string]: [CardProgress[], CardProgress[]]
 }
-
+/* 
 export const seperateResolutionRequiredConflicts = (
   remoteOperations: CardProgress[],
   localOperations: CardProgress[],
@@ -282,7 +276,4 @@ export const applyConflictResolution = async (mostRecentId: string, progresses: 
     console.log(error)
   }
 }
-
-const syncLocalMostRecentWithRemote = () => {
-  //clear all of the pending functions
-}
+ */

@@ -59,14 +59,12 @@ export const getGlobalDeckFlashcardsAfterTime = async (
 ) => {
   const date = new Date(time)
   const formattedTime = date.toISOString()
-  console.log(field, formattedTime, "current field time")
   let { data: deck, error } = await supabase
     .from("global_decks")
     .select("private_global_flashcards(*)")
     .eq("id", deck_id)
     .gt(field, formattedTime)
   if (deck && deck?.length > 0) {
-    console.log(deck[0].private_global_flashcards)
     return deck[0].private_global_flashcards
   }
   return []
@@ -82,7 +80,7 @@ export const importFreeGlobalDeckById = async (
     deck_title: deckTitle,
     new_per_day: newPerDay,
   })
-  console.log(deck, error)
+
   return deck
 }
 
@@ -110,13 +108,11 @@ export const insertPaidFlashcardsIntoDeck = async (
       deck_id_param: deckId,
       selected_deck_id: globalDeckId,
     })
-    console.log("we purchased the deck", data, error)
     if (data) {
       return data.map((card) => mapReponseToFlashcard(card))
     }
     return null
   } catch (error) {
-    console.log(error)
     return null
   }
 }

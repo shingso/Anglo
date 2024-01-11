@@ -46,7 +46,6 @@ export const processProductPayment = async (productId: string, userId: string): 
   const { data, error } = await supabase.functions.invoke("stripePayment", {
     body: JSON.stringify({ productId: productId, userId: userId }),
   })
-
   return data
 }
 
@@ -54,7 +53,6 @@ export const processSubscriptionPayment = async (userId: string): Promise<any> =
   const { data, error } = await supabase.functions.invoke("stripeSubscription", {
     body: JSON.stringify({ userId: userId }),
   })
-
   return data
 }
 
@@ -62,7 +60,6 @@ export const cancelSubscription = async (subscriptionId: string): Promise<any> =
   const { data, error } = await supabase.functions.invoke("cancelSubscription", {
     body: JSON.stringify({ subscriptionId: subscriptionId }),
   })
-
   return data
 }
 
@@ -70,7 +67,6 @@ export const reactivateSubscription = async (subscriptionId: string): Promise<an
   const { data, error } = await supabase.functions.invoke("reactivateSubscription", {
     body: JSON.stringify({ subscriptionId: subscriptionId }),
   })
-
   return data
 }
 
@@ -120,7 +116,6 @@ export const getPaidFlashcardsPreview = async (deck_id: string) => {
       .limit(20)
       .eq("deck_id", deck_id)
       .eq("free", false)
-    console.log(data, error)
     return data
   } catch (error) {
     return null
