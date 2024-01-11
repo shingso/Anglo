@@ -37,7 +37,7 @@ export const AboutScreen: FC<StackScreenProps<AppStackScreenProps, "About">> = o
             preset="body2Strong"
             onPress={() => navigation.navigate(AppRoutes.ABOUT_FLASHCARD)}
           >
-            Flashcard tips
+            Flashcard fields
           </CustomText>
           <CustomText
             style={$item}

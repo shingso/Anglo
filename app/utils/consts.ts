@@ -261,8 +261,9 @@ export const freeLimitDeck = 2
 
 export const defaultBackPrompt =
   "The part of the speech for the word, followed by a short and consise definition"
-export const defaultSubheaderPrompt = "The English pronounciation"
-export const defaultExtraPrompt = "An example sentence."
+export const defaultSubheaderPrompt =
+  "Give the american pronoucation for the subheader. Some examples would be the word 'founder' would translate to 'fown-dr' and the word 'country' would be 'kuhn-tree'"
+export const defaultExtraPrompt = "An example sentence"
 export const defaultExtraArrayPrompt = "Three related words"
 
 export const defaultLanguageBackPrompt = (language: TranslateLanguage) =>

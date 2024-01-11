@@ -183,7 +183,7 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
       <Header
         title="AI Generate"
         onRightPress={() => aiTutorialRef?.current?.present()}
-        rightIcon="fluent_error_circle"
+        rightIcon="fluent_question_circle"
       ></Header>
 
       <View style={{ height: "100%" }}>
@@ -209,43 +209,6 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
                   Remaining rate: {limitRemaining <= 0 ? 0 : limitRemaining}
                 </CustomText>
               )}
-
-              {/*   <Card
-                disabled={true}
-                style={{
-                  paddingHorizontal: spacing.size160,
-                  paddingVertical: spacing.size160,
-                  minHeight: 0,
-                  elevation: 0,
-                  marginBottom: spacing.size120,
-                  borderRadius: 16,
-                }}
-                ContentComponent={
-                  <View>
-                    <TouchableOpacity onPress={() => aiLanguageModelRef?.current?.present()}>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <View>
-                          <CustomText preset="body1">
-                            {capitalizeFirstLetter(aiLanguage)}
-                          </CustomText>
-                        </View>
-                        <Icon
-                          icon="caret_right"
-                          color="#242424"
-                          style={{ marginLeft: spacing.size80 }}
-                          size={16}
-                        ></Icon>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                }
-              ></Card> */}
 
               <CustomText
                 style={{ marginBottom: spacing.size40 }}
@@ -452,10 +415,14 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
       <BottomSheet ref={aiTutorialRef} customSnap={["85%"]}>
         <ModalHeader title={"AI flashcard generate tips"}></ModalHeader>
         <CustomText
-          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          style={{
+            marginBottom: spacing.size160,
+            paddingHorizontal: spacing.size80,
+            marginTop: spacing.size160,
+          }}
           preset="body2"
         >
-          - To add multiple words at a time, seperate them with a comma. Copy and paste a list to
+          - To add multiple words at a time, seperate words with a comma. Copy and paste a list to
           quickly add words.
         </CustomText>
         <CustomText
@@ -475,13 +442,27 @@ export const MultiAddAiScreen: FC<MultiAddAiScreenProps> = observer(function Mul
           preset="body2"
         >
           - The extra tags fields can only be used for a list of items. If using your own custom
-          prompt ask for a number of things, such as 'two related words'.
+          prompt for extra tags ask for a number of things, such as 'two related words' or 'three
+          synonyms'.
         </CustomText>
         <CustomText
           style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
           preset="body2"
         >
           - Try generating serveral cards and checking their responses before making many.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - You can input words of a different language for AI. For best results change the front
+          input language.
+        </CustomText>
+        <CustomText
+          style={{ marginBottom: spacing.size160, paddingHorizontal: spacing.size80 }}
+          preset="body2"
+        >
+          - Look at the about section for more information about the flashcard fields.
         </CustomText>
       </BottomSheet>
     </Screen>
