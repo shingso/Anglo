@@ -107,6 +107,9 @@ export const FreeStudyScreen: FC<FreeStudyScreenProps> = observer(function FreeS
     <Screen contentContainerStyle={{ flexGrow: 1 }} style={$root} preset="fixed">
       <Header title={"Free study"}></Header>
       <View style={$container}>
+        <CustomText preset="caption1" style={{ marginBottom: spacing.size120 }}>
+          It is recommended that you use spaced memorization instead of free study.
+        </CustomText>
         <ScrollView
           style={{ flexGrow: 0, marginBottom: spacing.size160 }}
           contentContainerStyle={{ gap: spacing.size80 }}

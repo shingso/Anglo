@@ -86,6 +86,12 @@ export const TutorialScreen: FC<TutorialScreenProps> = observer(function Tutoria
       title: "Forgot card",
       text: "If you forgot the card, swipe the card left.",
     },
+    /*   {
+      key: "seven1",
+      image: require("../../assets/images/swipeleftcard.png"),
+      title: "Get started with premade decks",
+      text: "Try a premade deck for SAT vocabulary, Spanish, German, and French.",
+    }, */
   ]
 
   const scrollX = useRef(new Animated.Value(0)).current
