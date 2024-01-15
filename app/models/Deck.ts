@@ -60,7 +60,7 @@ export const DeckModel = types
     customPrompts: types.optional(CustomPromptModel, {}),
     //customPromptLanguages: types.optional(CustomPromptLanguageModel, {}),
     soundOption: types.optional(types.enumeration(soundOptionArray), SoundOptions.FRONT),
-    playSoundAutomatically: types.optional(types.boolean, false),
+    playSoundAutomatically: types.optional(types.boolean, true),
     addNewCardsPerDay: types.optional(types.boolean, true),
     startMode: types.optional(types.enumeration(startOptions), StartOption.DATE_ADDED),
     flipFlashcard: types.optional(types.boolean, false),

@@ -123,12 +123,13 @@ export const FreeStudySessionScreen: FC<FreeStudySessionScreenProps> = observer(
             swipeRight={() => navigateHome()}
             children={
               <View style={$sessions_statistics}>
-                <CustomText style={{ marginBottom: spacing.size200 }} preset="title2">
-                  You have just learned more words.
+                <CustomText
+                  style={{ fontFamily: typography.primary.medium, marginBottom: spacing.size200 }}
+                  preset="title1"
+                >
+                  Free study complete
                 </CustomText>
-                <CustomText style={{ marginTop: "auto" }} preset="caption1Strong">
-                  Swipe to go back home
-                </CustomText>
+                <CustomText preset="body2Strong">Swipe to go back home</CustomText>
               </View>
             }
           ></CustomSwipeCards>

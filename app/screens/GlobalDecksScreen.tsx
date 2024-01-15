@@ -81,31 +81,6 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
             onChangeText={setSearchTerm}
           ></TextField>
 
-          {/*           <ScrollView
-            contentContainerStyle={{
-              gap: 12,
-              backgroundColor: "green",
-            }}
-            style={{
-              paddingHorizontal: spacing.size160,
-              marginBottom: spacing.size160,
-              flexShrink: 1,
-            }}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            {["Featured", "SAT", "English", "Spanish"].map((text, index) => {
-              return (
-                <View key={text} style={{ height: 42 }}>
-                  <CustomTag
-                    onPress={() => setSelectedTag(text)}
-                    selected={text === selectedTag}
-                    text={text}
-                  ></CustomTag>
-                </View>
-              )
-            })}
-          </ScrollView> */}
           {loading ? (
             <Loading></Loading>
           ) : (
@@ -148,11 +123,11 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                             }}
                           />
                         )}
-                        <CustomText style={{ marginBottom: spacing.size80 }} preset="body1">
+                        <CustomText style={{ marginBottom: spacing.size80 }} preset="body1Strong">
                           {item?.title}
                         </CustomText>
                       </View>
-                      <CustomText style={{ marginBottom: spacing.size80 }} preset="caption2">
+                      <CustomText style={{ marginBottom: spacing.size80 }} preset="caption1">
                         {item?.private_global_flashcards?.length} cards
                       </CustomText>
                       {item?.description ? (
@@ -164,19 +139,6 @@ export const GlobalDecksScreen: FC<StackScreenProps<AppStackScreenProps, "Global
                           {item?.description}
                         </CustomText>
                       ) : null}
-                      {/*  <CustomText
-                      preset="caption1Strong"
-                      style={{
-                        marginBottom: spacing.size40,
-                        color: custom_colors.background1,
-                        backgroundColor: custom_colors.brandBackground1,
-                        paddingHorizontal: spacing.size80,
-                        paddingVertical: spacing.size40,
-                        borderRadius: borderRadius.corner80,
-                      }}
-                    >
-                      Premium
-                    </CustomText> */}
                     </View>
                   }
                 ></Card>

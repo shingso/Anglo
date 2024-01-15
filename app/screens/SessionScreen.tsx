@@ -341,23 +341,27 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
             swipeRight={() => navigateHome()}
             children={
               <View style={$sessions_statistics}>
-                <CustomText preset="title1" style={{ fontFamily: typography.primary.light }}>
+                <CustomText preset="title1" style={{ fontFamily: typography.primary.medium }}>
                   The progress you've made
                 </CustomText>
-                <View style={{ gap: spacing.size160 }}>
+                <View style={{ gap: spacing.size200 }}>
                   <View>
-                    <CustomText preset="body1">{sessionStats.left}</CustomText>
-                    <CustomText preset="caption1">Cards passed</CustomText>
+                    <CustomText style={{ fontFamily: typography.primary.light }} preset="title1">
+                      {sessionStats.left}
+                    </CustomText>
+                    <CustomText preset="body2Strong">Cards passed</CustomText>
                   </View>
                   <View>
-                    <CustomText preset="body1">{sessionStats.totalSwipes}</CustomText>
-                    <CustomText preset="caption1">Total swipes</CustomText>
+                    <CustomText style={{ fontFamily: typography.primary.light }} preset="title1">
+                      {sessionStats.totalSwipes}
+                    </CustomText>
+                    <CustomText preset="body2Strong">Total swipes</CustomText>
                   </View>
                   <View>
-                    <CustomText preset="body1">
+                    <CustomText style={{ fontFamily: typography.primary.light }} preset="title1">
                       {millisecondsToTime(sessionStats?.longestElapsed * 60000)}
                     </CustomText>
-                    <CustomText preset="caption1">Longest recall period</CustomText>
+                    <CustomText preset="body2Strong">Longest recall period</CustomText>
                   </View>
                 </View>
               </View>
@@ -512,21 +516,6 @@ export const SessionScreen: FC<StackScreenProps<AppStackScreenProps<"Session">>>
               </View>
             </View>
           </ScrollView>
-
-          {/*    <ExpandingDot
-            data={slides}
-            expandingDotWidth={30}
-            scrollX={scrollX}
-            inActiveDotOpacity={0.6}
-            dotStyle={{
-              width: 10,
-              height: 10,
-              backgroundColor: custom_palette.primary150,
-              borderRadius: 5,
-              marginHorizontal: 5,
-            }}
-            containerStyle={{ left: 36, bottom: 120 }}
-          /> */}
         </BottomSheet>
         <CustomModal
           mainAction={() => removeFlashcard(currentFlashcard, deckStore.selectedDeck)}
