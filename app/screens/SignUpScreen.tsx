@@ -19,6 +19,7 @@ import { supabase } from "../services/supabase/supabase"
 import { makeRedirectUri } from "expo-auth-session"
 import { AuthProviders } from "./LoginScreen"
 import * as WebBrowser from "expo-web-browser"
+import { showErrorToast } from "app/utils/errorUtils"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
 
@@ -41,7 +42,9 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
         email: email,
         password: password,
       })
-      console.log("DATA " + data.session, "ERROR " + error)
+      if (error) {
+        showErrorToast("Could not sign up with credentials", error.message)
+      }
     }
     const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
