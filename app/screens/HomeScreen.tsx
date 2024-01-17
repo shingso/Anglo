@@ -85,7 +85,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
             >
               {source && <Image style={{ height: 36, width: 36 }} source={source} />}
               <View>
-                <CustomText preset="body1">{title}</CustomText>
+                <CustomText preset="body2Strong">{title}</CustomText>
                 <CustomText style={{ flexShrink: 1 }} preset="caption2" presetColors={"secondary"}>
                   {caption}
                 </CustomText>
@@ -146,7 +146,7 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                   <DeckItem
                     source={require("../../assets/icons/qanda.png")}
                     title={"Get the most out of studying"}
-                    caption={"Learn more about spaced memorization"}
+                    caption={"Get the most out of your studying"}
                     onPress={() => navigation.navigate(AppRoutes.TUTORIAL)}
                   ></DeckItem>
                 </View>
@@ -170,19 +170,19 @@ export const HomeScreen: FC<StackScreenProps<AppStackScreenProps<"Home">>> = obs
                     source={require("../../assets/icons/mexico.png")}
                     onPress={() => importStarterDeckById(starterSpanishDeckId)}
                     title={"Spanish"}
-                    caption={"Basic and common Spanish words"}
+                    caption={"Most frequently used Spanish words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/germany.png")}
                     onPress={() => importStarterDeckById(starterGermanDeckId)}
                     title={"German"}
-                    caption={"Basic and common German words"}
+                    caption={"Most frequently used German words"}
                   ></DeckItem>
                   <DeckItem
                     source={require("../../assets/icons/france.png")}
                     onPress={() => importStarterDeckById(starterFrenchDeckId)}
                     title={"French"}
-                    caption={"Basic and common French words"}
+                    caption={"Most frequently used French words"}
                   ></DeckItem>
                   {/*    <DeckItem
                     source={require("../../assets/icons/italy.png")}
