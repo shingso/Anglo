@@ -212,6 +212,7 @@ export const iconRegistry = {
   free_study: require("../../assets/icons/free_study.png"),
   arrow_up: require("../../assets/icons/arrow_up.png"),
   language: require("../../assets/icons/language.png"),
+  discord_logo: require("../../assets/icons/discord_logo.png"),
 }
 
 const $imageStyle: ImageStyle = {

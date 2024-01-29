@@ -25,6 +25,7 @@ import { showErrorToast } from "app/utils/errorUtils"
 export enum AuthProviders {
   GOOGLE = "google",
   APPLE = "apple",
+  DISCORD = "discord",
 }
 // REMOVE ME! ⬇️ This TS ignore will not be necessary after you've added the correct navigator param type
 // @ts-ignore
@@ -49,13 +50,11 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
           email: email,
           password: password,
         })
-        console.log(data, error)
         if (error) {
           showErrorToast("No account found", "Could not find a login with entered information")
         }
       } catch (error) {
         console.log("Somthing went wrong with login")
-        console.log(error)
       }
     }
 
@@ -188,7 +187,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
           >
             <View style={{ backgroundColor: custom_colors.foreground2, height: 1, flex: 1 }} />
             <CustomText preset="caption1" style={{ paddingHorizontal: spacing.size160 }}>
-              or
+              or quickly sign in
             </CustomText>
             <View style={{ backgroundColor: custom_colors.foreground2, height: 1, flex: 1 }} />
           </View>
@@ -222,6 +221,27 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             onPress={() => signInWithSocialAuth(AuthProviders.APPLE)}
           >
             Continue with Apple
+          </Button>
+          <Button
+            preset="custom_outline"
+            style={{
+              marginBottom: spacing.size160,
+              height: 44,
+              backgroundColor: custom_colors.background3,
+              borderWidth: 0,
+            }}
+            textStyle={{ fontSize: 16, lineHeight: 26, color: "#5865F2" }}
+            LeftAccessory={(props) => (
+              <Icon
+                containerStyle={props.style}
+                icon="discord_logo"
+                color="#5865F2"
+                size={22}
+              ></Icon>
+            )}
+            onPress={() => signInWithSocialAuth(AuthProviders.DISCORD)}
+          >
+            Continue with Discord
           </Button>
           <CustomText
             preset="body1Strong"
