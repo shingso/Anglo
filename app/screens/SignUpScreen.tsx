@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps } from "../navigators"
 import {
@@ -129,7 +129,12 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
     const passwordError = isSubmitted ? validatePassword() : ""
 
     return (
-      <Screen safeAreaEdges={["top", "bottom"]} style={$root} preset="scroll">
+      <Screen
+        contentContainerStyle={{ flexGrow: 1 }}
+        safeAreaEdges={["top", "bottom"]}
+        style={$root}
+        preset="scroll"
+      >
         <View style={$container}>
           <View style={{ width: 300, marginBottom: spacing.size40 }}>
             <CustomText
@@ -231,6 +236,22 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
           >
             Already have an account?
           </CustomText>
+          <View
+            style={{
+              flexDirection: "row",
+              marginTop: "auto",
+              justifyContent: "center",
+            }}
+          >
+            <CustomText preset="caption2">By using this application you agree to our </CustomText>
+            <CustomText
+              style={$terms_link}
+              preset="caption2"
+              onPress={() => navigation.navigate(AppRoutes.TERMS_OF_SERVICE)}
+            >
+              Terms of Service
+            </CustomText>
+          </View>
         </View>
       </Screen>
     )
@@ -244,8 +265,13 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   padding: spacing.size240,
   paddingTop: spacing.size400,
+  flex: 1,
 }
 
 const $inputContainer: ViewStyle = {
   marginBottom: spacing.size200,
+}
+
+const $terms_link: TextStyle = {
+  color: custom_colors.brandBackground2,
 }
