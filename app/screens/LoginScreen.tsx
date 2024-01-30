@@ -41,7 +41,11 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
     async function signInWithEmail() {
       setIsSubmitted(true)
       if (validateEmail()) {
-        showErrorToast("Invalid email address")
+        showErrorToast(validateEmail())
+        return
+      }
+      if (validatePassword()) {
+        showErrorToast(validatePassword())
         return
       }
       setIsSubmitted(false)
@@ -58,17 +62,31 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
       }
     }
 
+    async function signInWithPhone() {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          phone: email,
+          password: password,
+        })
+        console.log(data, error)
+        if (error) {
+          console.log("error", error)
+          showErrorToast("No account found", "Could not find a login with entered information")
+        }
+      } catch (error) {
+        console.log("Somthing went wrong with login")
+      }
+    }
+
     const validateEmail = (): string => {
-      if (email.length === 0) return "can't be blank"
-      if (email.length < 6) return "must be at least 6 characters"
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "must be a valid email address"
+      if (email.length === 0) return "Email can't be blank"
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Must be a valid email address"
       return ""
     }
 
     const validatePassword = (): string => {
-      if (email.length === 0) return "can't be blank"
-      if (email.length < 6) return "must be at least 6 characters"
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "must be a valid email address"
+      if (password.length === 0) return "Password can't be blank"
+      /* if (password.length < 6) return "Password must be at least 6 characters" */
       return ""
     }
 
@@ -141,14 +159,17 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
     return (
       <Screen safeAreaEdges={["top", "bottom"]} style={$root} preset="fixed">
         <View style={$container}>
-          <View style={{ width: 300, marginBottom: spacing.size320 }}>
+          <View style={{ width: 300, marginBottom: spacing.size40 }}>
             <CustomText
               preset="title1"
               style={{ marginBottom: spacing.size40, fontFamily: typography.primary.semiBold }}
             >
-              Study anywhere, know it everywhere
+              Welcome back!
             </CustomText>
           </View>
+          <CustomText preset="caption1" style={{ marginBottom: spacing.size160 }}>
+            Sign back into your account and continue studying.
+          </CustomText>
           <TextField
             containerStyle={$modal_text_field}
             value={email}
@@ -244,7 +265,7 @@ export const LoginScreen: FC<StackScreenProps<AppStackScreenProps, "Login">> = o
             Continue with Discord
           </Button>
           <CustomText
-            preset="body1Strong"
+            preset="body2Strong"
             style={{ marginTop: spacing.size160, color: custom_colors.blueForeground1 }}
             onPress={() => goToSignUp()}
           >

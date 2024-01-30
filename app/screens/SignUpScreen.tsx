@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
-import { StackScreenProps } from "@react-navigation/stack"
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { AppStackScreenProps } from "../navigators"
 import {
   Button,
@@ -20,6 +20,8 @@ import { makeRedirectUri } from "expo-auth-session"
 import { AuthProviders } from "./LoginScreen"
 import * as WebBrowser from "expo-web-browser"
 import { showErrorToast } from "app/utils/errorUtils"
+import { useNavigation } from "@react-navigation/native"
+import { AppRoutes, AppStackParamList } from "app/utils/consts"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
 
@@ -36,8 +38,20 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
   function SignUpScreen() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [isSubmitted, setIsSubmitted] = useState(false)
+    const navigation = useNavigation<StackNavigationProp<AppStackParamList>>()
 
     const signUp = async (email: string, password: string) => {
+      setIsSubmitted(true)
+      if (validateEmail()) {
+        showErrorToast(validateEmail())
+        return
+      }
+      if (validatePassword()) {
+        showErrorToast(validatePassword())
+        return
+      }
+      setIsSubmitted(false)
       let { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
@@ -99,21 +113,44 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
       }
     }
 
-    return (
-      <Screen style={$root} preset="scroll">
-        <Header title={"Sign up"}></Header>
+    const validateEmail = (): string => {
+      if (email.length === 0) return "Email can't be blank"
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Must be a valid email address"
+      return ""
+    }
 
+    const validatePassword = (): string => {
+      if (password.length === 0) return "Password can't be blank"
+      if (password.length < 6) return "Password must be at least 6 characters"
+      return ""
+    }
+
+    const emailError = isSubmitted ? validateEmail() : ""
+    const passwordError = isSubmitted ? validatePassword() : ""
+
+    return (
+      <Screen safeAreaEdges={["top", "bottom"]} style={$root} preset="scroll">
         <View style={$container}>
-          <View style={{ width: 300, marginBottom: spacing.size320 }}>
+          <View style={{ width: 300, marginBottom: spacing.size40 }}>
             <CustomText
               preset="title1"
               style={{ marginBottom: spacing.size40, fontFamily: typography.primary.semiBold }}
             >
-              Get more out of your studying
+              Study anywhere, know it everywhere
             </CustomText>
           </View>
 
+          <CustomText
+            //presetColors={"secondary"}
+            preset="caption1"
+            style={{ marginBottom: spacing.size120 }}
+          >
+            Quickly get started by signing up with an email and password or use a social provider
+            (recommended).
+          </CustomText>
+
           <TextField
+            status={emailError ? "error" : undefined}
             value={email}
             placeholder="Email"
             autoCapitalize="none"
@@ -121,6 +158,7 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
             containerStyle={$inputContainer}
           ></TextField>
           <TextField
+            status={passwordError ? "error" : undefined}
             value={password}
             autoCapitalize="none"
             placeholder="Password"
@@ -133,7 +171,7 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
           <Button preset="custom_default" onPress={() => signUp(email, password)}>
             Sign Up
           </Button>
-          <LineWord text="or"></LineWord>
+          <LineWord text="or easily sign up with a social provider"></LineWord>
           <Button
             preset="custom_outline"
             style={{
@@ -165,6 +203,34 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
           >
             Continue with Apple
           </Button>
+          <Button
+            preset="custom_outline"
+            style={{
+              marginBottom: spacing.size160,
+              height: 44,
+              backgroundColor: custom_colors.background3,
+              borderWidth: 0,
+            }}
+            textStyle={{ fontSize: 16, lineHeight: 26, color: "#5865F2" }}
+            LeftAccessory={(props) => (
+              <Icon
+                containerStyle={props.style}
+                icon="discord_logo"
+                color="#5865F2"
+                size={22}
+              ></Icon>
+            )}
+            onPress={() => signInWithSocialAuth(AuthProviders.DISCORD)}
+          >
+            Continue with Discord
+          </Button>
+          <CustomText
+            preset="body2Strong"
+            style={{ marginTop: spacing.size160, color: custom_colors.blueForeground1 }}
+            onPress={() => navigation.navigate(AppRoutes.LOGIN)}
+          >
+            Already have an account?
+          </CustomText>
         </View>
       </Screen>
     )
@@ -176,7 +242,8 @@ const $root: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  padding: spacing.size160,
+  padding: spacing.size240,
+  paddingTop: spacing.size400,
 }
 
 const $inputContainer: ViewStyle = {
