@@ -91,6 +91,7 @@ const Drawer = createDrawerNavigator()
 const LoginStackScreens = () => {
   return (
     <Stack.Navigator
+      initialRouteName={AppRoutes.SIGN_UP}
       screenOptions={{
         header: (props) => {
           return <Header title={props?.options?.title}></Header>
@@ -99,13 +100,13 @@ const LoginStackScreens = () => {
     >
       <Stack.Screen
         options={{ headerShown: false }}
-        name={AppRoutes.LOGIN}
-        component={LoginScreen}
+        name={AppRoutes.SIGN_UP}
+        component={SignUpScreen}
       />
       <Stack.Screen
         options={{ headerShown: false }}
-        name={AppRoutes.SIGN_UP}
-        component={SignUpScreen}
+        name={AppRoutes.LOGIN}
+        component={LoginScreen}
       />
       <Stack.Screen
         options={{ title: "Password Reset" }}
