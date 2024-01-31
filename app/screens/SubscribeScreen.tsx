@@ -212,18 +212,17 @@ export const SubscribeScreen: FC<StackScreenProps<AppStackScreenProps, "Subscrib
       return (
         <View>
           <FeatureListItem
+            icon="fluent_diamond"
+            title={"Many more cards"}
+            description={
+              "All premade decks free for a limited time! Get 1000 essential SAT vocabulary words and 1000 most frequent language learner decks!"
+            }
+          ></FeatureListItem>
+          <FeatureListItem
             icon="fluent_lightbulb"
             title={"More decks"}
             description={
               "Key track of more topics by increasing the number of decks you have up to 25."
-            }
-          ></FeatureListItem>
-
-          <FeatureListItem
-            icon="fluent_diamond"
-            title={"Many more cards"}
-            description={
-              "Get access to all the premade flashcards. An additional 1400 need to know SAT words and 700 most frequent words for language learners."
             }
           ></FeatureListItem>
 
