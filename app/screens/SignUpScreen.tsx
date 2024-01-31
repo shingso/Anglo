@@ -136,7 +136,7 @@ export const SignUpScreen: FC<StackScreenProps<AppStackScreenProps, "SignUp">> =
         preset="scroll"
       >
         <View style={$container}>
-          <View style={{ width: 300, marginBottom: spacing.size40 }}>
+          <View style={{ width: 300, marginBottom: spacing.size200 }}>
             <CustomText
               preset="title1"
               style={{ marginBottom: spacing.size40, fontFamily: typography.primary.semiBold }}
